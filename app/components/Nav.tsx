@@ -17,20 +17,17 @@ export default function Nav() {
 
           {/* Desktop Nav */}
           <div className="hidden md:flex items-center gap-8">
-            <a href="/#personal" className="text-sm text-[#8b949e] hover:text-white transition-colors">
-              Personal Helpers
+            <a href="/#products" className="text-sm text-[#8b949e] hover:text-white transition-colors">
+              Products
             </a>
-            <a href="/#business" className="text-sm text-[#8b949e] hover:text-white transition-colors">
-              Business Systems
+            <a href="/#about" className="text-sm text-[#8b949e] hover:text-white transition-colors">
+              About
             </a>
-            <Link href="/pricing" className="text-sm text-[#8b949e] hover:text-white transition-colors">
-              Pricing
-            </Link>
             <a
-              href="mailto:hello@micro-titan.com?subject=Get Started"
-              className="text-sm font-medium bg-[#6366f1] hover:bg-[#4f46e5] text-white px-4 py-2 rounded-lg transition-colors"
+              href="mailto:hello@micro-titan.com"
+              className="text-sm text-[#8b949e] hover:text-white transition-colors"
             >
-              Get Started
+              hello@micro-titan.com
             </a>
           </div>
 
@@ -55,20 +52,26 @@ export default function Nav() {
         {/* Mobile menu */}
         {menuOpen && (
           <div className="md:hidden py-4 border-t border-[#21262d] flex flex-col gap-4">
-            <a href="/#personal" className="text-sm text-[#8b949e] hover:text-white transition-colors" onClick={() => setMenuOpen(false)}>
-              Personal Helpers
-            </a>
-            <a href="/#business" className="text-sm text-[#8b949e] hover:text-white transition-colors" onClick={() => setMenuOpen(false)}>
-              Business Systems
-            </a>
-            <Link href="/pricing" className="text-sm text-[#8b949e] hover:text-white transition-colors" onClick={() => setMenuOpen(false)}>
-              Pricing
-            </Link>
             <a
-              href="mailto:hello@micro-titan.com?subject=Get Started"
-              className="text-sm font-medium bg-[#6366f1] hover:bg-[#4f46e5] text-white px-4 py-2 rounded-lg transition-colors text-center"
+              href="/#products"
+              className="text-sm text-[#8b949e] hover:text-white transition-colors"
+              onClick={() => setMenuOpen(false)}
             >
-              Get Started
+              Products
+            </a>
+            <a
+              href="/#about"
+              className="text-sm text-[#8b949e] hover:text-white transition-colors"
+              onClick={() => setMenuOpen(false)}
+            >
+              About
+            </a>
+            <a
+              href="mailto:hello@micro-titan.com"
+              className="text-sm text-[#8b949e] hover:text-white transition-colors"
+              onClick={() => setMenuOpen(false)}
+            >
+              hello@micro-titan.com
             </a>
           </div>
         )}
