@@ -10,28 +10,27 @@ export default function Nav() {
     <nav className="fixed top-0 left-0 right-0 z-50 border-b border-[#21262d] bg-[#0d1117]/95 backdrop-blur-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          {/* Wordmark */}
           <Link href="/" className="flex items-center gap-2">
             <span className="text-xl font-bold text-gradient">Micro Titan</span>
           </Link>
 
-          {/* Desktop Nav */}
           <div className="hidden md:flex items-center gap-8">
-            <a href="/#products" className="text-sm text-[#8b949e] hover:text-white transition-colors">
-              Products
+            <a href="/#ventures" className="text-sm text-[#8b949e] hover:text-white transition-colors">
+              Ventures
             </a>
             <a href="/#about" className="text-sm text-[#8b949e] hover:text-white transition-colors">
               About
             </a>
             <a
-              href="mailto:hello@micro-titan.com"
-              className="text-sm text-[#8b949e] hover:text-white transition-colors"
+              href="https://greg-installer.vercel.app"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm font-semibold text-[#6366f1] hover:text-[#a78bfa] transition-colors"
             >
-              hello@micro-titan.com
+              Meet Greg →
             </a>
           </div>
 
-          {/* Mobile menu toggle */}
           <button
             className="md:hidden text-[#8b949e] hover:text-white"
             onClick={() => setMenuOpen(!menuOpen)}
@@ -49,15 +48,14 @@ export default function Nav() {
           </button>
         </div>
 
-        {/* Mobile menu */}
         {menuOpen && (
           <div className="md:hidden py-4 border-t border-[#21262d] flex flex-col gap-4">
             <a
-              href="/#products"
+              href="/#ventures"
               className="text-sm text-[#8b949e] hover:text-white transition-colors"
               onClick={() => setMenuOpen(false)}
             >
-              Products
+              Ventures
             </a>
             <a
               href="/#about"
@@ -67,11 +65,13 @@ export default function Nav() {
               About
             </a>
             <a
-              href="mailto:hello@micro-titan.com"
-              className="text-sm text-[#8b949e] hover:text-white transition-colors"
+              href="https://greg-installer.vercel.app"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm font-semibold text-[#6366f1] hover:text-[#a78bfa] transition-colors"
               onClick={() => setMenuOpen(false)}
             >
-              hello@micro-titan.com
+              Meet Greg →
             </a>
           </div>
         )}
