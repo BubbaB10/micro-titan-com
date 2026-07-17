@@ -2,12 +2,12 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Micro Titan — AI tools that run your life.",
-  description: "We build the agents. You keep the life. Six AI tools for the parts of life most people just wing it through.",
-  keywords: ["AI tools", "AI agents", "Micro Titan", "missed call AI", "AI bookkeeper", "AI estimator", "car wash marketplace", "rescue social"],
+  title: "Micro Titan — AI-native ventures from Paris, Texas",
+  description: "One operator. Seven AI-powered ventures. Building software, hospitality, real estate, and sports products from Paris, Texas.",
+  keywords: ["Micro Titan", "AI ventures", "Fairway Bets", "Greg AI", "PGCC", "Paris Texas", "AI chief of staff", "Mineral Ledger"],
   openGraph: {
-    title: "Micro Titan — AI tools that run your life.",
-    description: "We build the agents. You keep the life.",
+    title: "Micro Titan — AI-native ventures from Paris, Texas",
+    description: "One operator. Seven AI-powered ventures. Building from Paris, Texas.",
     url: "https://micro-titan.com",
     siteName: "Micro Titan",
     type: "website",
