@@ -66,35 +66,35 @@ const ventures = [
 
 const offers = [
   {
-    name: "Greg Foundation",
+    name: "Aver Foundation",
     price: "$500",
     period: "one-time setup",
-    description: "Your AI chief of staff, live and working in 48 hours.",
+    description: "Your provable AI agent, live and working in 48 hours.",
     features: [
-      "Persistent memory — knows your full context across every session",
-      "Telegram interface — text Greg like a colleague, any time",
+      "Persistent memory — knows your full business context across every session",
+      "Telegram interface — text your agent like a colleague, any time",
       "Background tasks and scheduled reports while you sleep",
       "Connected to your existing apps and data",
       "One industry context included (restaurant, golf, real estate, finance)",
       "2-hour guided onboarding session",
     ],
     cta: "Apply for Access",
-    ctaHref: "mailto:hello@micro-titan.com?subject=Greg%20Foundation%20%E2%80%94%20Application",
+    ctaHref: "mailto:hello@micro-titan.com?subject=Aver%20Foundation%20%E2%80%94%20Application",
     highlight: false,
     badge: null,
   },
   {
     name: "Build + Operate",
     price: "$1,500",
-    period: "one-time build + Greg included",
-    description: "Greg running your business, plus a custom app built for it.",
+    period: "one-time build + Aver included",
+    description: "Aver running your business, plus a custom app built for it.",
     features: [
-      "Everything in Greg Foundation",
+      "Everything in Aver Foundation",
       "Custom app built for your vertical and deployed live",
-      "Greg wired directly to your app data from day one",
+      "Aver wired directly to your app data from day one",
       "Proven patterns from Sandwich Etc., Rosewood, Mineral Ledger",
       "Available for: restaurants, clubs, O&G royalty, rental portfolios, golf groups",
-      "Ongoing: Greg manages the app on autopilot and flags exceptions",
+      "Ongoing: Aver manages the app on autopilot and flags exceptions",
     ],
     cta: "Tell us about your business",
     ctaHref: "mailto:hello@micro-titan.com?subject=Build%20%2B%20Operate%20%E2%80%94%20Inquiry",
@@ -121,10 +121,10 @@ export default function HomePage() {
             One operator. Seven ventures. All running on AI infrastructure built in Paris, Texas.
           </p>
           <a
-            href="#get-greg"
+            href="#get-aver"
             className="inline-flex items-center gap-2 bg-[#6366f1] hover:bg-[#4f46e5] text-white font-semibold px-8 py-4 rounded-xl text-lg transition-all duration-200"
           >
-            Get Greg for your business
+            Get Aver for your business
           </a>
         </div>
         <div className="absolute bottom-12 flex flex-col items-center gap-2 text-[#6e7681] text-xs">
@@ -134,7 +134,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Greg — featured */}
+      {/* Aver — featured */}
       <section className="py-20 px-4 border-t border-[#21262d]">
         <div className="max-w-6xl mx-auto">
           <p className="text-xs font-semibold tracking-[0.25em] uppercase text-[#6366f1] mb-6 text-center">
@@ -146,20 +146,23 @@ export default function HomePage() {
             </div>
             <div className="flex-1">
               <div className="flex items-center gap-3 mb-3">
-                <h2 className="text-3xl md:text-4xl font-black">Greg</h2>
+                <h2 className="text-3xl md:text-4xl font-black">Aver</h2>
                 <span className="px-3 py-1 rounded-full text-xs font-semibold bg-[#10b981]/10 text-[#10b981] border border-[#10b981]/20">
                   Active
                 </span>
                 <span className="px-3 py-1 rounded-full text-xs font-semibold bg-[#161b22] text-[#8b949e] border border-[#21262d]">
-                  AI Product
+                  Provable AI Agent
                 </span>
               </div>
-              <p className="text-xl text-[#8b949e] leading-relaxed mb-6 max-w-2xl">
-                Your personal AI chief of staff. Greg runs in the background, works while you sleep, connects to your real data, and reports back on Telegram. Persistent memory. Background workers. Real automation — not a chatbot.
+              <p className="text-xl text-[#8b949e] leading-relaxed mb-3 max-w-2xl">
+                The provable AI agent framework. Aver runs in the background, works while you sleep, connects to your real data, and reports back on Telegram. Every claim it makes is gate-verified — not just reported, <em>proven</em>.
+              </p>
+              <p className="text-sm text-[#6e7681] leading-relaxed mb-6 max-w-2xl">
+                Our own instance is named Greg — he runs Micro Titan end-to-end and is the proof that this works. You name yours whatever you want.
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
                 {[
-                  { label: "Persistent memory", desc: "Knows your full business context across every session" },
+                  { label: "Verifiable trust", desc: "A mechanical gate proves work before anything is marked done — no self-reporting" },
                   { label: "Background workers", desc: "Scheduled tasks that run and report without you watching" },
                   { label: "Telegram-native", desc: "One text away. No browser required." },
                 ].map((f) => (
@@ -170,7 +173,7 @@ export default function HomePage() {
                 ))}
               </div>
               <a
-                href="#get-greg"
+                href="#get-aver"
                 className="inline-flex items-center gap-2 bg-[#6366f1] hover:bg-[#4f46e5] text-white font-semibold px-6 py-3 rounded-xl transition-all duration-200"
               >
                 Get started →
@@ -188,7 +191,7 @@ export default function HomePage() {
           </p>
           <h2 className="text-3xl font-bold text-center mb-4">Built and proven.</h2>
           <p className="text-center text-[#8b949e] mb-16 text-lg max-w-2xl mx-auto">
-            Every venture below was designed, built, and deployed by one operator with Greg. These are live products, real customers, and real data.
+            Every venture below was designed, built, and deployed by one operator running Aver (our instance: Greg). These are live products, real customers, and real data.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {ventures.map((v) => (
@@ -231,14 +234,14 @@ export default function HomePage() {
       </section>
 
       {/* Storefront — two offers */}
-      <section id="get-greg" className="py-24 px-4 border-t border-[#21262d]">
+      <section id="get-aver" className="py-24 px-4 border-t border-[#21262d]">
         <div className="max-w-5xl mx-auto">
           <p className="text-xs font-semibold tracking-[0.25em] uppercase text-[#6366f1] mb-4 text-center">
             Get Started
           </p>
           <h2 className="text-3xl sm:text-4xl font-bold text-center mb-4">Two ways in.</h2>
           <p className="text-center text-[#8b949e] mb-16 text-lg max-w-xl mx-auto">
-            Start with Greg as your chief of staff, or have us build your custom app and wire Greg into it from day one.
+            Start with Aver as your provable agent, or have us build your custom app and wire Aver into it from day one.
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
@@ -308,10 +311,10 @@ export default function HomePage() {
           </p>
           <h2 className="text-3xl font-bold mb-6">One operator. All AI.</h2>
           <p className="text-[#8b949e] text-lg leading-relaxed mb-4">
-            Micro Titan is a Texas holding company building AI-automated ventures across software, hospitality, real estate, and sports. One person. Seven businesses. A chief-of-staff AI running everything else.
+            Micro Titan is a Texas holding company building AI-automated ventures across software, hospitality, real estate, and sports. One person. Seven businesses. Aver — our provable agent framework — running everything else.
           </p>
           <p className="text-[#8b949e] text-lg leading-relaxed">
-            The thesis: a single founder with the right AI infrastructure can run what used to take a full team. We&apos;re proving it from Paris, Texas.
+            The thesis: a single founder with the right AI infrastructure can run what used to take a full team — and prove it mechanically, not just claim it. We&apos;re proving it from Paris, Texas.
           </p>
           <p className="text-[#6e7681] text-sm mt-6">
             Micro Titan LLC &mdash; Paris, Texas &mdash;{" "}

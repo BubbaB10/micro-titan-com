@@ -22,12 +22,12 @@ export default function Nav() {
               About
             </a>
             <a
-              href="https://greg-installer.vercel.app"
+              href="https://aver-installer.vercel.app"
               target="_blank"
               rel="noopener noreferrer"
               className="text-sm font-semibold text-[#6366f1] hover:text-[#a78bfa] transition-colors"
             >
-              Meet Greg →
+              Meet Aver →
             </a>
           </div>
 
@@ -65,13 +65,13 @@ export default function Nav() {
               About
             </a>
             <a
-              href="https://greg-installer.vercel.app"
+              href="https://aver-installer.vercel.app"
               target="_blank"
               rel="noopener noreferrer"
               className="text-sm font-semibold text-[#6366f1] hover:text-[#a78bfa] transition-colors"
               onClick={() => setMenuOpen(false)}
             >
-              Meet Greg →
+              Meet Aver →
             </a>
           </div>
         )}
