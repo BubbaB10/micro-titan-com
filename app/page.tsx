@@ -3,7 +3,8 @@ import Footer from "./components/Footer";
 
 const ventures = [
   {
-    icon: "⛳",
+    // Golf flag in hole: pole, pennant flag, ground oval
+    iconSvg: '<line x1="12" y1="4" x2="12" y2="19"/><path d="M12 4 L19 7.5 L12 11"/><ellipse cx="12" cy="19" rx="4.5" ry="1.5"/>',
     name: "Fairway Bets",
     tagline: "Golf betting OS — handicaps, Wolf, Hammer, and multi-format trip planner. Zero math, zero arguments.",
     outcome: "10+ games proven zero-sum and wired end-to-end by gate verification.",
@@ -13,7 +14,8 @@ const ventures = [
     accent: "#10b981",
   },
   {
-    icon: "🏌️",
+    // Golf club: angled shaft + iron head
+    iconSvg: '<line x1="9" y1="4" x2="16" y2="17"/><path d="M14 16 L18 18 L17 21 L11 21 Z"/>',
     name: "The Club",
     tagline: "Member app for Paris Golf & Country Club — tee times, events, news, and club communication.",
     outcome: "Groundskeeping hub, event lifecycle, and ticker board all live.",
@@ -23,7 +25,8 @@ const ventures = [
     accent: "#1d4ed8",
   },
   {
-    icon: "🥪",
+    // Sandwich: curved top bun, filling line, curved bottom bun
+    iconSvg: '<path d="M4 9 Q4 6 12 6 Q20 6 20 9"/><line x1="4" y1="13" x2="20" y2="13"/><path d="M4 16 Q4 18.5 12 18.5 Q20 18.5 20 16"/>',
     name: "Sandwich Etc.",
     tagline: "Order-ahead app for a Paris, TX sandwich shop. Twilio SMS confirmation, live for customers.",
     outcome: "Built, connected, and live with real orders inside one week.",
@@ -33,7 +36,8 @@ const ventures = [
     accent: "#dc2626",
   },
   {
-    icon: "🍽️",
+    // Fork and knife: fork tines + handle, knife blade + handle
+    iconSvg: '<path d="M7 4 L7 20"/><path d="M5 4 L5 8 Q5 11 7 11 Q9 11 9 8 L9 4"/><path d="M15 4 L15 20"/><path d="M15 4 C17 5 18 8 15 11"/>',
     name: "Rosewood Dine",
     tagline: "Full restaurant OS — orders, kitchen display, inventory, customer CRM, and analytics.",
     outcome: "Live in 72 hours. Tax config, reservations, and full order flow operational.",
@@ -43,7 +47,8 @@ const ventures = [
     accent: "#7c3aed",
   },
   {
-    icon: "🛢️",
+    // Oil droplet with ledger lines: royalty/finance visual
+    iconSvg: '<path d="M12 4 C12 4 6 10 6 15 Q6 20 12 20 Q18 20 18 15 Q18 10 12 4 Z"/><line x1="9" y1="14" x2="15" y2="14"/><line x1="10" y1="17" x2="14" y2="17"/>',
     name: "Mineral Ledger",
     tagline: "XTO Energy royalty audit and cross-sibling reconciliation. Every statement parsed, every gap flagged.",
     outcome: "16 statements parsed, discrepancies surfaced, and reconciliation live — first evening.",
@@ -53,7 +58,8 @@ const ventures = [
     accent: "#d97706",
   },
   {
-    icon: "🏡",
+    // House: peaked roof, walls, door
+    iconSvg: '<polyline points="3 12 12 4 21 12"/><path d="M5 12 L5 21 L19 21 L19 12"/><path d="M9 21 L9 15 L15 15 L15 21"/>',
     name: "Property OS",
     tagline: "AI-managed rental portfolio operations. Maintenance, leasing, and tenant comms on autopilot.",
     outcome: "Built as a reusable template from a real 25-unit portfolio. Zero hours/week on admin.",
@@ -201,11 +207,12 @@ export default function HomePage() {
               >
                 <div className="flex items-start justify-between">
                   <div
-                    className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl flex-shrink-0"
-                    style={{ backgroundColor: `${v.accent}18`, border: `1px solid ${v.accent}40` }}
-                  >
-                    {v.icon}
-                  </div>
+                    className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0"
+                    style={{ backgroundColor: `${v.accent}18`, border: `1px solid ${v.accent}40`, color: v.accent }}
+                    dangerouslySetInnerHTML={{
+                      __html: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" width="24" height="24">${v.iconSvg}</svg>`
+                    }}
+                  />
                   <span
                     className="text-xs font-semibold px-2.5 py-1 rounded-full"
                     style={{ backgroundColor: `${v.statusColor}15`, color: v.statusColor, border: `1px solid ${v.statusColor}30` }}
