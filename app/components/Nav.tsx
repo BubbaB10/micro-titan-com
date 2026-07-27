@@ -22,9 +22,7 @@ export default function Nav() {
               About
             </a>
             <a
-              href="https://aver-installer.vercel.app"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="/#get-aver"
               className="text-sm font-semibold text-[#6366f1] hover:text-[#a78bfa] transition-colors"
             >
               Meet Aver →
@@ -65,9 +63,7 @@ export default function Nav() {
               About
             </a>
             <a
-              href="https://aver-installer.vercel.app"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="/#get-aver"
               className="text-sm font-semibold text-[#6366f1] hover:text-[#a78bfa] transition-colors"
               onClick={() => setMenuOpen(false)}
             >
