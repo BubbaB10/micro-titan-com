@@ -147,9 +147,7 @@ export default function HomePage() {
             The Operating System
           </p>
           <div className="bg-gradient-to-br from-[#161b22] to-[#1a1f2e] border border-[#6366f1]/30 rounded-3xl p-8 md:p-12 flex flex-col md:flex-row gap-8 items-start">
-            <div className="w-20 h-20 rounded-2xl flex items-center justify-center text-4xl flex-shrink-0 bg-[#6366f1]/10 border border-[#6366f1]/30">
-              🤖
-            </div>
+            <div className="w-20 h-20 rounded-2xl flex items-center justify-center flex-shrink-0 bg-[#6366f1]/10 border border-[#6366f1]/30" dangerouslySetInnerHTML={{ __html: '<svg viewBox="0 0 64 64" fill="none" width="52" height="52"><circle cx="32" cy="32" r="28.5" stroke="#6366f1" stroke-width="1" opacity="0.35"/><line x1="32" y1="11" x2="14" y2="54" stroke="#6366f1" stroke-width="3.8" stroke-linecap="round"/><line x1="32" y1="11" x2="50" y2="54" stroke="#6366f1" stroke-width="3.8" stroke-linecap="round"/><path d="M21 37 L28.5 45 L46 25" stroke="#818cf8" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>' }} />
             <div className="flex-1">
               <div className="flex items-center gap-3 mb-3">
                 <h2 className="text-3xl md:text-4xl font-black">Aver</h2>
