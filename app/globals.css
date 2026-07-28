@@ -25,12 +25,8 @@ body {
   from { stroke-dashoffset: 140; }
   to   { stroke-dashoffset: 0; }
 }
-@keyframes draw-crossbar {
-  from { stroke-dashoffset: 28; }
-  to   { stroke-dashoffset: 0; }
-}
-@keyframes draw-check {
-  from { stroke-dashoffset: 62; }
+@keyframes draw-checkbar {
+  from { stroke-dashoffset: 46; }
   to   { stroke-dashoffset: 0; }
 }
 @keyframes glow-pop {

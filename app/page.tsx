@@ -64,17 +64,11 @@ export default function HomePage() {
               stroke="#f4f7fa" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" fill="none"
               style={{ strokeDasharray: 137, strokeDashoffset: 137, animation: "draw-a 0.75s cubic-bezier(0.4,0,0.2,1) 1.2s forwards" }}
             />
-            {/* Crossbar */}
-            <line
-              x1="47" y1="65" x2="73" y2="65"
-              stroke="#f4f7fa" strokeWidth="3" strokeLinecap="round"
-              style={{ strokeDasharray: 28, strokeDashoffset: 28, animation: "draw-crossbar 0.28s ease 1.8s forwards" }}
-            />
-            {/* Checkmark — mint, glow-pop */}
+            {/* Crossbar IS the checkmark — single integrated stroke */}
             <path
-              d="M42 72 L54 84 L80 52"
+              d="M44 62 L55 73 L79 55"
               stroke="#46cf93" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" fill="none"
-              style={{ strokeDasharray: 62, strokeDashoffset: 62, animation: "draw-check 0.48s cubic-bezier(0.4,0,0.2,1) 2.05s forwards, glow-pop 0.9s ease 2.52s forwards" }}
+              style={{ strokeDasharray: 46, strokeDashoffset: 46, animation: "draw-checkbar 0.52s cubic-bezier(0.4,0,0.2,1) 1.95s forwards, glow-pop 0.9s ease 2.45s forwards" }}
             />
           </svg>
         </div>

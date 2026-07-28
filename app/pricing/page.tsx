@@ -6,14 +6,15 @@ const PLANS = [
   {
     name: "Personal",
     buildFee: "$250",
-    monthly: "$49",
+    monthly: "$59",
     monthlyUnit: "/mo",
     desc: "Your provable AI agent, live in 48 hours. Low-friction entry.",
     featured: false,
     badge: null,
     features: [
       "Persistent memory across every session",
-      "Telegram interface — text your agent like a colleague",
+      "SMS — text your agent from any phone",
+      "Free dashboard app included",
       "Scheduled reports and background tasks",
       "Connected to your data and apps",
       "One industry context included",
