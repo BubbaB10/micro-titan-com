@@ -33,7 +33,7 @@ export default function HomePage() {
           style={{ maskImage: "linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.25) 35%, rgba(0,0,0,0.15) 65%, transparent 100%)" }}
         />
 
-        {/* Animated A-seal */}
+        {/* MT firm mark — placeholder for the Monolith shield (asset incoming from Bubba) */}
         <div
           style={{
             position: "relative",
@@ -44,32 +44,26 @@ export default function HomePage() {
         >
           <div
             style={{
-              position: "absolute", inset: "-24px", borderRadius: "50%",
-              background: "radial-gradient(circle, rgba(129,140,248,0.18) 0%, transparent 70%)",
+              position: "absolute", inset: "-36px", borderRadius: "50%",
+              background: "radial-gradient(circle, rgba(129,140,248,0.12) 0%, transparent 68%)",
               pointerEvents: "none",
             }}
           />
-          <svg viewBox="0 0 120 120" width="176" height="176" fill="none" xmlns="http://www.w3.org/2000/svg">
-            {/* Outer ring — indigo */}
-            <circle
-              cx="60" cy="60" r="52"
-              stroke="#818cf8" strokeWidth="1.5" fill="none"
-              style={{ strokeDasharray: 327, strokeDashoffset: 327, animation: "draw-ring 1.3s cubic-bezier(0.4,0,0.2,1) 0.3s forwards" }}
-            />
-            {/* Inner ring faint */}
-            <circle cx="60" cy="60" r="47" stroke="rgba(129,140,248,0.18)" strokeWidth="0.5" fill="none" />
-            {/* A legs */}
+          <svg viewBox="0 0 100 112" width="108" height="120" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
-              d="M38 84 L60 32 L82 84"
-              stroke="#f4f7fa" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" fill="none"
-              style={{ strokeDasharray: 137, strokeDashoffset: 137, animation: "draw-a 0.75s cubic-bezier(0.4,0,0.2,1) 1.2s forwards" }}
+              d="M50 6L94 23L94 62Q94 90 50 107Q6 90 6 62L6 23Z"
+              stroke="#818cf8" strokeWidth="1.3" fill="rgba(129,140,248,0.05)"
+              style={{ strokeDasharray: 312, strokeDashoffset: 312, animation: "draw-ring 1.6s cubic-bezier(0.4,0,0.2,1) 0.3s forwards" }}
             />
-            {/* Crossbar IS the checkmark — single integrated stroke */}
-            <path
-              d="M44 62 L55 73 L79 55"
-              stroke="#46cf93" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" fill="none"
-              style={{ strokeDasharray: 46, strokeDashoffset: 46, animation: "draw-checkbar 0.52s cubic-bezier(0.4,0,0.2,1) 1.95s forwards, glow-pop 0.9s ease 2.45s forwards" }}
-            />
+            <text
+              x="50" y="70"
+              textAnchor="middle"
+              fontSize="26"
+              fontWeight="300"
+              letterSpacing="4"
+              fill="#f4f7fa"
+              style={{ fontFamily: "var(--font-mulish), sans-serif", animation: "fade-in-up 0.5s ease 1.2s both" }}
+            >MT</text>
           </svg>
         </div>
 
@@ -149,9 +143,11 @@ export default function HomePage() {
             <Link href="/aver" className="group block">
               <div className="h-full bg-[#12243d] border border-[#818cf8]/25 hover:border-[#818cf8]/50 rounded-2xl p-8 flex flex-col gap-5 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[#818cf8]/10">
                 <div className="w-12 h-12 rounded-xl bg-[#818cf8]/10 border border-[#818cf8]/25 flex items-center justify-center">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="#818cf8" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" width="22" height="22">
-                    <path d="M12 2L3 7v5c0 5.25 3.75 10.15 9 11.35C17.25 22.15 21 17.25 21 12V7z"/>
-                    <path d="M9 12l2 2 4-4"/>
+                  {/* Aver A-check sub-mark: circle + A + crossbar-as-checkmark */}
+                  <svg viewBox="0 0 24 24" fill="none" strokeLinecap="round" strokeLinejoin="round" width="22" height="22">
+                    <circle cx="12" cy="12" r="9.5" stroke="#818cf8" strokeWidth="1.4"/>
+                    <path d="M8.5 17L12 8L15.5 17" stroke="#818cf8" strokeWidth="1.5"/>
+                    <path d="M9.5 13.8L11.2 15.8L15 12.2" stroke="#46cf93" strokeWidth="1.7"/>
                   </svg>
                 </div>
                 <div className="flex-1">
@@ -185,9 +181,9 @@ export default function HomePage() {
             <Link href="/studio" className="group block">
               <div className="h-full bg-[#12243d] border border-[#46cf93]/20 hover:border-[#46cf93]/40 rounded-2xl p-8 flex flex-col gap-5 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg">
                 <div className="w-12 h-12 rounded-xl bg-[#0a1628] border border-[#46cf93]/25 flex items-center justify-center">
+                  {/* The Studio — corner-frame sub-mark */}
                   <svg viewBox="0 0 24 24" fill="none" stroke="#46cf93" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" width="22" height="22">
-                    <polyline points="16 18 22 12 16 6"/>
-                    <polyline points="8 6 2 12 8 18"/>
+                    <path d="M7 3H5a2 2 0 00-2 2v2M17 3h2a2 2 0 012 2v2M7 21H5a2 2 0 01-2-2v-2M17 21h2a2 2 0 002-2v-2"/>
                   </svg>
                 </div>
                 <div className="flex-1">
@@ -230,7 +226,7 @@ export default function HomePage() {
             className="text-2xl sm:text-3xl font-[300] text-[#f4f7fa] text-center mb-3"
             style={{ fontFamily: "var(--font-mulish)" }}
           >
-            Every product below is a live Aver instance.
+            Software Micro Titan builds and runs.
           </h2>
           <p className="text-[#a8d8f0]/70 text-sm text-center mb-10">
             Greg — our own Aver — built and currently runs all six.
