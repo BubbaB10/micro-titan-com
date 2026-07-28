@@ -10,34 +10,87 @@ html {
 
 body {
   font-family: var(--font-mulish), -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  background-color: #0d1117;
-  color: #ffffff;
+  background-color: #0a1628;
+  color: #f4f7fa;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* ── A-seal draw animations ── */
+@keyframes draw-ring {
+  from { stroke-dashoffset: 327; }
+  to   { stroke-dashoffset: 0; }
+}
+@keyframes draw-a {
+  from { stroke-dashoffset: 140; }
+  to   { stroke-dashoffset: 0; }
+}
+@keyframes draw-crossbar {
+  from { stroke-dashoffset: 28; }
+  to   { stroke-dashoffset: 0; }
+}
+@keyframes draw-check {
+  from { stroke-dashoffset: 62; }
+  to   { stroke-dashoffset: 0; }
+}
+@keyframes glow-pop {
+  0%   { filter: drop-shadow(0 0 0px #46cf93); }
+  55%  { filter: drop-shadow(0 0 22px #46cf93); }
+  100% { filter: drop-shadow(0 0 9px rgba(70,207,147,0.45)); }
+}
+@keyframes seal-appear {
+  from { opacity: 0; transform: scale(0.88); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* ── Aurora ambient ── */
+@keyframes aurora-1 {
+  0%, 100% { opacity: 0.15; transform: scale(1); }
+  50%       { opacity: 0.28; transform: scale(1.2); }
+}
+@keyframes aurora-2 {
+  0%, 100% { opacity: 0.09; transform: scale(1.15) rotate(20deg); }
+  50%       { opacity: 0.2;  transform: scale(0.9)  rotate(-10deg); }
+}
+
+/* ── Content reveals ── */
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(22px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
 @layer utilities {
   .text-gradient {
-    background: linear-gradient(135deg, #6366f1 0%, #a78bfa 100%);
+    background: linear-gradient(135deg, #818cf8 0%, #a8d8f0 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
 
-  .bg-card {
-    background-color: #161b22;
-    border: 1px solid #21262d;
+  /* Subtle tech-grid overlay */
+  .tech-grid {
+    background-image:
+      linear-gradient(rgba(168,216,240,0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(168,216,240,0.035) 1px, transparent 1px);
+    background-size: 48px 48px;
   }
 
   .sms-bubble-user {
-    background: #6366f1;
+    background: #2563eb;
     color: white;
     border-radius: 18px 18px 4px 18px;
   }
 
   .sms-bubble-ai {
-    background: #21262d;
-    color: #e6edf3;
+    background: #12243d;
+    color: #f4f7fa;
     border-radius: 18px 18px 18px 4px;
   }
+
+  .fade-in-up-1 { animation: fade-in-up 0.55s ease 0.1s both; }
+  .fade-in-up-2 { animation: fade-in-up 0.55s ease 0.25s both; }
+  .fade-in-up-3 { animation: fade-in-up 0.55s ease 0.4s both; }
+  .fade-in-up-4 { animation: fade-in-up 0.55s ease 0.55s both; }
+  .fade-in-up-5 { animation: fade-in-up 0.55s ease 0.7s both; }
+  .fade-in-up-6 { animation: fade-in-up 0.55s ease 0.85s both; }
 }

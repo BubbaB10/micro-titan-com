@@ -10,12 +10,12 @@ const mulish = Mulish({
 });
 
 export const metadata: Metadata = {
-  title: "Micro Titan — AI-native ventures from Paris, Texas",
-  description: "One operator. Seven AI-powered ventures. Building software, hospitality, real estate, and sports products from Paris, Texas.",
-  keywords: ["Micro Titan", "AI ventures", "Fairway Bets", "Aver AI", "Aver agent", "PGCC", "Paris Texas", "provable AI agent", "verifiable AI", "AI chief of staff", "Mineral Ledger"],
+  title: "Micro Titan — Provable software, end to end.",
+  description: "We build your app or OS — and hand you the AI agent that runs it. Gate-verified either way. Aver is the provable AI chief-of-staff from Paris, Texas.",
+  keywords: ["Micro Titan", "Aver", "provable AI agent", "verifiable AI", "AI chief of staff", "The Studio", "AI app builder", "Paris Texas", "Fairway Bets", "Mineral Ledger"],
   openGraph: {
-    title: "Micro Titan — AI-native ventures from Paris, Texas",
-    description: "One operator. Seven AI-powered ventures. Building from Paris, Texas.",
+    title: "Micro Titan — Provable software, end to end.",
+    description: "We build your app or OS — and hand you the AI agent that runs it. Gate-verified either way.",
     url: "https://micro-titan.com",
     siteName: "Micro Titan",
     type: "website",
