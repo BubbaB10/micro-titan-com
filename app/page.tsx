@@ -152,7 +152,7 @@ export default function HomePage() {
                 </div>
                 <div className="flex-1">
                   <span className="inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#818cf8]/10 text-[#c7d2fe] border border-[#818cf8]/25 mb-3">The Agent</span>
-                  <h3 className="text-2xl font-[300] text-[#f4f7fa] mb-3" style={{ fontFamily: "var(--font-mulish)" }}>Aver</h3>
+                  <h3 className="text-2xl font-[300] text-[#f4f7fa] mb-3" style={{ fontFamily: "var(--font-mulish)" }}>Aver™</h3>
                   <p className="text-[#a8d8f0] text-sm leading-relaxed mb-6">
                     Your provable AI chief-of-staff. Runs your business or life,
                     verifies its own work, and fails closed to you — not to the world — when it&apos;s unsure.

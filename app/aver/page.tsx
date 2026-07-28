@@ -314,7 +314,7 @@ export default function AverPage() {
             className="text-6xl sm:text-7xl md:text-8xl font-[300] leading-none tracking-tight text-[#f4f7fa] mb-6"
             style={{ fontFamily: "var(--font-mulish)" }}
           >
-            Aver
+            Aver™
           </h1>
           <p className="text-xl sm:text-2xl text-[#a8d8f0] font-light max-w-2xl mx-auto mb-8">
             Most AI tells you what it did. Aver proves it — or it doesn&apos;t reach you at all.

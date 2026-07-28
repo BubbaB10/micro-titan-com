@@ -7,7 +7,7 @@ export default function Footer() {
         <div className="flex flex-col md:flex-row justify-between items-start gap-10">
           {/* Brand */}
           <div className="flex flex-col gap-3">
-            <Link href="/" className="text-sm font-semibold tracking-widest text-[#f4f7fa]">MICRO TITAN</Link>
+            <Link href="/" className="text-sm font-semibold tracking-widest text-[#f4f7fa]">MICRO TITAN™</Link>
             <p className="text-sm text-[#a8d8f0]/60">Provable software, end to end.</p>
             <a href="mailto:hello@micro-titan.com" className="text-sm text-[#2563eb] hover:text-[#60a5fa] transition-colors">
               hello@micro-titan.com
@@ -24,8 +24,11 @@ export default function Footer() {
         </div>
 
         <div className="mt-10 pt-8 border-t border-[rgba(168,216,240,0.08)] flex flex-col md:flex-row justify-between items-center gap-3">
-          <p className="text-xs text-[#a8d8f0]/40">&copy; 2026 Micro Titan LLC &middot; Paris, Texas</p>
-          <p className="text-xs text-[#a8d8f0]/30">Provability is always on &mdash; never an add-on.</p>
+          <p className="text-xs text-[#a8d8f0]/40">&copy; 2026 Micro Titan LLC &middot; Paris, Texas &middot; All rights reserved.</p>
+          <div className="flex items-center gap-4">
+            <Link href="/terms" className="text-xs text-[#a8d8f0]/30 hover:text-[#a8d8f0]/60 transition-colors">Terms</Link>
+            <Link href="/privacy" className="text-xs text-[#a8d8f0]/30 hover:text-[#a8d8f0]/60 transition-colors">Privacy</Link>
+          </div>
         </div>
       </div>
     </footer>
