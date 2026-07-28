@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Nav from "./components/Nav";
 import Footer from "./components/Footer";
+import EmailCapture from "./components/EmailCapture";
 
 export default function HomePage() {
   return (
@@ -116,12 +117,15 @@ export default function HomePage() {
               Start a build
             </Link>
           </div>
-          <p
-            className="text-xs text-[#a8d8f0]/35 mt-5"
+          <div
+            className="mt-7 pt-7 border-t border-[rgba(168,216,240,0.12)] w-full max-w-sm mx-auto"
             style={{ animation: "fade-in-up 0.5s ease 1.1s both" }}
           >
-            🔒 We never ask for your passwords. Ever.
-          </p>
+            <p className="text-xs text-[#a8d8f0]/50 mb-3 text-center">
+              Or get the free guide + early access:
+            </p>
+            <EmailCapture variant="hero" source="hero" />
+          </div>
         </div>
 
         <div
@@ -293,6 +297,34 @@ export default function HomePage() {
               </Link>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* EMAIL CAPTURE — LEAD MAGNET */}
+      <section className="py-20 px-4 border-t border-[rgba(168,216,240,0.08)]">
+        <div className="max-w-2xl mx-auto text-center">
+          <p className="text-xs font-semibold tracking-[0.25em] uppercase text-[#e2a44a] mb-4">
+            Free guide
+          </p>
+          <h2
+            className="text-3xl sm:text-4xl font-[300] text-[#f4f7fa] mb-4"
+            style={{ fontFamily: "var(--font-mulish)" }}
+          >
+            Nothing Slips: The 15-Minute Weekly Reset
+          </h2>
+          <p className="text-[#a8d8f0] text-sm leading-relaxed mb-8 max-w-lg mx-auto">
+            A simple Friday ritual for anyone whose life has more moving parts than one person
+            can track. Enter your email — the guide is yours, free. No pitch. Value-for-value.
+          </p>
+          <div className="max-w-sm mx-auto">
+            <EmailCapture variant="hero" source="home-mid" />
+          </div>
+          <p className="text-xs text-[#a8d8f0]/30 mt-4">
+            Already have it?{" "}
+            <Link href="/guide" className="underline underline-offset-2 hover:text-[#a8d8f0]/60 transition-colors">
+              Read the guide →
+            </Link>
+          </p>
         </div>
       </section>
 
