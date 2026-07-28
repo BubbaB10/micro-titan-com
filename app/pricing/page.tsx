@@ -5,10 +5,10 @@ import Footer from "../components/Footer";
 const PLANS = [
   {
     name: "Personal",
-    buildFee: "$750",
-    monthly: "$129",
+    buildFee: "$250",
+    monthly: "$49",
     monthlyUnit: "/mo",
-    desc: "Your provable AI agent, live in 48 hours.",
+    desc: "Your provable AI agent, live in 48 hours. Low-friction entry.",
     featured: false,
     badge: null,
     features: [
