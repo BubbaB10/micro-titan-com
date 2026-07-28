@@ -36,8 +36,14 @@ export default function Nav() {
             ))}
           </div>
 
-          {/* Desktop CTA */}
-          <div className="hidden lg:flex">
+          {/* Desktop CTAs */}
+          <div className="hidden lg:flex items-center gap-3">
+            <Link
+              href="/onboarding"
+              className="bg-[#818cf8]/15 hover:bg-[#818cf8]/25 border border-[#818cf8]/35 text-[#c7d2fe] text-sm font-semibold px-5 py-2 rounded-lg transition-colors"
+            >
+              Try Aver →
+            </Link>
             <Link
               href="/pricing"
               className="bg-[#2563eb] hover:bg-[#1d4ed8] text-white text-sm font-semibold px-5 py-2 rounded-lg transition-colors"
@@ -77,6 +83,13 @@ export default function Nav() {
                 {l.label}
               </Link>
             ))}
+            <Link
+              href="/onboarding"
+              className="text-sm font-semibold text-[#818cf8] hover:text-[#c7d2fe] transition-colors"
+              onClick={() => setMenuOpen(false)}
+            >
+              Try Aver →
+            </Link>
             <Link
               href="/pricing"
               className="text-sm font-semibold text-[#2563eb] hover:text-[#60a5fa] transition-colors"

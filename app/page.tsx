@@ -104,10 +104,10 @@ export default function HomePage() {
             style={{ animation: "fade-in-up 0.55s ease 0.85s both" }}
           >
             <Link
-              href="/aver"
+              href="/onboarding"
               className="inline-flex items-center justify-center gap-2 bg-[#818cf8]/15 hover:bg-[#818cf8]/25 border border-[#818cf8]/40 text-[#c7d2fe] font-semibold px-7 py-3.5 rounded-xl text-sm transition-all duration-200"
             >
-              Explore Aver →
+              Try Aver →
             </Link>
             <Link
               href="/pricing"
@@ -116,6 +116,12 @@ export default function HomePage() {
               Start a build
             </Link>
           </div>
+          <p
+            className="text-xs text-[#a8d8f0]/35 mt-5"
+            style={{ animation: "fade-in-up 0.5s ease 1.1s both" }}
+          >
+            🔒 We never ask for your passwords. Ever.
+          </p>
         </div>
 
         <div
