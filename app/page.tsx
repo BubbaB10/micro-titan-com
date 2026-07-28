@@ -261,6 +261,35 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* GATE TEASER */}
+      <section className="py-16 px-4 border-t border-[rgba(168,216,240,0.08)]">
+        <div className="max-w-5xl mx-auto">
+          <div className="bg-[#0f1f38] border border-[#2563eb]/20 rounded-2xl p-8 md:p-10 flex flex-col md:flex-row md:items-center gap-8">
+            <div className="flex-1">
+              <p className="text-xs font-semibold tracking-[0.25em] uppercase text-[#4fb8e8] mb-3">Live proof</p>
+              <h3
+                className="text-2xl font-[300] text-[#f4f7fa] mb-3"
+                style={{ fontFamily: "var(--font-mulish)" }}
+              >
+                Don&apos;t take our word for it.<br />Watch the gate run.
+              </h3>
+              <p className="text-[#a8d8f0] text-sm leading-relaxed">
+                Pick a scenario — clean claim or conflict caught. See what gets stamped and what gets held.
+                The &ldquo;held&rdquo; moment is the trust-maker.
+              </p>
+            </div>
+            <div className="flex-shrink-0">
+              <Link
+                href="/why-provable#gate"
+                className="inline-flex items-center gap-2 bg-[#2563eb] hover:bg-[#1d4ed8] text-white font-semibold px-7 py-3.5 rounded-xl text-sm transition-all duration-200"
+              >
+                Watch the gate →
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* BUSY MOM HOOK CARD */}
       <section className="py-16 px-4 border-t border-[rgba(168,216,240,0.08)]">
         <div className="max-w-5xl mx-auto">

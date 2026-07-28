@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Nav from "../components/Nav";
 import Footer from "../components/Footer";
+import GateDemo from "../components/GateDemo";
 
 const PILLARS = [
   {
@@ -78,6 +79,26 @@ export default function WhyProvablePage() {
             Whether you&apos;re running Aver to manage your life, or The Studio built your app — the same
             mechanical gate underlies everything. Provability isn&apos;t a feature tier. It&apos;s the floor.
           </p>
+        </div>
+      </section>
+
+      {/* Gate demo — live interactive proof */}
+      <section className="py-20 px-4 border-b border-[rgba(168,216,240,0.08)]">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-10">
+            <p className="text-xs font-semibold tracking-[0.25em] uppercase text-[#4fb8e8] mb-3">Live proof</p>
+            <h2
+              className="text-3xl sm:text-4xl font-[300] text-[#f4f7fa] mb-4"
+              style={{ fontFamily: "var(--font-mulish)" }}
+            >
+              See the gate run.
+            </h2>
+            <p className="text-[#a8d8f0] font-light max-w-lg mx-auto text-sm leading-relaxed">
+              Two everyday scenarios. Pick one, click run — watch what gets stamped and what gets held.
+              The &ldquo;held&rdquo; moment is the one that matters.
+            </p>
+          </div>
+          <GateDemo />
         </div>
       </section>
 
