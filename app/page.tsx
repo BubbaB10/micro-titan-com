@@ -119,8 +119,20 @@ export default function HomePage() {
             </Link>
           </div>
 
+          {/* Compact price row — answers "what it costs" above the fold */}
           <div
-            className="mt-7 pt-7 border-t border-[rgba(168,216,240,0.12)] w-full max-w-sm mx-auto"
+            className="mt-6 flex flex-wrap justify-center gap-x-5 gap-y-1.5 text-xs text-[#a8d8f0]/65"
+            style={{ animation: "fade-in-up 0.5s ease 1.0s both" }}
+          >
+            <Link href="/studio" className="hover:text-[#46cf93] transition-colors">Custom build <span className="font-semibold text-[#f4f7fa]/80">from $5k</span></Link>
+            <span className="text-[#a8d8f0]/20">·</span>
+            <Link href="/pricing" className="hover:text-[#60a5fa] transition-colors">Business Aver <span className="font-semibold text-[#f4f7fa]/80">$1,500 + $349/mo</span></Link>
+            <span className="text-[#a8d8f0]/20">·</span>
+            <Link href="/pricing" className="hover:text-[#c7d2fe] transition-colors">Personal Aver <span className="font-semibold text-[#f4f7fa]/80">$250 + $59/mo</span></Link>
+          </div>
+
+          <div
+            className="mt-6 pt-6 border-t border-[rgba(168,216,240,0.10)] w-full max-w-sm mx-auto"
             style={{ animation: "fade-in-up 0.5s ease 1.1s both" }}
           >
             <p className="text-xs text-[#a8d8f0]/50 mb-3 text-center">
