@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Mulish } from "next/font/google";
 import "./globals.css";
+import BottomTabBar from "./components/BottomTabBar";
 
 const mulish = Mulish({
   subsets: ["latin"],
@@ -29,8 +30,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={mulish.variable}>
-      <body className="antialiased">
+      {/* pb-24 on mobile leaves room for the fixed bottom tab bar (56px bar + safe-area) */}
+      <body className="antialiased pb-24 lg:pb-0">
         {children}
+        <BottomTabBar />
       </body>
     </html>
   );

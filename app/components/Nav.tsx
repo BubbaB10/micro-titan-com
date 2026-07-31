@@ -4,11 +4,17 @@ import Link from "next/link";
 import { useState } from "react";
 
 const NAV_LINKS = [
-  { href: "/aver",         label: "Aver" },
-  { href: "/studio",       label: "The Studio" },
-  { href: "/proof",        label: "Proof" },
-  { href: "/pricing",      label: "Pricing" },
-  { href: "/why-provable", label: "Why provable" },
+  { href: "/aver",         label: "Aver",        desc: "the agent" },
+  { href: "/studio",       label: "The Studio",  desc: "custom builds" },
+  { href: "/proof",        label: "Proof",        desc: "what we've shipped" },
+  { href: "/pricing",      label: "Pricing",      desc: null },
+  { href: "/why-provable", label: "How it works", desc: null },
+];
+
+// Mobile hamburger shows the overflow items the tab bar doesn't cover
+const MOBILE_OVERFLOW = [
+  { href: "/why-provable", label: "How it works" },
+  { href: "/onboarding",   label: "Try Aver" },
 ];
 
 export default function Nav() {
@@ -28,15 +34,22 @@ export default function Nav() {
             MICRO TITAN™
           </Link>
 
-          {/* Desktop links */}
+          {/* Desktop links — brand name + plain-language descriptor */}
           <div className="hidden lg:flex items-center gap-7">
             {NAV_LINKS.map((l) => (
               <Link
                 key={l.href}
                 href={l.href}
-                className="text-sm text-[#a8d8f0]/70 hover:text-[#f4f7fa] transition-colors"
+                className="group flex flex-col items-center gap-0.5"
               >
-                {l.label}
+                <span className="text-sm text-[#a8d8f0]/70 group-hover:text-[#f4f7fa] transition-colors leading-tight">
+                  {l.label}
+                </span>
+                {l.desc && (
+                  <span className="text-[10px] text-[#a8d8f0]/30 group-hover:text-[#a8d8f0]/50 transition-colors leading-tight">
+                    {l.desc}
+                  </span>
+                )}
               </Link>
             ))}
           </div>
@@ -57,11 +70,12 @@ export default function Nav() {
             </Link>
           </div>
 
-          {/* Mobile hamburger */}
+          {/* Mobile hamburger — overflow only (tab bar handles primary nav) */}
           <button
             className="lg:hidden text-[#a8d8f0] hover:text-white"
             onClick={() => setMenuOpen(!menuOpen)}
             aria-label="Toggle menu"
+            aria-expanded={menuOpen}
           >
             {menuOpen ? (
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -75,10 +89,10 @@ export default function Nav() {
           </button>
         </div>
 
-        {/* Mobile menu */}
+        {/* Mobile menu — overflow items */}
         {menuOpen && (
           <div className="lg:hidden py-5 border-t border-[rgba(168,216,240,0.1)] flex flex-col gap-4">
-            {NAV_LINKS.map((l) => (
+            {MOBILE_OVERFLOW.map((l) => (
               <Link
                 key={l.href}
                 href={l.href}
@@ -88,13 +102,6 @@ export default function Nav() {
                 {l.label}
               </Link>
             ))}
-            <Link
-              href="/onboarding"
-              className="text-sm font-semibold text-[#818cf8] hover:text-[#c7d2fe] transition-colors"
-              onClick={() => setMenuOpen(false)}
-            >
-              Try Aver →
-            </Link>
             <Link
               href="/pricing"
               className="text-sm font-semibold text-[#2563eb] hover:text-[#60a5fa] transition-colors"
