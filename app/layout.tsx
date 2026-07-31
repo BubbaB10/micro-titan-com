@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Mulish } from "next/font/google";
 import "./globals.css";
 import BottomTabBar from "./components/BottomTabBar";
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const mulish = Mulish({
   subsets: ["latin"],
@@ -34,6 +36,8 @@ export default function RootLayout({
       <body className="antialiased pb-24 lg:pb-0">
         {children}
         <BottomTabBar />
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
