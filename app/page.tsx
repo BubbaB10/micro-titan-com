@@ -8,7 +8,7 @@ export default function HomePage() {
     <div className="min-h-screen bg-[#0a1628] text-[#f4f7fa]">
       <Nav />
 
-      {/* HERO */}
+      {/* ── 1. HERO ──────────────────────────────────────────────────────────── */}
       <section className="relative min-h-screen flex flex-col items-center justify-center text-center px-4 pt-16 overflow-hidden">
         {/* Aurora glows */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
@@ -33,12 +33,14 @@ export default function HomePage() {
           style={{ maskImage: "linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.25) 35%, rgba(0,0,0,0.15) 65%, transparent 100%)" }}
         />
 
-        {/* MT firm mark — placeholder for the Monolith shield (asset incoming from Bubba) */}
+        {/* MT firm mark */}
         <div
           style={{
             position: "relative",
             display: "inline-flex",
-            marginBottom: "2rem",
+            flexDirection: "column",
+            alignItems: "center",
+            marginBottom: "1.75rem",
             animation: "seal-appear 0.5s ease 0.1s both",
           }}
         >
@@ -65,6 +67,13 @@ export default function HomePage() {
               style={{ fontFamily: "var(--font-mulish), sans-serif", animation: "fade-in-up 0.5s ease 1.2s both" }}
             >MT</text>
           </svg>
+          {/* Brand tagline — near the logo */}
+          <p
+            className="text-[10px] font-light tracking-[0.35em] uppercase text-[#a8d8f0]/25 mt-3"
+            style={{ animation: "fade-in-up 0.5s ease 1.5s both" }}
+          >
+            Provable software, end to end.
+          </p>
         </div>
 
         {/* Hero copy */}
@@ -79,61 +88,36 @@ export default function HomePage() {
             className="text-5xl sm:text-6xl md:text-7xl font-[300] leading-[1.05] tracking-tight text-[#f4f7fa] mb-6"
             style={{ fontFamily: "var(--font-mulish)", animation: "fade-in-up 0.55s ease 0.55s both" }}
           >
-            Provable software,<br />end to end.
+            We build your software.<br />Then we hand you the AI<br className="hidden sm:block" /> that runs it.
           </h1>
           <p
             className="text-lg sm:text-xl text-[#a8d8f0] font-light max-w-xl mx-auto mb-10 leading-relaxed"
             style={{ animation: "fade-in-up 0.55s ease 0.7s both" }}
           >
-            We build your app or OS — and hand you the AI agent that runs it.
-            Gate-verified either way.
+            Custom apps and business operating systems — with an agent that won&apos;t tell you
+            something&apos;s done until it actually is.
           </p>
+
+          {/* CTAs — one dominant, one subordinate */}
           <div
-            className="flex flex-col sm:flex-row gap-4 justify-center"
+            className="flex flex-col sm:flex-row gap-3 justify-center items-center"
             style={{ animation: "fade-in-up 0.55s ease 0.85s both" }}
           >
+            {/* PRIMARY — visually dominant */}
+            <Link
+              href="/studio"
+              className="inline-flex items-center justify-center gap-2 bg-[#2563eb] hover:bg-[#1d4ed8] text-white font-semibold px-9 py-4 rounded-xl text-base transition-all duration-200 shadow-lg shadow-[#2563eb]/25"
+            >
+              Start a build →
+            </Link>
+            {/* SECONDARY — clearly subordinate */}
             <Link
               href="/onboarding"
-              className="inline-flex items-center justify-center gap-2 bg-[#818cf8]/15 hover:bg-[#818cf8]/25 border border-[#818cf8]/40 text-[#c7d2fe] font-semibold px-7 py-3.5 rounded-xl text-sm transition-all duration-200"
+              className="inline-flex items-center justify-center gap-2 text-[#a8d8f0]/60 hover:text-[#c7d2fe] text-sm font-medium transition-colors px-4 py-2"
             >
-              Try Aver →
-            </Link>
-            <Link
-              href="/pricing"
-              className="inline-flex items-center justify-center gap-2 bg-[#2563eb] hover:bg-[#1d4ed8] text-white font-semibold px-7 py-3.5 rounded-xl text-sm transition-all duration-200"
-            >
-              Start a build
+              or try Aver
             </Link>
           </div>
-
-          {/* Pricing anchor — visible without navigating */}
-          <p
-            className="mt-5 text-xs text-center"
-            style={{ animation: "fade-in-up 0.5s ease 1.0s both" }}
-          >
-            <Link href="/pricing" className="text-[#a8d8f0]/55 hover:text-[#f4f7fa] transition-colors">
-              Aver from{" "}
-              <span className="text-[#c7d2fe] font-semibold">$250</span> setup ·{" "}
-              <span className="text-[#c7d2fe] font-semibold">$59/mo</span>
-              {"  ·  "}
-              Custom builds from{" "}
-              <span className="text-[#c7d2fe] font-semibold">$5,000</span>
-              {"  → "}See full pricing
-            </Link>
-          </p>
-
-          {/* Gate demo second entry point */}
-          <p
-            className="mt-2 text-xs text-center"
-            style={{ animation: "fade-in-up 0.5s ease 1.05s both" }}
-          >
-            <Link
-              href="/why-provable#gate"
-              className="text-[#a8d8f0]/35 hover:text-[#a8d8f0]/65 transition-colors underline underline-offset-2"
-            >
-              or watch the gate run →
-            </Link>
-          </p>
 
           <div
             className="mt-7 pt-7 border-t border-[rgba(168,216,240,0.12)] w-full max-w-sm mx-auto"
@@ -156,128 +140,92 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* TWO PILLARS */}
-      <section className="py-24 px-4 border-t border-[rgba(168,216,240,0.08)]">
+      {/* ── 2. WHAT YOU CAN BUY ──────────────────────────────────────────────── */}
+      <section className="py-14 px-4 border-t border-[rgba(168,216,240,0.08)] bg-[#06101f]">
         <div className="max-w-5xl mx-auto">
-          <p className="text-xs font-semibold tracking-[0.25em] uppercase text-[#4fb8e8] text-center mb-4">
-            One provable core. Two ways in.
+          <p className="text-xs font-semibold tracking-[0.25em] uppercase text-[#4fb8e8] text-center mb-10">
+            What you can buy
           </p>
-          <h2
-            className="text-3xl sm:text-4xl font-[300] text-[#f4f7fa] text-center mb-14"
-            style={{ fontFamily: "var(--font-mulish)" }}
-          >
-            Your agent. Your app.
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Aver */}
-            <Link href="/aver" className="group block">
-              <div className="h-full bg-[#12243d] border border-[#818cf8]/25 hover:border-[#818cf8]/50 rounded-2xl p-8 flex flex-col gap-5 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[#818cf8]/10">
-                <div className="w-12 h-12 rounded-xl bg-[#818cf8]/10 border border-[#818cf8]/25 flex items-center justify-center">
-                  {/* Aver A-check sub-mark: circle + A + crossbar-as-checkmark */}
-                  <svg viewBox="0 0 24 24" fill="none" strokeLinecap="round" strokeLinejoin="round" width="22" height="22">
-                    <circle cx="12" cy="12" r="9.5" stroke="#818cf8" strokeWidth="1.4"/>
-                    <path d="M8.5 17L12 8L15.5 17" stroke="#818cf8" strokeWidth="1.5"/>
-                    <path d="M9.5 13.8L11.2 15.8L15 12.2" stroke="#46cf93" strokeWidth="1.7"/>
-                  </svg>
-                </div>
-                <div className="flex-1">
-                  <span className="inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#818cf8]/10 text-[#c7d2fe] border border-[#818cf8]/25 mb-3">The Agent</span>
-                  <h3 className="text-2xl font-[300] text-[#f4f7fa] mb-3" style={{ fontFamily: "var(--font-mulish)" }}>Aver™</h3>
-                  <p className="text-[#a8d8f0] text-sm leading-relaxed mb-4">
-                    Your provable AI chief-of-staff. Runs your business or life,
-                    verifies its own work, and fails closed to you — not to the world — when it&apos;s unsure.
-                  </p>
-                  <div className="flex flex-col gap-2 mb-4">
-                    <div className="flex items-center gap-2 text-xs text-[#46cf93]">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#46cf93]" />
-                      Gate proves every claim before it reaches you
-                    </div>
-                    <div className="flex items-center gap-2 text-xs text-[#e2a44a]">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#e2a44a]" />
-                      You decide direction — Aver handles execution
-                    </div>
-                  </div>
-                  {/* Pricing anchor */}
-                  <Link
-                    href="/pricing"
-                    onClick={(e) => e.stopPropagation()}
-                    className="inline-block text-xs text-[#818cf8]/60 hover:text-[#818cf8] transition-colors"
-                  >
-                    from <span className="font-semibold text-[#c7d2fe]">$250</span> setup ·{" "}
-                    <span className="font-semibold text-[#c7d2fe]">$59/mo</span>{" → "}pricing
-                  </Link>
-                </div>
-                <div className="flex items-center gap-1.5 text-sm font-semibold text-[#818cf8] group-hover:text-[#c7d2fe] transition-colors">
-                  Explore Aver
-                  <svg className="w-4 h-4 transition-transform group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
-                </div>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+
+            {/* Custom Build */}
+            <Link href="/studio" className="group block bg-[#0f1f38] border border-[#46cf93]/25 hover:border-[#46cf93]/50 rounded-2xl p-7 text-center transition-all duration-200 hover:-translate-y-0.5">
+              <div className="w-10 h-10 rounded-xl bg-[#46cf93]/08 border border-[#46cf93]/25 flex items-center justify-center mx-auto mb-4">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#46cf93" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" width="20" height="20">
+                  <polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>
+                </svg>
+              </div>
+              <div className="text-2xl font-bold text-[#46cf93] mb-1">from $5,000</div>
+              <div className="text-sm font-semibold text-[#f4f7fa] mb-2">Custom Build</div>
+              <div className="text-xs text-[#a8d8f0]/60 leading-relaxed mb-5">
+                Your app or business OS, built end-to-end. Gate-broken before delivery.
+              </div>
+              <div className="text-xs text-[#46cf93] font-semibold group-hover:text-[#7fe9bb] transition-colors">
+                See The Studio →
               </div>
             </Link>
 
-            {/* The Studio */}
-            <Link href="/studio" className="group block">
-              <div className="h-full bg-[#12243d] border border-[#46cf93]/20 hover:border-[#46cf93]/40 rounded-2xl p-8 flex flex-col gap-5 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg">
-                <div className="w-12 h-12 rounded-xl bg-[#0a1628] border border-[#46cf93]/25 flex items-center justify-center">
-                  {/* The Studio — corner-frame sub-mark */}
-                  <svg viewBox="0 0 24 24" fill="none" stroke="#46cf93" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" width="22" height="22">
-                    <path d="M7 3H5a2 2 0 00-2 2v2M17 3h2a2 2 0 012 2v2M7 21H5a2 2 0 01-2-2v-2M17 21h2a2 2 0 002-2v-2"/>
+            {/* Aver Business — featured */}
+            <div className="relative">
+              <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 z-10">
+                <span className="px-3 py-1 rounded-full text-[10px] font-semibold bg-[#2563eb] text-white shadow shadow-[#2563eb]/40">
+                  Most chosen
+                </span>
+              </div>
+              <Link href="/pricing" className="group block h-full bg-[#0f1f38] border border-[#2563eb]/50 hover:border-[#2563eb]/80 rounded-2xl p-7 text-center transition-all duration-200 hover:-translate-y-0.5 shadow-lg shadow-[#2563eb]/08">
+                <div className="w-10 h-10 rounded-xl bg-[#2563eb]/10 border border-[#2563eb]/30 flex items-center justify-center mx-auto mb-4">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="#60a5fa" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" width="20" height="20">
+                    <rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-4 0v2M8 11h8"/>
                   </svg>
                 </div>
-                <div className="flex-1">
-                  <span className="inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#46cf93]/10 text-[#46cf93] border border-[#46cf93]/25 mb-3">Boutique Build Service</span>
-                  <h3 className="text-2xl font-[300] text-[#f4f7fa] mb-3" style={{ fontFamily: "var(--font-mulish)" }}>The Studio</h3>
-                  <p className="text-[#a8d8f0] text-sm leading-relaxed mb-4">
-                    We build your app or OS end-to-end. Scout → Architect → Builder → Breaker.
-                    The gate breaks it before you see it. You keep the agent that runs it.
-                  </p>
-                  <div className="flex flex-col gap-2 mb-4">
-                    <div className="flex items-center gap-2 text-xs text-[#46cf93]">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#46cf93]" />
-                      Gate-broken before delivery — not just hand-tested
-                    </div>
-                    <div className="flex items-center gap-2 text-xs text-[#e2a44a]">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#e2a44a]" />
-                      You own the app and the agent that runs it
-                    </div>
-                  </div>
-                  {/* Pricing anchor */}
-                  <Link
-                    href="/pricing"
-                    onClick={(e) => e.stopPropagation()}
-                    className="inline-block text-xs text-[#46cf93]/60 hover:text-[#46cf93] transition-colors"
-                  >
-                    from <span className="font-semibold text-[#46cf93]">$5,000</span>{" → "}pricing
-                  </Link>
+                <div className="text-2xl font-bold text-[#60a5fa] mb-0.5">$1,500</div>
+                <div className="text-sm text-[#a8d8f0]/50 mb-2">setup · then <span className="font-semibold text-[#a8d8f0]/80">$349/mo</span></div>
+                <div className="text-sm font-semibold text-[#f4f7fa] mb-2">Aver for Business</div>
+                <div className="text-xs text-[#a8d8f0]/60 leading-relaxed mb-5">
+                  Your provable agent running your business, verified.
                 </div>
-                <div className="flex items-center gap-1.5 text-sm font-semibold text-[#46cf93] group-hover:text-[#7fe9bb] transition-colors">
-                  See the process
-                  <svg className="w-4 h-4 transition-transform group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
+                <div className="text-xs text-[#60a5fa] font-semibold group-hover:text-[#93c5fd] transition-colors">
+                  See what&apos;s included →
                 </div>
+              </Link>
+            </div>
+
+            {/* Aver Personal */}
+            <Link href="/pricing" className="group block bg-[#0f1f38] border border-[#818cf8]/25 hover:border-[#818cf8]/50 rounded-2xl p-7 text-center transition-all duration-200 hover:-translate-y-0.5">
+              <div className="w-10 h-10 rounded-xl bg-[#818cf8]/10 border border-[#818cf8]/25 flex items-center justify-center mx-auto mb-4">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#c7d2fe" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" width="20" height="20">
+                  <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+                </svg>
+              </div>
+              <div className="text-2xl font-bold text-[#c7d2fe] mb-0.5">$250</div>
+              <div className="text-sm text-[#a8d8f0]/50 mb-2">setup · then <span className="font-semibold text-[#a8d8f0]/80">$59/mo</span></div>
+              <div className="text-sm font-semibold text-[#f4f7fa] mb-2">Aver for You</div>
+              <div className="text-xs text-[#a8d8f0]/60 leading-relaxed mb-5">
+                Your personal AI chief-of-staff, provably yours.
+              </div>
+              <div className="text-xs text-[#818cf8] font-semibold group-hover:text-[#c7d2fe] transition-colors">
+                Get started →
               </div>
             </Link>
+
           </div>
         </div>
       </section>
 
-      {/* GATE TEASER — moved above portfolio so it's reachable without scrolling past proof */}
+      {/* ── 3. GATE DEMO ─────────────────────────────────────────────────────── */}
       <section className="py-16 px-4 border-t border-[rgba(168,216,240,0.08)]">
         <div className="max-w-5xl mx-auto">
           <div className="bg-[#0f1f38] border border-[#2563eb]/20 rounded-2xl p-8 md:p-10 flex flex-col md:flex-row md:items-center gap-8">
             <div className="flex-1">
               <p className="text-xs font-semibold tracking-[0.25em] uppercase text-[#4fb8e8] mb-3">Live proof</p>
               <h3
-                className="text-2xl font-[300] text-[#f4f7fa] mb-3"
+                className="text-2xl sm:text-3xl font-[300] text-[#f4f7fa] mb-3"
                 style={{ fontFamily: "var(--font-mulish)" }}
               >
-                Don&apos;t take our word for it.<br />Watch the gate run.
+                Watch our AI challenge its own answers<br className="hidden md:block" /> before it reaches you.
               </h3>
               <p className="text-[#a8d8f0] text-sm leading-relaxed">
-                Pick a scenario — clean claim or conflict caught. See what gets stamped and what gets held.
-                The &ldquo;held&rdquo; moment is the trust-maker.
+                Our AI doesn&apos;t just produce — it audits. See a live run: what passes, what gets held, and why that matters to you.
               </p>
             </div>
             <div className="flex-shrink-0">
@@ -285,14 +233,14 @@ export default function HomePage() {
                 href="/why-provable#gate"
                 className="inline-flex items-center gap-2 bg-[#2563eb] hover:bg-[#1d4ed8] text-white font-semibold px-7 py-3.5 rounded-xl text-sm transition-all duration-200"
               >
-                Watch the gate →
+                Watch the gate run →
               </Link>
             </div>
           </div>
         </div>
       </section>
 
-      {/* PROOF STRIP */}
+      {/* ── 4. PORTFOLIO ─────────────────────────────────────────────────────── */}
       <section className="py-16 px-4 border-t border-[rgba(168,216,240,0.08)]">
         <div className="max-w-5xl mx-auto">
           <p className="text-xs font-semibold tracking-[0.25em] uppercase text-[#4fb8e8] text-center mb-3">
@@ -343,7 +291,110 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* EMAIL CAPTURE — LEAD MAGNET */}
+      {/* ── 5. TWO PILLARS ───────────────────────────────────────────────────── */}
+      <section className="py-24 px-4 border-t border-[rgba(168,216,240,0.08)]">
+        <div className="max-w-5xl mx-auto">
+          <p className="text-xs font-semibold tracking-[0.25em] uppercase text-[#4fb8e8] text-center mb-4">
+            One provable core. Two ways in.
+          </p>
+          <h2
+            className="text-3xl sm:text-4xl font-[300] text-[#f4f7fa] text-center mb-14"
+            style={{ fontFamily: "var(--font-mulish)" }}
+          >
+            Your agent. Your app.
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Aver */}
+            <Link href="/aver" className="group block">
+              <div className="h-full bg-[#12243d] border border-[#818cf8]/25 hover:border-[#818cf8]/50 rounded-2xl p-8 flex flex-col gap-5 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[#818cf8]/10">
+                <div className="w-12 h-12 rounded-xl bg-[#818cf8]/10 border border-[#818cf8]/25 flex items-center justify-center">
+                  <svg viewBox="0 0 24 24" fill="none" strokeLinecap="round" strokeLinejoin="round" width="22" height="22">
+                    <circle cx="12" cy="12" r="9.5" stroke="#818cf8" strokeWidth="1.4"/>
+                    <path d="M8.5 17L12 8L15.5 17" stroke="#818cf8" strokeWidth="1.5"/>
+                    <path d="M9.5 13.8L11.2 15.8L15 12.2" stroke="#46cf93" strokeWidth="1.7"/>
+                  </svg>
+                </div>
+                <div className="flex-1">
+                  <span className="inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#818cf8]/10 text-[#c7d2fe] border border-[#818cf8]/25 mb-3">The Agent</span>
+                  <h3 className="text-2xl font-[300] text-[#f4f7fa] mb-3" style={{ fontFamily: "var(--font-mulish)" }}>Aver™</h3>
+                  <p className="text-[#a8d8f0] text-sm leading-relaxed mb-4">
+                    Your provable AI chief-of-staff. Runs your business or life,
+                    verifies its own work, and fails closed to you — not to the world — when it&apos;s unsure.
+                  </p>
+                  <div className="flex flex-col gap-2 mb-4">
+                    <div className="flex items-center gap-2 text-xs text-[#46cf93]">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#46cf93]" />
+                      Gate proves every claim before it reaches you
+                    </div>
+                    <div className="flex items-center gap-2 text-xs text-[#e2a44a]">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#e2a44a]" />
+                      You decide direction — Aver handles execution
+                    </div>
+                  </div>
+                  <Link
+                    href="/pricing"
+                    onClick={(e) => e.stopPropagation()}
+                    className="inline-block text-xs text-[#818cf8]/60 hover:text-[#818cf8] transition-colors"
+                  >
+                    from <span className="font-semibold text-[#c7d2fe]">$250</span> setup ·{" "}
+                    <span className="font-semibold text-[#c7d2fe]">$59/mo</span>{" → "}pricing
+                  </Link>
+                </div>
+                <div className="flex items-center gap-1.5 text-sm font-semibold text-[#818cf8] group-hover:text-[#c7d2fe] transition-colors">
+                  Explore Aver
+                  <svg className="w-4 h-4 transition-transform group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </div>
+              </div>
+            </Link>
+
+            {/* The Studio */}
+            <Link href="/studio" className="group block">
+              <div className="h-full bg-[#12243d] border border-[#46cf93]/20 hover:border-[#46cf93]/40 rounded-2xl p-8 flex flex-col gap-5 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg">
+                <div className="w-12 h-12 rounded-xl bg-[#0a1628] border border-[#46cf93]/25 flex items-center justify-center">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="#46cf93" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" width="22" height="22">
+                    <path d="M7 3H5a2 2 0 00-2 2v2M17 3h2a2 2 0 012 2v2M7 21H5a2 2 0 01-2-2v-2M17 21h2a2 2 0 002-2v-2"/>
+                  </svg>
+                </div>
+                <div className="flex-1">
+                  <span className="inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#46cf93]/10 text-[#46cf93] border border-[#46cf93]/25 mb-3">Boutique Build Service</span>
+                  <h3 className="text-2xl font-[300] text-[#f4f7fa] mb-3" style={{ fontFamily: "var(--font-mulish)" }}>The Studio</h3>
+                  <p className="text-[#a8d8f0] text-sm leading-relaxed mb-4">
+                    We build your app or OS end-to-end. Scout → Architect → Builder → Breaker.
+                    The gate breaks it before you see it. You keep the agent that runs it.
+                  </p>
+                  <div className="flex flex-col gap-2 mb-4">
+                    <div className="flex items-center gap-2 text-xs text-[#46cf93]">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#46cf93]" />
+                      Gate-broken before delivery — not just hand-tested
+                    </div>
+                    <div className="flex items-center gap-2 text-xs text-[#e2a44a]">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#e2a44a]" />
+                      You own the app and the agent that runs it
+                    </div>
+                  </div>
+                  <Link
+                    href="/pricing"
+                    onClick={(e) => e.stopPropagation()}
+                    className="inline-block text-xs text-[#46cf93]/60 hover:text-[#46cf93] transition-colors"
+                  >
+                    from <span className="font-semibold text-[#46cf93]">$5,000</span>{" → "}pricing
+                  </Link>
+                </div>
+                <div className="flex items-center gap-1.5 text-sm font-semibold text-[#46cf93] group-hover:text-[#7fe9bb] transition-colors">
+                  See the process
+                  <svg className="w-4 h-4 transition-transform group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </div>
+              </div>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ── 6. EMAIL CAPTURE — LEAD MAGNET ───────────────────────────────────── */}
       <section className="py-20 px-4 border-t border-[rgba(168,216,240,0.08)]">
         <div className="max-w-2xl mx-auto text-center">
           <p className="text-xs font-semibold tracking-[0.25em] uppercase text-[#e2a44a] mb-4">
@@ -371,7 +422,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* BUSY MOM HOOK CARD */}
+      {/* ── 7. BUSY MOM HOOK CARD ────────────────────────────────────────────── */}
       <section className="py-16 px-4 border-t border-[rgba(168,216,240,0.08)]">
         <div className="max-w-5xl mx-auto">
           <div className="bg-[#0f1f38] border border-[rgba(168,216,240,0.15)] rounded-2xl p-8 md:p-10">
