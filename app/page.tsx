@@ -331,14 +331,10 @@ export default function HomePage() {
                       You decide direction — Aver handles execution
                     </div>
                   </div>
-                  <Link
-                    href="/pricing"
-                    onClick={(e) => e.stopPropagation()}
-                    className="inline-block text-xs text-[#818cf8]/60 hover:text-[#818cf8] transition-colors"
-                  >
+                  <p className="text-xs text-[#818cf8]/60">
                     from <span className="font-semibold text-[#c7d2fe]">$250</span> setup ·{" "}
                     <span className="font-semibold text-[#c7d2fe]">$59/mo</span>{" → "}pricing
-                  </Link>
+                  </p>
                 </div>
                 <div className="flex items-center gap-1.5 text-sm font-semibold text-[#818cf8] group-hover:text-[#c7d2fe] transition-colors">
                   Explore Aver
@@ -374,13 +370,9 @@ export default function HomePage() {
                       You own the app and the agent that runs it
                     </div>
                   </div>
-                  <Link
-                    href="/pricing"
-                    onClick={(e) => e.stopPropagation()}
-                    className="inline-block text-xs text-[#46cf93]/60 hover:text-[#46cf93] transition-colors"
-                  >
+                  <p className="text-xs text-[#46cf93]/60">
                     from <span className="font-semibold text-[#46cf93]">$5,000</span>{" → "}pricing
-                  </Link>
+                  </p>
                 </div>
                 <div className="flex items-center gap-1.5 text-sm font-semibold text-[#46cf93] group-hover:text-[#7fe9bb] transition-colors">
                   See the process
