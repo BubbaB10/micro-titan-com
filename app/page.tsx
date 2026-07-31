@@ -105,6 +105,36 @@ export default function HomePage() {
               Start a build
             </Link>
           </div>
+
+          {/* Pricing anchor — visible without navigating */}
+          <p
+            className="mt-5 text-xs text-center"
+            style={{ animation: "fade-in-up 0.5s ease 1.0s both" }}
+          >
+            <Link href="/pricing" className="text-[#a8d8f0]/55 hover:text-[#f4f7fa] transition-colors">
+              Aver from{" "}
+              <span className="text-[#c7d2fe] font-semibold">$250</span> setup ·{" "}
+              <span className="text-[#c7d2fe] font-semibold">$59/mo</span>
+              {"  ·  "}
+              Custom builds from{" "}
+              <span className="text-[#c7d2fe] font-semibold">$5,000</span>
+              {"  → "}See full pricing
+            </Link>
+          </p>
+
+          {/* Gate demo second entry point */}
+          <p
+            className="mt-2 text-xs text-center"
+            style={{ animation: "fade-in-up 0.5s ease 1.05s both" }}
+          >
+            <Link
+              href="/why-provable#gate"
+              className="text-[#a8d8f0]/35 hover:text-[#a8d8f0]/65 transition-colors underline underline-offset-2"
+            >
+              or watch the gate run →
+            </Link>
+          </p>
+
           <div
             className="mt-7 pt-7 border-t border-[rgba(168,216,240,0.12)] w-full max-w-sm mx-auto"
             style={{ animation: "fade-in-up 0.5s ease 1.1s both" }}
@@ -153,11 +183,11 @@ export default function HomePage() {
                 <div className="flex-1">
                   <span className="inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#818cf8]/10 text-[#c7d2fe] border border-[#818cf8]/25 mb-3">The Agent</span>
                   <h3 className="text-2xl font-[300] text-[#f4f7fa] mb-3" style={{ fontFamily: "var(--font-mulish)" }}>Aver™</h3>
-                  <p className="text-[#a8d8f0] text-sm leading-relaxed mb-6">
+                  <p className="text-[#a8d8f0] text-sm leading-relaxed mb-4">
                     Your provable AI chief-of-staff. Runs your business or life,
                     verifies its own work, and fails closed to you — not to the world — when it&apos;s unsure.
                   </p>
-                  <div className="flex flex-col gap-2">
+                  <div className="flex flex-col gap-2 mb-4">
                     <div className="flex items-center gap-2 text-xs text-[#46cf93]">
                       <span className="w-1.5 h-1.5 rounded-full bg-[#46cf93]" />
                       Gate proves every claim before it reaches you
@@ -167,6 +197,15 @@ export default function HomePage() {
                       You decide direction — Aver handles execution
                     </div>
                   </div>
+                  {/* Pricing anchor */}
+                  <Link
+                    href="/pricing"
+                    onClick={(e) => e.stopPropagation()}
+                    className="inline-block text-xs text-[#818cf8]/60 hover:text-[#818cf8] transition-colors"
+                  >
+                    from <span className="font-semibold text-[#c7d2fe]">$250</span> setup ·{" "}
+                    <span className="font-semibold text-[#c7d2fe]">$59/mo</span>{" → "}pricing
+                  </Link>
                 </div>
                 <div className="flex items-center gap-1.5 text-sm font-semibold text-[#818cf8] group-hover:text-[#c7d2fe] transition-colors">
                   Explore Aver
@@ -189,11 +228,11 @@ export default function HomePage() {
                 <div className="flex-1">
                   <span className="inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#46cf93]/10 text-[#46cf93] border border-[#46cf93]/25 mb-3">Boutique Build Service</span>
                   <h3 className="text-2xl font-[300] text-[#f4f7fa] mb-3" style={{ fontFamily: "var(--font-mulish)" }}>The Studio</h3>
-                  <p className="text-[#a8d8f0] text-sm leading-relaxed mb-6">
+                  <p className="text-[#a8d8f0] text-sm leading-relaxed mb-4">
                     We build your app or OS end-to-end. Scout → Architect → Builder → Breaker.
                     The gate breaks it before you see it. You keep the agent that runs it.
                   </p>
-                  <div className="flex flex-col gap-2">
+                  <div className="flex flex-col gap-2 mb-4">
                     <div className="flex items-center gap-2 text-xs text-[#46cf93]">
                       <span className="w-1.5 h-1.5 rounded-full bg-[#46cf93]" />
                       Gate-broken before delivery — not just hand-tested
@@ -203,6 +242,14 @@ export default function HomePage() {
                       You own the app and the agent that runs it
                     </div>
                   </div>
+                  {/* Pricing anchor */}
+                  <Link
+                    href="/pricing"
+                    onClick={(e) => e.stopPropagation()}
+                    className="inline-block text-xs text-[#46cf93]/60 hover:text-[#46cf93] transition-colors"
+                  >
+                    from <span className="font-semibold text-[#46cf93]">$5,000</span>{" → "}pricing
+                  </Link>
                 </div>
                 <div className="flex items-center gap-1.5 text-sm font-semibold text-[#46cf93] group-hover:text-[#7fe9bb] transition-colors">
                   See the process
@@ -216,52 +263,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* PROOF STRIP */}
-      <section className="py-16 px-4 border-t border-[rgba(168,216,240,0.08)]">
-        <div className="max-w-5xl mx-auto">
-          <p className="text-xs font-semibold tracking-[0.25em] uppercase text-[#4fb8e8] text-center mb-3">
-            The portfolio
-          </p>
-          <h2
-            className="text-2xl sm:text-3xl font-[300] text-[#f4f7fa] text-center mb-3"
-            style={{ fontFamily: "var(--font-mulish)" }}
-          >
-            Software Micro Titan builds and runs.
-          </h2>
-          <p className="text-[#a8d8f0]/70 text-sm text-center mb-10">
-            Greg — our own Aver — built and currently runs all six.
-          </p>
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-            {[
-              { name: "Fairway Bets",   desc: "Golf betting OS"  },
-              { name: "The Club",       desc: "PGCC member app"  },
-              { name: "Sandwich Etc.",  desc: "Order-ahead"      },
-              { name: "Mineral Ledger", desc: "Royalty audit"    },
-              { name: "Rosewood Dine",  desc: "Restaurant OS"    },
-              { name: "Property OS",    desc: "Rental template"  },
-            ].map((v, i) => (
-              <div
-                key={v.name}
-                className="bg-[#12243d] border border-[rgba(168,216,240,0.1)] rounded-xl px-5 py-4 flex items-center gap-3"
-                style={{ animation: `fade-in-up 0.5s ease ${0.05 * i + 0.1}s both` }}
-              >
-                <span className="w-2 h-2 rounded-full bg-[#46cf93] flex-shrink-0" />
-                <div>
-                  <p className="text-sm font-semibold text-[#f4f7fa]">{v.name}</p>
-                  <p className="text-xs text-[#a8d8f0]/60">{v.desc}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div className="text-center mt-8">
-            <Link href="/proof" className="text-sm text-[#a8d8f0]/60 hover:text-[#f4f7fa] transition-colors">
-              See full portfolio →
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* GATE TEASER */}
+      {/* GATE TEASER — moved above portfolio so it's reachable without scrolling past proof */}
       <section className="py-16 px-4 border-t border-[rgba(168,216,240,0.08)]">
         <div className="max-w-5xl mx-auto">
           <div className="bg-[#0f1f38] border border-[#2563eb]/20 rounded-2xl p-8 md:p-10 flex flex-col md:flex-row md:items-center gap-8">
@@ -286,6 +288,57 @@ export default function HomePage() {
                 Watch the gate →
               </Link>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* PROOF STRIP */}
+      <section className="py-16 px-4 border-t border-[rgba(168,216,240,0.08)]">
+        <div className="max-w-5xl mx-auto">
+          <p className="text-xs font-semibold tracking-[0.25em] uppercase text-[#4fb8e8] text-center mb-3">
+            The portfolio
+          </p>
+          <h2
+            className="text-2xl sm:text-3xl font-[300] text-[#f4f7fa] text-center mb-3"
+            style={{ fontFamily: "var(--font-mulish)" }}
+          >
+            Software Micro Titan builds and runs.
+          </h2>
+          <p className="text-[#a8d8f0]/70 text-sm text-center mb-10">
+            Greg — our own Aver — built and currently runs all six.
+          </p>
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+            {[
+              { name: "Fairway Bets",   desc: "Golf betting OS"                   },
+              { name: "Golf Club OS",   desc: "Member app · Built for PGCC"       },
+              { name: "Sandwich Etc.",  desc: "Order-ahead"                       },
+              { name: "Mineral Ledger", desc: "Royalty audit"                     },
+              { name: "Rosewood Dine",  desc: "Restaurant OS"                     },
+              { name: "Property OS",    desc: "Rental template"                   },
+            ].map((v, i) => (
+              <div
+                key={v.name}
+                className="bg-[#12243d] border border-[rgba(168,216,240,0.1)] rounded-xl px-5 py-4 flex items-center gap-3"
+                style={{ animation: `fade-in-up 0.5s ease ${0.05 * i + 0.1}s both` }}
+              >
+                <span className="w-2 h-2 rounded-full bg-[#46cf93] flex-shrink-0" />
+                <div>
+                  <p className="text-sm font-semibold text-[#f4f7fa]">{v.name}</p>
+                  <p className="text-xs text-[#a8d8f0]/60">{v.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+          <p className="text-xs text-[#a8d8f0]/40 text-center mt-4">
+            Each app ships as a clean template — your name, your brand. No Paris, TX branding required.{" "}
+            <Link href="/studio" className="underline underline-offset-2 hover:text-[#a8d8f0]/65 transition-colors">
+              See The Studio →
+            </Link>
+          </p>
+          <div className="text-center mt-3">
+            <Link href="/proof" className="text-sm text-[#a8d8f0]/60 hover:text-[#f4f7fa] transition-colors">
+              See full portfolio →
+            </Link>
           </div>
         </div>
       </section>
@@ -355,8 +408,8 @@ export default function HomePage() {
                   You stop being the family&apos;s memory.
                 </h4>
                 <p className="text-sm text-[#a8d8f0] leading-relaxed mb-4">
-                  School pickups, appointment reminders, grocery lists, household task backlogs —
-                  Aver holds the context so you don&apos;t have to carry it in your head.
+                  School pickups, appointment reminders, grocery lists, household task backlogs,
+                  summer camp sign-ups — Aver holds the context so you don&apos;t have to carry it in your head.
                 </p>
                 <div className="flex flex-col gap-2">
                   <div className="bg-[#0a1628] rounded-lg p-3 border border-[#46cf93]/20">
@@ -366,6 +419,10 @@ export default function HomePage() {
                   <div className="bg-[#0a1628] rounded-lg p-3 border border-[#e2a44a]/20">
                     <p className="text-xs font-semibold text-[#e2a44a] uppercase tracking-wider mb-1">You Decide</p>
                     <p className="text-xs text-[#f4f7fa] leading-relaxed">Priorities and tradeoffs. Aver surfaces what&apos;s falling behind; you decide what moves.</p>
+                  </div>
+                  <div className="bg-[#0a1628] rounded-lg p-3 border border-[#818cf8]/20">
+                    <p className="text-xs font-semibold text-[#818cf8] uppercase tracking-wider mb-1">Camps &amp; Activities</p>
+                    <p className="text-xs text-[#f4f7fa] leading-relaxed">Sign-up deadlines, permission forms, pickup windows — Aver tracks what&apos;s due and alerts you before it&apos;s late.</p>
                   </div>
                 </div>
               </div>
