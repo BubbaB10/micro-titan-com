@@ -19,7 +19,7 @@ export default function Footer() {
             <Link href="/studio" className="hover:text-[#f4f7fa] transition-colors">The Studio</Link>
             <Link href="/proof" className="hover:text-[#f4f7fa] transition-colors">Proof</Link>
             <Link href="/pricing" className="hover:text-[#f4f7fa] transition-colors">Pricing</Link>
-            <Link href="/why-provable" className="hover:text-[#f4f7fa] transition-colors">Why provable</Link>
+            <Link href="/why-provable" className="hover:text-[#f4f7fa] transition-colors">How it works</Link>
           </div>
         </div>
 
