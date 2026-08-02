@@ -262,42 +262,60 @@ export default function HomePage() {
             className="text-2xl sm:text-3xl font-[300] text-[#f4f7fa] text-center mb-3"
             style={{ fontFamily: "var(--font-mulish)" }}
           >
-            Software Micro Titan builds and runs.
+            One operator. Six businesses. One system.
           </h2>
-          <p className="text-[#a8d8f0]/70 text-sm text-center mb-10">
-            Greg — our own Aver — built and currently runs all six.
+          <p className="text-[#a8d8f0]/70 text-sm text-center mb-5">
+            Built by one person running all six on the same provable system you can hire us to build for you.
           </p>
+          {/* Stat bar */}
+          <div className="flex flex-wrap justify-center gap-x-5 gap-y-2 text-xs text-[#a8d8f0]/55 mb-8">
+            <span><span className="font-semibold text-[#f4f7fa]/80">6</span> live businesses</span>
+            <span className="text-[#a8d8f0]/20">·</span>
+            <span><span className="font-semibold text-[#f4f7fa]/80">4</span> industries</span>
+            <span className="text-[#a8d8f0]/20">·</span>
+            <span><span className="font-semibold text-[#f4f7fa]/80">$350k+</span> royalties reconciled</span>
+            <span className="text-[#a8d8f0]/20">·</span>
+            <span>Live in as fast as <span className="font-semibold text-[#f4f7fa]/80">72 hours</span></span>
+          </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
             {[
-              { name: "Fairway Bets",   desc: "Golf betting OS"                   },
-              { name: "Golf Club OS",   desc: "Member app · Built for PGCC"       },
-              { name: "Sandwich Etc.",  desc: "Order-ahead"                       },
-              { name: "Mineral Ledger", desc: "Royalty audit"                     },
-              { name: "Rosewood Dine",  desc: "Restaurant OS"                     },
-              { name: "Property OS",    desc: "Rental template"                   },
+              { name: "Fairway Bets",   desc: "Settle golf bets without an argument or a spreadsheet.", audience: "Golf groups & leagues",    slug: "fairway-bets"   },
+              { name: "The Club",       desc: "Member app — tee times, events, and club communications.", audience: "Golf & country clubs",   slug: "the-club"       },
+              { name: "Sandwich Etc.",  desc: "Order ahead with SMS confirmation, no third-party fees.", audience: "Local restaurants",       slug: "sandwich-etc"   },
+              { name: "Mineral Ledger", desc: "Royalty audit and cross-owner reconciliation.",            audience: "Mineral rights owners",  slug: "mineral-ledger" },
+              { name: "Rosewood Dine",  desc: "Full restaurant OS — orders to kitchen to analytics.",     audience: "Restaurant owners",      slug: "rosewood-dine"  },
+              { name: "Property OS",    desc: "AI-managed rental portfolio with zero admin hours.",        audience: "Landlords with 10+ units", slug: "property-os"  },
             ].map((v, i) => (
-              <div
+              <Link
                 key={v.name}
-                className="bg-[#12243d] border border-[rgba(168,216,240,0.1)] rounded-xl px-5 py-4 flex items-center gap-3"
+                href={`/portfolio/${v.slug}`}
+                className="group bg-[#12243d] border border-[rgba(168,216,240,0.1)] hover:border-[rgba(168,216,240,0.22)] rounded-xl px-5 py-4 flex items-center gap-3 transition-all duration-200 hover:-translate-y-0.5"
                 style={{ animation: `fade-in-up 0.5s ease ${0.05 * i + 0.1}s both` }}
               >
                 <span className="w-2 h-2 rounded-full bg-[#46cf93] flex-shrink-0" />
-                <div>
+                <div className="flex-1 min-w-0">
                   <p className="text-sm font-semibold text-[#f4f7fa]">{v.name}</p>
-                  <p className="text-xs text-[#a8d8f0]/60">{v.desc}</p>
+                  <p className="text-xs text-[#a8d8f0]/60 leading-relaxed">{v.desc}</p>
+                  <p className="text-xs text-[#4fb8e8]/50 mt-0.5">{v.audience}</p>
                 </div>
-              </div>
+                <svg className="w-3.5 h-3.5 text-[#a8d8f0]/25 group-hover:text-[#4fb8e8]/60 transition-colors flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </Link>
             ))}
           </div>
           <p className="text-xs text-[#a8d8f0]/40 text-center mt-4">
-            Each app ships as a clean template — your name, your brand. No Paris, TX branding required.{" "}
+            Each app ships as a clean template — your name, your brand.{" "}
             <Link href="/studio" className="underline underline-offset-2 hover:text-[#a8d8f0]/65 transition-colors">
               See The Studio →
             </Link>
           </p>
           <div className="text-center mt-3">
+            <Link href="/about" className="text-sm text-[#a8d8f0]/60 hover:text-[#f4f7fa] transition-colors mr-5">
+              The operator story →
+            </Link>
             <Link href="/proof" className="text-sm text-[#a8d8f0]/60 hover:text-[#f4f7fa] transition-colors">
-              See full portfolio →
+              Full portfolio →
             </Link>
           </div>
         </div>

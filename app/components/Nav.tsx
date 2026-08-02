@@ -6,9 +6,9 @@ import { useState } from "react";
 const NAV_LINKS = [
   { href: "/aver",         label: "Aver",        desc: "the agent" },
   { href: "/studio",       label: "The Studio",  desc: "custom builds" },
-  { href: "/proof",        label: "Proof",        desc: "what we've shipped" },
+  { href: "/proof",        label: "Portfolio",    desc: "six businesses" },
+  { href: "/about",        label: "About",        desc: "the operator story" },
   { href: "/pricing",      label: "Pricing",      desc: null },
-  { href: "/why-provable", label: "How it works", desc: null },
 ];
 
 // Mobile hamburger shows the overflow items the tab bar doesn't cover
