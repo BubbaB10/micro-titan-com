@@ -27,7 +27,7 @@ export default function ReviewIntelPage() {
             $19/report
           </p>
           <a
-            href="https://buy.stripe.com/eVq5kveJn7P20DA2DCg7e00"
+            href="mailto:hello@micro-titan.com?subject=Review%20Intel"
             className="inline-flex items-center gap-2 text-white font-semibold px-8 py-4 rounded-xl text-lg transition-all hover:opacity-90"
             style={{ backgroundColor: accent }}
           >
@@ -105,7 +105,7 @@ export default function ReviewIntelPage() {
             Pay per analysis. No subscription. Results in minutes.
           </p>
           <a
-            href="https://buy.stripe.com/eVq5kveJn7P20DA2DCg7e00"
+            href="mailto:hello@micro-titan.com?subject=Review%20Intel"
             className="inline-flex items-center gap-2 text-white font-semibold px-8 py-4 rounded-xl text-lg transition-all hover:opacity-90 mb-4"
             style={{ backgroundColor: accent }}
           >

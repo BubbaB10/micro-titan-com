@@ -27,7 +27,7 @@ export default function RescueSocialPage() {
             $99/mo — 14-day free trial
           </p>
           <a
-            href="https://buy.stripe.com/bJebIT0Sx2uIfyudigg7e06"
+            href="mailto:hello@micro-titan.com?subject=Rescue%20Social"
             className="inline-flex items-center gap-2 text-white font-semibold px-8 py-4 rounded-xl text-lg transition-all hover:opacity-90"
             style={{ backgroundColor: accent }}
           >
@@ -106,7 +106,7 @@ export default function RescueSocialPage() {
             Unlimited captions. All platforms. Cancel anytime.
           </p>
           <a
-            href="https://buy.stripe.com/bJebIT0Sx2uIfyudigg7e06"
+            href="mailto:hello@micro-titan.com?subject=Rescue%20Social"
             className="inline-flex items-center gap-2 text-white font-semibold px-8 py-4 rounded-xl text-lg transition-all hover:opacity-90 mb-4"
             style={{ backgroundColor: accent }}
           >
