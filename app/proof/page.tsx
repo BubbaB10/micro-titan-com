@@ -32,7 +32,7 @@ const PORTFOLIO = [
     statusColor: "#46cf93",
     accent: "#dc2626",
     iconSvg: '<path d="M4 9 Q4 6 12 6 Q20 6 20 9"/><line x1="4" y1="13" x2="20" y2="13"/><path d="M4 16 Q4 18.5 12 18.5 Q20 18.5 20 16"/>',
-    desc: "Order-ahead app for a Paris, TX sandwich shop. Twilio SMS confirmation, live for real customers.",
+    desc: "Order-ahead app for a Paris, TX sandwich shop. Order-ahead, live for real customers.",
     proof: "Built, connected, and live with real orders inside one week. Warm cream UI, Twilio confirmed.",
     gate: "Order capture verified before launch.",
   },

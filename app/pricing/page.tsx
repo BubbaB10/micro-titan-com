@@ -52,7 +52,7 @@ const PLANS = [
     badgeColor: "#a8d8f0",
     features: [
       "Everything in Business",
-      "Mac mini: data local, reasoning cloud",
+      "Mac mini: data local, reasoning cloud (by arrangement)",
       "Spark: data + reasoning fully on-device (by arrangement)",
       "Hardware setup and configuration",
       "Air-gap option with local model (Spark only, by arrangement)",

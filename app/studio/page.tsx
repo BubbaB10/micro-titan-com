@@ -37,7 +37,7 @@ const PIPELINE = [
 const PROOF = [
   { name: "Fairway Bets",   desc: "10+ game formats, zero-sum verified per payout",  status: "Live" },
   { name: "The Club",       desc: "Tee sheet, event lifecycle, club comms",           status: "Live" },
-  { name: "Sandwich Etc.",  desc: "Order-ahead + Twilio SMS, live for real customers", status: "Live" },
+  { name: "Sandwich Etc.",  desc: "Order-ahead, live for real customers",               status: "Live" },
   { name: "Mineral Ledger", desc: "XTO royalty audit, 16 statements parsed",          status: "Live" },
   { name: "Rosewood Dine",  desc: "Full restaurant OS in 72 hours",                   status: "Live" },
   { name: "Property OS",    desc: "25-unit portfolio template",                        status: "Template" },

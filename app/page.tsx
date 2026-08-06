@@ -281,7 +281,7 @@ export default function HomePage() {
             {[
               { name: "Fairway Bets",   desc: "Settle golf bets without an argument or a spreadsheet.", audience: "Golf groups & leagues",    slug: "fairway-bets"   },
               { name: "The Club",       desc: "Member app — tee times, events, and club communications.", audience: "Golf & country clubs",   slug: "the-club"       },
-              { name: "Sandwich Etc.",  desc: "Order ahead with SMS confirmation, no third-party fees.", audience: "Local restaurants",       slug: "sandwich-etc"   },
+              { name: "Sandwich Etc.",  desc: "Order ahead, no third-party fees.",                      audience: "Local restaurants",       slug: "sandwich-etc"   },
               { name: "Mineral Ledger", desc: "Royalty audit and cross-owner reconciliation.",            audience: "Mineral rights owners",  slug: "mineral-ledger" },
               { name: "Rosewood Dine",  desc: "Full restaurant OS — orders to kitchen to analytics.",     audience: "Restaurant owners",      slug: "rosewood-dine"  },
               { name: "Property OS",    desc: "AI-managed rental portfolio with zero admin hours.",        audience: "Landlords with 10+ units", slug: "property-os"  },
