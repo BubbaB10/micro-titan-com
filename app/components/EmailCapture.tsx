@@ -13,7 +13,7 @@ const FORMSPREE_ID = process.env.NEXT_PUBLIC_FORMSPREE_FORM_ID;
 
 export default function EmailCapture({ variant = "inline", source = "page" }: Props) {
   const [email, setEmail] = useState("");
-  const [state, setState] = useState<"idle" | "submitting" | "success" | "error">("idle");
+  const [state, setState] = useState<"idle" | "submitting" | "success" | "error" | "email_fallback">("idle");
   const [errorMsg, setErrorMsg] = useState("");
 
   async function handleSubmit(e: React.FormEvent) {
@@ -24,9 +24,7 @@ export default function EmailCapture({ variant = "inline", source = "page" }: Pr
     setErrorMsg("");
 
     if (!FORMSPREE_ID) {
-      // Not yet activated — still show success so the flow is testable
-      await new Promise((r) => setTimeout(r, 800));
-      setState("success");
+      setState("email_fallback");
       return;
     }
 
@@ -47,6 +45,26 @@ export default function EmailCapture({ variant = "inline", source = "page" }: Pr
       setErrorMsg("Network error — check your connection and try again.");
       setState("error");
     }
+  }
+
+  if (state === "email_fallback") {
+    return (
+      <div
+        className={`flex flex-col items-center gap-3 ${
+          variant === "hero" ? "py-4" : "py-2"
+        }`}
+      >
+        <p className={`text-[#a8d8f0] text-center ${variant === "hero" ? "text-sm" : "text-xs"}`}>
+          Email us and we&apos;ll send the guide directly:
+        </p>
+        <a
+          href="mailto:hello@micro-titan.com?subject=Nothing%20Slips%20Guide"
+          className={`font-semibold text-[#818cf8] hover:text-[#c7d2fe] transition-colors underline underline-offset-2 ${variant === "hero" ? "text-base" : "text-sm"}`}
+        >
+          hello@micro-titan.com
+        </a>
+      </div>
+    );
   }
 
   if (state === "success") {
