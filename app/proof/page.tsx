@@ -34,7 +34,7 @@ const PORTFOLIO = [
     iconSvg: '<path d="M4 9 Q4 6 12 6 Q20 6 20 9"/><line x1="4" y1="13" x2="20" y2="13"/><path d="M4 16 Q4 18.5 12 18.5 Q20 18.5 20 16"/>',
     desc: "Order-ahead app for a Paris, TX sandwich shop. Twilio SMS confirmation, live for real customers.",
     proof: "Built, connected, and live with real orders inside one week. Warm cream UI, Twilio confirmed.",
-    gate: "Order capture and SMS delivery verified before launch.",
+    gate: "Order capture verified before launch.",
   },
   {
     name: "Mineral Ledger",
@@ -66,7 +66,7 @@ const PORTFOLIO = [
     accent: "#0891b2",
     iconSvg: '<polyline points="3 12 12 4 21 12"/><path d="M5 12 L5 21 L19 21 L19 12"/><path d="M9 21 L9 15 L15 15 L15 21"/>',
     desc: "AI-managed rental portfolio operations. Maintenance, leasing, and tenant comms on autopilot.",
-    proof: "Built as a reusable template from a real 25-unit portfolio. Zero hours/week on admin.",
+    proof: "Built as a reusable template from a real 25-unit portfolio.",
     gate: "Maintenance workflow and tenant communication delivery verified.",
   },
 ];
