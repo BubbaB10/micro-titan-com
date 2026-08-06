@@ -85,10 +85,10 @@ export default function HomePage() {
             Micro Titan
           </p>
           <h1
-            className="text-5xl sm:text-6xl md:text-7xl font-[300] leading-[1.05] tracking-tight text-[#f4f7fa] mb-6"
+            className="text-4xl sm:text-6xl md:text-7xl font-[300] leading-[1.05] tracking-tight text-[#f4f7fa] mb-6"
             style={{ fontFamily: "var(--font-mulish)", animation: "fade-in-up 0.55s ease 0.55s both" }}
           >
-            We build your software.<br />Then we hand you the AI<br className="hidden sm:block" /> that runs it.
+            We build your software.<br />Then we hand you the AI that runs it.
           </h1>
           <p
             className="text-lg sm:text-xl text-[#a8d8f0] font-light max-w-xl mx-auto mb-10 leading-relaxed"

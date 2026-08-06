@@ -12,6 +12,13 @@ const nextConfig: NextConfig = {
         destination: "/why-provable",
         permanent: false,
       },
+      {
+        // /portfolio/<slug> pages exist but /portfolio itself never did — nav and cards call the
+        // index "/proof", so a trimmed URL 404'd. Redirect rather than a second index page.
+        source: "/portfolio",
+        destination: "/proof",
+        permanent: false,
+      },
     ];
   },
 };
