@@ -6,14 +6,15 @@ type Variant = "hero" | "inline";
 
 interface Props {
   variant?: Variant;
-  source?: string; // where on the page (for Formspree metadata)
+  source?: string;
 }
 
-const FORMSPREE_ID = process.env.NEXT_PUBLIC_FORMSPREE_FORM_ID;
+const SUBSCRIBE_URL = "https://ripple-the-download-production.up.railway.app/api/subscribe";
 
 export default function EmailCapture({ variant = "inline", source = "page" }: Props) {
   const [email, setEmail] = useState("");
-  const [state, setState] = useState<"idle" | "submitting" | "success" | "error" | "email_fallback">("idle");
+  const [honeypot, setHoneypot] = useState("");
+  const [state, setState] = useState<"idle" | "submitting" | "success" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState("");
 
   async function handleSubmit(e: React.FormEvent) {
@@ -23,48 +24,22 @@ export default function EmailCapture({ variant = "inline", source = "page" }: Pr
     setState("submitting");
     setErrorMsg("");
 
-    if (!FORMSPREE_ID) {
-      setState("email_fallback");
-      return;
-    }
-
     try {
-      const res = await fetch(`https://formspree.io/f/${FORMSPREE_ID}`, {
+      const res = await fetch(SUBSCRIBE_URL, {
         method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify({ email, source }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, source, website: honeypot }),
       });
       if (res.ok) {
         setState("success");
       } else {
-        const data = await res.json().catch(() => ({}));
-        setErrorMsg(data?.errors?.[0]?.message ?? "Something went wrong — try again.");
+        setErrorMsg("Something went wrong — try again or email us directly.");
         setState("error");
       }
     } catch {
-      setErrorMsg("Network error — check your connection and try again.");
+      setErrorMsg("Network error — try again or email us directly.");
       setState("error");
     }
-  }
-
-  if (state === "email_fallback") {
-    return (
-      <div
-        className={`flex flex-col items-center gap-3 ${
-          variant === "hero" ? "py-4" : "py-2"
-        }`}
-      >
-        <p className={`text-[#a8d8f0] text-center ${variant === "hero" ? "text-sm" : "text-xs"}`}>
-          Email us and we&apos;ll send the guide directly:
-        </p>
-        <a
-          href="mailto:hello@micro-titan.com?subject=Nothing%20Slips%20Guide"
-          className={`font-semibold text-[#818cf8] hover:text-[#c7d2fe] transition-colors underline underline-offset-2 ${variant === "hero" ? "text-base" : "text-sm"}`}
-        >
-          hello@micro-titan.com
-        </a>
-      </div>
-    );
   }
 
   if (state === "success") {
@@ -95,6 +70,16 @@ export default function EmailCapture({ variant = "inline", source = "page" }: Pr
 
   return (
     <form onSubmit={handleSubmit} className={variant === "hero" ? "w-full max-w-sm mx-auto" : "w-full"}>
+      {/* Honeypot — bots fill it, humans don't */}
+      <input
+        type="text"
+        name="website"
+        value={honeypot}
+        onChange={(e) => setHoneypot(e.target.value)}
+        tabIndex={-1}
+        aria-hidden="true"
+        style={{ position: "absolute", opacity: 0, pointerEvents: "none", height: 0 }}
+      />
       <div className="flex flex-col sm:flex-row gap-2">
         <input
           type="email"
@@ -117,7 +102,15 @@ export default function EmailCapture({ variant = "inline", source = "page" }: Pr
         </button>
       </div>
       {state === "error" && (
-        <p className="mt-2 text-xs text-[#f87171]">{errorMsg}</p>
+        <p className="mt-2 text-xs text-[#f87171]">
+          {errorMsg}{" "}
+          <a
+            href="mailto:hello@micro-titan.com?subject=Nothing%20Slips%20Guide"
+            className="underline underline-offset-2 text-[#818cf8]"
+          >
+            hello@micro-titan.com
+          </a>
+        </p>
       )}
       <p className="mt-2 text-xs text-[#a8d8f0]/30 text-center">
         🔒 We never ask for your passwords. Ever.
