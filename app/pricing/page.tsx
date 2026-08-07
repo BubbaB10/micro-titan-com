@@ -45,7 +45,7 @@ const PLANS = [
     name: "On Your Hardware",
     buildFee: "$1,250",
     monthly: "$249",
-    monthlyUnit: "/mo (Mac mini) · (Spark — by arrangement) + hardware",
+    monthlyUnit: "/mo (Mac mini — by arrangement) · (Spark — by arrangement) + hardware",
     desc: "Your data stays on your box. Provability identical — custody is yours.",
     featured: false,
     badge: "Privacy tier",

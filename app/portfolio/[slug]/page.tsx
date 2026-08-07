@@ -50,7 +50,7 @@ const VENTURES: Record<string, {
   },
   "sandwich-etc": {
     name: "Sandwich Etc.",
-    tagline: "Order-ahead for local restaurants — SMS-confirmed, no third-party fees.",
+    tagline: "Order-ahead for local restaurants — order-ahead pickup, no third-party fees.",
     audience: "Local restaurants",
     category: "Restaurant Tech",
     status: "Live",
