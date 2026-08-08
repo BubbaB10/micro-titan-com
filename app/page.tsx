@@ -112,7 +112,7 @@ export default function HomePage() {
             </Link>
             {/* SECONDARY — clearly subordinate */}
             <Link
-              href="/onboarding"
+              href="https://ripple-the-download-production.up.railway.app"
               className="inline-flex items-center justify-center gap-2 text-[#a8d8f0]/60 hover:text-[#c7d2fe] text-sm font-medium transition-colors px-4 py-2"
             >
               or try Aver
