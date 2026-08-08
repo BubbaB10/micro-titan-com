@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import Nav from "../components/Nav";
 import Footer from "../components/Footer";
+import AverGateFlow from "../components/AverGateFlow";
 
 const TABS = [
   { id: "what",  label: "What it does" },
@@ -319,13 +320,14 @@ export default function AverPage() {
           <p className="text-xl sm:text-2xl text-[#a8d8f0] font-light max-w-2xl mx-auto mb-8">
             Most AI tells you what it did. Aver proves it — or it doesn&apos;t reach you at all.
           </p>
-          <div className="flex flex-wrap gap-3 justify-center">
+          <div className="flex flex-wrap gap-3 justify-center mb-14">
             {["Provable not plausible", "Fail-closed", "Alert discipline"].map((p) => (
               <span key={p} className="px-4 py-2 rounded-full text-xs font-semibold bg-[#12243d] text-[#a8d8f0] border border-[rgba(168,216,240,0.15)]">
                 {p}
               </span>
             ))}
           </div>
+          <AverGateFlow />
         </div>
       </section>
 

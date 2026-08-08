@@ -2,6 +2,7 @@ import Link from "next/link";
 import Nav from "./components/Nav";
 import Footer from "./components/Footer";
 import EmailCapture from "./components/EmailCapture";
+import HeroSystemDiagram from "./components/HeroSystemDiagram";
 
 export default function HomePage() {
   return (
@@ -149,6 +150,16 @@ export default function HomePage() {
           <svg className="w-4 h-4 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
           </svg>
+        </div>
+      </section>
+
+      {/* ── 1b. SYSTEM FLOW DIAGRAM ──────────────────────────────────────────── */}
+      <section className="py-14 px-4 border-t border-[rgba(168,216,240,0.07)] bg-[#07101e]">
+        <div className="max-w-5xl mx-auto">
+          <p className="text-[10px] font-semibold tracking-[0.28em] uppercase text-[#a8d8f0]/35 text-center mb-8">
+            How it works
+          </p>
+          <HeroSystemDiagram />
         </div>
       </section>
 
