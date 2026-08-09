@@ -51,29 +51,35 @@ function WhatItDoes() {
         />
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-        {[
-          {
-            badge: "Daily operations",
-            title: "Your calendar is no longer a puzzle you carry in your head.",
-            body: "Meetings, deadlines, follow-ups, recurring tasks — Aver holds the full schedule and flags conflicts before they land in your lap.",
-            gp: "Schedule conflicts surfaced early. Follow-ups sent on time.",
-            yd: "Which priorities shift when something moves.",
-          },
-          {
-            badge: "Business context",
-            title: "Every stakeholder loop closed without micromanagement.",
-            body: "Clients, vendors, team members — Aver keeps the communication threads alive, tracks commitments, and escalates only what genuinely needs your attention.",
-            gp: "Communication threads tracked. Commitments logged.",
-            yd: "Tone, relationship strategy, which relationships to prioritize.",
-          },
-        ].map((c) => (
-          <div key={c.title} className="bg-[#12243d] border border-[rgba(168,216,240,0.12)] rounded-2xl p-6">
-            <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-[#1e3a5f] text-[#a8d8f0] border border-[rgba(168,216,240,0.2)] mb-3">{c.badge}</span>
-            <h4 className="text-lg font-[300] text-[#f4f7fa] mb-2" style={{ fontFamily: "var(--font-mulish)" }}>{c.title}</h4>
-            <p className="text-sm text-[#a8d8f0] leading-relaxed">{c.body}</p>
-            <GpYd gp={c.gp} yd={c.yd} />
-          </div>
-        ))}
+        <div className="bg-[#12243d] border border-[rgba(168,216,240,0.12)] rounded-2xl p-6">
+          <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-[#1e3a5f] text-[#a8d8f0] border border-[rgba(168,216,240,0.2)] mb-3">Schedule awareness</span>
+          <h4 className="text-lg font-[300] text-[#f4f7fa] mb-2" style={{ fontFamily: "var(--font-mulish)" }}>
+            Your agent knows your calendar — and tells you when it can&apos;t see it.
+          </h4>
+          <p className="text-sm text-[#a8d8f0] leading-relaxed mb-3">
+            You paste a private read-only calendar feed during intake. Aver reads it,
+            reminds you before things happen, and tells you when something slipped — instead
+            of hiding it. When you need an invite sent, Aver proposes it and you accept it
+            in your own calendar app.
+          </p>
+          <p className="text-xs text-[#a8d8f0]/50 leading-relaxed mb-1">
+            What Aver can&apos;t see: if your feed is unavailable, it says so. It doesn&apos;t
+            pretend. No write access, no account connections — a read-only URL is all it ever has.
+          </p>
+          <GpYd
+            gp="Upcoming conflicts surfaced. Slipped commitments flagged — not silently buried."
+            yd="Which priorities shift when something moves. Aver reads your schedule; direction is yours."
+          />
+        </div>
+        <div className="bg-[#12243d] border border-[rgba(168,216,240,0.12)] rounded-2xl p-6">
+          <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-[#1e3a5f] text-[#a8d8f0] border border-[rgba(168,216,240,0.2)] mb-3">Business context</span>
+          <h4 className="text-lg font-[300] text-[#f4f7fa] mb-2" style={{ fontFamily: "var(--font-mulish)" }}>Every stakeholder loop closed without micromanagement.</h4>
+          <p className="text-sm text-[#a8d8f0] leading-relaxed">Clients, vendors, team members — Aver keeps the communication threads alive, tracks commitments, and escalates only what genuinely needs your attention.</p>
+          <GpYd
+            gp="Communication threads tracked. Commitments logged."
+            yd="Tone, relationship strategy, which relationships to prioritize."
+          />
+        </div>
       </div>
     </div>
   );
