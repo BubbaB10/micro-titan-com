@@ -9,7 +9,7 @@ interface Props {
   source?: string;
 }
 
-const SUBSCRIBE_URL = "https://ripple-the-download-production.up.railway.app/api/subscribe";
+const SUBSCRIBE_URL = "https://download.micro-titan.com/api/subscribe";
 
 export default function EmailCapture({ variant = "inline", source = "page" }: Props) {
   const [email, setEmail] = useState("");

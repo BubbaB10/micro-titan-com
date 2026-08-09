@@ -243,7 +243,7 @@ export default function GuidePage() {
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link
-            href="https://ripple-the-download-production.up.railway.app"
+            href="https://download.micro-titan.com"
             className="inline-flex items-center justify-center gap-2 font-semibold px-7 py-3.5 rounded-xl text-sm transition-all duration-200"
             style={{ backgroundColor: "#818cf8", color: "#ffffff" }}
           >
