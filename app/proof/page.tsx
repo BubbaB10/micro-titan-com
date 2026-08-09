@@ -2,72 +2,36 @@ import Link from "next/link";
 import Nav from "../components/Nav";
 import Footer from "../components/Footer";
 
-const PORTFOLIO = [
+const GATE_CHECKS = [
   {
-    name: "Fairway Bets",
-    category: "Sports / Fintech",
-    status: "App Store Stage",
-    statusColor: "#e2a44a",
-    accent: "#10b981",
-    iconSvg: '<line x1="12" y1="4" x2="12" y2="19"/><path d="M12 4 L19 7.5 L12 11"/><ellipse cx="12" cy="19" rx="4.5" ry="1.5"/>',
-    desc: "Golf betting OS — handicaps, Wolf, Hammer, multi-format trip planner, and full settlement engine. Zero math, zero arguments.",
-    proof: "10+ game formats verified zero-sum by the gate. Payout correctness is mechanical, not manual.",
-    gate: "Every payout is gate-verified before money moves.",
+    app: "Fairway Bets",
+    check: "Zero-sum payout verification",
+    detail: "Every game format — Wolf, Hammer, banker, skins — verified that payouts sum to zero before money moves.",
+    color: "#10b981",
   },
   {
-    name: "The Club",
-    category: "Club Management",
-    status: "Live",
-    statusColor: "#3b82f6",
-    accent: "#1d4ed8",
-    iconSvg: '<line x1="9" y1="4" x2="16" y2="17"/><path d="M14 16 L18 18 L17 21 L11 21 Z"/>',
-    desc: "Member app for Paris Golf & Country Club — tee times, event lifecycle, news ticker, and club communication hub.",
-    proof: "Groundskeeping hub, event status lifecycle, ticker board, and full member directory all live.",
-    gate: "Tee sheet data integrity and event state transitions verified.",
+    app: "Mineral Ledger",
+    check: "Statement parse vs. source document",
+    detail: "Extracted line amounts reconciled against the header totals. Parse flagged LOW_FIDELITY when volume and price can't be extracted.",
+    color: "#d97706",
   },
   {
-    name: "Sandwich Etc.",
-    category: "Restaurant Tech",
-    status: "Live",
-    statusColor: "#46cf93",
-    accent: "#dc2626",
-    iconSvg: '<path d="M4 9 Q4 6 12 6 Q20 6 20 9"/><line x1="4" y1="13" x2="20" y2="13"/><path d="M4 16 Q4 18.5 12 18.5 Q20 18.5 20 16"/>',
-    desc: "Order-ahead app for a Paris, TX sandwich shop. Order-ahead, live for real customers.",
-    proof: "Built, connected, and live with real orders inside one week. Warm cream UI, order flow live.",
-    gate: "Order capture verified before launch.",
+    app: "Sandwich Etc.",
+    check: "Anonymous read blocked",
+    detail: "Order and customer data must not be readable without authentication. The probe confirms it — not assumed.",
+    color: "#dc2626",
   },
   {
-    name: "Mineral Ledger",
-    category: "Finance / Royalty",
-    status: "Live",
-    statusColor: "#46cf93",
-    accent: "#d97706",
-    iconSvg: '<path d="M12 4 C12 4 6 10 6 15 Q6 20 12 20 Q18 20 18 15 Q18 10 12 4 Z"/><line x1="9" y1="14" x2="15" y2="14"/><line x1="10" y1="17" x2="14" y2="17"/>',
-    desc: "XTO Energy royalty audit and cross-sibling reconciliation. Every statement parsed, every discrepancy flagged.",
-    proof: "16 statements parsed, $353k–$370k per sibling reconciled, monthly comparison live.",
-    gate: "Statement parsing and cross-owner math verified against source documents.",
+    app: "Rosewood Dine",
+    check: "Order-to-kitchen flow and SMS trigger",
+    detail: "Station status transitions and the SMS-on-ready signal verified against a live test order on every deploy.",
+    color: "#7c3aed",
   },
   {
-    name: "Rosewood Dine",
-    category: "Restaurant Tech",
-    status: "Live",
-    statusColor: "#46cf93",
-    accent: "#7c3aed",
-    iconSvg: '<path d="M7 4 L7 20"/><path d="M5 4 L5 8 Q5 11 7 11 Q9 11 9 8 L9 4"/><path d="M15 4 L15 20"/><path d="M15 4 C17 5 18 8 15 11"/>',
-    desc: "Full restaurant OS — orders, kitchen display, inventory, customer CRM, reservations, and analytics.",
-    proof: "Live in 72 hours. Tax config, reservations, and full order flow all operational.",
-    gate: "Order-to-kitchen flow and inventory tracking verified on launch.",
-  },
-  {
-    name: "Property OS",
-    category: "Real Estate",
-    status: "Template",
-    statusColor: "#8b5cf6",
-    accent: "#0891b2",
-    iconSvg: '<polyline points="3 12 12 4 21 12"/><path d="M5 12 L5 21 L19 21 L19 12"/><path d="M9 21 L9 15 L15 15 L15 21"/>',
-    desc: "AI-managed rental portfolio operations. Maintenance, leasing, and tenant comms on autopilot.",
-    proof: "Built as a reusable template from a real 25-unit portfolio.",
-    gate: "Maintenance workflow and tenant communication delivery verified.",
+    app: "The Club",
+    check: "Tee sheet and event lifecycle",
+    detail: "Tee sheet data integrity and event state transitions checked against their expected lifecycle on every change.",
+    color: "#1d4ed8",
   },
 ];
 
@@ -77,58 +41,58 @@ export default function ProofPage() {
       <Nav />
 
       {/* Hero */}
-      <section className="pt-32 pb-16 px-4 text-center border-b border-[rgba(168,216,240,0.08)]">
+      <section className="pt-32 pb-16 px-4 border-b border-[rgba(168,216,240,0.08)]">
         <div className="max-w-3xl mx-auto">
-          <p className="text-xs font-semibold tracking-[0.25em] uppercase text-[#4fb8e8] mb-4">The portfolio</p>
+          <p className="text-xs font-semibold tracking-[0.25em] uppercase text-[#4fb8e8] mb-4">The proof record</p>
           <h1
             className="text-5xl sm:text-6xl font-[300] leading-tight tracking-tight text-[#f4f7fa] mb-6"
             style={{ fontFamily: "var(--font-mulish)" }}
           >
-            Built by The Studio.<br />Runs on Aver.
+            Completion is mechanical,<br />not self-reported.
           </h1>
-          <p className="text-lg text-[#a8d8f0] font-light max-w-xl mx-auto">
-            Greg — our own Aver instance — designed, built, and currently operates all six.
-            Each is a live product, real customers, real data.
+          <p className="text-lg text-[#a8d8f0] font-light leading-relaxed">
+            The gate doesn&apos;t ask the agent if the work is done. It clones the trusted mirror,
+            runs owner-defined checks, and returns a PASS or a receipt with what failed.
+            There is no self-reporting path.
           </p>
         </div>
       </section>
 
-      {/* Portfolio grid */}
-      <section className="py-16 px-4">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {PORTFOLIO.map((v) => (
-              <div
-                key={v.name}
-                className="group bg-[#12243d] border border-[rgba(168,216,240,0.1)] hover:border-[rgba(168,216,240,0.2)] rounded-2xl p-6 flex flex-col gap-4 transition-all duration-200 hover:-translate-y-0.5"
-              >
-                <div className="flex items-start justify-between">
-                  <div
-                    className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0"
-                    style={{ backgroundColor: `${v.accent}18`, border: `1px solid ${v.accent}40`, color: v.accent }}
-                    dangerouslySetInnerHTML={{
-                      __html: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" width="24" height="24">${v.iconSvg}</svg>`
-                    }}
-                  />
-                  <span
-                    className="text-xs font-semibold px-2.5 py-1 rounded-full"
-                    style={{ backgroundColor: `${v.statusColor}15`, color: v.statusColor, border: `1px solid ${v.statusColor}30` }}
-                  >
-                    {v.status}
-                  </span>
-                </div>
-                <div className="flex-1">
-                  <h3 className="font-bold text-lg text-white mb-1">{v.name}</h3>
-                  <p className="text-xs text-[#a8d8f0]/50 mb-2">{v.category}</p>
-                  <p className="text-sm text-[#a8d8f0] leading-relaxed mb-4">{v.desc}</p>
-                  <p className="text-xs font-medium leading-relaxed mb-3" style={{ color: v.accent }}>
-                    {v.proof}
-                  </p>
-                  <div className="bg-[#0a1628] rounded-lg px-3 py-2 border border-[#46cf93]/15">
-                    <p className="text-xs text-[#46cf93]">
-                      <span className="font-semibold">Gate: </span>{v.gate}
-                    </p>
-                  </div>
+      {/* How the gate works */}
+      <section className="py-16 px-4 border-b border-[rgba(168,216,240,0.08)]">
+        <div className="max-w-3xl mx-auto">
+          <p className="text-xs font-semibold tracking-[0.25em] uppercase text-[#4fb8e8] mb-8">How it works</p>
+          <div className="flex flex-col gap-6">
+            {[
+              {
+                step: "01",
+                color: "#46cf93",
+                title: "A change lands in the mirror",
+                body: "Every code change goes through Base44’s editor, which commits to a trusted GitHub mirror. The gate runs against that mirror — not a local copy, not a summary the agent provides.",
+              },
+              {
+                step: "02",
+                color: "#818cf8",
+                title: "The host runs owner-defined checks",
+                body: "The owner (Bubba) writes the acceptance criteria — what the gate checks for each app. The agent doesn’t choose the checks and can’t modify them. The host clones the trusted mirror and runs the checks against it.",
+              },
+              {
+                step: "03",
+                color: "#e2a44a",
+                title: "PASS, FAIL, or HALT — with a receipt",
+                body: "PASS means the work counts as complete. FAIL returns exactly what failed so it can be fixed. HALT means an integrity issue — leaked secret, removed test, out-of-scope edit — work stops and escalates to Bubba. The agent cannot clear a HALT.",
+              },
+            ].map((s) => (
+              <div key={s.step} className="flex gap-5">
+                <span
+                  className="text-3xl font-[300] tabular-nums flex-shrink-0 leading-none pt-1"
+                  style={{ color: s.color, fontFamily: "var(--font-mulish)" }}
+                >
+                  {s.step}
+                </span>
+                <div>
+                  <h3 className="font-semibold text-[#f4f7fa] mb-1.5">{s.title}</h3>
+                  <p className="text-sm text-[#a8d8f0] leading-relaxed">{s.body}</p>
                 </div>
               </div>
             ))}
@@ -136,32 +100,70 @@ export default function ProofPage() {
         </div>
       </section>
 
-      {/* Bottom callout */}
-      <section className="py-16 px-4 border-t border-[rgba(168,216,240,0.08)]">
-        <div className="max-w-3xl mx-auto text-center">
-          <h2
-            className="text-2xl font-[300] text-[#f4f7fa] mb-4"
-            style={{ fontFamily: "var(--font-mulish)" }}
-          >
-            The same process that built these is available to you.
-          </h2>
-          <p className="text-[#a8d8f0] mb-8">
-            Every build includes an Aver instance. The gate that verified delivery keeps proving operations.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link
-              href="/studio"
-              className="inline-flex items-center justify-center gap-2 bg-[#12243d] hover:bg-[#1e3a5f] border border-[rgba(168,216,240,0.15)] text-[#f4f7fa] font-semibold px-6 py-3 rounded-xl text-sm transition-all duration-200"
-            >
-              How we build →
-            </Link>
-            <Link
-              href="/pricing"
-              className="inline-flex items-center justify-center gap-2 bg-[#2563eb] hover:bg-[#1d4ed8] text-white font-semibold px-6 py-3 rounded-xl text-sm transition-all duration-200"
-            >
-              Start a build
-            </Link>
+      {/* Real checks from real apps */}
+      <section className="py-16 px-4 border-b border-[rgba(168,216,240,0.08)]">
+        <div className="max-w-3xl mx-auto">
+          <p className="text-xs font-semibold tracking-[0.25em] uppercase text-[#4fb8e8] mb-2">What the gate actually checks</p>
+          <p className="text-sm text-[#a8d8f0]/60 mb-8">From the live apps. These run on every deploy.</p>
+          <div className="flex flex-col gap-4">
+            {GATE_CHECKS.map((c) => (
+              <div
+                key={c.app}
+                className="bg-[#12243d] border border-[rgba(168,216,240,0.08)] rounded-xl px-5 py-4"
+              >
+                <div className="flex items-start justify-between gap-4 mb-1.5">
+                  <p className="font-semibold text-[#f4f7fa] text-sm">{c.check}</p>
+                  <span
+                    className="text-xs font-semibold px-2 py-0.5 rounded-full flex-shrink-0"
+                    style={{ backgroundColor: `${c.color}15`, color: c.color, border: `1px solid ${c.color}30` }}
+                  >
+                    {c.app}
+                  </span>
+                </div>
+                <p className="text-xs text-[#a8d8f0]/70 leading-relaxed">{c.detail}</p>
+              </div>
+            ))}
           </div>
+        </div>
+      </section>
+
+      {/* Failure beat */}
+      <section className="py-16 px-4 border-b border-[rgba(168,216,240,0.08)]">
+        <div className="max-w-3xl mx-auto">
+          <p className="text-xs font-semibold tracking-[0.25em] uppercase text-[#4fb8e8] mb-6">What failure looks like</p>
+          <div className="bg-[#0f1f38] border border-[rgba(168,216,240,0.15)] rounded-2xl p-8">
+            <p className="text-[#a8d8f0] leading-relaxed mb-4">
+              Failures are not hidden. They&apos;re the mechanism.
+            </p>
+            <p className="text-[#a8d8f0] leading-relaxed mb-4">
+              A competence failure — wrong math, broken test, missing behavior — comes back with exactly
+              what failed and what needs to change. The agent fixes it and resubmits. No arguing with the
+              gate, no marking something complete that didn&apos;t pass.
+            </p>
+            <p className="text-[#a8d8f0] leading-relaxed">
+              An integrity failure — a secret leaked, a test removed, an edit out of scope — halts everything
+              and escalates directly to Bubba. The agent can&apos;t clear it. That&apos;s by design: integrity
+              failures are not agent-resolvable. They require a human decision.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Link to operator story */}
+      <section className="py-16 px-4">
+        <div className="max-w-3xl mx-auto flex flex-col sm:flex-row gap-3">
+          <Link
+            href="/about"
+            className="inline-flex items-center justify-center gap-2 bg-[#12243d] hover:bg-[#1e3a5f] border border-[rgba(168,216,240,0.15)] text-[#f4f7fa] font-semibold px-7 py-3.5 rounded-xl text-sm transition-all duration-200"
+          >
+            The operator story →
+          </Link>
+          <Link
+            href="/why-provable"
+            className="inline-flex items-center justify-center gap-2 text-[#a8d8f0]/60 hover:text-[#c7d2fe] text-sm font-medium transition-colors px-4 py-2"
+          >
+            Why provability matters →
+          </Link>
         </div>
       </section>
 

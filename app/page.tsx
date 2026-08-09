@@ -297,10 +297,9 @@ export default function HomePage() {
               { name: "Rosewood Dine",  desc: "Full restaurant OS — orders to kitchen to analytics.",     audience: "Restaurant owners",      slug: "rosewood-dine"  },
               { name: "Property OS",    desc: "AI-managed rental portfolio with zero admin hours.",        audience: "Landlords with 10+ units", slug: "property-os"  },
             ].map((v, i) => (
-              <Link
+              <div
                 key={v.name}
-                href={`/portfolio/${v.slug}`}
-                className="group bg-[#12243d] border border-[rgba(168,216,240,0.1)] hover:border-[rgba(168,216,240,0.22)] rounded-xl px-5 py-4 flex items-center gap-3 transition-all duration-200 hover:-translate-y-0.5"
+                className="bg-[#12243d] border border-[rgba(168,216,240,0.1)] rounded-xl px-5 py-4 flex items-center gap-3"
                 style={{ animation: `fade-in-up 0.5s ease ${0.05 * i + 0.1}s both` }}
               >
                 <span className="w-2 h-2 rounded-full bg-[#46cf93] flex-shrink-0" />
@@ -309,10 +308,7 @@ export default function HomePage() {
                   <p className="text-xs text-[#a8d8f0]/60 leading-relaxed">{v.desc}</p>
                   <p className="text-xs text-[#4fb8e8]/50 mt-0.5">{v.audience}</p>
                 </div>
-                <svg className="w-3.5 h-3.5 text-[#a8d8f0]/25 group-hover:text-[#4fb8e8]/60 transition-colors flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </Link>
+              </div>
             ))}
           </div>
           <p className="text-xs text-[#a8d8f0]/40 text-center mt-4">

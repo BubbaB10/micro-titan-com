@@ -13,11 +13,11 @@ const nextConfig: NextConfig = {
         permanent: false,
       },
       {
-        // /portfolio/<slug> pages exist but /portfolio itself never did — nav and cards call the
-        // index "/proof", so a trimmed URL 404'd. Redirect rather than a second index page.
-        source: "/portfolio",
-        destination: "/proof",
-        permanent: false,
+        // /portfolio and /portfolio/<slug> — portfolio folded into /about (2026-08-08).
+        // :slug* catches zero-or-more segments so this covers both /portfolio and /portfolio/anything.
+        source: "/portfolio/:slug*",
+        destination: "/about",
+        permanent: true,
       },
     ];
   },

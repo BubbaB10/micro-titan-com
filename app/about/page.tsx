@@ -111,17 +111,16 @@ export default function AboutPage() {
             <p className="text-xs font-semibold tracking-[0.25em] uppercase text-[#4fb8e8] mb-4">What&apos;s running today</p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {[
-                { name: "Fairway Bets",   audience: "Golf groups & leagues",    slug: "fairway-bets",   status: "App Store Stage" },
-                { name: "The Club",       audience: "Golf & country clubs",      slug: "the-club",       status: "Live" },
-                { name: "Sandwich Etc.",  audience: "Local restaurants",         slug: "sandwich-etc",   status: "Live" },
-                { name: "Mineral Ledger", audience: "Mineral rights owners",     slug: "mineral-ledger", status: "Live" },
-                { name: "Rosewood Dine",  audience: "Restaurant owners",         slug: "rosewood-dine",  status: "Live" },
-                { name: "Property OS",    audience: "Landlords with 10+ units",  slug: "property-os",    status: "Template" },
+                { name: "Fairway Bets",   audience: "Golf groups & leagues",    status: "App Store Stage" },
+                { name: "The Club",       audience: "Golf & country clubs",      status: "Live" },
+                { name: "Sandwich Etc.",  audience: "Local restaurants",         status: "Live" },
+                { name: "Mineral Ledger", audience: "Mineral rights owners",     status: "Live" },
+                { name: "Rosewood Dine",  audience: "Restaurant owners",         status: "Live" },
+                { name: "Property OS",    audience: "Landlords with 10+ units",  status: "Template" },
               ].map((v) => (
-                <Link
+                <div
                   key={v.name}
-                  href={`/portfolio/${v.slug}`}
-                  className="group flex items-center gap-3 bg-[#12243d] border border-[rgba(168,216,240,0.08)] hover:border-[rgba(168,216,240,0.2)] rounded-xl px-4 py-3 transition-all duration-200"
+                  className="flex items-center gap-3 bg-[#12243d] border border-[rgba(168,216,240,0.08)] rounded-xl px-4 py-3"
                 >
                   <span className="w-1.5 h-1.5 rounded-full bg-[#46cf93] flex-shrink-0" />
                   <div className="flex-1 min-w-0">
@@ -129,7 +128,7 @@ export default function AboutPage() {
                     <p className="text-xs text-[#a8d8f0]/50">{v.audience}</p>
                   </div>
                   <span className="text-xs text-[#a8d8f0]/40">{v.status}</span>
-                </Link>
+                </div>
               ))}
             </div>
           </div>
@@ -146,7 +145,7 @@ export default function AboutPage() {
               href="/proof"
               className="inline-flex items-center justify-center gap-2 text-[#a8d8f0]/60 hover:text-[#c7d2fe] text-sm font-medium transition-colors px-4 py-2"
             >
-              Full portfolio with proof →
+              See the proof record →
             </Link>
           </div>
 
