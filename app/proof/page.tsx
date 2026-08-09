@@ -85,6 +85,9 @@ const PRODUCTS = [
   },
 ];
 
+// RULE: every entry here must name a check that exists in gate-checks.json or the floor config,
+// verbatim verifiable. If an app only has the generic floor, say so — "build verified, secrets
+// blocked, data probed hourly" is stronger than a fiction because it's checkable.
 const GATE_CHECKS = [
   {
     app: "Fairway Bets",
@@ -95,9 +98,9 @@ const GATE_CHECKS = [
   },
   {
     app: "Mineral Ledger",
-    check: "Statement parse vs. source document",
+    check: "Comparison engine (24 assertions) + parse reconciliation",
     detail:
-      "Extracted line amounts reconciled against the header totals. Parse flagged LOW_FIDELITY when volume and price can't be extracted.",
+      "Comparison engine proven per deploy (24 assertions on the math). Every statement parse reconciles extracted line amounts against the header totals and flags LOW_FIDELITY instead of guessing.",
     color: "#d97706",
   },
   {
@@ -109,16 +112,16 @@ const GATE_CHECKS = [
   },
   {
     app: "Rosewood Dine",
-    check: "Order-to-kitchen flow and SMS trigger",
+    check: "Anonymous read blocked + export key refused",
     detail:
-      "Station status transitions and the SMS-on-ready signal verified against a live test order on every deploy.",
+      "Customer and order data probed on every deploy — anonymous reads must be rejected and the export endpoint must require the correct key. The floor monitor re-probes hourly in production.",
     color: "#7c3aed",
   },
   {
     app: "The Club",
-    check: "Tee sheet and event lifecycle",
+    check: "Anonymous read blocked + export key refused",
     detail:
-      "Tee sheet data integrity and event state transitions checked against their expected lifecycle on every change.",
+      "Member and event data probed on every deploy — anonymous reads must be rejected and the export endpoint must require the correct key. Build verified, secrets blocked, data access gated.",
     color: "#1d4ed8",
   },
 ];
@@ -339,7 +342,7 @@ export default function ProofPage() {
             What the gate actually checks
           </p>
           <p className="text-sm text-[#a8d8f0]/60 mb-8">
-            From the live apps. These run on every deploy.
+            From the live apps. Gate checks run on every deploy; some also run in production on every event.
           </p>
           <div className="flex flex-col gap-4">
             {GATE_CHECKS.map((c) => (
