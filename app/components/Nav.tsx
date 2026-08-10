@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 
 const NAV_LINKS = [
-  { href: "/aver",         label: "Aver",        desc: "the agent" },
+  { href: "/valet",        label: "Valet",       desc: "the agent" },
   { href: "/studio",       label: "The Studio",  desc: "custom builds" },
   { href: "/proof",        label: "Proof",        desc: "gate & receipts" },
   { href: "/about",        label: "About",        desc: "the operator story" },
@@ -14,7 +14,7 @@ const NAV_LINKS = [
 // Mobile hamburger shows the overflow items the tab bar doesn't cover
 const MOBILE_OVERFLOW = [
   { href: "/why-provable", label: "How it works" },
-  { href: "https://download.micro-titan.com", label: "Try Aver" },
+  { href: "https://download.micro-titan.com", label: "Meet Valet" },
 ];
 
 export default function Nav() {
