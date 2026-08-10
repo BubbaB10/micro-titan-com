@@ -27,7 +27,7 @@ export default function AverGateFlow() {
 
   // Vertical stack: y positions for each step
   const N1 = { x: 170, y: 10, w: 200, h: 44 }; // YOUR CLAIM
-  const N2 = { x: 170, y: 76, w: 200, h: 44 };  // AVER ACTS
+  const N2 = { x: 170, y: 76, w: 200, h: 44 };  // VALET ACTS
   const N3 = { x: 155, y: 142, w: 230, h: 44 }; // EVIDENCE COLLECTED
   const N4 = { x: 150, y: 208, w: 240, h: 48 }; // GATE VERIFIES (slightly taller)
   // Branch at y=256+
@@ -87,10 +87,10 @@ export default function AverGateFlow() {
         <text x={cx(N1)} y={N1.y + 19} textAnchor="middle" fill={C.cyan} fontSize="8" fontWeight="700" letterSpacing="1.5" fontFamily="system-ui,sans-serif">YOUR CLAIM</text>
         <text x={cx(N1)} y={N1.y + 33} textAnchor="middle" fill={C.muted} fontSize="7" fontFamily="system-ui,sans-serif">enters the system</text>
 
-        {/* ── Node 2: AVER ACTS ── */}
+        {/* ── Node 2: VALET ACTS ── */}
         <rect x={N2.x} y={N2.y} width={N2.w} height={N2.h} rx="7" fill={C.bg} stroke="rgba(129,140,248,0.25)" strokeWidth="1" />
         <rect x={N2.x} y={N2.y} width={N2.w} height="3" rx="2" fill="rgba(129,140,248,0.55)" />
-        <text x={cx(N2)} y={N2.y + 19} textAnchor="middle" fill="rgba(129,140,248,0.85)" fontSize="8" fontWeight="700" letterSpacing="1.5" fontFamily="system-ui,sans-serif">AVER ACTS</text>
+        <text x={cx(N2)} y={N2.y + 19} textAnchor="middle" fill="rgba(129,140,248,0.85)" fontSize="8" fontWeight="700" letterSpacing="1.5" fontFamily="system-ui,sans-serif">VALET ACTS</text>
         <text x={cx(N2)} y={N2.y + 33} textAnchor="middle" fill={C.muted} fontSize="7" fontFamily="system-ui,sans-serif">tasks executed, sources checked</text>
 
         {/* ── Node 3: EVIDENCE COLLECTED ── */}
