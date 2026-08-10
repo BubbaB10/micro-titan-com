@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import Nav from "../components/Nav";
 import Footer from "../components/Footer";
 import AverGateFlow from "../components/AverGateFlow";
@@ -334,6 +335,51 @@ export default function ValetPage() {
             ))}
           </div>
           <AverGateFlow />
+        </div>
+      </section>
+
+      {/* Persona showcase */}
+      <section className="py-20 px-4 border-b border-[rgba(168,216,240,0.08)]">
+        <div className="max-w-4xl mx-auto">
+          <p className="text-center text-xs font-semibold tracking-[0.2em] uppercase text-[#4fb8e8] mb-3">Your cockpit, your life</p>
+          <h2 className="text-center text-3xl sm:text-4xl font-[300] text-[#f4f7fa] mb-2" style={{ fontFamily: "var(--font-mulish)" }}>
+            Every life looks different. The cockpit adapts.
+          </h2>
+          <p className="text-center text-[#a8d8f0] mb-12 max-w-xl mx-auto">
+            Same verifiable agent. Different domains, different stakes, same provability underneath.
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 items-start justify-items-center">
+            {/* Mom persona */}
+            <div className="flex flex-col items-center gap-4 w-full max-w-[280px]">
+              <div className="relative w-full rounded-[2.5rem] overflow-hidden border-[6px] border-[#1e3a5f] shadow-2xl shadow-black/60">
+                <Image
+                  src="/screenshots/personas/mom-top.png"
+                  alt="Stay-at-home mom cockpit — The Kids, The House, Health, Money domains"
+                  width={780}
+                  height={1688}
+                  className="w-full h-auto"
+                  priority
+                />
+              </div>
+              <p className="text-sm font-medium text-[#f4f7fa]">Stay-at-home mom</p>
+              <p className="text-xs text-[#a8d8f0]/70 text-center">The Kids · The House · Health · Money</p>
+            </div>
+            {/* Biz persona */}
+            <div className="flex flex-col items-center gap-4 w-full max-w-[280px]">
+              <div className="relative w-full rounded-[2.5rem] overflow-hidden border-[6px] border-[#1e3a5f] shadow-2xl shadow-black/60">
+                <Image
+                  src="/screenshots/personas/biz-top.png"
+                  alt="Young business owner cockpit — Orders, Money, Staff, Marketing domains"
+                  width={780}
+                  height={1688}
+                  className="w-full h-auto"
+                />
+              </div>
+              <p className="text-sm font-medium text-[#f4f7fa]">Young business owner</p>
+              <p className="text-xs text-[#a8d8f0]/70 text-center">Orders · Money · Staff · Marketing</p>
+            </div>
+          </div>
+          <p className="text-center text-xs text-[#a8d8f0]/40 mt-8">Illustrative — sample data.</p>
         </div>
       </section>
 
