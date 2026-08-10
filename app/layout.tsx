@@ -14,8 +14,8 @@ const mulish = Mulish({
 
 export const metadata: Metadata = {
   title: "Micro Titan — Provable software, end to end.",
-  description: "We build your app or OS — and hand you the AI agent that runs it. Gate-verified either way. Aver is the provable AI chief-of-staff from Paris, Texas.",
-  keywords: ["Micro Titan", "Aver", "provable AI agent", "verifiable AI", "AI chief of staff", "The Studio", "AI app builder", "Paris Texas", "Fairway Bets", "Mineral Ledger"],
+  description: "We build your app or OS — and hand you the AI agent that runs it. Gate-verified either way. Valet by Micro Titan is the provable AI chief-of-staff from Paris, Texas.",
+  keywords: ["Micro Titan", "Valet", "provable AI agent", "verifiable AI", "AI chief of staff", "The Studio", "AI app builder", "Paris Texas", "Fairway Bets", "Mineral Ledger"],
   openGraph: {
     title: "Micro Titan — Provable software, end to end.",
     description: "We build your app or OS — and hand you the AI agent that runs it. Gate-verified either way.",
