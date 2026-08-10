@@ -52,21 +52,21 @@ export default function HomePage() {
               pointerEvents: "none",
             }}
           />
-          <svg viewBox="0 0 100 112" width="108" height="120" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path
-              d="M50 6L94 23L94 62Q94 90 50 107Q6 90 6 62L6 23Z"
-              stroke="#818cf8" strokeWidth="1.3" fill="rgba(129,140,248,0.05)"
-              style={{ strokeDasharray: 312, strokeDashoffset: 312, animation: "draw-ring 1.6s cubic-bezier(0.4,0,0.2,1) 0.3s forwards" }}
-            />
-            <text
-              x="50" y="70"
-              textAnchor="middle"
-              fontSize="26"
-              fontWeight="300"
-              letterSpacing="4"
-              fill="#f4f7fa"
-              style={{ fontFamily: "var(--font-mulish), sans-serif", animation: "fade-in-up 0.5s ease 1.2s both" }}
-            >MT</text>
+          <svg aria-hidden="true" viewBox="243 160 653 433" width="108" height="72" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="heroSilver" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stopColor="#FFFFFF"/>
+                <stop offset=".52" stopColor="#D7D7D8"/>
+                <stop offset="1" stopColor="#85878A"/>
+              </linearGradient>
+              <linearGradient id="heroViolet" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stopColor="#8589FF"/>
+                <stop offset=".55" stopColor="#6669E8"/>
+                <stop offset="1" stopColor="#4D51C9"/>
+              </linearGradient>
+            </defs>
+            <path fill="url(#heroSilver)" fillRule="evenodd" d="M258 175 H345 L567 365 L793 175 H881 V578 H783 V548 H849 V205 H806 L567 405 L331 205 H289 V548 H359 V578 H258 Z"/>
+            <path fill="url(#heroViolet)" d="M483 437 H655 V478 H590 V578 H548 V478 H483 Z"/>
           </svg>
           {/* Brand tagline — near the logo */}
           <p
