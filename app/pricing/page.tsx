@@ -27,7 +27,7 @@ const PLANS = [
     buildFee: "$1,500",
     monthly: "$349",
     monthlyUnit: "/mo",
-    desc: "Aver running your business, with deeper integrations and broader context.",
+    desc: "Valet running your business, with deeper integrations and broader context.",
     featured: true,
     badge: "Most chosen",
     features: [
@@ -228,7 +228,7 @@ export default function PricingPage() {
               </div>
               <h3 className="text-lg font-semibold text-[#f4f7fa] mb-2">Need a full app built first?</h3>
               <p className="text-sm text-[#a8d8f0] leading-relaxed">
-                The Studio builds it from scratch — from $5,000 — then it rolls directly into your Aver plan.
+                The Studio builds it from scratch — from $5,000 — then it rolls directly into your Valet plan.
                 The gate breaks the build before delivery. You keep the agent that runs it.
               </p>
             </div>
