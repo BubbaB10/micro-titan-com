@@ -22,6 +22,11 @@ export const metadata: Metadata = {
     url: "https://micro-titan.com",
     siteName: "Micro Titan",
     type: "website",
+    images: [{ url: "/icons/og-image.png", width: 1200, height: 630, alt: "Micro Titan" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: ["/icons/og-image.png"],
   },
 };
 

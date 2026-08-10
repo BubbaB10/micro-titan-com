@@ -24,14 +24,12 @@ export default function Nav() {
     <nav className="fixed top-0 left-0 right-0 z-50 border-b border-[rgba(168,216,240,0.1)] bg-[#0a1628]/95 backdrop-blur-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          {/*
-            LOGO — The Monolith shield (MT crest mark) replaces this text when the file arrives.
-            Drop the vector at: /public/logo-monolith.svg
-            Then replace the <Link> text with: <Image src="/logo-monolith.svg" alt="Micro Titan" ... />
-            Favicon: add <link rel="icon" href="/logo-monolith.svg" /> in app/layout.tsx
-          */}
-          <Link href="/" className="text-sm font-semibold tracking-widest text-[#f4f7fa] hover:text-[#a8d8f0] transition-colors">
-            MICRO TITAN™
+          <Link href="/" className="flex items-center gap-2.5 text-[#f4f7fa] hover:text-[#a8d8f0] transition-colors">
+            <svg aria-hidden="true" height="20" viewBox="243 160 653 433" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+              <path fillRule="evenodd" d="M258 175 H345 L567 365 L793 175 H881 V578 H783 V548 H849 V205 H806 L567 405 L331 205 H289 V548 H359 V578 H258 Z"/>
+              <path d="M483 437 H655 V478 H590 V578 H548 V478 H483 Z"/>
+            </svg>
+            <span className="text-sm font-semibold tracking-widest">MICRO TITAN™</span>
           </Link>
 
           {/* Desktop links — brand name + plain-language descriptor */}

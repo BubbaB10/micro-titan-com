@@ -20,6 +20,9 @@ export default function AboutPage() {
           <p className="text-lg text-[#a8d8f0] font-light leading-relaxed">
             Micro Titan was built to prove a system — not just sell one. Here&apos;s what&apos;s actually running today, and why it works.
           </p>
+          <p className="mt-4 text-sm font-semibold tracking-[0.18em] uppercase text-[#818cf8]">
+            Micro at the core of something massive.
+          </p>
         </div>
       </section>
 

@@ -7,7 +7,25 @@ export default function Footer() {
         <div className="flex flex-col md:flex-row justify-between items-start gap-10">
           {/* Brand */}
           <div className="flex flex-col gap-3">
-            <Link href="/" className="text-sm font-semibold tracking-widest text-[#f4f7fa]">MICRO TITAN™</Link>
+            <Link href="/" className="flex items-center gap-3 text-[#f4f7fa] hover:opacity-80 transition-opacity">
+              <svg aria-hidden="true" height="32" viewBox="243 160 653 433" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <linearGradient id="ftSilver" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0" stopColor="#FFFFFF"/>
+                    <stop offset=".52" stopColor="#D7D7D8"/>
+                    <stop offset="1" stopColor="#85878A"/>
+                  </linearGradient>
+                  <linearGradient id="ftViolet" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0" stopColor="#8589FF"/>
+                    <stop offset=".55" stopColor="#6669E8"/>
+                    <stop offset="1" stopColor="#4D51C9"/>
+                  </linearGradient>
+                </defs>
+                <path fill="url(#ftSilver)" fillRule="evenodd" d="M258 175 H345 L567 365 L793 175 H881 V578 H783 V548 H849 V205 H806 L567 405 L331 205 H289 V548 H359 V578 H258 Z"/>
+                <path fill="url(#ftViolet)" d="M483 437 H655 V478 H590 V578 H548 V478 H483 Z"/>
+              </svg>
+              <span className="text-sm font-semibold tracking-widest">MICRO TITAN™</span>
+            </Link>
             <p className="text-sm text-[#a8d8f0]/60">Provable software, end to end.</p>
             <a href="mailto:hello@micro-titan.com" className="text-sm text-[#2563eb] hover:text-[#60a5fa] transition-colors">
               hello@micro-titan.com
