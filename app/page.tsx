@@ -36,6 +36,7 @@ export default function HomePage() {
 
         {/* MT firm mark */}
         <div
+          className="mt-8 sm:mt-0"
           style={{
             position: "relative",
             display: "inline-flex",
