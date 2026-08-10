@@ -130,7 +130,7 @@ export default function HomePage() {
             <span className="text-[#a8d8f0]/20">·</span>
             <Link href="/pricing" className="hover:text-[#60a5fa] transition-colors">Business Aver <span className="font-semibold text-[#f4f7fa]/80">$1,500 + $349/mo</span></Link>
             <span className="text-[#a8d8f0]/20">·</span>
-            <Link href="/pricing" className="hover:text-[#c7d2fe] transition-colors">Personal Aver <span className="font-semibold text-[#f4f7fa]/80">$250 + $59/mo</span></Link>
+            <Link href="/pricing" className="hover:text-[#c7d2fe] transition-colors">Personal Aver <span className="font-semibold text-[#f4f7fa]/80">$495 + $59/mo</span></Link>
           </div>
 
           <div
@@ -221,8 +221,8 @@ export default function HomePage() {
                   <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
                 </svg>
               </div>
-              <div className="text-2xl font-bold text-[#c7d2fe] mb-0.5">$250</div>
-              <div className="text-sm text-[#a8d8f0]/50 mb-2">setup · then <span className="font-semibold text-[#a8d8f0]/80">$59/mo</span></div>
+              <div className="text-2xl font-bold text-[#c7d2fe] mb-0.5">$495</div>
+              <div className="text-sm text-[#a8d8f0]/50 mb-2">build · then <span className="font-semibold text-[#a8d8f0]/80">$59/mo</span></div>
               <div className="text-sm font-semibold text-[#f4f7fa] mb-2">Aver for You</div>
               <div className="text-xs text-[#a8d8f0]/60 leading-relaxed mb-5">
                 Your personal AI chief-of-staff, provably yours.
@@ -370,7 +370,7 @@ export default function HomePage() {
                     </div>
                   </div>
                   <p className="text-xs text-[#818cf8]/60">
-                    from <span className="font-semibold text-[#c7d2fe]">$250</span> setup ·{" "}
+                    from <span className="font-semibold text-[#c7d2fe]">$495</span> build ·{" "}
                     <span className="font-semibold text-[#c7d2fe]">$59/mo</span>{" → "}pricing
                   </p>
                 </div>

@@ -5,10 +5,10 @@ import Footer from "../components/Footer";
 const PLANS = [
   {
     name: "Personal",
-    buildFee: "$250",
+    buildFee: "$495",
     monthly: "$59",
     monthlyUnit: "/mo",
-    desc: "Your provable AI agent, live in days. Low-friction entry.",
+    desc: "Your assistant — built and configured specifically for you.",
     featured: false,
     badge: null,
     features: [
@@ -17,7 +17,7 @@ const PLANS = [
       "Scheduled reports and background tasks",
       "Connected to your data and apps",
       "One industry context included",
-      "2-hour guided onboarding",
+      "Deep intake — your assistant arrives already knowing your world",
     ],
     cta: "Apply for access",
     ctaHref: "mailto:hello@micro-titan.com?subject=Personal+Plan+%E2%80%94+Application",
@@ -90,6 +90,37 @@ export default function PricingPage() {
             Every plan is a one-time build fee, then flat monthly. No trials that auto-upgrade.
             No features behind a higher tier. The gate is in every plan.
           </p>
+        </div>
+      </section>
+
+      {/* Founding Member offer */}
+      <section className="py-8 px-4 border-b border-[rgba(168,216,240,0.08)]">
+        <div className="max-w-3xl mx-auto">
+          <div className="bg-[#0f1f38] border border-[#46cf93]/30 rounded-2xl p-6 flex flex-col sm:flex-row sm:items-center gap-5">
+            <div className="flex-1">
+              <div className="flex items-center gap-3 mb-2">
+                <span className="text-xs font-semibold tracking-[0.2em] uppercase text-[#46cf93]">Founding Member</span>
+                <span className="text-xs text-[#a8d8f0]/50">· the first 25 builds</span>
+              </div>
+              <div className="flex items-baseline gap-2 mb-1">
+                <span className="text-2xl font-bold text-[#f4f7fa]">$295</span>
+                <span className="text-sm text-[#a8d8f0]/60">build · then <span className="font-semibold text-[#f4f7fa]">$59/mo</span></span>
+              </div>
+              <p className="text-sm text-[#a8d8f0]/70 leading-relaxed mt-2">
+                Your assistant — built and configured specifically for you, at cost.
+                In exchange: real feedback that makes it better for everyone who comes after.
+                Genuine early-adopter exchange, not a countdown.
+              </p>
+            </div>
+            <div className="flex-shrink-0">
+              <a
+                href="mailto:hello@micro-titan.com?subject=Founding+Member+%E2%80%94+Application"
+                className="inline-flex items-center gap-2 bg-[#46cf93]/10 hover:bg-[#46cf93]/20 border border-[#46cf93]/30 text-[#46cf93] font-semibold px-5 py-2.5 rounded-xl text-sm transition-all duration-200"
+              >
+                Apply for access →
+              </a>
+            </div>
+          </div>
         </div>
       </section>
 
