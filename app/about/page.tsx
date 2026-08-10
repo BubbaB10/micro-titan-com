@@ -54,7 +54,7 @@ export default function AboutPage() {
               could run any of them, simultaneously, without the wheels coming off.
             </p>
             <p className="text-[#a8d8f0] leading-relaxed">
-              That&apos;s what Micro Titan is: the operating system behind the portfolio. Aver is the agent that runs it.
+              That&apos;s what Micro Titan is: the operating system behind the portfolio. Valet is the agent that runs it.
               The gate is the mechanism that proves it&apos;s actually working — not just reported as working.
             </p>
           </div>
@@ -77,7 +77,7 @@ export default function AboutPage() {
                 {
                   label: "Run",
                   color: "#818cf8",
-                  text: "Greg — Micro Titan&apos;s own Aver instance — manages all six operations. Monitoring, backup, anomaly detection, customer escalations. Bubba decides strategy; Greg handles execution.",
+                  text: "Greg — Micro Titan&apos;s own Valet instance — manages all six operations. Monitoring, backup, anomaly detection, customer escalations. Bubba decides strategy; Greg handles execution.",
                 },
               ].map((step) => (
                 <div key={step.label} className="flex gap-4">
@@ -104,7 +104,7 @@ export default function AboutPage() {
             <p className="text-[#a8d8f0] leading-relaxed">
               That mechanical proof is what lets one person run six businesses without a compliance team,
               a QA department, or a full-time manager watching every output.
-              It&apos;s also what Aver and The Studio bring to a client build — not just a faster way to build software,
+              It&apos;s also what Valet and The Studio bring to a client build — not just a faster way to build software,
               but a provable way to run it.
             </p>
           </div>

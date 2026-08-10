@@ -133,7 +133,7 @@ export default function GateDemo() {
             </svg>
           </div>
           <div className="flex-1">
-            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#4fb8e8] mb-1.5">Aver says</p>
+            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#4fb8e8] mb-1.5">Valet says</p>
             <p className="text-sm text-[#f4f7fa] leading-relaxed italic">&ldquo;{scenario.claim}&rdquo;</p>
           </div>
         </div>

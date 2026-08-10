@@ -33,7 +33,7 @@ export default function Footer() {
           </div>
           {/* Nav */}
           <div className="flex flex-col gap-2 text-sm text-[#a8d8f0]/60">
-            <Link href="/aver" className="hover:text-[#f4f7fa] transition-colors">Aver</Link>
+            <Link href="/valet" className="hover:text-[#f4f7fa] transition-colors">Valet</Link>
             <Link href="/studio" className="hover:text-[#f4f7fa] transition-colors">The Studio</Link>
             <Link href="/proof" className="hover:text-[#f4f7fa] transition-colors">Proof</Link>
             <Link href="/pricing" className="hover:text-[#f4f7fa] transition-colors">Pricing</Link>

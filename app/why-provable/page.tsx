@@ -9,12 +9,12 @@ const PILLARS = [
     title: "Provable, not plausible.",
     color: "#46cf93",
     lead: "Any AI can sound confident. That’s not the bar.",
-    body: `Aver doesn't claim to have done something — it proves it. Every task that can be
+    body: `Valet doesn't claim to have done something — it proves it. Every task that can be
 mechanically verified goes through the gate before it reaches you. If the gate can't verify it,
-Aver tells you that clearly instead of asserting confidence it doesn't have.
+Valet tells you that clearly instead of asserting confidence it doesn't have.
 
 The distinction matters because a plausible answer that's wrong costs more than an honest
-"I can't verify this." Most AI optimizes for sounding right. Aver optimizes for being right
+"I can't verify this." Most AI optimizes for sounding right. Valet optimizes for being right
 — and being transparent about the difference.`,
     examples: [
       "A payout calculation is verified zero-sum before money moves.",
@@ -26,18 +26,18 @@ The distinction matters because a plausible answer that's wrong costs more than 
     number: "02",
     title: "Fail closed.",
     color: "#818cf8",
-    lead: "When Aver is unsure, it stops — it doesn't proceed and hope for the best.",
+    lead: "When Valet is unsure, it stops — it doesn't proceed and hope for the best.",
     body: `Most AI fails open: when in doubt, it guesses, proceeds, or hedges with language that
-sounds careful but still commits to an answer. Aver fails closed: when it's outside a proven-safe
+sounds careful but still commits to an answer. Valet fails closed: when it's outside a proven-safe
 envelope, it escalates to you rather than auto-proceeding.
 
-This is what makes autonomy safe enough to actually deploy. Aver earns the right to act
+This is what makes autonomy safe enough to actually deploy. Valet earns the right to act
 autonomously by demonstrating it knows when not to. Every time it escalates correctly,
 that's not a failure — that's the gate working as designed.`,
     examples: [
       "An integrity check fails → work halts, Bubba is notified, nothing proceeds.",
       "An edit touches something out of scope → gate flags it before it lands.",
-      "Aver is uncertain about a judgment call → it surfaces the question instead of guessing.",
+      "Valet is uncertain about a judgment call → it surfaces the question instead of guessing.",
     ],
   },
   {
@@ -45,12 +45,12 @@ that's not a failure — that's the gate working as designed.`,
     title: "Alert discipline.",
     color: "#e2a44a",
     lead: "An alert that fires too often gets ignored. That's worse than no alert.",
-    body: `Aver doesn't flood you with notifications to seem busy. Alerts are rare, high-signal,
-and receipt-attached — meaning when Aver escalates something, it comes with exactly what it found
+    body: `Valet doesn't flood you with notifications to seem busy. Alerts are rare, high-signal,
+and receipt-attached — meaning when Valet escalates something, it comes with exactly what it found
 and what it thinks you need to decide. You don't get a nudge; you get a decision package.
 
 Alert fatigue kills oversight. If every escalation is low-stakes, the one that matters gets
-rubber-stamped. Aver is designed to surface things you genuinely need to act on — and stay
+rubber-stamped. Valet is designed to surface things you genuinely need to act on — and stay
 quiet the rest of the time.`,
     examples: [
       "An escalation comes with the relevant evidence already attached.",
@@ -76,7 +76,7 @@ export default function WhyProvablePage() {
             One gate.<br />Both arms.
           </h1>
           <p className="text-lg text-[#a8d8f0] font-light max-w-2xl mx-auto">
-            Whether you&apos;re running Aver to manage your life, or The Studio built your app — the same
+            Whether you&apos;re running Valet to manage your life, or The Studio built your app — the same
             mechanical gate underlies everything. Provability isn&apos;t a feature tier. It&apos;s the floor.
           </p>
         </div>
@@ -165,7 +165,7 @@ export default function WhyProvablePage() {
               The gate is un-removable.
             </h3>
             <p className="text-[#a8d8f0] leading-relaxed mb-4 max-w-xl mx-auto">
-              Customers can customize Aver — industry context, tone, data sources, workflows.
+              Customers can customize Valet — industry context, tone, data sources, workflows.
               What they can&apos;t do is remove the gate. Provability is always on.
               That&apos;s not a policy; it&apos;s how the architecture is built.
             </p>

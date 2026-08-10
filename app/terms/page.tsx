@@ -55,7 +55,7 @@ export default function TermsPage() {
             <p>
               All content on this site — including text, graphics, logos, and software — is the
               property of Micro Titan LLC or its licensors and is protected by applicable
-              intellectual property laws. "Micro Titan™" and "Aver™" are trademarks of Micro Titan LLC.
+              intellectual property laws. "Micro Titan™" and "Valet™" are trademarks of Micro Titan LLC.
               Unauthorized use is prohibited.
             </p>
           </div>

@@ -48,7 +48,7 @@ export default function AverGateFlow() {
         style={{ width: "100%", height: "auto", display: "block" }}
         xmlns="http://www.w3.org/2000/svg"
         role="img"
-        aria-label="Gate flow: A claim enters, Aver acts, evidence is collected, the gate verifies. If evidence is sufficient, the answer is delivered. If insufficient, nothing is sent."
+        aria-label="Gate flow: A claim enters, Valet acts, evidence is collected, the gate verifies. If evidence is sufficient, the answer is delivered. If insufficient, nothing is sent."
       >
         <defs>
           <marker id="agf-a" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">

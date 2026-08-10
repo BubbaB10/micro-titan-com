@@ -21,7 +21,7 @@ const PIPELINE = [
     step: "03",
     name: "Builder",
     color: "#4fb8e8",
-    desc: "We build it. Full app or OS, wired to Aver from day one. You get milestone previews as sections go live, not a big-bang delivery. Aver runs the build on our end so Greg can answer questions as they arise.",
+    desc: "We build it. Full app or OS, wired to Valet from day one. You get milestone previews as sections go live, not a big-bang delivery. Valet runs the build on our end so Greg can answer questions as they arise.",
     deliverable: "Live milestones. No big-bang delivery.",
   },
   {
@@ -60,7 +60,7 @@ export default function StudioPage() {
           </h1>
           <p className="text-lg sm:text-xl text-[#a8d8f0] font-light max-w-2xl mx-auto mb-10">
             A boutique build service where every delivery comes with a gate PASS receipt —
-            and the Aver instance that runs it afterward.
+            and the Valet instance that runs it afterward.
           </p>
           <Link
             href="/pricing"
@@ -140,14 +140,14 @@ export default function StudioPage() {
                 And you keep the agent that runs it.
               </h2>
               <p className="text-[#a8d8f0] leading-relaxed mb-6">
-                Every Studio build includes an Aver instance — wired to your app from day one.
-                Once the gate passes, Aver takes over operations. You don&apos;t hire someone to
-                manage what we built. Aver does it, and the gate proves it.
+                Every Studio build includes an Valet instance — wired to your app from day one.
+                Once the gate passes, Valet takes over operations. You don&apos;t hire someone to
+                manage what we built. Valet does it, and the gate proves it.
               </p>
               <div className="flex flex-col gap-3">
                 <div className="flex items-start gap-3">
                   <span className="w-1.5 h-1.5 rounded-full bg-[#46cf93] mt-1.5 flex-shrink-0" />
-                  <p className="text-sm text-[#a8d8f0]">Aver knows your app — it was there when we built it.</p>
+                  <p className="text-sm text-[#a8d8f0]">Valet knows your app — it was there when we built it.</p>
                 </div>
                 <div className="flex items-start gap-3">
                   <span className="w-1.5 h-1.5 rounded-full bg-[#46cf93] mt-1.5 flex-shrink-0" />
@@ -166,18 +166,18 @@ export default function StudioPage() {
                   <path d="M9 12l2 2 4-4"/>
                 </svg>
               </div>
-              <h3 className="text-lg font-semibold text-[#f4f7fa] mb-2">Aver, included.</h3>
+              <h3 className="text-lg font-semibold text-[#f4f7fa] mb-2">Valet, included.</h3>
               <p className="text-sm text-[#a8d8f0] leading-relaxed">
-                Every Studio build rolls directly into Aver for ongoing operations.
+                Every Studio build rolls directly into Valet for ongoing operations.
                 The build fee covers construction. The monthly covers the agent that runs it.
                 Same gate. Same provability. Always.
               </p>
               <div className="mt-5">
                 <Link
-                  href="/aver"
+                  href="/valet"
                   className="text-sm font-semibold text-[#818cf8] hover:text-[#c7d2fe] transition-colors"
                 >
-                  Learn about Aver →
+                  Learn about Valet →
                 </Link>
               </div>
             </div>
@@ -193,10 +193,10 @@ export default function StudioPage() {
             className="text-3xl font-[300] text-[#f4f7fa] text-center mb-3"
             style={{ fontFamily: "var(--font-mulish)" }}
           >
-            Built by The Studio. Runs on Aver.
+            Built by The Studio. Runs on Valet.
           </h2>
           <p className="text-[#a8d8f0]/70 text-sm text-center mb-10">
-            Greg — our own Aver — built and operates all six. Each one is a proof point.
+            Greg — our own Valet — built and operates all six. Each one is a proof point.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {PROOF.map((p) => (

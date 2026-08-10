@@ -27,7 +27,7 @@ export default function HeroSystemDiagram() {
         style={{ display: "block", margin: "0 auto" }}
         xmlns="http://www.w3.org/2000/svg"
         role="img"
-        aria-label="System flow: Your Business feeds Micro Titan, who builds Your Software, which Aver monitors, delivering verified insight to You."
+        aria-label="System flow: Your Business feeds Micro Titan, who builds Your Software, which Valet monitors, delivering verified insight to You."
       >
         <defs>
           <marker id="hsd-arr" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">

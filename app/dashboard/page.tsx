@@ -260,7 +260,7 @@ export default function DashboardPage() {
                 <path d="M9 12l2 2 4-4" stroke="#46cf93" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
               <p className="text-xs text-[#a8d8f0]/50 leading-relaxed">
-                Every item above is gate-verified. Aver does not claim&nbsp;done unless it can prove it.
+                Every item above is gate-verified. Valet does not claim&nbsp;done unless it can prove it.
               </p>
             </div>
             <Link

@@ -58,7 +58,7 @@ export default function Nav() {
               href="https://download.micro-titan.com"
               className="bg-[#818cf8]/15 hover:bg-[#818cf8]/25 border border-[#818cf8]/35 text-[#c7d2fe] text-sm font-semibold px-5 py-2 rounded-lg transition-colors"
             >
-              Try Aver →
+              Try Valet →
             </Link>
             <Link
               href="/pricing"

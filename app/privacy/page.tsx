@@ -50,7 +50,7 @@ export default function PrivacyPage() {
               </li>
               <li className="flex items-start gap-2">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#46cf93] mt-1.5 flex-shrink-0"/>
-                <span><strong className="text-[#f4f7fa]">No passwords, no financial data</strong> — we do not collect or store passwords or financial account credentials. Aver agents connect to external systems via secure integrations; credentials are never stored by Micro Titan.</span>
+                <span><strong className="text-[#f4f7fa]">No passwords, no financial data</strong> — we do not collect or store passwords or financial account credentials. Valet agents connect to external systems via secure integrations; credentials are never stored by Micro Titan.</span>
               </li>
             </ul>
           </div>

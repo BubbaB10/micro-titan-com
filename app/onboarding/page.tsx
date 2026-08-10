@@ -39,7 +39,7 @@ const JOBS = [
   {
     id: "parent",
     title: "Aging parent",
-    desc: "Meds, appointments, calls — Aver holds the care thread.",
+    desc: "Meds, appointments, calls — Valet holds the care thread.",
     svg: '<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>',
   },
 ];
@@ -142,7 +142,7 @@ export default function OnboardingPage() {
                 What do you want off your plate?
               </h1>
               <p className="text-[#a8d8f0] text-center text-sm mb-10">
-                Pick anything that applies. Aver handles it — and proves it.
+                Pick anything that applies. Valet handles it — and proves it.
               </p>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
@@ -223,7 +223,7 @@ export default function OnboardingPage() {
                 Connect what those need
               </h1>
               <p className="text-[#a8d8f0] text-center text-sm mb-8">
-                Read-only access only. Aver sees what's relevant — nothing else.
+                Read-only access only. Valet sees what's relevant — nothing else.
               </p>
 
               {/* Trust headline */}
@@ -233,7 +233,7 @@ export default function OnboardingPage() {
                   <p className="text-sm font-bold text-[#f4f7fa] mb-1">We never ask for your passwords. Ever.</p>
                   <p className="text-xs text-[#a8d8f0]/70 leading-relaxed">
                     Connections go through secure OAuth — you authorize directly with Google, your bank, etc.
-                    Aver reads. Never writes. Never stores passwords.
+                    Valet reads. Never writes. Never stores passwords.
                   </p>
                 </div>
               </div>
@@ -338,7 +338,7 @@ export default function OnboardingPage() {
                 You're live.
               </h1>
               <p className="text-[#a8d8f0] mb-3 max-w-sm mx-auto leading-relaxed">
-                Aver has what it needs. Give it a day to learn your patterns.
+                Valet has what it needs. Give it a day to learn your patterns.
               </p>
               <p className="text-xs text-[#a8d8f0]/40 mb-10">
                 Every item it surfaces will be gate-verified before it reaches you.

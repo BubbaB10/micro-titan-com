@@ -189,7 +189,7 @@ export default function HomePage() {
               </div>
             </Link>
 
-            {/* Aver Business — featured */}
+            {/* Valet Business — featured */}
             <div className="relative">
               <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 z-10">
                 <span className="px-3 py-1 rounded-full text-[10px] font-semibold bg-[#2563eb] text-white shadow shadow-[#2563eb]/40">
@@ -204,7 +204,7 @@ export default function HomePage() {
                 </div>
                 <div className="text-2xl font-bold text-[#60a5fa] mb-0.5">$1,500</div>
                 <div className="text-sm text-[#a8d8f0]/50 mb-2">setup · then <span className="font-semibold text-[#a8d8f0]/80">$349/mo</span></div>
-                <div className="text-sm font-semibold text-[#f4f7fa] mb-2">Aver for Business</div>
+                <div className="text-sm font-semibold text-[#f4f7fa] mb-2">Valet for Business</div>
                 <div className="text-xs text-[#a8d8f0]/60 leading-relaxed mb-5">
                   Your provable agent running your business, verified.
                 </div>
@@ -214,7 +214,7 @@ export default function HomePage() {
               </Link>
             </div>
 
-            {/* Aver Personal */}
+            {/* Valet Personal */}
             <Link href="/pricing" className="group block bg-[#0f1f38] border border-[#818cf8]/25 hover:border-[#818cf8]/50 rounded-2xl p-7 text-center transition-all duration-200 hover:-translate-y-0.5">
               <div className="w-10 h-10 rounded-xl bg-[#818cf8]/10 border border-[#818cf8]/25 flex items-center justify-center mx-auto mb-4">
                 <svg viewBox="0 0 24 24" fill="none" stroke="#c7d2fe" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" width="20" height="20">
@@ -223,7 +223,7 @@ export default function HomePage() {
               </div>
               <div className="text-2xl font-bold text-[#c7d2fe] mb-0.5">$495</div>
               <div className="text-sm text-[#a8d8f0]/50 mb-2">build · then <span className="font-semibold text-[#a8d8f0]/80">$59/mo</span></div>
-              <div className="text-sm font-semibold text-[#f4f7fa] mb-2">Aver for You</div>
+              <div className="text-sm font-semibold text-[#f4f7fa] mb-2">Valet for You</div>
               <div className="text-xs text-[#a8d8f0]/60 leading-relaxed mb-5">
                 Your personal AI chief-of-staff, provably yours.
               </div>
@@ -342,7 +342,7 @@ export default function HomePage() {
             Your agent. Your app.
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Aver */}
+            {/* Valet */}
             <Link href="/valet" className="group block">
               <div className="h-full bg-[#12243d] border border-[#818cf8]/25 hover:border-[#818cf8]/50 rounded-2xl p-8 flex flex-col gap-5 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[#818cf8]/10">
                 <div className="w-12 h-12 rounded-xl bg-[#818cf8]/10 border border-[#818cf8]/25 flex items-center justify-center">
@@ -469,7 +469,7 @@ export default function HomePage() {
                 </h3>
                 <p className="text-[#a8d8f0] text-sm leading-relaxed mb-6">
                   Busy parents. Solo operators. Caregivers managing a loved one&apos;s needs
-                  across multiple providers. Aver holds the full picture so you don&apos;t have to.
+                  across multiple providers. Valet holds the full picture so you don&apos;t have to.
                 </p>
                 <Link
                   href="/valet"
@@ -490,7 +490,7 @@ export default function HomePage() {
                 </h4>
                 <p className="text-sm text-[#a8d8f0] leading-relaxed mb-4">
                   School pickups, appointment reminders, grocery lists, household task backlogs,
-                  summer camp sign-ups — Aver holds the context so you don&apos;t have to carry it in your head.
+                  summer camp sign-ups — Valet holds the context so you don&apos;t have to carry it in your head.
                 </p>
                 <div className="flex flex-col gap-2">
                   <div className="bg-[#0a1628] rounded-lg p-3 border border-[#46cf93]/20">
@@ -499,11 +499,11 @@ export default function HomePage() {
                   </div>
                   <div className="bg-[#0a1628] rounded-lg p-3 border border-[#e2a44a]/20">
                     <p className="text-xs font-semibold text-[#e2a44a] uppercase tracking-wider mb-1">You Decide</p>
-                    <p className="text-xs text-[#f4f7fa] leading-relaxed">Priorities and tradeoffs. Aver surfaces what&apos;s falling behind; you decide what moves.</p>
+                    <p className="text-xs text-[#f4f7fa] leading-relaxed">Priorities and tradeoffs. Valet surfaces what&apos;s falling behind; you decide what moves.</p>
                   </div>
                   <div className="bg-[#0a1628] rounded-lg p-3 border border-[#818cf8]/20">
                     <p className="text-xs font-semibold text-[#818cf8] uppercase tracking-wider mb-1">Camps &amp; Activities</p>
-                    <p className="text-xs text-[#f4f7fa] leading-relaxed">Sign-up deadlines, permission forms, pickup windows — Aver tracks what&apos;s due and alerts you before it&apos;s late.</p>
+                    <p className="text-xs text-[#f4f7fa] leading-relaxed">Sign-up deadlines, permission forms, pickup windows — Valet tracks what&apos;s due and alerts you before it&apos;s late.</p>
                   </div>
                 </div>
               </div>

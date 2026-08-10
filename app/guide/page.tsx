@@ -222,7 +222,7 @@ export default function GuidePage() {
         </div>
       </section>
 
-      {/* Aver CTA */}
+      {/* Valet CTA */}
       <section className="px-4 py-16 max-w-2xl mx-auto text-center">
         <p
           className="text-xs font-bold tracking-[0.25em] uppercase mb-4"
@@ -234,10 +234,10 @@ export default function GuidePage() {
           className="text-2xl font-[300] mb-4"
           style={{ fontFamily: "var(--font-mulish)", color: "#1c1917" }}
         >
-          Aver does the weekly reset with you — and tracks everything in between.
+          Valet does the weekly reset with you — and tracks everything in between.
         </h3>
         <p className="text-sm leading-relaxed mb-8" style={{ color: "#57534e" }}>
-          The guide gives you the framework. Aver is the agent that runs it alongside you,
+          The guide gives you the framework. Valet is the agent that runs it alongside you,
           watches for things that slip between Fridays, and proves its own work before it
           calls anything done.
         </p>
@@ -247,10 +247,10 @@ export default function GuidePage() {
             className="inline-flex items-center justify-center gap-2 font-semibold px-7 py-3.5 rounded-xl text-sm transition-all duration-200"
             style={{ backgroundColor: "#818cf8", color: "#ffffff" }}
           >
-            Try Aver free →
+            Try Valet free →
           </Link>
           <Link
-            href="/aver"
+            href="/valet"
             className="inline-flex items-center justify-center gap-2 font-semibold px-7 py-3.5 rounded-xl text-sm border transition-all duration-200"
             style={{ borderColor: "#d6d3d1", color: "#44403c", backgroundColor: "transparent" }}
           >
