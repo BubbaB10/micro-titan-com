@@ -89,7 +89,7 @@ function WhatItDoes() {
 function ForYou() {
   const personas = [
     {
-      badge: "Busy Mom",
+      badge: "Busy Parent",
       title: "You stop being the family's memory.",
       body: "School pickups, appointment reminders, grocery lists, household task backlogs — Valet holds the context so you don't have to carry it in your head.",
       gp: "Commitments tracked and actioned. Reminders fire without you managing them.",
@@ -349,33 +349,51 @@ export default function ValetPage() {
             Same verifiable agent. Different domains, different stakes, same provability underneath.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 items-start justify-items-center">
-            {/* Mom persona */}
+            {/* Busy Parent persona */}
             <div className="flex flex-col items-center gap-4 w-full max-w-[280px]">
               <div className="relative w-full rounded-[2.5rem] overflow-hidden border-[6px] border-[#1e3a5f] shadow-2xl shadow-black/60">
                 <Image
                   src="/screenshots/personas/mom-top.png"
-                  alt="Stay-at-home mom cockpit — The Kids, The House, Health, Money domains"
+                  alt="Busy Parent cockpit — verdict, needs-you items, and domain cards for The Kids, The House, Health, and Money"
                   width={780}
                   height={1688}
                   className="w-full h-auto"
                   priority
                 />
               </div>
-              <p className="text-sm font-medium text-[#f4f7fa]">Stay-at-home mom</p>
-              <p className="text-xs text-[#a8d8f0]/70 text-center">The Kids · The House · Health · Money</p>
-            </div>
-            {/* Biz persona */}
-            <div className="flex flex-col items-center gap-4 w-full max-w-[280px]">
               <div className="relative w-full rounded-[2.5rem] overflow-hidden border-[6px] border-[#1e3a5f] shadow-2xl shadow-black/60">
                 <Image
-                  src="/screenshots/personas/biz-top.png"
-                  alt="Young business owner cockpit — Orders, Money, Staff, Marketing domains"
+                  src="/screenshots/personas/mom-metrics.png"
+                  alt="Busy Parent cockpit — Business Activity charts: grocery spend trending down, kids-activities logged, chores-done streak, and This Week summary table"
                   width={780}
                   height={1688}
                   className="w-full h-auto"
                 />
               </div>
-              <p className="text-sm font-medium text-[#f4f7fa]">Young business owner</p>
+              <p className="text-sm font-medium text-[#f4f7fa]">Busy Parent</p>
+              <p className="text-xs text-[#a8d8f0]/70 text-center">The Kids · The House · Health · Money</p>
+            </div>
+            {/* Business Owner persona */}
+            <div className="flex flex-col items-center gap-4 w-full max-w-[280px]">
+              <div className="relative w-full rounded-[2.5rem] overflow-hidden border-[6px] border-[#1e3a5f] shadow-2xl shadow-black/60">
+                <Image
+                  src="/screenshots/personas/biz-top.png"
+                  alt="Business Owner cockpit — verdict, needs-you items, and domain cards for Orders, Money, Staff, and Marketing"
+                  width={780}
+                  height={1688}
+                  className="w-full h-auto"
+                />
+              </div>
+              <div className="relative w-full rounded-[2.5rem] overflow-hidden border-[6px] border-[#1e3a5f] shadow-2xl shadow-black/60">
+                <Image
+                  src="/screenshots/personas/biz-metrics.png"
+                  alt="Business Owner cockpit — Business Activity charts: daily orders with weekend peaks, revenue MTD, and Invoice Aging table showing overdue balance"
+                  width={780}
+                  height={1688}
+                  className="w-full h-auto"
+                />
+              </div>
+              <p className="text-sm font-medium text-[#f4f7fa]">Business Owner</p>
               <p className="text-xs text-[#a8d8f0]/70 text-center">Orders · Money · Staff · Marketing</p>
             </div>
           </div>
