@@ -117,7 +117,7 @@ export default function HomePage() {
               href="https://download.micro-titan.com"
               className="inline-flex items-center justify-center gap-2 text-[#a8d8f0]/60 hover:text-[#c7d2fe] text-sm font-medium transition-colors px-4 py-2"
             >
-              or try Aver
+              or meet Valet
             </Link>
           </div>
 
@@ -128,9 +128,9 @@ export default function HomePage() {
           >
             <Link href="/studio" className="hover:text-[#46cf93] transition-colors">Custom build <span className="font-semibold text-[#f4f7fa]/80">from $5k</span></Link>
             <span className="text-[#a8d8f0]/20">·</span>
-            <Link href="/pricing" className="hover:text-[#60a5fa] transition-colors">Business Aver <span className="font-semibold text-[#f4f7fa]/80">$1,500 + $349/mo</span></Link>
+            <Link href="/pricing" className="hover:text-[#60a5fa] transition-colors">Valet Business <span className="font-semibold text-[#f4f7fa]/80">$1,500 + $349/mo</span></Link>
             <span className="text-[#a8d8f0]/20">·</span>
-            <Link href="/pricing" className="hover:text-[#c7d2fe] transition-colors">Personal Aver <span className="font-semibold text-[#f4f7fa]/80">$495 + $59/mo</span></Link>
+            <Link href="/pricing" className="hover:text-[#c7d2fe] transition-colors">Valet Personal <span className="font-semibold text-[#f4f7fa]/80">$495 + $59/mo</span></Link>
           </div>
 
           <div
@@ -343,7 +343,7 @@ export default function HomePage() {
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Aver */}
-            <Link href="/aver" className="group block">
+            <Link href="/valet" className="group block">
               <div className="h-full bg-[#12243d] border border-[#818cf8]/25 hover:border-[#818cf8]/50 rounded-2xl p-8 flex flex-col gap-5 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[#818cf8]/10">
                 <div className="w-12 h-12 rounded-xl bg-[#818cf8]/10 border border-[#818cf8]/25 flex items-center justify-center">
                   <svg viewBox="0 0 24 24" fill="none" strokeLinecap="round" strokeLinejoin="round" width="22" height="22">
@@ -354,7 +354,7 @@ export default function HomePage() {
                 </div>
                 <div className="flex-1">
                   <span className="inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#818cf8]/10 text-[#c7d2fe] border border-[#818cf8]/25 mb-3">The Agent</span>
-                  <h3 className="text-2xl font-[300] text-[#f4f7fa] mb-3" style={{ fontFamily: "var(--font-mulish)" }}>Aver™</h3>
+                  <h3 className="text-2xl font-[300] text-[#f4f7fa] mb-3" style={{ fontFamily: "var(--font-mulish)" }}>Valet by Micro Titan™</h3>
                   <p className="text-[#a8d8f0] text-sm leading-relaxed mb-4">
                     Your provable AI chief-of-staff. Runs your business or life,
                     verifies its own work, and fails closed to you — not to the world — when it&apos;s unsure.
@@ -366,7 +366,7 @@ export default function HomePage() {
                     </div>
                     <div className="flex items-center gap-2 text-xs text-[#e2a44a]">
                       <span className="w-1.5 h-1.5 rounded-full bg-[#e2a44a]" />
-                      You decide direction — Aver handles execution
+                      You decide direction — Valet handles execution
                     </div>
                   </div>
                   <p className="text-xs text-[#818cf8]/60">
@@ -375,7 +375,7 @@ export default function HomePage() {
                   </p>
                 </div>
                 <div className="flex items-center gap-1.5 text-sm font-semibold text-[#818cf8] group-hover:text-[#c7d2fe] transition-colors">
-                  Explore Aver
+                  Explore Valet
                   <svg className="w-4 h-4 transition-transform group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
@@ -465,17 +465,17 @@ export default function HomePage() {
                   className="text-2xl font-[300] text-[#f4f7fa] mb-3"
                   style={{ fontFamily: "var(--font-mulish)" }}
                 >
-                  Aver works for anyone whose life has more moving parts than one person can track.
+                  Valet works for anyone whose life has more moving parts than one person can track.
                 </h3>
                 <p className="text-[#a8d8f0] text-sm leading-relaxed mb-6">
                   Busy parents. Solo operators. Caregivers managing a loved one&apos;s needs
                   across multiple providers. Aver holds the full picture so you don&apos;t have to.
                 </p>
                 <Link
-                  href="/aver"
+                  href="/valet"
                   className="text-sm font-semibold text-[#818cf8] hover:text-[#c7d2fe] transition-colors"
                 >
-                  See who Aver is for →
+                  See who Valet is for →
                 </Link>
               </div>
               <div className="bg-[#12243d] border border-[rgba(168,216,240,0.12)] rounded-xl p-6">
