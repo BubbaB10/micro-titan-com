@@ -345,6 +345,11 @@ export default function ValetPage() {
             </Link>
           </p>
           <AverGateFlow />
+          <p className="text-center text-xs text-[#a8d8f0]/35 mt-8">
+            <Link href="/receipts" className="hover:text-[#46cf93]/70 transition-colors underline underline-offset-2">
+              Check the ledger yourself →
+            </Link>
+          </p>
         </div>
       </section>
 

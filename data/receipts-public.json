@@ -1,0 +1,1096 @@
+{
+  "generatedAt": "2026-08-11T22:09:29.591Z",
+  "windowDays": 90,
+  "totalInWindow": 179,
+  "perApp": {
+    "micro-titan-web": 42,
+    "the-download": 7,
+    "micro-titan-hq": 19,
+    "sandwich-etc": 18,
+    "ripple-the-download": 10,
+    "mineral-ledger": 23,
+    "greg-installer": 1,
+    "property-os": 1,
+    "pgcc": 2,
+    "rosewood": 1,
+    "fairway-bets": 54,
+    "micro-titan-base": 1
+  },
+  "failuresRecordedSince": null,
+  "receipts": [
+    {
+      "app": "micro-titan-web",
+      "verifiedAt": "2026-08-11T20:47:25.796Z",
+      "head": "10e7560",
+      "filesChanged": 5
+    },
+    {
+      "app": "the-download",
+      "verifiedAt": "2026-08-11T19:30:41.016Z",
+      "head": "d74d70a",
+      "filesChanged": 1
+    },
+    {
+      "app": "the-download",
+      "verifiedAt": "2026-08-11T17:39:29.046Z",
+      "head": "ea9dfac",
+      "filesChanged": 2
+    },
+    {
+      "app": "micro-titan-hq",
+      "verifiedAt": "2026-08-11T15:10:23.277Z",
+      "head": "2a0d86b",
+      "filesChanged": 1
+    },
+    {
+      "app": "micro-titan-web",
+      "verifiedAt": "2026-08-11T15:09:21.598Z",
+      "head": "156b814",
+      "filesChanged": 2
+    },
+    {
+      "app": "the-download",
+      "verifiedAt": "2026-08-11T14:31:50.549Z",
+      "head": "600f589",
+      "filesChanged": 1
+    },
+    {
+      "app": "the-download",
+      "verifiedAt": "2026-08-11T12:00:28.659Z",
+      "head": "39b8c89",
+      "filesChanged": 2
+    },
+    {
+      "app": "the-download",
+      "verifiedAt": "2026-08-11T11:53:08.315Z",
+      "head": "96e6480",
+      "filesChanged": 6
+    },
+    {
+      "app": "micro-titan-hq",
+      "verifiedAt": "2026-08-11T03:07:18.564Z",
+      "head": "f28d0d6",
+      "filesChanged": 7
+    },
+    {
+      "app": "micro-titan-web",
+      "verifiedAt": "2026-08-11T02:55:52.876Z",
+      "head": "9369104",
+      "filesChanged": 5
+    },
+    {
+      "app": "micro-titan-hq",
+      "verifiedAt": "2026-08-10T23:17:33.777Z",
+      "head": "5babded",
+      "filesChanged": 6
+    },
+    {
+      "app": "micro-titan-web",
+      "verifiedAt": "2026-08-10T23:08:09.242Z",
+      "head": "e707c4d",
+      "filesChanged": 3
+    },
+    {
+      "app": "micro-titan-hq",
+      "verifiedAt": "2026-08-10T23:07:05.344Z",
+      "head": "106a955",
+      "filesChanged": 4
+    },
+    {
+      "app": "micro-titan-web",
+      "verifiedAt": "2026-08-10T22:56:18.783Z",
+      "head": "b6ad294",
+      "filesChanged": 3
+    },
+    {
+      "app": "sandwich-etc",
+      "verifiedAt": "2026-08-10T22:11:41.169Z",
+      "head": "b3a66ef",
+      "filesChanged": 1
+    },
+    {
+      "app": "micro-titan-hq",
+      "verifiedAt": "2026-08-10T22:02:46.002Z",
+      "head": "5aa4633",
+      "filesChanged": 1
+    },
+    {
+      "app": "micro-titan-hq",
+      "verifiedAt": "2026-08-10T21:13:05.989Z",
+      "head": "2c32138",
+      "filesChanged": 4
+    },
+    {
+      "app": "micro-titan-web",
+      "verifiedAt": "2026-08-10T21:04:18.217Z",
+      "head": "c686f40",
+      "filesChanged": 15
+    },
+    {
+      "app": "sandwich-etc",
+      "verifiedAt": "2026-08-10T20:42:23.810Z",
+      "head": "efb900b1",
+      "filesChanged": 1
+    },
+    {
+      "app": "sandwich-etc",
+      "verifiedAt": "2026-08-10T20:36:07.645Z",
+      "head": "7bbe4a5d",
+      "filesChanged": 12
+    },
+    {
+      "app": "sandwich-etc",
+      "verifiedAt": "2026-08-10T20:09:36.354Z",
+      "head": "76dde49e",
+      "filesChanged": 7
+    },
+    {
+      "app": "sandwich-etc",
+      "verifiedAt": "2026-08-10T19:52:47.753Z",
+      "head": "0e50a7c5",
+      "filesChanged": 1
+    },
+    {
+      "app": "micro-titan-hq",
+      "verifiedAt": "2026-08-10T18:55:51.292Z",
+      "head": "afd0a6b4",
+      "filesChanged": 3
+    },
+    {
+      "app": "the-download",
+      "verifiedAt": "2026-08-10T18:40:08.583Z",
+      "head": "fd558c3d",
+      "filesChanged": 1
+    },
+    {
+      "app": "micro-titan-web",
+      "verifiedAt": "2026-08-10T18:39:26.517Z",
+      "head": "461ec285",
+      "filesChanged": 7
+    },
+    {
+      "app": "the-download",
+      "verifiedAt": "2026-08-10T18:01:46.709Z",
+      "head": "55aaaaba",
+      "filesChanged": 8
+    },
+    {
+      "app": "micro-titan-hq",
+      "verifiedAt": "2026-08-10T17:41:24.642Z",
+      "head": "079c9d43",
+      "filesChanged": 2
+    },
+    {
+      "app": "micro-titan-web",
+      "verifiedAt": "2026-08-10T16:43:36.603Z",
+      "head": "eb5b8b0a",
+      "filesChanged": 2
+    },
+    {
+      "app": "sandwich-etc",
+      "verifiedAt": "2026-08-10T15:37:53.343Z",
+      "head": "75c76c50",
+      "filesChanged": 3
+    },
+    {
+      "app": "sandwich-etc",
+      "verifiedAt": "2026-08-10T14:36:49.150Z",
+      "head": "2b578ebe",
+      "filesChanged": 9
+    },
+    {
+      "app": "micro-titan-hq",
+      "verifiedAt": "2026-08-10T12:54:58.908Z",
+      "head": "84c5734b",
+      "filesChanged": 5
+    },
+    {
+      "app": "micro-titan-web",
+      "verifiedAt": "2026-08-10T11:45:39.697Z",
+      "head": "bff6380",
+      "filesChanged": 1
+    },
+    {
+      "app": "micro-titan-hq",
+      "verifiedAt": "2026-08-10T11:44:20.149Z",
+      "head": "a77da0c",
+      "filesChanged": 2
+    },
+    {
+      "app": "micro-titan-web",
+      "verifiedAt": "2026-08-10T11:38:21.225Z",
+      "head": "9f6f709",
+      "filesChanged": 1
+    },
+    {
+      "app": "micro-titan-web",
+      "verifiedAt": "2026-08-10T02:39:13.220Z",
+      "head": "423683d",
+      "filesChanged": 11
+    },
+    {
+      "app": "micro-titan-hq",
+      "verifiedAt": "2026-08-10T00:04:52.340Z",
+      "head": "6edacc6",
+      "filesChanged": 2
+    },
+    {
+      "app": "ripple-the-download",
+      "verifiedAt": "2026-08-09T22:59:41.118Z",
+      "head": "b707ef0",
+      "filesChanged": 3
+    },
+    {
+      "app": "micro-titan-web",
+      "verifiedAt": "2026-08-09T22:58:10.336Z",
+      "head": "1a8066d",
+      "filesChanged": 1
+    },
+    {
+      "app": "micro-titan-web",
+      "verifiedAt": "2026-08-09T22:44:07.722Z",
+      "head": "948f255",
+      "filesChanged": 8
+    },
+    {
+      "app": "ripple-the-download",
+      "verifiedAt": "2026-08-09T22:43:01.020Z",
+      "head": "578adf4",
+      "filesChanged": 3
+    },
+    {
+      "app": "ripple-the-download",
+      "verifiedAt": "2026-08-09T21:24:38.780Z",
+      "head": "9e0e721",
+      "filesChanged": 3
+    },
+    {
+      "app": "ripple-the-download",
+      "verifiedAt": "2026-08-09T19:11:49.230Z",
+      "head": "cddde42",
+      "filesChanged": 4
+    },
+    {
+      "app": "micro-titan-web",
+      "verifiedAt": "2026-08-09T16:42:59.741Z",
+      "head": "ed25532",
+      "filesChanged": 4
+    },
+    {
+      "app": "mineral-ledger",
+      "verifiedAt": "2026-08-09T01:51:24.414Z",
+      "head": "0a0d3052",
+      "filesChanged": 3
+    },
+    {
+      "app": "micro-titan-web",
+      "verifiedAt": "2026-08-09T01:16:59.249Z",
+      "head": "d28faab",
+      "filesChanged": 6
+    },
+    {
+      "app": "micro-titan-hq",
+      "verifiedAt": "2026-08-08T23:30:33.049Z",
+      "head": "aaa3e810",
+      "filesChanged": 2
+    },
+    {
+      "app": "ripple-the-download",
+      "verifiedAt": "2026-08-08T23:22:42.874Z",
+      "head": "79426cda",
+      "filesChanged": 2
+    },
+    {
+      "app": "micro-titan-web",
+      "verifiedAt": "2026-08-08T22:31:51.037Z",
+      "head": "4d47f5c8",
+      "filesChanged": 4
+    },
+    {
+      "app": "micro-titan-hq",
+      "verifiedAt": "2026-08-08T22:25:00.702Z",
+      "head": "de64e1cf",
+      "filesChanged": 2
+    },
+    {
+      "app": "micro-titan-hq",
+      "verifiedAt": "2026-08-08T22:17:08.249Z",
+      "head": "4352837",
+      "filesChanged": 1
+    },
+    {
+      "app": "micro-titan-web",
+      "verifiedAt": "2026-08-08T13:33:59.549Z",
+      "head": "05842e4e",
+      "filesChanged": 3
+    },
+    {
+      "app": "micro-titan-hq",
+      "verifiedAt": "2026-08-08T02:02:50.778Z",
+      "head": "adace1cc",
+      "filesChanged": 2
+    },
+    {
+      "app": "ripple-the-download",
+      "verifiedAt": "2026-08-08T01:45:57.503Z",
+      "head": "c0210ef",
+      "filesChanged": 1
+    },
+    {
+      "app": "ripple-the-download",
+      "verifiedAt": "2026-08-08T01:22:09.872Z",
+      "head": "b6286c16",
+      "filesChanged": 3
+    },
+    {
+      "app": "sandwich-etc",
+      "verifiedAt": "2026-08-07T22:39:53.883Z",
+      "head": "d1f2a308",
+      "filesChanged": 4
+    },
+    {
+      "app": "micro-titan-web",
+      "verifiedAt": "2026-08-07T20:40:43.729Z",
+      "head": "fbf7e1e",
+      "filesChanged": 3
+    },
+    {
+      "app": "ripple-the-download",
+      "verifiedAt": "2026-08-07T18:00:34.892Z",
+      "head": "e2829f2a",
+      "filesChanged": 4
+    },
+    {
+      "app": "micro-titan-web",
+      "verifiedAt": "2026-08-07T12:17:39.406Z",
+      "head": "9f1f7552",
+      "filesChanged": 1
+    },
+    {
+      "app": "ripple-the-download",
+      "verifiedAt": "2026-08-07T12:14:22.529Z",
+      "head": "cabce1c6",
+      "filesChanged": 3
+    },
+    {
+      "app": "sandwich-etc",
+      "verifiedAt": "2026-08-07T12:03:08.362Z",
+      "head": "a938ed11",
+      "filesChanged": 3
+    },
+    {
+      "app": "ripple-the-download",
+      "verifiedAt": "2026-08-07T03:37:48.789Z",
+      "head": "84658234",
+      "filesChanged": 4
+    },
+    {
+      "app": "greg-installer",
+      "verifiedAt": "2026-08-06T21:34:43.379Z",
+      "head": "86024195",
+      "filesChanged": 8
+    },
+    {
+      "app": "micro-titan-web",
+      "verifiedAt": "2026-08-06T04:14:15.446Z",
+      "head": "d92d182",
+      "filesChanged": 5
+    },
+    {
+      "app": "micro-titan-web",
+      "verifiedAt": "2026-08-06T03:00:01.072Z",
+      "head": "9f44db4e",
+      "filesChanged": 3
+    },
+    {
+      "app": "micro-titan-hq",
+      "verifiedAt": "2026-08-06T02:58:16.909Z",
+      "head": "49880bed",
+      "filesChanged": 3
+    },
+    {
+      "app": "micro-titan-web",
+      "verifiedAt": "2026-08-06T02:02:08.480Z",
+      "head": "b6a45a98",
+      "filesChanged": 1
+    },
+    {
+      "app": "micro-titan-web",
+      "verifiedAt": "2026-08-06T01:40:38.180Z",
+      "head": "8b191360",
+      "filesChanged": 2
+    },
+    {
+      "app": "mineral-ledger",
+      "verifiedAt": "2026-08-05T23:16:33.613Z",
+      "head": "360a489c",
+      "filesChanged": 10
+    },
+    {
+      "app": "micro-titan-hq",
+      "verifiedAt": "2026-08-05T22:52:32.309Z",
+      "head": "6b1865e5",
+      "filesChanged": 4
+    },
+    {
+      "app": "sandwich-etc",
+      "verifiedAt": "2026-08-05T21:40:32.324Z",
+      "head": "839f0120",
+      "filesChanged": 7
+    },
+    {
+      "app": "mineral-ledger",
+      "verifiedAt": "2026-08-05T21:11:54.955Z",
+      "head": "main",
+      "filesChanged": 10
+    },
+    {
+      "app": "mineral-ledger",
+      "verifiedAt": "2026-08-05T19:11:17.677Z",
+      "head": "81e12f36",
+      "filesChanged": 5
+    },
+    {
+      "app": "mineral-ledger",
+      "verifiedAt": "2026-08-05T17:23:58.616Z",
+      "head": "c5594c4e",
+      "filesChanged": 1
+    },
+    {
+      "app": "micro-titan-hq",
+      "verifiedAt": "2026-08-05T02:20:27.360Z",
+      "head": "e91e7bdf",
+      "filesChanged": 5
+    },
+    {
+      "app": "micro-titan-web",
+      "verifiedAt": "2026-08-05T02:19:22.598Z",
+      "head": "98bcc872",
+      "filesChanged": 2
+    },
+    {
+      "app": "property-os",
+      "verifiedAt": "2026-08-05T02:15:59.447Z",
+      "head": "9ecfcc2a",
+      "filesChanged": 49
+    },
+    {
+      "app": "micro-titan-hq",
+      "verifiedAt": "2026-08-03T03:04:43.926Z",
+      "head": "5e36ad1b",
+      "filesChanged": 50
+    },
+    {
+      "app": "micro-titan-web",
+      "verifiedAt": "2026-08-03T02:21:37.325Z",
+      "head": "46f454ff",
+      "filesChanged": 4
+    },
+    {
+      "app": "pgcc",
+      "verifiedAt": "2026-08-03T02:20:25.414Z",
+      "head": "8f44a3df",
+      "filesChanged": 2
+    },
+    {
+      "app": "mineral-ledger",
+      "verifiedAt": "2026-08-02T21:51:18.335Z",
+      "head": "826056dd",
+      "filesChanged": 2
+    },
+    {
+      "app": "mineral-ledger",
+      "verifiedAt": "2026-08-02T20:15:15.538Z",
+      "head": "842da32",
+      "filesChanged": 2
+    },
+    {
+      "app": "mineral-ledger",
+      "verifiedAt": "2026-08-02T20:10:36.577Z",
+      "head": "8a2a5e0",
+      "filesChanged": 1
+    },
+    {
+      "app": "mineral-ledger",
+      "verifiedAt": "2026-08-02T18:51:39.491Z",
+      "head": "6db6148",
+      "filesChanged": 4
+    },
+    {
+      "app": "rosewood",
+      "verifiedAt": "2026-08-02T12:52:37.861Z",
+      "head": "3a0e84b6",
+      "filesChanged": 53
+    },
+    {
+      "app": "sandwich-etc",
+      "verifiedAt": "2026-08-02T12:51:40.287Z",
+      "head": "749075a3",
+      "filesChanged": 12
+    },
+    {
+      "app": "fairway-bets",
+      "verifiedAt": "2026-08-02T01:20:07.697Z",
+      "head": "14704bae",
+      "filesChanged": 1
+    },
+    {
+      "app": "mineral-ledger",
+      "verifiedAt": "2026-08-02T00:38:08.340Z",
+      "head": "04a2e63",
+      "filesChanged": 2
+    },
+    {
+      "app": "mineral-ledger",
+      "verifiedAt": "2026-08-01T13:14:48.946Z",
+      "head": "068226c",
+      "filesChanged": 1
+    },
+    {
+      "app": "fairway-bets",
+      "verifiedAt": "2026-08-01T05:36:34.491Z",
+      "head": "6b6957a",
+      "filesChanged": 60
+    },
+    {
+      "app": "micro-titan-web",
+      "verifiedAt": "2026-07-31T15:06:17.084Z",
+      "head": "4172bdf",
+      "filesChanged": 3
+    },
+    {
+      "app": "micro-titan-web",
+      "verifiedAt": "2026-07-31T13:22:00.602Z",
+      "head": "23fbe0d",
+      "filesChanged": 5
+    },
+    {
+      "app": "micro-titan-web",
+      "verifiedAt": "2026-07-31T12:36:33.386Z",
+      "head": "12cb618",
+      "filesChanged": 1
+    },
+    {
+      "app": "fairway-bets",
+      "verifiedAt": "2026-07-29T19:54:05.583Z",
+      "head": "827361a0",
+      "filesChanged": 1
+    },
+    {
+      "app": "micro-titan-web",
+      "verifiedAt": "2026-07-28T23:04:06.356Z",
+      "head": "5dc4ff8",
+      "filesChanged": 6
+    },
+    {
+      "app": "micro-titan-web",
+      "verifiedAt": "2026-07-28T22:17:55.768Z",
+      "head": "d75e933",
+      "filesChanged": 1
+    },
+    {
+      "app": "micro-titan-web",
+      "verifiedAt": "2026-07-28T21:20:43.873Z",
+      "head": "953a548",
+      "filesChanged": 3
+    },
+    {
+      "app": "micro-titan-web",
+      "verifiedAt": "2026-07-28T19:28:27.140Z",
+      "head": "6710b80",
+      "filesChanged": 3
+    },
+    {
+      "app": "micro-titan-web",
+      "verifiedAt": "2026-07-28T18:08:56.613Z",
+      "head": "29eb389",
+      "filesChanged": 4
+    },
+    {
+      "app": "micro-titan-web",
+      "verifiedAt": "2026-07-28T03:22:13.191Z",
+      "head": "ef4fa5b",
+      "filesChanged": 3
+    },
+    {
+      "app": "micro-titan-web",
+      "verifiedAt": "2026-07-28T03:06:04.881Z",
+      "head": "b4782d3",
+      "filesChanged": 1
+    },
+    {
+      "app": "micro-titan-web",
+      "verifiedAt": "2026-07-28T03:03:25.803Z",
+      "head": "072c186",
+      "filesChanged": 10
+    },
+    {
+      "app": "micro-titan-web",
+      "verifiedAt": "2026-07-27T14:49:23.380Z",
+      "head": "2f625ffa",
+      "filesChanged": 3
+    },
+    {
+      "app": "mineral-ledger",
+      "verifiedAt": "2026-07-27T14:26:15.084Z",
+      "head": "355492d2",
+      "filesChanged": 1
+    },
+    {
+      "app": "micro-titan-web",
+      "verifiedAt": "2026-07-27T12:58:27.330Z",
+      "head": "5a8ddc5b",
+      "filesChanged": 1
+    },
+    {
+      "app": "mineral-ledger",
+      "verifiedAt": "2026-07-27T12:27:51.290Z",
+      "head": "0bf7120f",
+      "filesChanged": 1
+    },
+    {
+      "app": "fairway-bets",
+      "verifiedAt": "2026-07-27T02:47:43.291Z",
+      "head": "ae5f175b",
+      "filesChanged": 3
+    },
+    {
+      "app": "micro-titan-web",
+      "verifiedAt": "2026-07-27T00:41:49.928Z",
+      "head": "cdf29412",
+      "filesChanged": 1
+    },
+    {
+      "app": "micro-titan-web",
+      "verifiedAt": "2026-07-26T23:37:50.385Z",
+      "head": "9843704b",
+      "filesChanged": 1
+    },
+    {
+      "app": "fairway-bets",
+      "verifiedAt": "2026-07-26T23:36:41.004Z",
+      "head": "ae5f175b",
+      "filesChanged": 3
+    },
+    {
+      "app": "fairway-bets",
+      "verifiedAt": "2026-07-26T21:22:03.661Z",
+      "head": "fc53431b",
+      "filesChanged": 5
+    },
+    {
+      "app": "fairway-bets",
+      "verifiedAt": "2026-07-26T20:06:22.600Z",
+      "head": "d7f26bdf",
+      "filesChanged": 1
+    },
+    {
+      "app": "fairway-bets",
+      "verifiedAt": "2026-07-26T19:52:30.054Z",
+      "head": "83b8df68",
+      "filesChanged": 1
+    },
+    {
+      "app": "fairway-bets",
+      "verifiedAt": "2026-07-26T19:47:14.603Z",
+      "head": "b632d3b3",
+      "filesChanged": 1
+    },
+    {
+      "app": "fairway-bets",
+      "verifiedAt": "2026-07-26T19:42:39.256Z",
+      "head": "03cf8e7b",
+      "filesChanged": 1
+    },
+    {
+      "app": "fairway-bets",
+      "verifiedAt": "2026-07-26T19:00:03.923Z",
+      "head": "3d3eb2a1",
+      "filesChanged": 2
+    },
+    {
+      "app": "fairway-bets",
+      "verifiedAt": "2026-07-26T17:47:21.896Z",
+      "head": "7640ca1",
+      "filesChanged": 1
+    },
+    {
+      "app": "fairway-bets",
+      "verifiedAt": "2026-07-26T15:01:49.528Z",
+      "head": "78a57705",
+      "filesChanged": 8
+    },
+    {
+      "app": "fairway-bets",
+      "verifiedAt": "2026-07-26T03:46:04.284Z",
+      "head": "e4fd340f",
+      "filesChanged": 2
+    },
+    {
+      "app": "fairway-bets",
+      "verifiedAt": "2026-07-26T03:42:05.779Z",
+      "head": "a163c203",
+      "filesChanged": 6
+    },
+    {
+      "app": "fairway-bets",
+      "verifiedAt": "2026-07-26T00:52:20.595Z",
+      "head": "a1107438",
+      "filesChanged": 1
+    },
+    {
+      "app": "fairway-bets",
+      "verifiedAt": "2026-07-26T00:40:50.638Z",
+      "head": "f95a263c",
+      "filesChanged": 2
+    },
+    {
+      "app": "fairway-bets",
+      "verifiedAt": "2026-07-25T23:52:21.341Z",
+      "head": "e3d92340",
+      "filesChanged": 1
+    },
+    {
+      "app": "micro-titan-web",
+      "verifiedAt": "2026-07-25T14:39:58.637Z",
+      "head": "4ba86ae",
+      "filesChanged": 3
+    },
+    {
+      "app": "fairway-bets",
+      "verifiedAt": "2026-07-25T06:08:47.994Z",
+      "head": "66d21d6c",
+      "filesChanged": 1
+    },
+    {
+      "app": "fairway-bets",
+      "verifiedAt": "2026-07-25T06:04:06.002Z",
+      "head": "bfc49265",
+      "filesChanged": 1
+    },
+    {
+      "app": "fairway-bets",
+      "verifiedAt": "2026-07-25T05:59:55.849Z",
+      "head": "958bf0f0",
+      "filesChanged": 1
+    },
+    {
+      "app": "fairway-bets",
+      "verifiedAt": "2026-07-25T05:50:53.066Z",
+      "head": "ac2cf843",
+      "filesChanged": 1
+    },
+    {
+      "app": "fairway-bets",
+      "verifiedAt": "2026-07-25T05:46:00.691Z",
+      "head": "a8d38392",
+      "filesChanged": 1
+    },
+    {
+      "app": "mineral-ledger",
+      "verifiedAt": "2026-07-24T23:13:17.991Z",
+      "head": "09eb477b",
+      "filesChanged": 1
+    },
+    {
+      "app": "mineral-ledger",
+      "verifiedAt": "2026-07-24T23:00:33.715Z",
+      "head": "9cfcbe6b",
+      "filesChanged": 1
+    },
+    {
+      "app": "mineral-ledger",
+      "verifiedAt": "2026-07-24T22:54:53.717Z",
+      "head": "f09076f8",
+      "filesChanged": 1
+    },
+    {
+      "app": "fairway-bets",
+      "verifiedAt": "2026-07-24T14:51:10.997Z",
+      "head": "92957261",
+      "filesChanged": 1
+    },
+    {
+      "app": "mineral-ledger",
+      "verifiedAt": "2026-07-24T14:38:19.558Z",
+      "head": "4a2d9ca0",
+      "filesChanged": 1
+    },
+    {
+      "app": "mineral-ledger",
+      "verifiedAt": "2026-07-24T13:18:29.696Z",
+      "head": "d7211719",
+      "filesChanged": 1
+    },
+    {
+      "app": "fairway-bets",
+      "verifiedAt": "2026-07-24T05:16:24.839Z",
+      "head": "967091e2",
+      "filesChanged": 2
+    },
+    {
+      "app": "fairway-bets",
+      "verifiedAt": "2026-07-24T04:50:23.280Z",
+      "head": "3dd99fee",
+      "filesChanged": 2
+    },
+    {
+      "app": "micro-titan-web",
+      "verifiedAt": "2026-07-24T04:40:05.489Z",
+      "head": "9ddb12c3",
+      "filesChanged": 3
+    },
+    {
+      "app": "sandwich-etc",
+      "verifiedAt": "2026-07-24T04:38:32.029Z",
+      "head": "8fcabbbc",
+      "filesChanged": 20
+    },
+    {
+      "app": "mineral-ledger",
+      "verifiedAt": "2026-07-24T04:29:50.056Z",
+      "head": "65e06656",
+      "filesChanged": 1
+    },
+    {
+      "app": "pgcc",
+      "verifiedAt": "2026-07-24T03:06:26.386Z",
+      "head": "ef6a745",
+      "filesChanged": 19
+    },
+    {
+      "app": "fairway-bets",
+      "verifiedAt": "2026-07-24T03:00:17.615Z",
+      "head": "eef751b5",
+      "filesChanged": 2
+    },
+    {
+      "app": "mineral-ledger",
+      "verifiedAt": "2026-07-24T01:20:46.828Z",
+      "head": "fc7623bb",
+      "filesChanged": 1
+    },
+    {
+      "app": "mineral-ledger",
+      "verifiedAt": "2026-07-23T21:30:35.150Z",
+      "head": "1b62b0b7",
+      "filesChanged": 3
+    },
+    {
+      "app": "mineral-ledger",
+      "verifiedAt": "2026-07-23T20:54:22.915Z",
+      "head": "299e07d5",
+      "filesChanged": 5
+    },
+    {
+      "app": "mineral-ledger",
+      "verifiedAt": "2026-07-23T19:56:47.436Z",
+      "head": "90aea0ce",
+      "filesChanged": 4
+    },
+    {
+      "app": "micro-titan-base",
+      "verifiedAt": "2026-07-22T11:21:07.466Z",
+      "head": "main",
+      "filesChanged": 0
+    },
+    {
+      "app": "sandwich-etc",
+      "verifiedAt": "2026-07-22T00:48:43.546Z",
+      "head": "8fcabbbc",
+      "filesChanged": 3
+    },
+    {
+      "app": "sandwich-etc",
+      "verifiedAt": "2026-07-21T23:50:32.398Z",
+      "head": "dcad7688",
+      "filesChanged": 12
+    },
+    {
+      "app": "sandwich-etc",
+      "verifiedAt": "2026-07-21T23:49:42.678Z",
+      "head": "4335b892",
+      "filesChanged": 4
+    },
+    {
+      "app": "fairway-bets",
+      "verifiedAt": "2026-07-21T23:46:55.544Z",
+      "head": "cdbd8762",
+      "filesChanged": 2
+    },
+    {
+      "app": "fairway-bets",
+      "verifiedAt": "2026-07-21T23:43:09.665Z",
+      "head": "751d2e60",
+      "filesChanged": 1
+    },
+    {
+      "app": "sandwich-etc",
+      "verifiedAt": "2026-07-21T20:00:15.914Z",
+      "head": "2b5ec9fe",
+      "filesChanged": 3
+    },
+    {
+      "app": "sandwich-etc",
+      "verifiedAt": "2026-07-21T19:02:09.136Z",
+      "head": "346ff2d5",
+      "filesChanged": 3
+    },
+    {
+      "app": "sandwich-etc",
+      "verifiedAt": "2026-07-21T18:11:15.757Z",
+      "head": "6049a0ea",
+      "filesChanged": 0
+    },
+    {
+      "app": "fairway-bets",
+      "verifiedAt": "2026-07-21T04:23:22.012Z",
+      "head": "f92058d2",
+      "filesChanged": 7
+    },
+    {
+      "app": "fairway-bets",
+      "verifiedAt": "2026-07-21T01:34:41.358Z",
+      "head": "b2994243",
+      "filesChanged": 1
+    },
+    {
+      "app": "fairway-bets",
+      "verifiedAt": "2026-07-20T19:50:29.742Z",
+      "head": "ac40090f",
+      "filesChanged": 1
+    },
+    {
+      "app": "fairway-bets",
+      "verifiedAt": "2026-07-20T18:15:52.611Z",
+      "head": "62fbd178",
+      "filesChanged": 2
+    },
+    {
+      "app": "fairway-bets",
+      "verifiedAt": "2026-07-20T18:11:07.835Z",
+      "head": "27f05eaa",
+      "filesChanged": 2
+    },
+    {
+      "app": "fairway-bets",
+      "verifiedAt": "2026-07-20T15:12:57.752Z",
+      "head": "2c9595d6",
+      "filesChanged": 3
+    },
+    {
+      "app": "fairway-bets",
+      "verifiedAt": "2026-07-20T12:53:14.417Z",
+      "head": "84d8f58f",
+      "filesChanged": 5
+    },
+    {
+      "app": "fairway-bets",
+      "verifiedAt": "2026-07-20T03:29:25.545Z",
+      "head": "f495d03",
+      "filesChanged": 1
+    },
+    {
+      "app": "fairway-bets",
+      "verifiedAt": "2026-07-20T02:01:25.199Z",
+      "head": "9909ee85",
+      "filesChanged": 5
+    },
+    {
+      "app": "fairway-bets",
+      "verifiedAt": "2026-07-20T01:56:11.776Z",
+      "head": "9909ee85",
+      "filesChanged": 5
+    },
+    {
+      "app": "fairway-bets",
+      "verifiedAt": "2026-07-20T01:52:28.947Z",
+      "head": "0e694378",
+      "filesChanged": 1
+    },
+    {
+      "app": "fairway-bets",
+      "verifiedAt": "2026-07-20T01:49:33.654Z",
+      "head": "0e694378",
+      "filesChanged": 1
+    },
+    {
+      "app": "fairway-bets",
+      "verifiedAt": "2026-07-20T01:34:36.056Z",
+      "head": "c6b34048",
+      "filesChanged": 3
+    },
+    {
+      "app": "fairway-bets",
+      "verifiedAt": "2026-07-20T01:14:05.966Z",
+      "head": "c6b34048",
+      "filesChanged": 1
+    },
+    {
+      "app": "fairway-bets",
+      "verifiedAt": "2026-07-20T00:59:55.661Z",
+      "head": "69c20142",
+      "filesChanged": 6
+    },
+    {
+      "app": "fairway-bets",
+      "verifiedAt": "2026-07-20T00:54:57.231Z",
+      "head": "c60eff5f",
+      "filesChanged": 1
+    },
+    {
+      "app": "fairway-bets",
+      "verifiedAt": "2026-07-20T00:49:45.181Z",
+      "head": "77f8e407",
+      "filesChanged": 4
+    },
+    {
+      "app": "fairway-bets",
+      "verifiedAt": "2026-07-20T00:03:08.547Z",
+      "head": "78e68510",
+      "filesChanged": 1
+    },
+    {
+      "app": "fairway-bets",
+      "verifiedAt": "2026-07-20T00:00:55.866Z",
+      "head": "78e68510",
+      "filesChanged": 1
+    },
+    {
+      "app": "fairway-bets",
+      "verifiedAt": "2026-07-19T23:34:48.802Z",
+      "head": "8b8e4460",
+      "filesChanged": 2
+    },
+    {
+      "app": "fairway-bets",
+      "verifiedAt": "2026-07-19T23:33:32.085Z",
+      "head": "8b8e4460",
+      "filesChanged": 2
+    },
+    {
+      "app": "fairway-bets",
+      "verifiedAt": "2026-07-19T21:41:49.523Z",
+      "head": "f7383445",
+      "filesChanged": 2
+    },
+    {
+      "app": "fairway-bets",
+      "verifiedAt": "2026-07-19T21:40:56.163Z",
+      "head": "f7383445",
+      "filesChanged": 2
+    },
+    {
+      "app": "fairway-bets",
+      "verifiedAt": "2026-07-19T21:19:21.883Z",
+      "head": "f7383445",
+      "filesChanged": 0
+    },
+    {
+      "app": "fairway-bets",
+      "verifiedAt": "2026-07-19T21:18:22.200Z",
+      "head": "f7383445",
+      "filesChanged": 2
+    }
+  ]
+}

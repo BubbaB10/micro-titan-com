@@ -4,6 +4,7 @@ import Nav from "./components/Nav";
 import Footer from "./components/Footer";
 import EmailCapture from "./components/EmailCapture";
 import DecisionCardDemo from "./components/DecisionCard";
+import HeroChatInput from "./components/HeroChatInput";
 
 export default function HomePage() {
   return (
@@ -87,6 +88,11 @@ export default function HomePage() {
             >
               Or talk to the agent right now — free, no signup →
             </Link>
+          </div>
+
+          {/* Hero chat input — visitor is mid-conversation before they've decided anything */}
+          <div className="w-full max-w-lg mx-auto mb-6" style={{ animation: "fade-in-up 0.55s ease 0.75s both" }}>
+            <HeroChatInput />
           </div>
 
           <div className="flex flex-wrap justify-center gap-x-5 gap-y-1.5 text-xs text-[#a8d8f0]/65" style={{ animation: "fade-in-up 0.5s ease 0.8s both" }}>
@@ -482,9 +488,13 @@ export default function HomePage() {
             ))}
           </div>
 
-          <div className="text-center mt-10">
+          <div className="text-center mt-10 flex flex-col sm:flex-row gap-4 justify-center items-center">
             <Link href="/about" className="text-sm text-[#a8d8f0]/60 hover:text-[#f4f7fa] transition-colors">
               The operator story →
+            </Link>
+            <span className="hidden sm:block text-[#a8d8f0]/20 text-xs">·</span>
+            <Link href="/receipts" className="text-sm text-[#46cf93]/70 hover:text-[#46cf93] transition-colors">
+              Check the gate ledger →
             </Link>
           </div>
         </div>
