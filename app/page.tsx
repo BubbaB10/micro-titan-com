@@ -59,11 +59,20 @@ export default function HomePage() {
             You&apos;re the router between every app, every plan, and your own head.
           </h1>
           <p
-            className="text-base sm:text-lg text-[#a8d8f0] font-light max-w-xl mx-auto mb-8 leading-relaxed"
+            className="text-base sm:text-lg text-[#a8d8f0] font-light max-w-xl mx-auto mb-4 leading-relaxed"
             style={{ animation: "fade-in-up 0.55s ease 0.5s both" }}
           >
             Micro Titan gives you an agent that does the carrying — and one screen that proves the work is done.
           </p>
+
+          {/* Persona entry chips — anchor to Three Doors */}
+          <div className="flex flex-wrap justify-center gap-x-1 gap-y-2 mb-7" style={{ animation: "fade-in-up 0.5s ease 0.58s both" }}>
+            <a href="#three-doors" className="px-3 py-1 rounded-full text-xs text-[#46cf93]/80 border border-[#46cf93]/20 hover:border-[#46cf93]/45 hover:text-[#46cf93] transition-colors">For your business</a>
+            <span className="text-[#a8d8f0]/20 self-center text-xs px-0.5">·</span>
+            <a href="#three-doors" className="px-3 py-1 rounded-full text-xs text-[#818cf8]/80 border border-[#818cf8]/20 hover:border-[#818cf8]/45 hover:text-[#818cf8] transition-colors">For your life</a>
+            <span className="text-[#a8d8f0]/20 self-center text-xs px-0.5">·</span>
+            <a href="#three-doors" className="px-3 py-1 rounded-full text-xs text-[#e2a44a]/80 border border-[#e2a44a]/20 hover:border-[#e2a44a]/45 hover:text-[#e2a44a] transition-colors">For your next chapter</a>
+          </div>
 
           <div className="flex flex-col sm:flex-row gap-3 justify-center items-center mb-5" style={{ animation: "fade-in-up 0.55s ease 0.65s both" }}>
             <Link
@@ -76,7 +85,7 @@ export default function HomePage() {
               href="https://download.micro-titan.com"
               className="inline-flex items-center justify-center gap-2 text-[#a8d8f0]/60 hover:text-[#c7d2fe] text-sm font-medium transition-colors px-4 py-2"
             >
-              or meet Valet
+              Or talk to the agent right now — free, no signup →
             </Link>
           </div>
 
@@ -102,7 +111,7 @@ export default function HomePage() {
       </section>
 
       {/* ── THREE DOORS ──────────────────────────────────────────────────────── */}
-      <section className="py-20 px-4 border-t border-[rgba(168,216,240,0.08)] bg-[#06101f]">
+      <section id="three-doors" className="py-20 px-4 border-t border-[rgba(168,216,240,0.08)] bg-[#06101f]">
         <div className="max-w-5xl mx-auto">
           <p className="text-xs font-semibold tracking-[0.25em] uppercase text-[#4fb8e8] text-center mb-4">Three doors</p>
           <h2 className="text-2xl sm:text-3xl font-[300] text-[#f4f7fa] text-center mb-14" style={{ fontFamily: "var(--font-mulish)" }}>
@@ -322,9 +331,21 @@ export default function HomePage() {
           <p className="text-center text-[#a8d8f0] mb-4 max-w-xl mx-auto leading-relaxed">
             Same verifiable agent. Different domains, different stakes, same provability underneath.
           </p>
-          <p className="text-center text-xs text-[#a8d8f0]/50 mb-14 max-w-lg mx-auto leading-relaxed">
+          <p className="text-center text-xs text-[#a8d8f0]/50 mb-8 max-w-lg mx-auto leading-relaxed">
             These aren&apos;t mockups — the real app rendering sample data, and that rendering is machine-tested on every change.
           </p>
+
+          {/* Jargon decode */}
+          <div className="flex flex-col sm:flex-row justify-center gap-4 mb-14 max-w-xl mx-auto">
+            <div className="bg-[#0f1f38] border border-[rgba(168,216,240,0.1)] rounded-xl px-5 py-4 flex-1">
+              <p className="text-xs font-semibold text-[#46cf93] mb-1">Needs You</p>
+              <p className="text-xs text-[#a8d8f0]/60 leading-relaxed">The only list you have to read. Everything else is handled.</p>
+            </div>
+            <div className="bg-[#0f1f38] border border-[rgba(168,216,240,0.1)] rounded-xl px-5 py-4 flex-1">
+              <p className="text-xs font-semibold text-[#e2a44a] mb-1">Not covered</p>
+              <p className="text-xs text-[#a8d8f0]/60 leading-relaxed">Checks we admit we haven&apos;t written yet — we show you that too.</p>
+            </div>
+          </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 items-start justify-items-center mb-12">
             {/* Busy Parent */}

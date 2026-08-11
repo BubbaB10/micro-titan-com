@@ -73,11 +73,11 @@ export default function WhyProvablePage() {
             className="text-5xl sm:text-6xl font-[300] leading-tight tracking-tight text-[#f4f7fa] mb-6"
             style={{ fontFamily: "var(--font-mulish)" }}
           >
-            One gate.<br />Both arms.
+            One gate.<br />Every door.
           </h1>
           <p className="text-lg text-[#a8d8f0] font-light max-w-2xl mx-auto">
-            Whether you&apos;re running Valet to manage your life, or The Studio built your app — the same
-            mechanical gate underlies everything. Provability isn&apos;t a feature tier. It&apos;s the floor.
+            Whether you came through The Studio, Valet, or Pivot — the same mechanical gate underlies
+            everything. Provability isn&apos;t a feature tier. It&apos;s the floor.
           </p>
         </div>
       </section>
@@ -194,10 +194,10 @@ export default function WhyProvablePage() {
               See pricing →
             </Link>
             <Link
-              href="/proof"
+              href="/valet"
               className="inline-flex items-center justify-center gap-2 bg-[#12243d] hover:bg-[#1e3a5f] border border-[rgba(168,216,240,0.15)] text-[#f4f7fa] font-semibold px-7 py-3.5 rounded-xl text-sm transition-all duration-200"
             >
-              See what we&apos;ve built →
+              See Valet →
             </Link>
           </div>
         </div>

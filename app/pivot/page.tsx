@@ -49,6 +49,23 @@ export default function PivotPage() {
         </div>
       </section>
 
+      {/* ── WHILE YOU WAIT ───────────────────────────────────────────────────── */}
+      <section className="py-12 px-4 bg-[#06101f] border-t border-[rgba(168,216,240,0.06)]">
+        <div className="max-w-md mx-auto text-center">
+          <p className="text-xs font-semibold tracking-[0.25em] uppercase text-[#a8d8f0]/35 mb-3">While you wait</p>
+          <p className="text-base text-[#a8d8f0] mb-4 leading-relaxed">
+            Talk to the agent today — free, no signup.
+          </p>
+          <Link
+            href="https://download.micro-titan.com"
+            className="inline-flex items-center gap-2 text-sm text-[#c7d2fe] hover:text-white border border-[#818cf8]/30 hover:border-[#818cf8]/60 px-5 py-2.5 rounded-lg transition-colors"
+          >
+            Open the conversation →
+          </Link>
+          <p className="text-xs text-[#a8d8f0]/30 mt-3">This is the discovery conversation, not a free trial of the full service.</p>
+        </div>
+      </section>
+
       {/* ── HOW IT WORKS ─────────────────────────────────────────────────────── */}
       <section className="py-20 px-4 border-t border-[rgba(168,216,240,0.08)] bg-[#07101e]">
         <div className="max-w-3xl mx-auto">

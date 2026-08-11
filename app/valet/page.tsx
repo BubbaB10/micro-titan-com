@@ -327,13 +327,23 @@ export default function ValetPage() {
           <p className="text-xl sm:text-2xl text-[#a8d8f0] font-light max-w-2xl mx-auto mb-8">
             Most AI tells you what it did. Valet proves it — or it doesn&apos;t reach you at all.
           </p>
-          <div className="flex flex-wrap gap-3 justify-center mb-14">
+          <div className="flex flex-wrap gap-3 justify-center mb-10">
             {["Provable not plausible", "Fail-closed", "Alert discipline"].map((p) => (
               <span key={p} className="px-4 py-2 rounded-full text-xs font-semibold bg-[#12243d] text-[#a8d8f0] border border-[rgba(168,216,240,0.15)]">
                 {p}
               </span>
             ))}
           </div>
+          {/* Free entry CTA — honest: this is the discovery conversation, not a free trial of full Valet */}
+          <p className="text-sm text-[#a8d8f0]/50 mb-10">
+            Or{" "}
+            <Link
+              href="https://download.micro-titan.com"
+              className="text-[#c7d2fe] hover:text-white transition-colors underline underline-offset-2"
+            >
+              talk to the agent right now — free, no signup
+            </Link>
+          </p>
           <AverGateFlow />
         </div>
       </section>
