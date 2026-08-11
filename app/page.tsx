@@ -11,7 +11,7 @@ export default function HomePage() {
       <Nav />
 
       {/* ── HERO ─────────────────────────────────────────────────────────────── */}
-      <section className="relative min-h-screen flex flex-col items-center justify-center text-center px-4 pt-16 overflow-hidden">
+      <section className="relative flex flex-col items-center px-4 pt-20 pb-0 overflow-hidden">
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
           <div
             className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full"
@@ -27,13 +27,13 @@ export default function HomePage() {
           style={{ maskImage: "linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.25) 35%, rgba(0,0,0,0.15) 65%, transparent 100%)" }}
         />
 
-        {/* MT mark */}
+        {/* MT mark — small, de-emphasised (nav already carries the full lockup) */}
         <div
-          className="mt-8 sm:mt-0"
-          style={{ position: "relative", display: "inline-flex", flexDirection: "column", alignItems: "center", marginBottom: "1.75rem", animation: "seal-appear 0.5s ease 0.1s both" }}
+          className="mt-8"
+          style={{ position: "relative", display: "inline-flex", flexDirection: "column", alignItems: "center", marginBottom: "1.25rem", animation: "seal-appear 0.5s ease 0.1s both" }}
         >
-          <div style={{ position: "absolute", inset: "-36px", borderRadius: "50%", background: "radial-gradient(circle, rgba(129,140,248,0.12) 0%, transparent 68%)", pointerEvents: "none" }} />
-          <svg aria-hidden="true" viewBox="243 160 653 433" width="108" height="72" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <div style={{ position: "absolute", inset: "-28px", borderRadius: "50%", background: "radial-gradient(circle, rgba(129,140,248,0.10) 0%, transparent 68%)", pointerEvents: "none" }} />
+          <svg aria-hidden="true" viewBox="243 160 653 433" width="72" height="48" fill="none" xmlns="http://www.w3.org/2000/svg">
             <defs>
               <linearGradient id="heroSilver" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="0" stopColor="#FFFFFF"/>
@@ -49,30 +49,23 @@ export default function HomePage() {
             <path fill="url(#heroSilver)" fillRule="evenodd" d="M258 175 H345 L567 365 L793 175 H881 V578 H783 V548 H849 V205 H806 L567 405 L331 205 H289 V548 H359 V578 H258 Z"/>
             <path fill="url(#heroViolet)" d="M483 437 H655 V478 H590 V578 H548 V478 H483 Z"/>
           </svg>
-          <p className="text-[10px] font-light tracking-[0.35em] uppercase text-[#a8d8f0]/25 mt-3" style={{ animation: "fade-in-up 0.5s ease 1.5s both" }}>
-            Provable software, end to end.
-          </p>
         </div>
 
-        <div className="relative z-10 max-w-3xl mx-auto">
-          <p className="text-xs font-semibold tracking-[0.28em] uppercase text-[#4fb8e8] mb-5" style={{ animation: "fade-in-up 0.5s ease 0.4s both" }}>
-            Micro Titan
-          </p>
+        <div className="relative z-10 max-w-2xl mx-auto text-center">
           <h1
-            className="text-4xl sm:text-6xl md:text-7xl font-[300] leading-[1.05] tracking-tight text-[#f4f7fa] mb-6"
-            style={{ fontFamily: "var(--font-mulish)", animation: "fade-in-up 0.55s ease 0.55s both" }}
+            className="text-3xl sm:text-5xl md:text-6xl font-[300] leading-[1.1] tracking-tight text-[#f4f7fa] mb-5"
+            style={{ fontFamily: "var(--font-mulish)", animation: "fade-in-up 0.55s ease 0.35s both" }}
           >
-            We build your software,<br />or hand you an agent for your life.<br />
-            <span className="text-[#818cf8]">Either way, you get a Cockpit.</span>
+            You&apos;re the router between every app, every plan, and your own head.
           </h1>
           <p
-            className="text-lg sm:text-xl text-[#a8d8f0] font-light max-w-xl mx-auto mb-10 leading-relaxed"
-            style={{ animation: "fade-in-up 0.55s ease 0.7s both" }}
+            className="text-base sm:text-lg text-[#a8d8f0] font-light max-w-xl mx-auto mb-8 leading-relaxed"
+            style={{ animation: "fade-in-up 0.55s ease 0.5s both" }}
           >
-            One screen that tells you the truth, and can prove it.
+            Micro Titan gives you an agent that does the carrying — and one screen that proves the work is done.
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-3 justify-center items-center" style={{ animation: "fade-in-up 0.55s ease 0.85s both" }}>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center items-center mb-5" style={{ animation: "fade-in-up 0.55s ease 0.65s both" }}>
             <Link
               href="/studio"
               className="inline-flex items-center justify-center gap-2 bg-[#2563eb] hover:bg-[#1d4ed8] text-white font-semibold px-9 py-4 rounded-xl text-base transition-all duration-200 shadow-lg shadow-[#2563eb]/25"
@@ -87,54 +80,38 @@ export default function HomePage() {
             </Link>
           </div>
 
-          <div className="mt-6 flex flex-wrap justify-center gap-x-5 gap-y-1.5 text-xs text-[#a8d8f0]/65" style={{ animation: "fade-in-up 0.5s ease 1.0s both" }}>
+          <div className="flex flex-wrap justify-center gap-x-5 gap-y-1.5 text-xs text-[#a8d8f0]/65" style={{ animation: "fade-in-up 0.5s ease 0.8s both" }}>
             <Link href="/studio" className="hover:text-[#46cf93] transition-colors">Custom build <span className="font-semibold text-[#f4f7fa]/80">from $5k</span></Link>
             <span className="text-[#a8d8f0]/20">·</span>
             <Link href="/pricing" className="hover:text-[#60a5fa] transition-colors">Business Valet <span className="font-semibold text-[#f4f7fa]/80">$1,500 + $349/mo</span></Link>
             <span className="text-[#a8d8f0]/20">·</span>
             <Link href="/pricing" className="hover:text-[#c7d2fe] transition-colors">Personal Valet <span className="font-semibold text-[#f4f7fa]/80">$495 + $59/mo</span></Link>
           </div>
+        </div>
 
-          <div className="mt-6 pt-6 border-t border-[rgba(168,216,240,0.10)] w-full max-w-sm mx-auto" style={{ animation: "fade-in-up 0.5s ease 1.1s both" }}>
-            <p className="text-xs text-[#a8d8f0]/50 mb-3 text-center">Or get the free guide + early access:</p>
-            <EmailCapture variant="hero" source="hero" />
+        {/* DecisionCard — the hero image, visible in first viewport */}
+        <div className="relative z-10 w-full max-w-sm mx-auto mt-10 pb-16" style={{ animation: "fade-in-up 0.55s ease 0.95s both" }}>
+          <div className="text-center mb-4">
+            <span className="text-xs text-[#a8d8f0]/40 tracking-widest uppercase font-semibold">Live demo · sample data</span>
           </div>
-        </div>
-
-        <div className="absolute bottom-10 flex flex-col items-center gap-1.5 text-[#a8d8f0]/30 text-xs" style={{ animation: "fade-in-up 0.5s ease 2s both" }}>
-          <svg className="w-4 h-4 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-          </svg>
-        </div>
-      </section>
-
-      {/* ── CHAPTER 1: THE PROBLEM ───────────────────────────────────────────── */}
-      <section className="py-20 px-4 border-t border-[rgba(168,216,240,0.07)] bg-[#07101e]">
-        <div className="max-w-3xl mx-auto text-center">
-          <p className="text-xs font-semibold tracking-[0.28em] uppercase text-[#a8d8f0]/35 mb-6">The problem</p>
-          <h2
-            className="text-3xl sm:text-4xl font-[300] text-[#f4f7fa] leading-snug mb-5"
-            style={{ fontFamily: "var(--font-mulish)" }}
-          >
-            You are the router between every app and your own head.
-          </h2>
-          <p className="text-lg text-[#a8d8f0] font-light leading-relaxed max-w-2xl mx-auto">
-            Every plan, reminder, bill, and decision passes through your attention first — because nothing is connected without you in the middle. That&apos;s the job we&apos;re here to take off your plate.
+          <DecisionCardDemo />
+          <p className="text-center text-xs text-[#a8d8f0]/40 mt-4 leading-relaxed max-w-xs mx-auto">
+            Every tap produces a receipt — calendar event, draft reply, or a written persistence policy.
           </p>
         </div>
       </section>
 
-      {/* ── CHAPTER 2: THE CHAIN ─────────────────────────────────────────────── */}
+      {/* ── THREE DOORS ──────────────────────────────────────────────────────── */}
       <section className="py-20 px-4 border-t border-[rgba(168,216,240,0.08)] bg-[#06101f]">
         <div className="max-w-5xl mx-auto">
-          <p className="text-xs font-semibold tracking-[0.25em] uppercase text-[#4fb8e8] text-center mb-4">One chain</p>
-          <h2 className="text-3xl sm:text-4xl font-[300] text-[#f4f7fa] text-center mb-14" style={{ fontFamily: "var(--font-mulish)" }}>
-            Build → Agent → Cockpit
+          <p className="text-xs font-semibold tracking-[0.25em] uppercase text-[#4fb8e8] text-center mb-4">Three doors</p>
+          <h2 className="text-2xl sm:text-3xl font-[300] text-[#f4f7fa] text-center mb-14" style={{ fontFamily: "var(--font-mulish)" }}>
+            Build your software &nbsp;·&nbsp; Run your life &nbsp;·&nbsp; Start your next chapter
           </h2>
 
-          <div className="flex flex-col md:flex-row items-stretch gap-0">
-            {/* Build */}
-            <div className="flex-1 bg-[#0f1f38] border border-[#46cf93]/25 rounded-2xl md:rounded-r-none p-8 flex flex-col gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-6">
+            {/* Studio */}
+            <div className="bg-[#0f1f38] border border-[#46cf93]/25 rounded-2xl p-8 flex flex-col gap-4">
               <div className="w-10 h-10 rounded-xl bg-[#46cf93]/10 border border-[#46cf93]/25 flex items-center justify-center">
                 <svg viewBox="0 0 24 24" fill="none" stroke="#46cf93" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" width="20" height="20">
                   <polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>
@@ -142,9 +119,9 @@ export default function HomePage() {
               </div>
               <div>
                 <span className="inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#46cf93]/10 text-[#46cf93] border border-[#46cf93]/25 mb-2">The Studio</span>
-                <h3 className="text-xl font-[300] text-[#f4f7fa] mb-2" style={{ fontFamily: "var(--font-mulish)" }}>Build</h3>
+                <h3 className="text-lg font-[300] text-[#f4f7fa] mb-2" style={{ fontFamily: "var(--font-mulish)" }}>Build your software</h3>
                 <p className="text-sm text-[#a8d8f0] leading-relaxed">
-                  We build your custom app or business operating system — end-to-end, gate-broken before delivery. You own the code.
+                  You have a business idea, a workflow that's broken, or an operation that needs custom software. We build it end-to-end, gate-verified before delivery. You own the code.
                 </p>
               </div>
               <Link href="/studio" className="mt-auto text-xs font-semibold text-[#46cf93] hover:text-[#7fe9bb] transition-colors">
@@ -152,17 +129,8 @@ export default function HomePage() {
               </Link>
             </div>
 
-            {/* Arrow desktop */}
-            <div className="hidden md:flex items-center justify-center z-10 -mx-4">
-              <div className="w-8 h-8 rounded-full bg-[#0a1628] border border-[rgba(168,216,240,0.15)] flex items-center justify-center">
-                <svg viewBox="0 0 24 24" fill="none" stroke="#a8d8f0" strokeWidth="2" width="14" height="14">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                </svg>
-              </div>
-            </div>
-
-            {/* Agent */}
-            <div className="flex-1 bg-[#0f1f38] border border-[#818cf8]/25 md:border-l-0 md:border-r-0 md:rounded-none p-8 flex flex-col gap-4">
+            {/* Valet */}
+            <div className="bg-[#0f1f38] border border-[#818cf8]/25 rounded-2xl p-8 flex flex-col gap-4">
               <div className="w-10 h-10 rounded-xl bg-[#818cf8]/10 border border-[#818cf8]/25 flex items-center justify-center">
                 <svg viewBox="0 0 24 24" fill="none" strokeLinecap="round" strokeLinejoin="round" width="20" height="20">
                   <circle cx="12" cy="12" r="9.5" stroke="#818cf8" strokeWidth="1.4"/>
@@ -172,9 +140,9 @@ export default function HomePage() {
               </div>
               <div>
                 <span className="inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#818cf8]/10 text-[#c7d2fe] border border-[#818cf8]/25 mb-2">Valet by Micro Titan™</span>
-                <h3 className="text-xl font-[300] text-[#f4f7fa] mb-2" style={{ fontFamily: "var(--font-mulish)" }}>Agent</h3>
+                <h3 className="text-lg font-[300] text-[#f4f7fa] mb-2" style={{ fontFamily: "var(--font-mulish)" }}>Run your life</h3>
                 <p className="text-sm text-[#a8d8f0] leading-relaxed">
-                  Your provable AI runs your life or business — tasks, calendar, communication — and verifies its own work before anything reaches you.
+                  You know where you're going — you just need something to carry it. Valet runs your life or business: tasks, follow-ups, calendar, and all the carrying you've been doing alone.
                 </p>
               </div>
               <Link href="https://download.micro-titan.com" className="mt-auto text-xs font-semibold text-[#818cf8] hover:text-[#c7d2fe] transition-colors">
@@ -182,39 +150,58 @@ export default function HomePage() {
               </Link>
             </div>
 
-            {/* Arrow desktop */}
-            <div className="hidden md:flex items-center justify-center z-10 -mx-4">
-              <div className="w-8 h-8 rounded-full bg-[#0a1628] border border-[rgba(168,216,240,0.15)] flex items-center justify-center">
-                <svg viewBox="0 0 24 24" fill="none" stroke="#a8d8f0" strokeWidth="2" width="14" height="14">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                </svg>
-              </div>
-            </div>
-
-            {/* Cockpit */}
-            <div className="flex-1 bg-[#0f1f38] border border-[#2563eb]/40 rounded-2xl md:rounded-l-none p-8 flex flex-col gap-4 relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-24 h-24 rounded-bl-[3rem]" style={{ background: "radial-gradient(circle at top right, rgba(37,99,235,0.15) 0%, transparent 70%)" }} />
-              <div className="w-10 h-10 rounded-xl bg-[#2563eb]/15 border border-[#2563eb]/35 flex items-center justify-center">
-                <svg viewBox="0 0 24 24" fill="none" stroke="#60a5fa" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" width="20" height="20">
-                  <rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/>
+            {/* Pivot */}
+            <div className="bg-[#0f1f38] border border-[#e2a44a]/25 rounded-2xl p-8 flex flex-col gap-4">
+              <div className="w-10 h-10 rounded-xl bg-[#e2a44a]/10 border border-[#e2a44a]/25 flex items-center justify-center">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#e2a44a" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" width="20" height="20">
+                  <circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 3"/><path d="M7.5 4.5l1 2"/><path d="M16.5 4.5l-1 2"/>
                 </svg>
               </div>
               <div>
-                <span className="inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#2563eb]/15 text-[#60a5fa] border border-[#2563eb]/35 mb-2">Every path ends here</span>
-                <h3 className="text-xl font-[300] text-[#f4f7fa] mb-2" style={{ fontFamily: "var(--font-mulish)" }}>Cockpit</h3>
+                <span className="inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#e2a44a]/10 text-[#e2a44a] border border-[#e2a44a]/25 mb-2">Pivot by Micro Titan</span>
+                <h3 className="text-lg font-[300] text-[#f4f7fa] mb-2" style={{ fontFamily: "var(--font-mulish)" }}>Start your next chapter</h3>
                 <p className="text-sm text-[#a8d8f0] leading-relaxed">
-                  One screen. Everything the agent knows, verified and surfaced. Whether you came through Studio or Valet, this is where you land.
+                  You don't know what's next — or you do, but the path isn't clear. An agent-guided discovery of your skills, constraints, and what you're starting from. Then Studio builds it and Valet runs it.
                 </p>
               </div>
-              <a href="#cockpit" className="mt-auto text-xs font-semibold text-[#60a5fa] hover:text-[#93c5fd] transition-colors">
-                See the Cockpit →
-              </a>
+              <Link href="/pivot" className="mt-auto text-xs font-semibold text-[#e2a44a] hover:text-[#f0c07a] transition-colors">
+                Explore Pivot →
+              </Link>
             </div>
+          </div>
+
+          {/* Convergence visual */}
+          <div className="flex items-center justify-center my-1 hidden md:flex">
+            <svg viewBox="0 0 480 40" fill="none" className="w-full max-w-3xl" aria-hidden="true">
+              <path d="M80 2 Q80 38 240 38" stroke="rgba(37,99,235,0.35)" strokeWidth="1.5" strokeLinecap="round" fill="none"/>
+              <path d="M240 2 L240 38" stroke="rgba(37,99,235,0.35)" strokeWidth="1.5" strokeLinecap="round"/>
+              <path d="M400 2 Q400 38 240 38" stroke="rgba(37,99,235,0.35)" strokeWidth="1.5" strokeLinecap="round" fill="none"/>
+              <circle cx="240" cy="38" r="3" fill="#2563eb" fillOpacity="0.6"/>
+            </svg>
+          </div>
+          <div className="flex justify-center my-2 md:hidden" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="rgba(37,99,235,0.4)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="20" height="20">
+              <path d="M12 5v14M5 12l7 7 7-7"/>
+            </svg>
+          </div>
+
+          {/* Cockpit convergence frame — first named introduction of "Cockpit" */}
+          <div className="bg-[#08162e] border border-[#2563eb]/35 rounded-2xl p-7 text-center">
+            <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-[#2563eb]/15 text-[#60a5fa] border border-[#2563eb]/35 mb-5">Every path ends here</span>
+            <p className="text-xl sm:text-2xl font-[300] text-[#f4f7fa] mb-3 leading-snug" style={{ fontFamily: "var(--font-mulish)" }}>
+              All three end at the same place: your <span className="text-[#60a5fa] font-semibold">Cockpit</span>.
+            </p>
+            <p className="text-sm text-[#a8d8f0]/70 max-w-lg mx-auto leading-relaxed">
+              One screen. Everything the agent knows, verified and surfaced — whether you built it, run it, or just figured out what to try.
+            </p>
+            <a href="#cockpit" className="inline-block mt-5 text-xs font-semibold text-[#60a5fa] hover:text-[#93c5fd] transition-colors">
+              See the Cockpit →
+            </a>
           </div>
         </div>
       </section>
 
-      {/* ── PRICING STRIP (surviving) ─────────────────────────────────────────── */}
+      {/* ── PRICING STRIP ─────────────────────────────────────────────────────── */}
       <section className="py-14 px-4 border-t border-[rgba(168,216,240,0.08)] bg-[#06101f]">
         <div className="max-w-5xl mx-auto">
           <p className="text-xs font-semibold tracking-[0.25em] uppercase text-[#4fb8e8] text-center mb-10">
@@ -311,7 +298,6 @@ export default function HomePage() {
             ))}
           </div>
 
-          {/* Interactive demo */}
           <div className="max-w-xl mx-auto">
             <div className="flex items-center gap-3 mb-6 justify-center">
               <div className="h-px flex-1 bg-[rgba(168,216,240,0.08)]" />
@@ -483,7 +469,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── EMAIL CAPTURE (surviving) ─────────────────────────────────────────── */}
+      {/* ── EMAIL CAPTURE ─────────────────────────────────────────────────────── */}
       <section className="py-20 px-4 border-t border-[rgba(168,216,240,0.08)]">
         <div className="max-w-2xl mx-auto text-center">
           <p className="text-xs font-semibold tracking-[0.25em] uppercase text-[#e2a44a] mb-4">Free guide</p>

@@ -1,0 +1,152 @@
+import Link from "next/link";
+import Nav from "../components/Nav";
+import Footer from "../components/Footer";
+import EmailCapture from "../components/EmailCapture";
+
+export const metadata = {
+  title: "Pivot by Micro Titan — Find what's next",
+  description: "An agent-guided discovery of what you're good at, what you can afford to try, and what kind of business actually fits your life. Then we build it and run it.",
+};
+
+export default function PivotPage() {
+  return (
+    <div className="min-h-screen bg-[#0a1628] text-[#f4f7fa]">
+      <Nav />
+
+      {/* ── HERO ─────────────────────────────────────────────────────────────── */}
+      <section className="relative flex flex-col items-center text-center px-4 pt-32 pb-20 overflow-hidden">
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          <div
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full"
+            style={{ background: "radial-gradient(circle, rgba(226,164,74,0.10) 0%, transparent 65%)" }}
+          />
+        </div>
+
+        <div className="relative z-10 max-w-2xl mx-auto">
+          <p className="text-xs font-semibold tracking-[0.28em] uppercase text-[#e2a44a] mb-5">
+            Pivot by Micro Titan
+          </p>
+          <h1
+            className="text-4xl sm:text-5xl md:text-6xl font-[300] leading-[1.08] tracking-tight text-[#f4f7fa] mb-6"
+            style={{ fontFamily: "var(--font-mulish)" }}
+          >
+            Don&apos;t know what&apos;s next?<br />
+            <span className="text-[#e2a44a]">Start there.</span>
+          </h1>
+          <p className="text-lg text-[#a8d8f0] font-light max-w-xl mx-auto mb-10 leading-relaxed">
+            For people who don&apos;t know what they want to do next, don&apos;t like their jobs, or can&apos;t find one. An agent-guided discovery of your skills, your constraints, and what you&apos;re actually starting from — then a shortlist of business shapes that fit, and we build and run the one you pick.
+          </p>
+
+          {/* Early access CTA */}
+          <div className="bg-[#0f1f38] border border-[#e2a44a]/25 rounded-2xl p-8 max-w-md mx-auto">
+            <p className="text-sm font-semibold text-[#f4f7fa] mb-1">Pivot opens soon.</p>
+            <p className="text-sm text-[#a8d8f0]/70 mb-6">Leave your email and you&apos;re first in.</p>
+            <EmailCapture variant="hero" source="pivot" />
+            <p className="text-xs text-[#a8d8f0]/35 mt-4">
+              No pitch. No intake form. Just early access when it&apos;s ready.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* ── HOW IT WORKS ─────────────────────────────────────────────────────── */}
+      <section className="py-20 px-4 border-t border-[rgba(168,216,240,0.08)] bg-[#07101e]">
+        <div className="max-w-3xl mx-auto">
+          <p className="text-xs font-semibold tracking-[0.25em] uppercase text-[#4fb8e8] text-center mb-4">How it works</p>
+          <h2 className="text-3xl sm:text-4xl font-[300] text-[#f4f7fa] text-center mb-14" style={{ fontFamily: "var(--font-mulish)" }}>
+            Three steps. No guesswork.
+          </h2>
+
+          <div className="flex flex-col gap-6">
+            {[
+              {
+                step: "01",
+                color: "#e2a44a",
+                title: "Discovery",
+                body: "The agent asks you structured questions about your skills, what you can afford to risk, how much time you have, and what kind of work you actually want to do. Not a quiz — a real conversation that gets to what matters.",
+              },
+              {
+                step: "02",
+                color: "#818cf8",
+                title: "Shortlist",
+                body: "From your answers, we map out a small set of business shapes that fit your situation. Viable means actually fit for where you are — not generic advice, not wishful thinking.",
+              },
+              {
+                step: "03",
+                color: "#46cf93",
+                title: "Build & Run",
+                body: "You pick one. The Studio builds the software your operation needs. Valet runs the day-to-day. You show up where the business actually needs you — not to manage tools.",
+              },
+            ].map((item) => (
+              <div key={item.step} className="bg-[#0f1f38] border border-[rgba(168,216,240,0.1)] rounded-2xl p-8 flex gap-6 items-start">
+                <div
+                  className="text-3xl font-bold flex-shrink-0 leading-none mt-1"
+                  style={{ color: item.color, opacity: 0.4 }}
+                >
+                  {item.step}
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-[#f4f7fa] mb-2">{item.title}</h3>
+                  <p className="text-sm text-[#a8d8f0] leading-relaxed">{item.body}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── HONEST FRAMING ───────────────────────────────────────────────────── */}
+      <section className="py-20 px-4 border-t border-[rgba(168,216,240,0.08)]">
+        <div className="max-w-2xl mx-auto text-center">
+          <p className="text-xs font-semibold tracking-[0.25em] uppercase text-[#a8d8f0]/40 mb-4">What Pivot is and isn&apos;t</p>
+          <h2 className="text-2xl sm:text-3xl font-[300] text-[#f4f7fa] mb-6" style={{ fontFamily: "var(--font-mulish)" }}>
+            Pivot won&apos;t tell you what to earn.<br />It helps you find what to try.
+          </h2>
+          <p className="text-[#a8d8f0] leading-relaxed mb-10 max-w-lg mx-auto">
+            We don&apos;t make income claims. We don&apos;t promise a lifestyle. We help you map the intersection of what you&apos;re good at, what you can actually start, and what would feel worth doing — then build it with you.
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-left max-w-lg mx-auto">
+            {[
+              { yes: true,  text: "Honest picture of what fits your situation" },
+              { yes: true,  text: "Structured — not a vibes-based quiz" },
+              { yes: true,  text: "Agent guides; you decide" },
+              { yes: true,  text: "Studio builds, Valet runs, you own it" },
+              { yes: false, text: "Income or earnings projections" },
+              { yes: false, text: "A guaranteed path to anything" },
+            ].map((item, i) => (
+              <div key={i} className="flex items-start gap-3">
+                <span className={`text-sm flex-shrink-0 mt-0.5 ${item.yes ? "text-[#46cf93]" : "text-[#a8d8f0]/30"}`}>
+                  {item.yes ? "✓" : "✗"}
+                </span>
+                <p className={`text-sm ${item.yes ? "text-[#a8d8f0]" : "text-[#a8d8f0]/40"}`}>{item.text}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── CTA / FINAL ──────────────────────────────────────────────────────── */}
+      <section className="py-20 px-4 border-t border-[rgba(168,216,240,0.08)] bg-[#07101e]">
+        <div className="max-w-md mx-auto text-center">
+          <h2 className="text-2xl font-[300] text-[#f4f7fa] mb-3" style={{ fontFamily: "var(--font-mulish)" }}>
+            Get early access
+          </h2>
+          <p className="text-sm text-[#a8d8f0]/70 mb-7">
+            Pivot opens soon — leave your email and you&apos;re first in.
+          </p>
+          <EmailCapture variant="hero" source="pivot-footer" />
+          <div className="mt-10 flex flex-col sm:flex-row gap-3 justify-center">
+            <Link
+              href="/studio"
+              className="text-sm text-[#a8d8f0]/50 hover:text-[#46cf93] transition-colors"
+            >
+              Already know what you want to build? → The Studio
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      <Footer />
+    </div>
+  );
+}

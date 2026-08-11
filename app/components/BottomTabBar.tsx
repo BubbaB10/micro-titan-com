@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 const TABS = [
   {
     href: "/valet",
-    label: "Agent",
+    label: "Valet",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" width="22" height="22" aria-hidden="true">
         <circle cx="12" cy="8" r="4" />
@@ -16,7 +16,7 @@ const TABS = [
   },
   {
     href: "/studio",
-    label: "Builds",
+    label: "Studio",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" width="22" height="22" aria-hidden="true">
         <polyline points="16 18 22 12 16 6" />
@@ -25,12 +25,13 @@ const TABS = [
     ),
   },
   {
-    href: "/proof",
-    label: "Proof",
+    href: "/about",
+    label: "About",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" width="22" height="22" aria-hidden="true">
-        <path d="M12 2L3 7v5c0 5.25 3.75 10.15 9 11.5C17.25 22.15 21 17.25 21 12V7z" />
-        <polyline points="9 12 11 14 15 10" />
+        <circle cx="12" cy="12" r="10" />
+        <line x1="12" y1="16" x2="12" y2="12" />
+        <line x1="12" y1="8" x2="12.01" y2="8" />
       </svg>
     ),
   },
