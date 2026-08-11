@@ -24,6 +24,11 @@ const nextConfig: NextConfig = {
         destination: "/valet",
         permanent: true,
       },
+      {
+        source: "/proof",
+        destination: "/valet",
+        permanent: true,
+      },
     ];
   },
 };

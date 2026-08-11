@@ -145,10 +145,10 @@ export default function AboutPage() {
               Build yours →
             </Link>
             <Link
-              href="/proof"
+              href="/valet"
               className="inline-flex items-center justify-center gap-2 text-[#a8d8f0]/60 hover:text-[#c7d2fe] text-sm font-medium transition-colors px-4 py-2"
             >
-              See the proof record →
+              See how completion is proven →
             </Link>
           </div>
 
