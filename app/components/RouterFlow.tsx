@@ -1,11 +1,11 @@
 'use client';
 
 const APPS = [
-  { id: 'fb',  label: 'Fairway Bets',   color: '#46cf93', y: 30  },
-  { id: 'sw',  label: 'Sandwich Etc.',  color: '#4fb8e8', y: 70  },
-  { id: 'ml',  label: 'Mineral Ledger', color: '#e2a44a', y: 110 },
-  { id: 'ro',  label: 'Rosewood',       color: '#818cf8', y: 150 },
-  { id: 'cl',  label: 'The Club',       color: '#4fb8e8', y: 190 },
+  { id: 'bi',  label: 'The Bills',          color: '#e2a44a', y: 30  },
+  { id: 'ki',  label: "The Kids' Schedule", color: '#46cf93', y: 70  },
+  { id: 'ap',  label: 'Appointments',       color: '#818cf8', y: 110 },
+  { id: 'ho',  label: 'The House',          color: '#4fb8e8', y: 150 },
+  { id: 've',  label: 'The Vehicles',       color: '#a78bfa', y: 190 },
 ];
 
 const HUB_X = 310;

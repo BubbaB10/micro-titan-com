@@ -121,8 +121,8 @@ export default function HomePage() {
           </div>
 
           {/* ── Router flow diagram — YOU as the hub ── */}
-          <div className="mt-16 pb-16" style={{ animation: "fade-in-up 0.6s ease 0.85s both" }}>
-            <p className="text-center text-xs font-semibold tracking-[0.25em] uppercase text-[#a8d8f0]/35 mb-8">
+          <div className="mt-6 pb-10 lg:mt-16 lg:pb-16" style={{ animation: "fade-in-up 0.6s ease 0.85s both" }}>
+            <p className="text-center text-xs font-semibold tracking-[0.25em] uppercase text-[#a8d8f0]/35 mb-5 lg:mb-8">
               Every signal flows through you to one screen
             </p>
             <RouterFlow />
