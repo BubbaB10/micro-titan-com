@@ -1,8 +1,9 @@
 {
-  "generatedAt": "2026-08-12T04:29:37.914Z",
+  "generatedAt": "2026-08-12T04:44:37.854Z",
   "windowDays": 90,
-  "totalInWindow": 184,
+  "totalInWindow": 185,
   "perApp": {
+    "hq-dashboard": 1,
     "sandwich-etc": 19,
     "the-download": 19,
     "micro-titan-web": 44,
@@ -17,6 +18,12 @@
   },
   "failuresRecordedSince": null,
   "receipts": [
+    {
+      "app": "hq-dashboard",
+      "verifiedAt": "2026-08-12T04:35:21.841Z",
+      "head": "7d4f3d6",
+      "filesChanged": 7
+    },
     {
       "app": "sandwich-etc",
       "verifiedAt": "2026-08-12T04:20:43.001Z",
