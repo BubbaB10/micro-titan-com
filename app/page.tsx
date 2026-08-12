@@ -5,114 +5,128 @@ import Footer from "./components/Footer";
 import EmailCapture from "./components/EmailCapture";
 import DecisionCardDemo from "./components/DecisionCard";
 import HeroChatInput from "./components/HeroChatInput";
+import CockpitDevice from "./components/CockpitDevice";
+import RouterFlow from "./components/RouterFlow";
 
 export default function HomePage() {
   return (
     <div className="min-h-screen bg-[#0a1628] text-[#f4f7fa]">
       <Nav />
 
-      {/* ── HERO ─────────────────────────────────────────────────────────────── */}
-      <section className="relative flex flex-col items-center px-4 pt-20 pb-0 overflow-hidden">
+      {/* ── HERO V3 ───────────────────────────────────────────────────────────── */}
+      <section className="relative px-4 pt-20 pb-0 overflow-hidden">
+        {/* Ambient aurora */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
           <div
             className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full"
-            style={{ background: "radial-gradient(circle, rgba(129,140,248,0.15) 0%, transparent 65%)", animation: "aurora-1 7s ease-in-out infinite" }}
+            style={{ background: "radial-gradient(circle, rgba(129,140,248,0.12) 0%, transparent 65%)", animation: "aurora-1 7s ease-in-out infinite" }}
           />
           <div
             className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[500px] rounded-full"
-            style={{ background: "radial-gradient(ellipse, rgba(79,184,232,0.07) 0%, transparent 65%)", animation: "aurora-2 9s ease-in-out infinite" }}
+            style={{ background: "radial-gradient(ellipse, rgba(37,99,235,0.07) 0%, transparent 65%)", animation: "aurora-2 9s ease-in-out infinite" }}
           />
         </div>
         <div
           className="absolute inset-0 pointer-events-none tech-grid"
-          style={{ maskImage: "linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.25) 35%, rgba(0,0,0,0.15) 65%, transparent 100%)" }}
+          style={{ maskImage: "linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.22) 40%, rgba(0,0,0,0.12) 70%, transparent 100%)" }}
         />
 
-        {/* MT mark — small, de-emphasised (nav already carries the full lockup) */}
-        <div
-          className="mt-8"
-          style={{ position: "relative", display: "inline-flex", flexDirection: "column", alignItems: "center", marginBottom: "1.25rem", animation: "seal-appear 0.5s ease 0.1s both" }}
-        >
-          <div style={{ position: "absolute", inset: "-28px", borderRadius: "50%", background: "radial-gradient(circle, rgba(129,140,248,0.10) 0%, transparent 68%)", pointerEvents: "none" }} />
-          <svg aria-hidden="true" viewBox="243 160 653 433" width="72" height="48" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <linearGradient id="heroSilver" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0" stopColor="#FFFFFF"/>
-                <stop offset=".52" stopColor="#D7D7D8"/>
-                <stop offset="1" stopColor="#85878A"/>
-              </linearGradient>
-              <linearGradient id="heroViolet" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0" stopColor="#8589FF"/>
-                <stop offset=".55" stopColor="#6669E8"/>
-                <stop offset="1" stopColor="#4D51C9"/>
-              </linearGradient>
-            </defs>
-            <path fill="url(#heroSilver)" fillRule="evenodd" d="M258 175 H345 L567 365 L793 175 H881 V578 H783 V548 H849 V205 H806 L567 405 L331 205 H289 V548 H359 V578 H258 Z"/>
-            <path fill="url(#heroViolet)" d="M483 437 H655 V478 H590 V578 H548 V478 H483 Z"/>
-          </svg>
-        </div>
+        {/* Two-column layout: copy left, device right */}
+        <div className="relative z-10 max-w-6xl mx-auto">
+          <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-16 pt-4">
 
-        <div className="relative z-10 max-w-2xl mx-auto text-center">
-          <h1
-            className="text-3xl sm:text-5xl md:text-6xl font-[300] leading-[1.1] tracking-tight text-[#f4f7fa] mb-5"
-            style={{ fontFamily: "var(--font-mulish)", animation: "fade-in-up 0.55s ease 0.35s both" }}
-          >
-            You&apos;re the router between every app, every plan, and your own head.
-          </h1>
-          <p
-            className="text-base sm:text-lg text-[#a8d8f0] font-light max-w-xl mx-auto mb-4 leading-relaxed"
-            style={{ animation: "fade-in-up 0.55s ease 0.5s both" }}
-          >
-            Micro Titan gives you an agent that does the carrying — and one screen that proves the work is done.
-          </p>
+            {/* ── Left: copy + CTAs ── */}
+            <div className="flex-1 flex flex-col items-center lg:items-start text-center lg:text-left">
+              {/* MT mark */}
+              <div
+                style={{ position: "relative", display: "inline-flex", marginBottom: "1.5rem", animation: "seal-appear 0.5s ease 0.1s both" }}
+              >
+                <div style={{ position: "absolute", inset: "-24px", borderRadius: "50%", background: "radial-gradient(circle, rgba(129,140,248,0.10) 0%, transparent 68%)", pointerEvents: "none" }} />
+                <svg aria-hidden="true" viewBox="243 160 653 433" width="60" height="40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <defs>
+                    <linearGradient id="heroSilver" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0" stopColor="#FFFFFF"/>
+                      <stop offset=".52" stopColor="#D7D7D8"/>
+                      <stop offset="1" stopColor="#85878A"/>
+                    </linearGradient>
+                    <linearGradient id="heroViolet" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0" stopColor="#8589FF"/>
+                      <stop offset=".55" stopColor="#6669E8"/>
+                      <stop offset="1" stopColor="#4D51C9"/>
+                    </linearGradient>
+                  </defs>
+                  <path fill="url(#heroSilver)" fillRule="evenodd" d="M258 175 H345 L567 365 L793 175 H881 V578 H783 V548 H849 V205 H806 L567 405 L331 205 H289 V548 H359 V578 H258 Z"/>
+                  <path fill="url(#heroViolet)" d="M483 437 H655 V478 H590 V578 H548 V478 H483 Z"/>
+                </svg>
+              </div>
 
-          {/* Persona entry chips — anchor to Three Doors */}
-          <div className="flex flex-wrap justify-center gap-x-1 gap-y-2 mb-7" style={{ animation: "fade-in-up 0.5s ease 0.58s both" }}>
-            <a href="#three-doors" className="px-3 py-1 rounded-full text-xs text-[#46cf93]/80 border border-[#46cf93]/20 hover:border-[#46cf93]/45 hover:text-[#46cf93] transition-colors">For your business</a>
-            <span className="text-[#a8d8f0]/20 self-center text-xs px-0.5">·</span>
-            <a href="#three-doors" className="px-3 py-1 rounded-full text-xs text-[#818cf8]/80 border border-[#818cf8]/20 hover:border-[#818cf8]/45 hover:text-[#818cf8] transition-colors">For your life</a>
-            <span className="text-[#a8d8f0]/20 self-center text-xs px-0.5">·</span>
-            <a href="#three-doors" className="px-3 py-1 rounded-full text-xs text-[#e2a44a]/80 border border-[#e2a44a]/20 hover:border-[#e2a44a]/45 hover:text-[#e2a44a] transition-colors">For your next chapter</a>
+              <h1
+                className="text-3xl sm:text-5xl font-[300] leading-[1.1] tracking-tight text-[#f4f7fa] mb-5 max-w-xl"
+                style={{ fontFamily: "var(--font-mulish)", animation: "fade-in-up 0.55s ease 0.3s both" }}
+              >
+                You&apos;re the router between every app, every plan, and your own head.
+              </h1>
+              <p
+                className="text-base sm:text-lg text-[#a8d8f0] font-light mb-5 leading-relaxed max-w-lg"
+                style={{ animation: "fade-in-up 0.55s ease 0.45s both" }}
+              >
+                Micro Titan gives you an agent that does the carrying — and one screen that proves the work is done.
+              </p>
+
+              {/* Persona chips */}
+              <div className="flex flex-wrap justify-center lg:justify-start gap-x-1 gap-y-2 mb-7" style={{ animation: "fade-in-up 0.5s ease 0.52s both" }}>
+                <a href="#three-doors" className="px-3 py-1 rounded-full text-xs text-[#46cf93]/80 border border-[#46cf93]/20 hover:border-[#46cf93]/45 hover:text-[#46cf93] transition-colors">For your business</a>
+                <span className="text-[#a8d8f0]/20 self-center text-xs px-0.5">·</span>
+                <a href="#three-doors" className="px-3 py-1 rounded-full text-xs text-[#818cf8]/80 border border-[#818cf8]/20 hover:border-[#818cf8]/45 hover:text-[#818cf8] transition-colors">For your life</a>
+                <span className="text-[#a8d8f0]/20 self-center text-xs px-0.5">·</span>
+                <a href="#three-doors" className="px-3 py-1 rounded-full text-xs text-[#e2a44a]/80 border border-[#e2a44a]/20 hover:border-[#e2a44a]/45 hover:text-[#e2a44a] transition-colors">For your next chapter</a>
+              </div>
+
+              {/* CTAs */}
+              <div className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start items-center mb-5" style={{ animation: "fade-in-up 0.55s ease 0.6s both" }}>
+                <Link
+                  href="/studio"
+                  className="inline-flex items-center justify-center gap-2 bg-[#2563eb] hover:bg-[#1d4ed8] text-white font-semibold px-9 py-4 rounded-xl text-base transition-all duration-200 shadow-lg shadow-[#2563eb]/25"
+                >
+                  Start a build →
+                </Link>
+                <Link
+                  href="https://download.micro-titan.com"
+                  className="inline-flex items-center justify-center gap-2 text-[#a8d8f0]/60 hover:text-[#c7d2fe] text-sm font-medium transition-colors px-4 py-2"
+                >
+                  Talk to the agent free →
+                </Link>
+              </div>
+
+              {/* Hero chat input */}
+              <div className="w-full max-w-lg mb-5" style={{ animation: "fade-in-up 0.55s ease 0.7s both" }}>
+                <HeroChatInput />
+              </div>
+
+              {/* Pricing strip */}
+              <div className="flex flex-wrap justify-center lg:justify-start gap-x-5 gap-y-1.5 text-xs text-[#a8d8f0]/65" style={{ animation: "fade-in-up 0.5s ease 0.75s both" }}>
+                <Link href="/studio" className="hover:text-[#46cf93] transition-colors">Custom build <span className="font-semibold text-[#f4f7fa]/80">from $5k</span></Link>
+                <span className="text-[#a8d8f0]/20">·</span>
+                <Link href="/pricing" className="hover:text-[#60a5fa] transition-colors">Business Valet <span className="font-semibold text-[#f4f7fa]/80">$1,500 + $349/mo</span></Link>
+                <span className="text-[#a8d8f0]/20">·</span>
+                <Link href="/pricing" className="hover:text-[#c7d2fe] transition-colors">Personal Valet <span className="font-semibold text-[#f4f7fa]/80">$495 + $59/mo</span></Link>
+              </div>
+            </div>
+
+            {/* ── Right: Cockpit device mockup ── */}
+            <div className="flex-shrink-0 flex flex-col items-center gap-4 pb-8 lg:pb-0" style={{ animation: "fade-in-up 0.6s ease 0.55s both" }}>
+              <CockpitDevice />
+              <span className="text-xs text-[#a8d8f0]/35 tracking-widest uppercase font-semibold">Live demo · sample data</span>
+            </div>
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-3 justify-center items-center mb-5" style={{ animation: "fade-in-up 0.55s ease 0.65s both" }}>
-            <Link
-              href="/studio"
-              className="inline-flex items-center justify-center gap-2 bg-[#2563eb] hover:bg-[#1d4ed8] text-white font-semibold px-9 py-4 rounded-xl text-base transition-all duration-200 shadow-lg shadow-[#2563eb]/25"
-            >
-              Start a build →
-            </Link>
-            <Link
-              href="https://download.micro-titan.com"
-              className="inline-flex items-center justify-center gap-2 text-[#a8d8f0]/60 hover:text-[#c7d2fe] text-sm font-medium transition-colors px-4 py-2"
-            >
-              Or talk to the agent right now — free, no signup →
-            </Link>
+          {/* ── Router flow diagram — YOU as the hub ── */}
+          <div className="mt-16 pb-16" style={{ animation: "fade-in-up 0.6s ease 0.85s both" }}>
+            <p className="text-center text-xs font-semibold tracking-[0.25em] uppercase text-[#a8d8f0]/35 mb-8">
+              Every signal flows through you to one screen
+            </p>
+            <RouterFlow />
           </div>
-
-          {/* Hero chat input — visitor is mid-conversation before they've decided anything */}
-          <div className="w-full max-w-lg mx-auto mb-6" style={{ animation: "fade-in-up 0.55s ease 0.75s both" }}>
-            <HeroChatInput />
-          </div>
-
-          <div className="flex flex-wrap justify-center gap-x-5 gap-y-1.5 text-xs text-[#a8d8f0]/65" style={{ animation: "fade-in-up 0.5s ease 0.8s both" }}>
-            <Link href="/studio" className="hover:text-[#46cf93] transition-colors">Custom build <span className="font-semibold text-[#f4f7fa]/80">from $5k</span></Link>
-            <span className="text-[#a8d8f0]/20">·</span>
-            <Link href="/pricing" className="hover:text-[#60a5fa] transition-colors">Business Valet <span className="font-semibold text-[#f4f7fa]/80">$1,500 + $349/mo</span></Link>
-            <span className="text-[#a8d8f0]/20">·</span>
-            <Link href="/pricing" className="hover:text-[#c7d2fe] transition-colors">Personal Valet <span className="font-semibold text-[#f4f7fa]/80">$495 + $59/mo</span></Link>
-          </div>
-        </div>
-
-        {/* DecisionCard — the hero image, visible in first viewport */}
-        <div className="relative z-10 w-full max-w-sm mx-auto mt-10 pb-16" style={{ animation: "fade-in-up 0.55s ease 0.95s both" }}>
-          <div className="text-center mb-4">
-            <span className="text-xs text-[#a8d8f0]/40 tracking-widest uppercase font-semibold">Live demo · sample data</span>
-          </div>
-          <DecisionCardDemo />
-          <p className="text-center text-xs text-[#a8d8f0]/40 mt-4 leading-relaxed max-w-xs mx-auto">
-            Every tap produces a receipt — calendar event, draft reply, or a written persistence policy.
-          </p>
         </div>
       </section>
 
