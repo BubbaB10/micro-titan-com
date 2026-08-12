@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import PersonaMetricsCard from "../components/PersonaMetricsCard";
 import Nav from "../components/Nav";
 import Footer from "../components/Footer";
 import AverGateFlow from "../components/AverGateFlow";
@@ -377,13 +378,7 @@ export default function ValetPage() {
                 />
               </div>
               <div className="relative w-full rounded-[2.5rem] overflow-hidden border-[6px] border-[#1e3a5f] shadow-2xl shadow-black/60">
-                <Image
-                  src="/screenshots/personas/mom-metrics.png"
-                  alt="Busy Parent cockpit — Business Activity charts: grocery spend trending down, kids-activities logged, chores-done streak, and This Week summary table"
-                  width={780}
-                  height={1688}
-                  className="w-full h-auto"
-                />
+                <PersonaMetricsCard persona="parent" />
               </div>
               <p className="text-sm font-medium text-[#f4f7fa]">Busy Parent</p>
               <p className="text-xs text-[#a8d8f0]/70 text-center">The Kids · The House · Health · Money</p>
@@ -400,13 +395,7 @@ export default function ValetPage() {
                 />
               </div>
               <div className="relative w-full rounded-[2.5rem] overflow-hidden border-[6px] border-[#1e3a5f] shadow-2xl shadow-black/60">
-                <Image
-                  src="/screenshots/personas/biz-metrics.png"
-                  alt="Business Owner cockpit — Business Activity charts: daily orders with weekend peaks, revenue MTD, and Invoice Aging table showing overdue balance"
-                  width={780}
-                  height={1688}
-                  className="w-full h-auto"
-                />
+                <PersonaMetricsCard persona="business" />
               </div>
               <p className="text-sm font-medium text-[#f4f7fa]">Business Owner</p>
               <p className="text-xs text-[#a8d8f0]/70 text-center">Orders · Money · Staff · Marketing</p>
