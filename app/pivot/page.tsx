@@ -34,7 +34,7 @@ export default function PivotPage() {
             <span className="text-[#e2a44a]">Start there.</span>
           </h1>
           <p className="text-lg text-[#a8d8f0] font-light max-w-xl mx-auto mb-10 leading-relaxed">
-            For people who don&apos;t know what they want to do next, don&apos;t like their jobs, or can&apos;t find one. An agent-guided discovery of your skills, your constraints, and what you&apos;re actually starting from — then a shortlist of business shapes that fit, and we build and run the one you pick.
+            Sometimes we reach a point where something has to change — we just can&apos;t quite name what yet. Pivot starts there: an agent-guided discovery of your skills, your constraints, and what you&apos;re actually starting from — then a shortlist of business shapes that fit your situation, and we build and run the one you pick.
           </p>
 
           {/* Early access CTA */}
