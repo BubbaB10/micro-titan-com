@@ -25,6 +25,16 @@ const TABS = [
     ),
   },
   {
+    href: "/pivot",
+    label: "Pivot",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" width="22" height="22" aria-hidden="true">
+        <circle cx="12" cy="12" r="9" />
+        <path d="M16.24 7.76l-2.12 6.36-6.36 2.12 2.12-6.36 6.36-2.12z" />
+      </svg>
+    ),
+  },
+  {
     href: "/about",
     label: "About",
     icon: (
