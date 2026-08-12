@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 type Variant = "hero" | "inline";
 
@@ -10,12 +10,20 @@ interface Props {
 }
 
 const SUBSCRIBE_URL = "https://download.micro-titan.com/api/subscribe";
+const LS_KEY = "mt_guide_submitted";
 
 export default function EmailCapture({ variant = "inline", source = "page" }: Props) {
   const [email, setEmail] = useState("");
   const [honeypot, setHoneypot] = useState("");
   const [state, setState] = useState<"idle" | "submitting" | "success" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState("");
+
+  // Restore success state if they already submitted in this browser
+  useEffect(() => {
+    if (typeof window !== "undefined" && localStorage.getItem(LS_KEY)) {
+      setState("success");
+    }
+  }, []);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -30,7 +38,11 @@ export default function EmailCapture({ variant = "inline", source = "page" }: Pr
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, source, website: honeypot }),
       });
-      if (res.ok) {
+
+      // 2xx = subscribed. 429 = rate-limited (already submitted this session).
+      // 409 = duplicate. All of these mean the email is captured — show success.
+      if (res.ok || res.status === 429 || res.status === 409) {
+        if (typeof window !== "undefined") localStorage.setItem(LS_KEY, "1");
         setState("success");
       } else {
         setErrorMsg("Something went wrong — try again or email us directly.");
@@ -45,24 +57,26 @@ export default function EmailCapture({ variant = "inline", source = "page" }: Pr
   if (state === "success") {
     return (
       <div
-        className={`flex flex-col items-center gap-3 ${
-          variant === "hero" ? "py-4" : "py-2"
+        className={`flex flex-col items-center gap-4 rounded-2xl ${
+          variant === "hero" ? "py-6 px-4" : "py-4 px-3"
         }`}
+        style={{ background: "rgba(6,164,12,0.07)", border: "1px solid rgba(6,164,12,0.25)" }}
       >
-        <div className="flex items-center gap-2">
-          <svg viewBox="0 0 20 20" fill="none" width="18" height="18">
-            <circle cx="10" cy="10" r="9" stroke="#46cf93" strokeWidth="1.5" />
-            <path d="M6.5 10.5l2.5 2.5 4.5-5" stroke="#46cf93" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        <div className="flex items-center gap-2.5">
+          <svg viewBox="0 0 20 20" fill="none" width="22" height="22" aria-hidden="true">
+            <circle cx="10" cy="10" r="9" stroke="#0ca30c" strokeWidth="1.5" />
+            <path d="M6.5 10.5l2.5 2.5 4.5-5" stroke="#0ca30c" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
-          <p className={`font-semibold text-[#46cf93] ${variant === "hero" ? "text-base" : "text-sm"}`}>
+          <p className="font-semibold text-base" style={{ color: "#0ca30c" }}>
             You&apos;re in. Your guide is ready.
           </p>
         </div>
         <a
           href="/guide"
-          className="text-sm font-semibold text-[#818cf8] hover:text-[#c7d2fe] transition-colors underline underline-offset-2"
+          className="inline-flex items-center justify-center gap-2 font-semibold rounded-xl transition-all duration-200 text-sm px-7 py-3.5 w-full sm:w-auto"
+          style={{ backgroundColor: "#0ca30c", color: "#ffffff" }}
         >
-          Read &ldquo;Nothing Slips&rdquo; now →
+          Here&apos;s your guide →
         </a>
       </div>
     );

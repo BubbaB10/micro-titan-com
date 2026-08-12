@@ -1,16 +1,8 @@
 import type { Metadata } from "next";
-import { Mulish } from "next/font/google";
 import "./globals.css";
 import BottomTabBar from "./components/BottomTabBar";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-
-const mulish = Mulish({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800", "900"],
-  variable: "--font-mulish",
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   title: "Micro Titan — Provable software, end to end.",
@@ -36,7 +28,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={mulish.variable}>
+    <html lang="en">
       {/* pb-24 on mobile leaves room for the fixed bottom tab bar (56px bar + safe-area) */}
       <body className="antialiased pb-24 lg:pb-0">
         {children}
