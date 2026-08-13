@@ -7,12 +7,19 @@ type Variant = "hero" | "inline";
 interface Props {
   variant?: Variant;
   source?: string;
+  buttonText?: string;
+  successCta?: { href: string; label: string } | null;
 }
 
 const SUBSCRIBE_URL = "https://download.micro-titan.com/api/subscribe";
 const LS_KEY = "mt_guide_submitted";
 
-export default function EmailCapture({ variant = "inline", source = "page" }: Props) {
+export default function EmailCapture({
+  variant = "inline",
+  source = "page",
+  buttonText = "Get the free guide →",
+  successCta = { href: "/guide", label: "Here's your guide →" },
+}: Props) {
   const [email, setEmail] = useState("");
   const [honeypot, setHoneypot] = useState("");
   const [state, setState] = useState<"idle" | "submitting" | "success" | "error">("idle");
@@ -40,7 +47,7 @@ export default function EmailCapture({ variant = "inline", source = "page" }: Pr
       });
 
       // 2xx = subscribed. 429 = rate-limited (already submitted this session).
-      // 409 = duplicate. All of these mean the email is captured — show success.
+      // 409 = duplicate. All mean the email is captured — show success.
       if (res.ok || res.status === 429 || res.status === 409) {
         if (typeof window !== "undefined") localStorage.setItem(LS_KEY, "1");
         setState("success");
@@ -68,16 +75,18 @@ export default function EmailCapture({ variant = "inline", source = "page" }: Pr
             <path d="M6.5 10.5l2.5 2.5 4.5-5" stroke="#0ca30c" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
           <p className="font-semibold text-base" style={{ color: "#0ca30c" }}>
-            You&apos;re in. Your guide is ready.
+            You&apos;re in.
           </p>
         </div>
-        <a
-          href="/guide"
-          className="inline-flex items-center justify-center gap-2 font-semibold rounded-xl transition-all duration-200 text-sm px-7 py-3.5 w-full sm:w-auto"
-          style={{ backgroundColor: "#0ca30c", color: "#ffffff" }}
-        >
-          Here&apos;s your guide →
-        </a>
+        {successCta && (
+          <a
+            href={successCta.href}
+            className="inline-flex items-center justify-center gap-2 font-semibold rounded-xl transition-all duration-200 text-sm px-7 py-3.5 w-full sm:w-auto"
+            style={{ backgroundColor: "#0ca30c", color: "#ffffff" }}
+          >
+            {successCta.label}
+          </a>
+        )}
       </div>
     );
   }
@@ -112,7 +121,7 @@ export default function EmailCapture({ variant = "inline", source = "page" }: Pr
             variant === "hero" ? "px-5 py-3 text-sm" : "px-4 py-2.5 text-sm"
           }`}
         >
-          {state === "submitting" ? "Sending…" : "Get the free guide →"}
+          {state === "submitting" ? "Sending…" : buttonText}
         </button>
       </div>
       {state === "error" && (

@@ -41,7 +41,7 @@ export default function PivotPage() {
           <div className="bg-[#0f1f38] border border-[#e2a44a]/25 rounded-2xl p-8 max-w-md mx-auto">
             <p className="text-sm font-semibold text-[#f4f7fa] mb-1">Pivot opens soon.</p>
             <p className="text-sm text-[#a8d8f0]/70 mb-6">Leave your email and you&apos;re first in.</p>
-            <EmailCapture variant="hero" source="pivot" />
+            <EmailCapture variant="hero" source="pivot-waitlist" buttonText="Save my spot →" successCta={null} />
             <p className="text-xs text-[#a8d8f0]/35 mt-4">
               No pitch. No intake form. Just early access when it&apos;s ready.
             </p>
@@ -151,7 +151,7 @@ export default function PivotPage() {
           <p className="text-sm text-[#a8d8f0]/70 mb-7">
             Pivot opens soon — leave your email and you&apos;re first in.
           </p>
-          <EmailCapture variant="hero" source="pivot-footer" />
+          <EmailCapture variant="hero" source="pivot-waitlist" buttonText="Save my spot →" successCta={null} />
           <div className="mt-10 flex flex-col sm:flex-row gap-3 justify-center">
             <Link
               href="/studio"

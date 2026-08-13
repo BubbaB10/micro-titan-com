@@ -518,7 +518,7 @@ export default function HomePage() {
             A simple Friday ritual for anyone whose life has more moving parts than one person can track. Enter your email — the guide is yours, free. No pitch. Value-for-value.
           </p>
           <div className="max-w-sm mx-auto">
-            <EmailCapture variant="hero" source="home-mid" />
+            <EmailCapture variant="hero" source="guide" />
           </div>
           <p className="text-xs text-[#a8d8f0]/30 mt-4">
             Already have it?{" "}
