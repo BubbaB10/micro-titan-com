@@ -24,6 +24,7 @@ export default function HomePage() {
 
         <div className="relative z-10 w-full flex flex-col items-center">
           <HeroDemoSequence />
+          <p className="mt-2 text-xs text-[#a8d8f0]/35 text-center">Preview — this flow ships with your agent's action layer.</p>
 
           <p className="mt-8 text-lg sm:text-xl font-[300] text-[#f4f7fa] text-center max-w-xs leading-snug" style={{ fontFamily: "var(--font-mulish)" }}>
             Your life, carried and proven.
