@@ -37,34 +37,25 @@ export default function PivotPage() {
             Sometimes we reach a point where something has to change — we just can&apos;t quite name what yet. Pivot starts there: an agent-guided discovery of your skills, your constraints, and what you&apos;re actually starting from — then a shortlist of business shapes that fit your situation, and we build and run the one you pick.
           </p>
 
-          {/* Early access CTA */}
-          <div className="bg-[#0f1f38] border border-[#e2a44a]/25 rounded-2xl p-8 max-w-md mx-auto">
-            <p className="text-sm font-semibold text-[#f4f7fa] mb-1">Pivot opens soon.</p>
-            <p className="text-sm text-[#a8d8f0]/70 mb-6">Leave your email and you&apos;re first in.</p>
+          {/* Primary CTA */}
+          <div className="flex flex-col items-center gap-4 mb-4">
+            <Link
+              href="https://download.micro-titan.com/#/pivot"
+              className="inline-flex items-center gap-2 px-8 py-4 text-base font-semibold text-[#0a1628] bg-[#e2a44a] hover:bg-[#f0b855] rounded-xl transition-colors shadow-lg"
+            >
+              Walk in now →
+            </Link>
+            <p className="text-xs text-[#a8d8f0]/40">~20 min · no signup required</p>
+          </div>
+
+          {/* Secondary: waitlist */}
+          <div className="max-w-sm mx-auto mt-6 pt-6 border-t border-[rgba(168,216,240,0.08)]">
+            <p className="text-xs text-[#a8d8f0]/40 mb-3 text-center">Or save your spot for updates</p>
             <EmailCapture variant="hero" source="pivot-waitlist" buttonText="Save my spot →" successCta={null} />
-            <p className="text-xs text-[#a8d8f0]/35 mt-4">
-              No pitch. No intake form. Just early access when it&apos;s ready.
-            </p>
           </div>
         </div>
       </section>
 
-      {/* ── WHILE YOU WAIT ───────────────────────────────────────────────────── */}
-      <section className="py-12 px-4 bg-[#06101f] border-t border-[rgba(168,216,240,0.06)]">
-        <div className="max-w-md mx-auto text-center">
-          <p className="text-xs font-semibold tracking-[0.25em] uppercase text-[#a8d8f0]/35 mb-3">While you wait</p>
-          <p className="text-base text-[#a8d8f0] mb-4 leading-relaxed">
-            Talk to the agent today — free, no signup.
-          </p>
-          <Link
-            href="https://download.micro-titan.com"
-            className="inline-flex items-center gap-2 text-sm text-[#c7d2fe] hover:text-white border border-[#818cf8]/30 hover:border-[#818cf8]/60 px-5 py-2.5 rounded-lg transition-colors"
-          >
-            Open the conversation →
-          </Link>
-          <p className="text-xs text-[#a8d8f0]/30 mt-3">This is the discovery conversation, not a free trial of the full service.</p>
-        </div>
-      </section>
 
       {/* ── HOW IT WORKS ─────────────────────────────────────────────────────── */}
       <section className="py-20 px-4 border-t border-[rgba(168,216,240,0.08)] bg-[#07101e]">
@@ -146,13 +137,22 @@ export default function PivotPage() {
       <section className="py-20 px-4 border-t border-[rgba(168,216,240,0.08)] bg-[#07101e]">
         <div className="max-w-md mx-auto text-center">
           <h2 className="text-2xl font-[300] text-[#f4f7fa] mb-3" style={{ fontFamily: "var(--font-mulish)" }}>
-            Get early access
+            Ready to find what fits?
           </h2>
           <p className="text-sm text-[#a8d8f0]/70 mb-7">
-            Pivot opens soon — leave your email and you&apos;re first in.
+            Twenty minutes. Your situation in full. A shortlist that makes sense.
           </p>
-          <EmailCapture variant="hero" source="pivot-waitlist" buttonText="Save my spot →" successCta={null} />
-          <div className="mt-10 flex flex-col sm:flex-row gap-3 justify-center">
+          <Link
+            href="https://download.micro-titan.com/#/pivot"
+            className="inline-flex items-center gap-2 px-7 py-3.5 text-sm font-semibold text-[#0a1628] bg-[#e2a44a] hover:bg-[#f0b855] rounded-xl transition-colors mb-6"
+          >
+            Walk in now →
+          </Link>
+          <div className="pt-5 border-t border-[rgba(168,216,240,0.07)]">
+            <p className="text-xs text-[#a8d8f0]/30 mb-3">Or leave your email for updates</p>
+            <EmailCapture variant="hero" source="pivot-waitlist" buttonText="Save my spot →" successCta={null} />
+          </div>
+          <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
             <Link
               href="/studio"
               className="text-sm text-[#a8d8f0]/50 hover:text-[#46cf93] transition-colors"
