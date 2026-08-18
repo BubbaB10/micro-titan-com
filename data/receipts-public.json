@@ -1,9 +1,9 @@
 {
-  "generatedAt": "2026-08-18T14:18:53.468Z",
+  "generatedAt": "2026-08-18T15:50:11.080Z",
   "windowDays": 90,
-  "totalInWindow": 239,
+  "totalInWindow": 240,
   "perApp": {
-    "sandwich-etc": 22,
+    "sandwich-etc": 23,
     "the-download": 37,
     "micro-titan-com": 1,
     "micro-titan-hq": 38,
@@ -19,6 +19,12 @@
   },
   "failuresRecordedSince": null,
   "receipts": [
+    {
+      "app": "sandwich-etc",
+      "verifiedAt": "2026-08-18T15:35:34.625Z",
+      "head": "c389862d",
+      "filesChanged": 1
+    },
     {
       "app": "sandwich-etc",
       "verifiedAt": "2026-08-18T13:58:58.155Z",
