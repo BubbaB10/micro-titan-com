@@ -41,6 +41,11 @@ const APP_DISPLAY: Record<string, string> = {
   "greg-installer":     "Greg (agent)",
 };
 
+const INFRA_APPS = new Set([
+  "micro-titan-web", "micro-titan-hq", "micro-titan-base",
+  "the-download", "ripple-the-download", "greg-installer",
+]);
+
 function displayApp(app: string): string {
   return APP_DISPLAY[app] ?? app;
 }
@@ -95,6 +100,8 @@ export default function ReceiptsPage() {
 
   const mergedPerApp = mergePerApp(data.perApp);
   const sortedApps = Object.entries(mergedPerApp).sort((a, b) => b[1] - a[1]);
+  const clientApps = sortedApps.filter(([app]) => !INFRA_APPS.has(app));
+  const infraApps = sortedApps.filter(([app]) => INFRA_APPS.has(app));
 
   // Merge receipt entries too
   const receipts = data.receipts.map(r => ({
@@ -142,17 +149,38 @@ export default function ReceiptsPage() {
       <section className="py-14 px-4 border-b border-[rgba(168,216,240,0.08)]">
         <div className="max-w-3xl mx-auto">
           <p className="text-xs font-semibold tracking-[0.25em] uppercase text-[#4fb8e8] mb-6">By app</p>
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-            {sortedApps.map(([app, count]) => (
-              <div
-                key={app}
-                className="bg-[#0f1f38] border border-[rgba(168,216,240,0.1)] rounded-xl px-4 py-3 flex items-center justify-between"
-              >
-                <span className="text-sm text-[#a8d8f0] truncate mr-3">{displayApp(app)}</span>
-                <span className="text-base font-semibold text-[#f4f7fa] tabular-nums flex-shrink-0">{count}</span>
+          {clientApps.length > 0 && (
+            <>
+              <p className="text-xs text-[#a8d8f0]/40 uppercase tracking-widest mb-3">Client ventures</p>
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-8">
+                {clientApps.map(([app, count]) => (
+                  <div
+                    key={app}
+                    className="bg-[#0f1f38] border border-[rgba(168,216,240,0.1)] rounded-xl px-4 py-3 flex items-center justify-between"
+                  >
+                    <span className="text-sm text-[#a8d8f0] truncate mr-3">{displayApp(app)}</span>
+                    <span className="text-base font-semibold text-[#f4f7fa] tabular-nums flex-shrink-0">{count}</span>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
+            </>
+          )}
+          {infraApps.length > 0 && (
+            <>
+              <p className="text-xs text-[#a8d8f0]/40 uppercase tracking-widest mb-3">Infrastructure / our own tooling</p>
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                {infraApps.map(([app, count]) => (
+                  <div
+                    key={app}
+                    className="bg-[#0f1f38] border border-[rgba(168,216,240,0.1)] rounded-xl px-4 py-3 flex items-center justify-between"
+                  >
+                    <span className="text-sm text-[#a8d8f0] truncate mr-3">{displayApp(app)}</span>
+                    <span className="text-base font-semibold text-[#f4f7fa] tabular-nums flex-shrink-0">{count}</span>
+                  </div>
+                ))}
+              </div>
+            </>
+          )}
         </div>
       </section>
 

@@ -153,15 +153,15 @@ export default function HomePage() {
               <span className="text-xs text-[#a8d8f0]/25">Mon 12:00 PM</span>
             </div>
             <div className="p-5">
-              <p className="text-xs font-semibold text-[#f4f7fa] mb-4">2 apps need you · 4 running clean</p>
+              <p className="text-xs font-semibold text-[#f4f7fa] mb-4">4 active clients · 2 in staging</p>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                 {[
-                  { name: "Sandwich Etc.",  status: "3 orders in queue",          state: "amber" },
-                  { name: "Fairway Bets",   status: "4/4 games settled",           state: "green" },
-                  { name: "Mineral Ledger", status: "1 statement pending review",  state: "amber" },
-                  { name: "Rosewood Dine",  status: "Dinner service running",       state: "green" },
-                  { name: "The Club",       status: "Tee sheet current",            state: "green" },
-                  { name: "Property OS",    status: "2 maintenance items open",     state: "green" },
+                  { name: "Sandwich Etc.",  status: "3 orders in queue",               state: "amber" },
+                  { name: "Fairway Bets",   status: "App Store stage — engine proven",  state: "amber" },
+                  { name: "Mineral Ledger", status: "1 statement pending review",       state: "amber" },
+                  { name: "Rosewood Dine",  status: "Dinner service running",           state: "green" },
+                  { name: "The Club",       status: "Tee sheet current",               state: "green" },
+                  { name: "Property OS",    status: "Template — ready to license",      state: "amber" },
                 ].map((app) => (
                   <div
                     key={app.name}

@@ -140,7 +140,7 @@ export default function StudioPage() {
                 And you keep the agent that runs it.
               </h2>
               <p className="text-[#a8d8f0] leading-relaxed mb-6">
-                Every Studio build includes an Valet instance — wired to your app from day one.
+                Every Studio build includes a Valet instance — wired to your app from day one.
                 Once the gate passes, Valet takes over operations. You don&apos;t hire someone to
                 manage what we built. Valet does it, and the gate proves it.
               </p>
