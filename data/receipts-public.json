@@ -1,14 +1,14 @@
 {
-  "generatedAt": "2026-08-18T13:17:43.947Z",
+  "generatedAt": "2026-08-18T14:18:53.468Z",
   "windowDays": 90,
-  "totalInWindow": 238,
+  "totalInWindow": 239,
   "perApp": {
+    "sandwich-etc": 22,
     "the-download": 37,
     "micro-titan-com": 1,
     "micro-titan-hq": 38,
     "hq-dashboard": 2,
     "micro-titan-web": 56,
-    "sandwich-etc": 21,
     "mineral-ledger": 23,
     "greg-installer": 1,
     "property-os": 1,
@@ -19,6 +19,12 @@
   },
   "failuresRecordedSince": null,
   "receipts": [
+    {
+      "app": "sandwich-etc",
+      "verifiedAt": "2026-08-18T13:58:58.155Z",
+      "head": "dfd66182",
+      "filesChanged": 3
+    },
     {
       "app": "the-download",
       "verifiedAt": "2026-08-18T12:54:44.793Z",
