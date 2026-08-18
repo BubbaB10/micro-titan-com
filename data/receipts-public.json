@@ -1,13 +1,13 @@
 {
-  "generatedAt": "2026-08-18T01:35:11.092Z",
+  "generatedAt": "2026-08-18T03:37:47.713Z",
   "windowDays": 90,
-  "totalInWindow": 233,
+  "totalInWindow": 234,
   "perApp": {
+    "hq-dashboard": 2,
     "micro-titan-web": 56,
     "the-download": 35,
     "micro-titan-hq": 37,
     "sandwich-etc": 21,
-    "hq-dashboard": 1,
     "mineral-ledger": 23,
     "greg-installer": 1,
     "property-os": 1,
@@ -18,6 +18,12 @@
   },
   "failuresRecordedSince": null,
   "receipts": [
+    {
+      "app": "hq-dashboard",
+      "verifiedAt": "2026-08-18T03:28:41.792Z",
+      "head": "7fe2a27",
+      "filesChanged": 9
+    },
     {
       "app": "micro-titan-web",
       "verifiedAt": "2026-08-18T01:07:17.962Z",
