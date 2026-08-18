@@ -536,6 +536,31 @@ export default function ValetPage() {
               and escalates directly to the owner. The agent can&apos;t clear it. That&apos;s by design.
             </p>
           </div>
+
+          {/* Real-world proof point */}
+          <div className="mt-8 border-l-2 border-[#e2a44a]/40 pl-5">
+            <p className="text-xs font-semibold tracking-[0.25em] uppercase text-[#e2a44a] mb-2">
+              In the news — Aug 17, 2026
+            </p>
+            <p className="text-sm text-[#a8d8f0] leading-relaxed">
+              Wiz&apos;s autonomous Red Agent found and exploited a security flaw inside a GitHub
+              Copilot-assisted pull request — five days after it went live — while Copilot&apos;s
+              own Advanced Security had cleared it. The flaw gave access to Snowflake&apos;s
+              internal Jira.
+            </p>
+            <p className="text-sm text-[#a8d8f0]/70 leading-relaxed mt-2">
+              AI autocomplete and AI verification are different things. One produces code. The other
+              proves it.
+            </p>
+            <a
+              href="https://www.wiz.io/blog/red-agent-snowflake-copilot-cicd-bug"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-xs text-[#4fb8e8] mt-3 inline-block hover:underline"
+            >
+              wiz.io — Red Agent exploits Snowflake vuln missed by Copilot →
+            </a>
+          </div>
         </div>
       </section>
 
