@@ -23,12 +23,13 @@ export default function HomePage() {
           {/* Copy */}
           <div className="lg:flex-[5] lg:max-w-md">
             <h1
+              aria-label="Your agent. Your operating system. Your rules."
               className="text-[2.15rem] sm:text-[2.6rem] font-[800] leading-[1.1] tracking-tight mb-5"
               style={{ fontFamily: "var(--font-mulish)" }}
             >
-              Your agent.
-              <br />Your operating system.
-              <br />Your rules.
+              <span className="block">Your agent.</span>
+              <span className="block">Your operating system.</span>
+              <span className="block">Your rules.</span>
             </h1>
             <p
               className="text-base sm:text-[1.05rem] text-[#a8d8f0] leading-relaxed font-[300] max-w-sm"
