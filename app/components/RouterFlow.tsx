@@ -49,7 +49,7 @@ export default function RouterFlow() {
         viewBox={`0 0 ${W} ${H}`}
         width={W}
         height={H}
-        style={{ display: 'block', margin: '0 auto', maxWidth: '100%' }}
+        style={{ display: 'block', margin: '0 auto', maxWidth: '100%', height: 'auto' }}
         aria-label="The tangle goes in to Valet. One clear screen comes back."
       >
         <defs>
