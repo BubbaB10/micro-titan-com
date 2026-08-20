@@ -9,7 +9,7 @@ export default function HomePage() {
       <Nav />
 
       {/* ── HERO ──────────────────────────────────────────────────────────── */}
-      <section className="relative px-4 pt-14 pb-16 overflow-hidden">
+      <section className="relative px-4 pt-24 lg:pt-32 pb-16 overflow-hidden">
         {/* Ambient glow */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
           <div
