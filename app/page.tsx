@@ -2,6 +2,7 @@ import Link from "next/link";
 import Nav from "./components/Nav";
 import Footer from "./components/Footer";
 import HeroDemoV4 from "./components/HeroDemoV4";
+import ThreeStepStrip from "./components/ThreeStepStrip";
 
 export default function HomePage() {
   return (
@@ -48,37 +49,7 @@ export default function HomePage() {
       </section>
 
       {/* ── HOW IT WORKS ─────────────────────────────────────────────────── */}
-      <section className="px-4 py-14 border-t border-[rgba(168,216,240,0.08)] bg-[#06101f]">
-        <div className="max-w-3xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-10 sm:gap-8">
-          {(
-            [
-              {
-                n: "01",
-                title: "Talk once",
-                body: "Tell your agent what matters. One conversation builds the picture.",
-              },
-              {
-                n: "02",
-                title: "It runs the small stuff",
-                body: "Scheduling, replies, reminders, receipts — handled silently while you focus.",
-              },
-              {
-                n: "03",
-                title: "You see everything",
-                body: "One cockpit screen shows everything your agent touched, proved, or needs you for.",
-              },
-            ] as const
-          ).map(({ n, title, body }) => (
-            <div key={n}>
-              <p className="text-[10px] font-semibold tracking-[0.28em] text-[#4fb8e8]/40 uppercase mb-2">{n}</p>
-              <p className="text-base font-semibold text-[#f4f7fa] mb-2" style={{ fontFamily: "var(--font-mulish)" }}>
-                {title}
-              </p>
-              <p className="text-sm text-[#a8d8f0]/55 leading-relaxed">{body}</p>
-            </div>
-          ))}
-        </div>
-      </section>
+      <ThreeStepStrip />
 
       {/* ── TRUST BLOCK + CTA ────────────────────────────────────────────── */}
       <section className="px-4 py-16 border-t border-[rgba(168,216,240,0.08)]">
