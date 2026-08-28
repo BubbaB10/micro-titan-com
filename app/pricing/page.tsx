@@ -15,8 +15,8 @@ const PLANS = [
       "Persistent memory across every session",
       "Free dashboard app included",
       "Scheduled reports and background tasks",
-      "Connected to your data and apps",
-      "One industry context included",
+      "Calendar-aware via read-only feed",
+      "Domain context shaped during intake",
       "Deep intake — your assistant arrives already knowing your world",
     ],
     cta: "Apply for access",
@@ -33,8 +33,8 @@ const PLANS = [
     features: [
       "Everything in Personal",
       "Full business context — vendors, clients, staff",
-      "Multi-system integrations",
-      "Expanded industry knowledge pack",
+      "Integrations scoped and built during onboarding",
+      "Broader domain context from intake and deployment history",
       "Priority onboarding + setup support",
       "Quarterly review session",
     ],
@@ -65,7 +65,7 @@ const PLANS = [
 
 const ALWAYS_INCLUDED = [
   "The gate — mechanical verification, always on",
-  "Daily digest and fail-closed alerts",
+  "Daily digest",
   "Data export anytime, no hostage fees",
   "All updates — no versioning tiers",
   "No per-seat fees. No per-feature upsells. No silent overages.",
