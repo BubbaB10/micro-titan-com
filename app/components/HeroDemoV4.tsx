@@ -179,7 +179,6 @@ export default function HeroDemoV4() {
 
       {/* Caption */}
       <p className="mt-5 text-center text-[11px] text-[#a8d8f0]/30 h-4 transition-all duration-500">
-        {phase === 'router' && 'The tangle goes in. One clear screen comes back.'}
         {phase === 'decision' && 'One tap. Done.'}
         {phase === 'results' && 'Everything logged. Nothing slips.'}
       </p>
