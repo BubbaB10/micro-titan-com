@@ -24,20 +24,19 @@ export default function HomePage() {
           {/* Copy */}
           <div className="lg:flex-[5] lg:max-w-md">
             <h1
-              aria-label="Your agent. Your operating system. Your rules."
+              aria-label="The tangle goes in. One clear screen comes back."
               className="text-[2.15rem] sm:text-[2.6rem] font-[800] leading-[1.1] tracking-tight mb-5"
               style={{ fontFamily: "var(--font-mulish)" }}
             >
-              <span className="block">Your agent.</span>
-              <span className="block">Your operating system.</span>
-              <span className="block">Your rules.</span>
+              <span className="block">The tangle goes in.</span>
+              <span className="block">One clear screen comes back.</span>
             </h1>
             <p
               className="text-base sm:text-[1.05rem] text-[#a8d8f0] leading-relaxed font-[300] max-w-sm"
               style={{ fontFamily: "var(--font-mulish)" }}
             >
-              One conversation. An operating system shaped to your life — books, parenting, the side
-              business. Your agent runs what matters to you. We stand guard.
+              Everything you&apos;re holding in your head — the bills, the kids&apos; schedule, the side business —
+              handed to an agent that runs it and shows its work.
             </p>
           </div>
 
