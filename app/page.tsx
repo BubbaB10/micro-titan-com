@@ -24,19 +24,23 @@ export default function HomePage() {
           {/* Copy */}
           <div className="lg:flex-[5] lg:max-w-md">
             <h1
-              aria-label="The tangle goes in. One clear screen comes back."
+              aria-label="Say it however it comes out."
               className="text-[2.15rem] sm:text-[2.6rem] font-[800] leading-[1.1] tracking-tight mb-5"
               style={{ fontFamily: "var(--font-mulish)" }}
             >
-              <span className="block">The tangle goes in.</span>
-              <span className="block">One clear screen comes back.</span>
+              Say it however it comes out.
             </h1>
             <p
               className="text-base sm:text-[1.05rem] text-[#a8d8f0] leading-relaxed font-[300] max-w-sm"
               style={{ fontFamily: "var(--font-mulish)" }}
             >
-              Everything you&apos;re holding in your head — the bills, the kids&apos; schedule, the side business —
-              handed to an agent that runs it and shows its work.
+              Everything you&apos;re holding in your head — the bills, the kids&apos; schedule, the side business — in whatever order it spills out. You get back one organized screen, run by an agent that shows its work.
+            </p>
+            <p
+              className="text-base sm:text-[1.05rem] font-[700] italic text-[#f4f7fa]/80 leading-tight mt-4"
+              style={{ fontFamily: "var(--font-mulish)" }}
+            >
+              The tangle goes in. One clear screen comes back.
             </p>
           </div>
 
