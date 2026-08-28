@@ -22,7 +22,19 @@ export default function HomePage() {
         <div className="relative z-10 max-w-5xl mx-auto flex flex-col lg:flex-row lg:items-center gap-10 lg:gap-16">
 
           {/* Copy */}
-          <div className="lg:flex-[5] lg:max-w-md">
+          <div className="lg:flex-[5] lg:max-w-md flex flex-col items-center text-center">
+            {/* Hero-scale centered mark */}
+            <svg
+              aria-hidden="true"
+              height="72"
+              viewBox="243 160 653 433"
+              fill="currentColor"
+              className="text-[#f4f7fa] mb-6"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path fillRule="evenodd" d="M258 175 H345 L567 365 L793 175 H881 V578 H783 V548 H849 V205 H806 L567 405 L331 205 H289 V548 H359 V578 H258 Z"/>
+              <path d="M483 437 H655 V478 H590 V578 H548 V478 H483 Z"/>
+            </svg>
             <h1
               aria-label="Say it however it comes out."
               className="text-[2.15rem] sm:text-[2.6rem] font-[800] leading-[1.1] tracking-tight mb-5"
