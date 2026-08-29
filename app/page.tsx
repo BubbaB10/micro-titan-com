@@ -27,11 +27,11 @@ export default function HomePage() {
             {/* Hero-scale gradient mark */}
             <MicroTitanMark height={72} idPrefix="heroMark" className="mb-6" />
             <h1
-              aria-label="Say it however it comes out."
+              aria-label="Your system, your rules."
               className="text-[2.15rem] sm:text-[2.6rem] font-[800] leading-[1.1] tracking-tight mb-5"
               style={{ fontFamily: "var(--font-mulish)" }}
             >
-              Say it however it comes out.
+              Your system, your rules.
             </h1>
             <p
               className="text-base sm:text-[1.05rem] text-[#a8d8f0] leading-relaxed font-[300] max-w-sm"
