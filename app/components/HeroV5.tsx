@@ -3,56 +3,56 @@
 
 const TANGLE_CARDS = [
   {
-    icon: "💬",
-    source: "Text Message",
-    content: "Helen — “Can you pick up milk on the way home?”",
-    time: "12:47 PM",
+    icon: “💬”,
+    source: “Text Message”,
+    content: “Dana — “Running 15 minutes late for the walkthrough””,
+    time: “12:47 PM”,
     rotate: -1.5,
   },
   {
-    icon: "✉️",
-    source: "Email",
-    content: "Andy — Re: Tuesday meeting",
-    time: "11:32 AM",
+    icon: “✉️”,
+    source: “Email”,
+    content: “Marcus — Re: Thursday site visit”,
+    time: “11:32 AM”,
     rotate: 1,
   },
   {
-    icon: "⚡",
-    source: "Bill Received",
-    content: "Electric Company — $247.63, due Sep 4",
-    time: "10:18 AM",
+    icon: “⚡”,
+    source: “Bill Received”,
+    content: “City Utilities — $186.40, due Sep 9”,
+    time: “10:18 AM”,
     rotate: -0.8,
   },
   {
-    icon: "📅",
-    source: "Calendar",
-    content: "Vet appointment — tomorrow, 10:00 AM",
-    time: "9:41 AM",
+    icon: “📅”,
+    source: “Calendar”,
+    content: “Dentist — Thursday, 8:30 AM”,
+    time: “9:41 AM”,
     rotate: 1.2,
   },
   {
-    icon: "📝",
-    source: "Quick Note",
-    content: "Order parts for the laser trailer",
-    time: "9:02 AM",
+    icon: “📝”,
+    source: “Quick Note”,
+    content: “Reorder filters for the shop”,
+    time: “9:02 AM”,
     rotate: -1,
   },
   {
-    icon: "🧾",
-    source: "Receipt",
-    content: "Tractor Supply — $89.47",
-    time: "yesterday",
+    icon: “🧾”,
+    source: “Receipt”,
+    content: “Delta Supply — $64.20”,
+    time: “yesterday”,
     rotate: 0.5,
   },
 ];
 
 const HANDLED = [
-  { text: "Electric bill paid", time: "12:18 PM" },
-  { text: "Vet appointment confirmed", time: "11:47 AM" },
-  { text: "Truck registration renewed", time: "10:33 AM" },
-  { text: "Friday dinner moved to 7:30", time: "9:58 AM" },
-  { text: "Invoice from Acme filed", time: "9:21 AM" },
-  { text: "Parts ordered for laser trailer", time: "8:42 AM" },
+  { text: "Water bill paid", time: "12:18 PM" },
+  { text: "Dentist appointment confirmed", time: "11:47 AM" },
+  { text: "Trailer registration renewed", time: "10:33 AM" },
+  { text: "Thursday walkthrough moved to 9:00", time: "9:58 AM" },
+  { text: "Invoice from Delta Supply filed", time: "9:21 AM" },
+  { text: "Filters reordered for the shop", time: "8:42 AM" },
 ];
 
 const DOMAINS = [
@@ -146,7 +146,7 @@ function ValetPhone() {
         </div>
         <div className="flex items-center justify-between mt-0.5">
           <span className="text-[0.88rem] font-[800] tracking-[0.1em] text-[#f4f7fa] uppercase">
-            Bubba
+            Jordan
           </span>
           <span className="text-[0.52rem] text-[#22c55e] font-[600]">● System online</span>
         </div>
@@ -203,9 +203,9 @@ function ValetPhone() {
             <div className="flex items-center gap-1.5 flex-1 min-w-0">
               <span className="text-[0.65rem] text-[#f0b429] font-[700] flex-shrink-0">$</span>
               <div className="min-w-0">
-                <div className="text-[0.62rem] font-[700] text-[#f4f7fa]">Approve $1,240</div>
+                <div className="text-[0.62rem] font-[700] text-[#f4f7fa]">Approve $890</div>
                 <div className="text-[0.52rem] text-[#a8d8f0]/50 truncate">
-                  Equipment purchase from Fastenal
+                  Materials order from Delta Supply
                 </div>
               </div>
             </div>
@@ -220,9 +220,9 @@ function ValetPhone() {
             <div className="flex items-center gap-1.5 flex-1 min-w-0">
               <span className="text-[0.65rem] text-[#a8d8f0] font-[700] flex-shrink-0">◑</span>
               <div className="min-w-0">
-                <div className="text-[0.62rem] font-[700] text-[#f4f7fa]">Reply to Andy about Tuesday</div>
+                <div className="text-[0.62rem] font-[700] text-[#f4f7fa]">Reply to Marcus about Thursday</div>
                 <div className="text-[0.52rem] text-[#a8d8f0]/50 truncate">
-                  Re: Meeting at 2:00 PM
+                  Re: Site visit at 2:00 PM
                 </div>
               </div>
             </div>
