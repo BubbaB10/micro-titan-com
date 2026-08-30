@@ -1187,9 +1187,12 @@ export default function HeroV5({ armIndex, reduced = false }: { armIndex: number
               alt=''
               decoding='async'
               style={{
-                position: 'absolute', inset: 0,
-                width: '100%', height: '100%',
-                objectFit: 'cover',
+                position: 'absolute',
+                left: '50%',
+                top: 0,
+                transform: 'translateX(-50%)',
+                height: '100%',
+                width: 'auto',
                 mixBlendMode: 'screen',
                 pointerEvents: 'none',
                 zIndex: 0,
