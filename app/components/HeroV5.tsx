@@ -202,6 +202,10 @@ const DOMAIN_COLORS = ['#60a5fa', '#34d399', '#a78bfa', '#fbbf24', '#f87171'];
 const LEFT_NODES  = [0.15, 0.29, 0.44, 0.57, 0.70, 0.83];
 const RIGHT_NODES = [0.32, 0.42, 0.50, 0.58, 0.67];
 
+// Fixed y-coordinates (CSS px) for the 402 × 439 stage.
+const TANGLE_Y = [25, 93, 159, 224, 290, 349];
+const DOMAIN_Y  = [92, 143, 196, 250, 303];
+
 // ─── CURVE COMPUTATION (DOM-measured bezier connector lines) ─────────────────
 
 type CurveSet = {
@@ -693,10 +697,229 @@ function ModuleCard({ name, status, domainIndex }: Omit<RightItem, 'icon'> & { d
   );
 }
 
+// ─── STAGE CARD COMPONENTS (authored at 402 CSS-px design width) ─────────────
+
+function StageTangleCard({ icon, source, content, time, rotate, tileColor }: TangleItem & { tileColor: string }) {
+  return (
+    <div
+      style={{
+        background: '#0c1c36',
+        borderRadius: 6,
+        border: '1px solid rgba(255,255,255,0.07)',
+        borderTop: '1px solid rgba(255,255,255,0.1)',
+        transform: `rotate(${rotate}deg)`,
+        overflow: 'hidden',
+        padding: 4,
+        display: 'flex',
+        alignItems: 'flex-start',
+        gap: 4,
+        boxShadow: '0 2px 6px rgba(0,0,0,0.5)',
+      }}
+    >
+      <div
+        style={{
+          flexShrink: 0, width: 14, height: 14, borderRadius: 2,
+          background: `linear-gradient(135deg, ${tileColor}28 0%, ${tileColor}14 100%)`,
+          border: `1px solid ${tileColor}24`,
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+        }}
+      >
+        <span style={{ fontSize: 8, lineHeight: 1 }}>{icon}</span>
+      </div>
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', gap: 2, marginBottom: 1 }}>
+          <span style={{
+            fontSize: 6.5, fontWeight: 700,
+            textTransform: 'uppercase' as const,
+            letterSpacing: '0.08em',
+            color: 'rgba(168,216,240,0.4)',
+            overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+          }}>
+            {source}
+          </span>
+          <span style={{ fontSize: 6, color: 'rgba(168,216,240,0.3)', flexShrink: 0 }}>{time}</span>
+        </div>
+        <p style={{ fontSize: 8, color: '#ccdff0', lineHeight: 1.3, margin: 0 }}>{content}</p>
+      </div>
+    </div>
+  );
+}
+
+function StageDomainCard({ icon, name, status, tileColor }: RightItem & { tileColor: string }) {
+  return (
+    <div
+      style={{
+        height: '100%',
+        background: '#0c1c36',
+        borderRadius: 6,
+        border: '1px solid rgba(34,197,94,0.18)',
+        borderTop: '1px solid rgba(255,255,255,0.08)',
+        boxShadow: '0 0 0 1px rgba(34,197,94,0.07), 0 0 8px rgba(34,197,94,0.12)',
+        display: 'flex', alignItems: 'stretch', overflow: 'hidden',
+        boxSizing: 'border-box' as const,
+      }}
+    >
+      <div
+        style={{
+          flexShrink: 0, width: 22,
+          background: `linear-gradient(160deg, ${tileColor}30 0%, ${tileColor}18 100%)`,
+          borderRight: `1px solid ${tileColor}22`,
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+        }}
+      >
+        <span style={{ fontSize: 9, lineHeight: 1 }}>{icon}</span>
+      </div>
+      <div style={{ flex: 1, minWidth: 0, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 5px' }}>
+        <span style={{ fontSize: 8, fontWeight: 600, color: '#f4f7fa', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{name}</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 2, flexShrink: 0, marginLeft: 3 }}>
+          <span style={{ fontSize: 7, color: '#22c55e' }}>&#10003;</span>
+          <span style={{ fontSize: 6.5, color: 'rgba(34,197,94,0.65)', whiteSpace: 'nowrap' }}>{status}</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function StageModuleCard({ name, status }: { name: string; status: string }) {
+  return (
+    <div
+      style={{
+        height: '100%',
+        background: '#0f1e35',
+        borderRadius: 6,
+        border: '1px solid rgba(109,40,217,0.28)',
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        padding: '3px 6px',
+        boxSizing: 'border-box' as const,
+      }}
+    >
+      <span style={{ fontSize: 8, fontWeight: 600, color: '#f4f7fa', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{name}</span>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 2, flexShrink: 0 }}>
+        <span style={{ fontSize: 7, color: '#22c55e' }}>&#10003;</span>
+        <span style={{ fontSize: 7, fontWeight: 700, color: 'rgba(34,197,94,0.8)' }}>{status}</span>
+      </div>
+    </div>
+  );
+}
+
+function StagePhone({ armIndex, reduced }: { armIndex: number; reduced: boolean }) {
+  return (
+    <div
+      data-phone-body='true'
+      style={{
+        width: 150, height: 400,
+        background: '#060b18',
+        borderRadius: 14,
+        border: '1.5px solid rgba(109,40,217,0.65)',
+        boxShadow: '0 0 0 1px rgba(109,40,217,0.25), 0 0 28px rgba(109,40,217,0.42), 0 0 56px rgba(109,40,217,0.18), 0 8px 24px rgba(0,0,0,0.65)',
+        overflow: 'hidden',
+        display: 'flex', flexDirection: 'column',
+        fontFamily: 'var(--font-mulish)',
+      }}
+    >
+      {/* Status bar */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 8px 2px', flexShrink: 0 }}>
+        <span style={{ fontSize: 7, color: 'rgba(168,216,240,0.4)' }}>9:41</span>
+        <span style={{ fontSize: 7, color: 'rgba(168,216,240,0.4)' }}>&#9679;&#9679;&#9679;</span>
+      </div>
+      {/* App header */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '2px 8px 3px', borderBottom: '1px solid rgba(30,58,95,0.5)', flexShrink: 0 }}>
+        <span style={{ fontSize: 9, color: 'rgba(168,216,240,0.45)' }}>&#8249;</span>
+        <span style={{ fontSize: 7, fontWeight: 700, letterSpacing: '0.18em', color: 'rgba(168,216,240,0.85)', textTransform: 'uppercase' as const }}>
+          {ARMS[armIndex].product.split('').join(' ')}
+        </span>
+        <span style={{ fontSize: 9, color: 'rgba(168,216,240,0.45)' }}>&#8943;</span>
+      </div>
+      {/* Greeting */}
+      <ArmStack armIndex={armIndex} reduced={reduced} arms={ARMS.map(arm => (
+        <div style={{ padding: '5px 8px 2px' }}>
+          <div style={{ fontSize: 6, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase' as const, color: 'rgba(168,216,240,0.4)', visibility: (arm.greetingLabel ? 'visible' : 'hidden') as React.CSSProperties['visibility'] }}>
+            {arm.greetingLabel || 'Good afternoon,'}
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 1 }}>
+            <span style={{ fontSize: 9, fontWeight: 800, letterSpacing: '0.07em', color: '#f4f7fa', textTransform: 'uppercase' as const, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', flex: 1 }}>
+              {arm.greetingName}
+            </span>
+            <span style={{ fontSize: 6, color: '#22c55e', fontWeight: 600, flexShrink: 0, marginLeft: 4 }}>{arm.greetingStatus}</span>
+          </div>
+        </div>
+      ))} />
+      {/* Verdict */}
+      <ArmStack armIndex={armIndex} reduced={reduced} arms={ARMS.map(arm => (
+        <div style={{ padding: '0 8px 4px' }}>
+          <div style={{ background: '#0a1c35', borderRadius: 8, padding: '4px 8px', border: '1px solid rgba(30,58,95,0.6)', boxShadow: '0 0 0 1px rgba(34,197,94,0.15), 0 0 10px rgba(34,197,94,0.08)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+              <span style={{ fontSize: 9, color: '#22c55e', fontWeight: 800 }}>&#10003;</span>
+              <span style={{ fontSize: 8, fontWeight: 700, color: '#f4f7fa' }}>{arm.verdictMain}</span>
+            </div>
+            <div style={{ fontSize: 7, color: '#f0b429', marginTop: 1, paddingLeft: 13, fontWeight: 600 }}>{arm.verdictSub}</div>
+          </div>
+        </div>
+      ))} />
+      {/* Tabs */}
+      <div style={{ display: 'flex', borderBottom: '1px solid rgba(30,58,95,0.5)', margin: '0 6px', flexShrink: 0 }}>
+        {[
+          { label: 'ALL CLEAR', color: '#22c55e', active: true },
+          { label: 'NEEDS YOU (2)', color: '#f0b429', active: false },
+          { label: 'ARCHIVE', color: 'rgba(168,216,240,0.35)', active: false },
+        ].map(({ label, color, active }) => (
+          <div key={label} style={{ flex: 1, fontSize: 6, fontWeight: active ? 700 : 600, color, padding: '3px 0', textAlign: 'center' as const, borderBottom: active ? `1.5px solid ${color}` : 'none' }}>
+            {label}
+          </div>
+        ))}
+      </div>
+      {/* Handled items */}
+      <ArmStack armIndex={armIndex} reduced={reduced} arms={ARMS.map(arm => (
+        <div style={{ padding: '2px 6px' }}>
+          {arm.handled.map((item, i) => (
+            <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '2px 0', borderBottom: i < arm.handled.length - 1 ? '1px solid rgba(30,58,95,0.2)' : 'none' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 3, minWidth: 0, flex: 1 }}>
+                <span style={{ fontSize: 7, color: '#22c55e', flexShrink: 0 }}>&#10003;</span>
+                <span style={{ fontSize: 7, color: '#c8dff0', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.text}</span>
+              </div>
+              <span style={{ fontSize: 5.5, color: 'rgba(168,216,240,0.35)', flexShrink: 0, marginLeft: 3 }}>{item.time}</span>
+            </div>
+          ))}
+        </div>
+      ))} />
+      {/* Needs You */}
+      <ArmStack armIndex={armIndex} reduced={reduced} arms={ARMS.map(arm => (
+        <div style={{ padding: '2px 6px', display: 'flex', flexDirection: 'column', gap: 3 }}>
+          {arm.needsYou.map((card, i) => (
+            <div key={i} style={{ background: '#0a1c35', borderRadius: 6, padding: '4px 6px', border: '1px solid rgba(240,180,41,0.2)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 3 }}>
+                <span style={{ fontSize: 9, color: '#f0b429', fontWeight: 700, flexShrink: 0 }}>{card.icon}</span>
+                <div style={{ minWidth: 0, flex: 1 }}>
+                  <div style={{ fontSize: 7, fontWeight: 700, color: '#f4f7fa', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{card.label}</div>
+                  <div style={{ fontSize: 6, color: 'rgba(168,216,240,0.5)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{card.sub}</div>
+                </div>
+                <span style={{ fontSize: 11, color: 'rgba(240,180,41,0.5)', flexShrink: 0 }}>&#8250;</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      ))} />
+      {/* 47 other items — always in DOM */}
+      <div style={{ margin: '2px 6px', background: 'rgba(10,28,53,0.7)', borderRadius: 6, padding: '3px 8px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexShrink: 0 }}>
+        <span style={{ fontSize: 7, color: 'rgba(168,216,240,0.6)', fontWeight: 500 }}>47 other items handled quietly</span>
+        <span style={{ fontSize: 10, color: 'rgba(168,216,240,0.3)', marginLeft: 3 }}>&#8897;</span>
+      </div>
+      {/* Bottom bar */}
+      <div style={{ display: 'flex', justifyContent: 'space-around', padding: '4px 4px 5px', borderTop: '1px solid rgba(30,58,95,0.5)', background: '#04080f', marginTop: 'auto', flexShrink: 0 }}>
+        {['Home', 'Feed', 'Search', 'Settings'].map(item => (
+          <span key={item} style={{ fontSize: 6, color: 'rgba(168,216,240,0.35)', fontWeight: 600 }}>{item}</span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 // ─── HERO V5 ──────────────────────────────────────────────────────────────────
 
 export default function HeroV5({ armIndex, reduced = false }: { armIndex: number; reduced?: boolean }) {
   const gridRef = useRef<HTMLDivElement>(null);
+  const wrapRef  = useRef<HTMLDivElement>(null);
+  const stageRef = useRef<HTMLDivElement>(null);
   const [curves, setCurves] = useState<CurveSet | null>(null);
   const [motionReduced, setMotionReduced] = useState(false);
   useEffect(() => {
@@ -736,6 +959,24 @@ export default function HeroV5({ armIndex, reduced = false }: { armIndex: number
       window.removeEventListener('resize', measure);
     };
   }, [measure]);
+
+  // Scale the fixed 402-px mobile stage to match actual viewport width.
+  // Clamped to 0.90–1.10; desktop (≥1024px) shows the lg:block section instead.
+  useEffect(() => {
+    const wrap  = wrapRef.current;
+    const stage = stageRef.current;
+    if (!wrap || !stage) return;
+    const update = () => {
+      const w = wrap.offsetWidth;
+      if (w < 1) return;
+      const s = Math.min(Math.max(w / 402, 0.90), 1.10);
+      stage.style.transform = `scale(${s.toFixed(4)})`;
+    };
+    update();
+    const ro = new ResizeObserver(update);
+    ro.observe(wrap);
+    return () => ro.disconnect();
+  }, []);
 
   return (
     <div className='w-full overflow-x-hidden'>
@@ -923,166 +1164,140 @@ export default function HeroV5({ armIndex, reduced = false }: { armIndex: number
         )}
       </div>
 
-      {/* ══ MOBILE / TABLET < 1024px: portrait ribbon artwork ══
-          artwork is 941×1672. mix-blend-mode:screen maps opaque black to
-          nothing over the dark page; neon colours add additively.
-          Cards sit at strand node positions (LEFT_NODES / RIGHT_NODES).   */}
+      {/* ══ MOBILE / TABLET < 1024px: fixed-coordinate 402 × 439 stage ══
+          Stage is authored at 402 CSS px (iPhone 16 Pro viewport width).
+          ResizeObserver scales the stage div so it fills the actual container.
+          Nothing inside reflowscales or responds to media queries — the
+          scale() on the stage handles all responsiveness.                   */}
       <div
-        className='lg:hidden relative w-full'
-        style={{ aspectRatio: '941 / 1672' }}
+        ref={wrapRef}
+        className='lg:hidden'
+        style={{ width: '100%', aspectRatio: '402 / 439', position: 'relative' }}
       >
-        {/* Portrait ribbon artwork — decorative, not LCP */}
-        <picture aria-hidden='true'>
-          <source type='image/avif' srcSet='/ribbons-portrait.avif' />
-          <source type='image/webp' srcSet='/ribbons-portrait.webp' />
-          <img
-            src='/ribbons-portrait.png'
-            alt=''
-            decoding='async'
+        <div
+          ref={stageRef}
+          style={{ position: 'absolute', top: 0, left: 0, width: 402, height: 439, transformOrigin: 'top left' }}
+        >
+          {/* Ribbon artwork — screen blend so black → transparent */}
+          <picture aria-hidden='true'>
+            <source type='image/avif' srcSet='/ribbons-portrait.avif' />
+            <source type='image/webp' srcSet='/ribbons-portrait.webp' />
+            <img
+              src='/ribbons-portrait.png'
+              alt=''
+              decoding='async'
+              style={{
+                position: 'absolute', inset: 0,
+                width: '100%', height: '100%',
+                objectFit: 'cover',
+                mixBlendMode: 'screen',
+                pointerEvents: 'none',
+                zIndex: 0,
+              }}
+            />
+          </picture>
+
+          {/* Violet glow pool behind the phone */}
+          <div
+            aria-hidden='true'
             style={{
-              position: 'absolute', inset: 0,
-              width: '100%', height: '100%',
-              objectFit: 'cover',
-              mixBlendMode: 'screen',
-              pointerEvents: 'none',
-              zIndex: 0,
+              position: 'absolute',
+              left: 126, top: 220, width: 150, height: 180,
+              background: 'radial-gradient(ellipse 80% 100% at 50% 100%, rgba(109,40,217,0.55) 0%, rgba(109,40,217,0.22) 50%, transparent 75%)',
+              pointerEvents: 'none', zIndex: 1,
+              filter: 'blur(14px)',
             }}
           />
-        </picture>
 
-        {/* Annotation — left (tangle goes in) */}
-        <div
-          style={{
-            position: 'absolute', left: '1%', top: '1.5%',
-            zIndex: 2, display: 'flex', alignItems: 'center', gap: 3,
-          }}
-        >
-          <svg width='8' height='12' viewBox='0 0 20 28' fill='none' aria-hidden='true' style={{ flexShrink: 0 }}>
-            <path d='M 10 2 C 10 10 10 16 10 22' stroke='rgba(168,216,240,0.4)' strokeWidth='1.5' fill='none' strokeLinecap='round' />
-            <path d='M 6 18 L 10 24 L 14 18' stroke='rgba(168,216,240,0.4)' strokeWidth='1.5' fill='none' strokeLinecap='round' strokeLinejoin='round' />
-          </svg>
-          <span
-            style={{
-              fontSize: '0.3rem', fontWeight: 600,
-              color: 'rgba(168,216,240,0.5)', fontStyle: 'italic',
-              fontFamily: 'Georgia, serif',
-            }}
+          {/* Left annotation — "The tangle goes in." */}
+          <div
+            style={{ position: 'absolute', left: 4, top: 4, zIndex: 4, display: 'flex', alignItems: 'center', gap: 4 }}
           >
-            The tangle goes in.
-          </span>
-        </div>
+            <span
+              style={{
+                fontSize: 9, fontStyle: 'italic',
+                color: 'rgba(168,216,240,0.65)',
+                fontFamily: 'Georgia, serif',
+                letterSpacing: '0.01em',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              The tangle goes in.
+            </span>
+            <svg width='10' height='14' viewBox='0 0 20 28' fill='none' aria-hidden='true' style={{ flexShrink: 0 }}>
+              <path d='M 5 2 C 8 8 14 14 16 24' stroke='rgba(168,216,240,0.45)' strokeWidth='1.5' fill='none' strokeLinecap='round' />
+              <path d='M 11 20 L 17 26 L 20 18' stroke='rgba(168,216,240,0.45)' strokeWidth='1.5' fill='none' strokeLinecap='round' strokeLinejoin='round' />
+            </svg>
+          </div>
 
-        {/* Annotation — right (one clear screen) */}
-        <div
-          style={{
-            position: 'absolute', right: '1%', top: '1.5%',
-            zIndex: 2, display: 'flex', alignItems: 'center', gap: 3,
-            maxWidth: '30%',
-          }}
-        >
-          <span
-            style={{
-              fontSize: '0.3rem', fontWeight: 600,
-              color: 'rgba(168,216,240,0.5)', fontStyle: 'italic',
-              fontFamily: 'Georgia, serif', lineHeight: 1.3, textAlign: 'right',
-            }}
+          {/* Right annotation — "One clear screen comes back." */}
+          <div
+            style={{ position: 'absolute', right: 4, top: 28, zIndex: 4, display: 'flex', alignItems: 'center', gap: 4, maxWidth: 108 }}
           >
-            One clear screen comes back.
-          </span>
-          <svg width='8' height='12' viewBox='0 0 20 28' fill='none' aria-hidden='true' style={{ flexShrink: 0 }}>
-            <path d='M 10 2 C 10 10 10 16 10 22' stroke='rgba(168,216,240,0.4)' strokeWidth='1.5' fill='none' strokeLinecap='round' />
-            <path d='M 6 18 L 10 24 L 14 18' stroke='rgba(168,216,240,0.4)' strokeWidth='1.5' fill='none' strokeLinecap='round' strokeLinejoin='round' />
-          </svg>
-        </div>
+            <svg width='10' height='14' viewBox='0 0 20 28' fill='none' aria-hidden='true' style={{ flexShrink: 0 }}>
+              <path d='M 15 2 C 12 8 6 14 4 24' stroke='rgba(168,216,240,0.45)' strokeWidth='1.5' fill='none' strokeLinecap='round' />
+              <path d='M 9 20 L 3 26 L 0 18' stroke='rgba(168,216,240,0.45)' strokeWidth='1.5' fill='none' strokeLinecap='round' strokeLinejoin='round' />
+            </svg>
+            <span
+              style={{
+                fontSize: 9, fontStyle: 'italic',
+                color: 'rgba(168,216,240,0.65)',
+                fontFamily: 'Georgia, serif',
+                letterSpacing: '0.01em',
+                lineHeight: 1.3,
+                textAlign: 'right' as const,
+              }}
+            >
+              One clear screen comes back.
+            </span>
+          </div>
 
-        {/* Left column — 6 tangle cards at strand node positions */}
-        <div
-          style={{
-            position: 'absolute', left: 0, top: 0,
-            width: '28%', height: '100%', zIndex: 1,
-          }}
-        >
-          <PortraitColumnStack
-            armIndex={armIndex}
-            reduced={effectiveReduced}
-            arms={ARMS.map((arm) => (
-              <div style={{ position: 'relative', width: '100%', height: '100%' }}>
-                {arm.tangle.map((card, i) => (
-                  <div
-                    key={i}
-                    style={{
-                      position: 'absolute',
-                      top: `${LEFT_NODES[i] * 100}%`,
-                      transform: 'translateY(-50%)',
-                      left: 0, right: 0,
-                    }}
-                  >
-                    <TangleCard {...card} tileColor={TANGLE_COLORS[i % TANGLE_COLORS.length]} />
-                  </div>
-                ))}
-              </div>
-            ))}
-          />
-        </div>
-
-        {/* Center — phone over the vertical black band */}
-        <div
-          style={{
-            position: 'absolute', left: '30.5%', top: '10%',
-            width: '38%', height: '80%',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            zIndex: 1,
-          }}
-        >
-          <ValetPhone armIndex={armIndex} reduced={effectiveReduced} />
-        </div>
-
-        {/* Right column — 5 domain/module cards at strand node positions */}
-        <div
-          style={{
-            position: 'absolute', left: '70%', top: 0,
-            width: '26%', height: '100%', zIndex: 1,
-          }}
-        >
-          <PortraitColumnStack
-            armIndex={armIndex}
-            reduced={effectiveReduced}
-            arms={ARMS.map((arm) => (
-              <div style={{ position: 'relative', width: '100%', height: '100%' }}>
-                {arm.rightType === 'modules' ? (
-                  arm.right.map((item, i) => (
+          {/* Left + right card columns (single PortraitColumnStack — crossfades in sync) */}
+          <div style={{ position: 'absolute', inset: 0, zIndex: 2 }}>
+            <PortraitColumnStack
+              armIndex={armIndex}
+              reduced={effectiveReduced}
+              arms={ARMS.map((arm) => (
+                <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+                  {/* Left column — 6 tangle cards */}
+                  {arm.tangle.map((card, i) => (
                     <div
-                      key={i}
-                      style={{
-                        position: 'absolute',
-                        top: `${RIGHT_NODES[i] * 100}%`,
-                        transform: 'translateY(-50%)',
-                        left: 0, right: 0,
-                      }}
+                      key={`l${i}`}
+                      style={{ position: 'absolute', left: 12, width: 72, top: TANGLE_Y[i] }}
                     >
-                      <ModuleCard name={item.name} status={item.status} />
+                      <StageTangleCard {...card} tileColor={TANGLE_COLORS[i % TANGLE_COLORS.length]} />
                     </div>
-                  ))
-                ) : (
-                  arm.right.map((item, i) => (
-                    <div
-                      key={i}
-                      style={{
-                        position: 'absolute',
-                        top: `${RIGHT_NODES[i] * 100}%`,
-                        transform: 'translateY(-50%)',
-                        left: 0, right: 0,
-                      }}
-                    >
-                      <DomainCard {...item} tileColor={DOMAIN_COLORS[i % DOMAIN_COLORS.length]} />
-                    </div>
-                  ))
-                )}
-              </div>
-            ))}
-          />
-        </div>
+                  ))}
+                  {/* Right column — 5 domain / module cards */}
+                  {arm.rightType === 'modules' ? (
+                    arm.right.map((item, i) => (
+                      <div
+                        key={`r${i}`}
+                        style={{ position: 'absolute', left: 311, width: 77, height: 42, top: DOMAIN_Y[i] }}
+                      >
+                        <StageModuleCard name={item.name} status={item.status} />
+                      </div>
+                    ))
+                  ) : (
+                    arm.right.map((item, i) => (
+                      <div
+                        key={`r${i}`}
+                        style={{ position: 'absolute', left: 311, width: 77, height: 42, top: DOMAIN_Y[i] }}
+                      >
+                        <StageDomainCard {...item} tileColor={DOMAIN_COLORS[i % DOMAIN_COLORS.length]} />
+                      </div>
+                    ))
+                  )}
+                </div>
+              ))}
+            />
+          </div>
 
+          {/* Phone — fixed position in the centre column */}
+          <div style={{ position: 'absolute', left: 126, top: 32, width: 150, height: 400, zIndex: 3 }}>
+            <StagePhone armIndex={armIndex} reduced={effectiveReduced} />
+          </div>
+        </div>
       </div>
 
     </div>
