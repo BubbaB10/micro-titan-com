@@ -17,6 +17,7 @@ type RightItem = { icon: string; name: string; status: string };
 
 type ArmData = {
   id: string;
+  product: string;
   tangle: TangleItem[];
   greetingLabel: string;
   greetingName: string;
@@ -31,9 +32,10 @@ type ArmData = {
 
 // ─── ARM DATA ─────────────────────────────────────────────────────────────────
 
-const ARMS: ArmData[] = [
+export const ARMS: ArmData[] = [
   {
     id: 'valet',
+    product: 'Valet',
     tangle: [
       { icon: '\u{1F4AC}', source: 'Text', content: 'Dana — running late for the walkthrough', time: '12:47 PM', rotate: -1.5 },
       { icon: '✉️', source: 'Email', content: 'Marcus — re: Thursday site visit', time: '11:32 AM', rotate: 1 },
@@ -70,6 +72,7 @@ const ARMS: ArmData[] = [
   },
   {
     id: 'business',
+    product: 'Valet',
     tangle: [
       { icon: '\u{1F4AC}', source: 'Text', content: 'Ray — can you quote the Fulton job?', time: '1:04 PM', rotate: -1.5 },
       { icon: '✉️', source: 'Email', content: 'Accounts payable — Invoice #2214 is 30 days out', time: '11:50 AM', rotate: 1 },
@@ -106,6 +109,7 @@ const ARMS: ArmData[] = [
   },
   {
     id: 'pivot',
+    product: 'Pivot',
     tangle: [
       { icon: '\u{1F4AC}', source: 'Text', content: 'Nora — did you hear back about the interview?', time: '2:15 PM', rotate: -1.5 },
       { icon: '✉️', source: 'Email', content: 'Course platform — Module 4 unlocks Friday', time: '12:05 PM', rotate: 1 },
@@ -142,6 +146,7 @@ const ARMS: ArmData[] = [
   },
   {
     id: 'studio',
+    product: 'Studio',
     tangle: [
       { icon: '\u{1F4CA}', source: 'Spreadsheet', content: 'Orders_FINAL_v7.xlsx — 3 people editing', time: '11:52 AM', rotate: -1.5 },
       { icon: '\u{1F4C4}', source: 'Paper', content: 'Job tickets in a clipboard by the door', time: '10:40 AM', rotate: 1 },
@@ -573,7 +578,7 @@ function ValetPhone({ armIndex, reduced, enhanced = false }: { armIndex: number;
         {/* App header */}
         <div className='flex items-center justify-between px-2 sm:px-4 py-1 sm:py-2 border-b border-[#1e3a5f]/50'>
           <span className='text-[0.42rem] sm:text-[0.6rem] lg:text-[0.75rem] text-[#a8d8f0]/50'>&#8249;</span>
-          <span className='text-[0.45rem] sm:text-[0.62rem] lg:text-[0.78rem] font-[700] tracking-[0.2em] text-[#a8d8f0]'>V A L E T</span>
+          <span className='text-[0.45rem] sm:text-[0.62rem] lg:text-[0.78rem] font-[700] tracking-[0.2em] text-[#a8d8f0]'>{ARMS[armIndex].product.split('').join(' ')}</span>
           <span className='text-[0.42rem] sm:text-[0.6rem] lg:text-[0.75rem] text-[#a8d8f0]/50'>&#8943;</span>
         </div>
 
@@ -989,7 +994,7 @@ export default function HeroV5({ armIndex, reduced = false }: { armIndex: number
         <div
           style={{
             position: 'absolute', left: 0, top: 0,
-            width: '18%', height: '100%', zIndex: 1,
+            width: '28%', height: '100%', zIndex: 1,
           }}
         >
           <PortraitColumnStack
@@ -1031,7 +1036,7 @@ export default function HeroV5({ armIndex, reduced = false }: { armIndex: number
         <div
           style={{
             position: 'absolute', right: 0, top: 0,
-            width: '19%', height: '100%', zIndex: 1,
+            width: '28%', height: '100%', zIndex: 1,
           }}
         >
           <PortraitColumnStack

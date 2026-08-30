@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import HeroV5, { ARM_SUBHEADS, ArmStack } from './HeroV5';
+import HeroV5, { ARM_SUBHEADS, ArmStack, ARMS } from './HeroV5';
 
 // ─── PILLAR DATA ───────────────────────────────────────────────────────────────
 
@@ -170,11 +170,8 @@ export default function HomePageClient() {
     };
   }, [reducedMotion, paused]);
 
-  // Valet is "active" for both arm 0 and arm 1 (Business has no dedicated nav item)
-  const activeNavId =
-    armIndex === 0 || armIndex === 1 ? 'valet' :
-    armIndex === 3 ? 'studio' :
-    'pivot';
+  // Business arm shares the Valet nav item; all others derive from product field
+  const activeNavId = ARMS[armIndex].product.toLowerCase();
 
   const itemStyle = (active: boolean) => ({
     color: active ? '#7c3aed' : 'rgba(168,216,240,0.38)',
