@@ -642,7 +642,6 @@ export default function HeroV5({ armIndex, reduced = false }: { armIndex: number
   useEffect(() => {
     const grid = gridRef.current;
     if (!grid) return;
-    // Measure after paint so layout is settled
     const raf = requestAnimationFrame(measure);
     const ro = new ResizeObserver(() => requestAnimationFrame(measure));
     ro.observe(grid);
@@ -656,165 +655,265 @@ export default function HeroV5({ armIndex, reduced = false }: { armIndex: number
 
   return (
     <div className='w-full overflow-x-hidden'>
-      {/* Three-column grid — NEVER stacks, always tangle | phone | domains */}
-      <div
-        ref={gridRef}
-        className='grid gap-4 sm:gap-6 lg:gap-8 items-start'
-        style={{ gridTemplateColumns: 'minmax(0, 1fr) auto minmax(0, 1fr)', position: 'relative', overflow: 'hidden' }}
-      >
 
-        {/* ── LEFT: The tangle ─────────────────────────────────────── */}
-        <div className='relative flex flex-col w-full min-w-0 overflow-hidden'>
-          {/* Annotation: top of column, arrow points down into the cards */}
-          <div className='mb-1.5 sm:mb-2 flex items-center gap-1 min-w-0 overflow-hidden'>
-            <svg width='12' height='16' viewBox='0 0 20 28' fill='none' aria-hidden='true' className='flex-shrink-0'>
+      {/* ══ DESKTOP ≥ 1024px: ribbon artwork + percentage-positioned columns ══
+          artwork is 1536×1024 (3:2). mix-blend-mode:screen maps opaque black
+          to nothing over the dark page; neon colours add additively.             */}
+      <div
+        className='hidden lg:block relative w-full'
+        style={{ aspectRatio: '1536 / 1024' }}
+      >
+        {/* Ribbon artwork — decorative, not LCP */}
+        <picture aria-hidden='true'>
+          <source type='image/avif' srcSet='/ribbons-layer.avif' />
+          <source type='image/webp' srcSet='/ribbons-layer.webp' />
+          <img
+            src='/ribbons-layer.png'
+            alt=''
+            decoding='async'
+            style={{
+              position: 'absolute', inset: 0,
+              width: '100%', height: '100%',
+              objectFit: 'cover',
+              mixBlendMode: 'screen',
+              pointerEvents: 'none',
+              zIndex: 0,
+            }}
+          />
+        </picture>
+
+        {/* Left column — tangle annotation + cards */}
+        <div
+          style={{
+            position: 'absolute', left: '1%', top: '4%',
+            width: '27%', height: '92%',
+            display: 'flex', flexDirection: 'column', justifyContent: 'center',
+            zIndex: 1,
+          }}
+        >
+          <div style={{ marginBottom: 8, display: 'flex', alignItems: 'center', gap: 4 }}>
+            <svg width='12' height='16' viewBox='0 0 20 28' fill='none' aria-hidden='true' style={{ flexShrink: 0 }}>
               <path d='M 10 2 C 10 10 10 16 10 22' stroke='rgba(168,216,240,0.4)' strokeWidth='1' fill='none' strokeLinecap='round' />
               <path d='M 6 18 L 10 24 L 14 18' stroke='rgba(168,216,240,0.4)' strokeWidth='1' fill='none' strokeLinecap='round' strokeLinejoin='round' />
             </svg>
             <span
-              className='text-[0.34rem] sm:text-[0.42rem] font-[600] text-[#a8d8f0]/50 italic'
-              style={{ textTransform: 'uppercase', fontFamily: 'Georgia, serif' }}
+              style={{
+                fontSize: '0.42rem', fontWeight: 600,
+                color: 'rgba(168,216,240,0.5)', fontStyle: 'italic',
+                textTransform: 'uppercase', fontFamily: 'Georgia, serif',
+              }}
             >
               The tangle goes in.
             </span>
           </div>
-
           <ArmStack
             armIndex={armIndex}
             reduced={reduced}
-            arms={ARMS.map((arm, armIdx) => (
-              <div className='flex flex-col gap-1 sm:gap-1.5 min-w-0 w-full'>
+            arms={ARMS.map((arm) => (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
                 {arm.tangle.map((card, i) => (
-                  <TangleCard
-                    key={i}
-                    {...card}
-                    tileColor={TANGLE_COLORS[i % TANGLE_COLORS.length]}
-                    tangleIndex={armIdx === 0 ? i : undefined}
-                  />
+                  <TangleCard key={i} {...card} tileColor={TANGLE_COLORS[i % TANGLE_COLORS.length]} />
                 ))}
               </div>
             ))}
           />
         </div>
 
-        {/* ── CENTER: Valet phone ─────────────────────────────────── */}
-        <div className='flex-shrink-0 flex justify-center'>
+        {/* Center — phone, centred in the dark gap between ribbon clusters */}
+        <div
+          style={{
+            position: 'absolute', left: '35%', top: '5%',
+            width: '30%', height: '90%',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            zIndex: 1,
+          }}
+        >
           <ValetPhone armIndex={armIndex} reduced={reduced} />
         </div>
 
-        {/* ── RIGHT: Domain / module cards ────────────────────────── */}
-        <div className='w-full min-w-0 overflow-hidden'>
-          {/* Annotation: sentence-case in DOM, uppercased via text-transform */}
-          <div className='mb-2 sm:mb-3 flex items-center gap-1 min-w-0 overflow-hidden'>
-            <svg width='18' height='10' viewBox='0 0 36 18' fill='none' aria-hidden='true' className='flex-shrink-0'>
+        {/* Right column — annotation + domain / module cards */}
+        <div
+          style={{
+            position: 'absolute', right: '1%', top: '4%',
+            width: '27%', height: '92%',
+            display: 'flex', flexDirection: 'column', justifyContent: 'center',
+            zIndex: 1,
+          }}
+        >
+          <div style={{ marginBottom: 8, display: 'flex', alignItems: 'center', gap: 4 }}>
+            <svg width='18' height='10' viewBox='0 0 36 18' fill='none' aria-hidden='true' style={{ flexShrink: 0 }}>
               <path d='M 32 9 C 24 9 14 4 4 9' stroke='rgba(168,216,240,0.4)' strokeWidth='1' fill='none' strokeLinecap='round' />
               <path d='M 8 6 L 4 9 L 8 12' stroke='rgba(168,216,240,0.4)' strokeWidth='1' fill='none' strokeLinecap='round' strokeLinejoin='round' />
             </svg>
             <span
-              className='text-[0.34rem] sm:text-[0.42rem] font-[600] text-[#a8d8f0]/50 italic leading-tight'
-              style={{ textTransform: 'uppercase', fontFamily: 'Georgia, serif' }}
+              style={{
+                fontSize: '0.42rem', fontWeight: 600,
+                color: 'rgba(168,216,240,0.5)', fontStyle: 'italic',
+                textTransform: 'uppercase', fontFamily: 'Georgia, serif',
+                lineHeight: 1.3,
+              }}
             >
               One clear screen comes back.
             </span>
           </div>
-
           <ArmStack
             armIndex={armIndex}
             reduced={reduced}
-            arms={ARMS.map((arm, armIdx) => (
-              <div className='flex flex-col gap-1 sm:gap-1.5 min-w-0 w-full'>
+            arms={ARMS.map((arm) => (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
                 {arm.rightType === 'modules' ? (
                   <>
                     {arm.right.map((item, i) => (
-                      <ModuleCard
-                        key={i}
-                        name={item.name}
-                        status={item.status}
-                        domainIndex={armIdx === 0 ? i : undefined}
-                      />
+                      <ModuleCard key={i} name={item.name} status={item.status} />
                     ))}
                     <Link
                       href='/receipts'
-                      className='mt-1 text-[0.34rem] sm:text-[0.44rem] text-[#7c3aed]/70 hover:text-[#7c3aed] font-[600] tracking-wide transition-colors text-center'
+                      style={{ marginTop: 4, fontSize: '0.44rem', color: 'rgba(124,58,237,0.7)', fontWeight: 600, letterSpacing: '0.05em', textAlign: 'center' }}
                     >
                       See the proof &#8594;
                     </Link>
                   </>
                 ) : (
                   arm.right.map((item, i) => (
-                    <DomainCard
-                      key={i}
-                      {...item}
-                      tileColor={DOMAIN_COLORS[i % DOMAIN_COLORS.length]}
-                      domainIndex={armIdx === 0 ? i : undefined}
-                    />
+                    <DomainCard key={i} {...item} tileColor={DOMAIN_COLORS[i % DOMAIN_COLORS.length]} />
                   ))
                 )}
               </div>
             ))}
           />
         </div>
-
-        {/* ── SVG CONNECTOR CURVES (absolutely positioned over grid) ── */}
-        {curves && (
-          <svg
-            aria-hidden='true'
-            style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              width: curves.w,
-              height: curves.h,
-              pointerEvents: 'none',
-              zIndex: 10,
-              overflow: 'visible',
-            }}
-            viewBox={`0 0 ${curves.w} ${curves.h}`}
-          >
-            <defs>
-              <filter id='hglow' x='-120%' y='-120%' width='340%' height='340%'>
-                <feGaussianBlur stdDeviation='5' result='blur' />
-              </filter>
-            </defs>
-
-            {/* Glow layer — luminous halo */}
-            {[...curves.leftCurves, ...curves.rightCurves].map((c, i) => (
-              <path
-                key={`g${i}`}
-                d={c.d}
-                fill='none'
-                stroke={c.color}
-                strokeWidth='14'
-                strokeOpacity='0.38'
-                filter='url(#hglow)'
-                strokeLinecap='round'
-              />
-            ))}
-
-            {/* Core layer — bright ribbon */}
-            {[...curves.leftCurves, ...curves.rightCurves].map((c, i) => (
-              <path
-                key={`c${i}`}
-                d={c.d}
-                fill='none'
-                stroke={c.color}
-                strokeWidth='2.2'
-                strokeOpacity='0.95'
-                strokeLinecap='round'
-              />
-            ))}
-
-            {/* Nodes at card connection points */}
-            {[...curves.leftNodes, ...curves.rightNodes].map((n, i) => (
-              <g key={`n${i}`}>
-                <circle cx={n.cx} cy={n.cy} r='4' fill={n.color} opacity='0.15' />
-                <circle cx={n.cx} cy={n.cy} r='1.8' fill={n.color} opacity='0.88' />
-              </g>
-            ))}
-          </svg>
-        )}
-
       </div>
+
+      {/* ══ MOBILE / TABLET < 1024px: three-column grid, SVG curves, unchanged ══ */}
+      <div className='lg:hidden'>
+        <div
+          ref={gridRef}
+          className='grid gap-4 sm:gap-6 items-start'
+          style={{ gridTemplateColumns: 'minmax(0, 1fr) auto minmax(0, 1fr)', position: 'relative', overflow: 'hidden' }}
+        >
+
+          {/* ── LEFT: The tangle ─────────────────────────────────────── */}
+          <div className='relative flex flex-col w-full min-w-0 overflow-hidden'>
+            <div className='mb-1.5 sm:mb-2 flex items-center gap-1 min-w-0 overflow-hidden'>
+              <svg width='12' height='16' viewBox='0 0 20 28' fill='none' aria-hidden='true' className='flex-shrink-0'>
+                <path d='M 10 2 C 10 10 10 16 10 22' stroke='rgba(168,216,240,0.4)' strokeWidth='1' fill='none' strokeLinecap='round' />
+                <path d='M 6 18 L 10 24 L 14 18' stroke='rgba(168,216,240,0.4)' strokeWidth='1' fill='none' strokeLinecap='round' strokeLinejoin='round' />
+              </svg>
+              <span
+                className='text-[0.34rem] sm:text-[0.42rem] font-[600] text-[#a8d8f0]/50 italic'
+                style={{ textTransform: 'uppercase', fontFamily: 'Georgia, serif' }}
+              >
+                The tangle goes in.
+              </span>
+            </div>
+            <ArmStack
+              armIndex={armIndex}
+              reduced={reduced}
+              arms={ARMS.map((arm, armIdx) => (
+                <div className='flex flex-col gap-1 sm:gap-1.5 min-w-0 w-full'>
+                  {arm.tangle.map((card, i) => (
+                    <TangleCard
+                      key={i}
+                      {...card}
+                      tileColor={TANGLE_COLORS[i % TANGLE_COLORS.length]}
+                      tangleIndex={armIdx === 0 ? i : undefined}
+                    />
+                  ))}
+                </div>
+              ))}
+            />
+          </div>
+
+          {/* ── CENTER: Valet phone ─────────────────────────────────── */}
+          <div className='flex-shrink-0 flex justify-center'>
+            <ValetPhone armIndex={armIndex} reduced={reduced} />
+          </div>
+
+          {/* ── RIGHT: Domain / module cards ────────────────────────── */}
+          <div className='w-full min-w-0 overflow-hidden'>
+            <div className='mb-2 sm:mb-3 flex items-center gap-1 min-w-0 overflow-hidden'>
+              <svg width='18' height='10' viewBox='0 0 36 18' fill='none' aria-hidden='true' className='flex-shrink-0'>
+                <path d='M 32 9 C 24 9 14 4 4 9' stroke='rgba(168,216,240,0.4)' strokeWidth='1' fill='none' strokeLinecap='round' />
+                <path d='M 8 6 L 4 9 L 8 12' stroke='rgba(168,216,240,0.4)' strokeWidth='1' fill='none' strokeLinecap='round' strokeLinejoin='round' />
+              </svg>
+              <span
+                className='text-[0.34rem] sm:text-[0.42rem] font-[600] text-[#a8d8f0]/50 italic leading-tight'
+                style={{ textTransform: 'uppercase', fontFamily: 'Georgia, serif' }}
+              >
+                One clear screen comes back.
+              </span>
+            </div>
+            <ArmStack
+              armIndex={armIndex}
+              reduced={reduced}
+              arms={ARMS.map((arm, armIdx) => (
+                <div className='flex flex-col gap-1 sm:gap-1.5 min-w-0 w-full'>
+                  {arm.rightType === 'modules' ? (
+                    <>
+                      {arm.right.map((item, i) => (
+                        <ModuleCard
+                          key={i}
+                          name={item.name}
+                          status={item.status}
+                          domainIndex={armIdx === 0 ? i : undefined}
+                        />
+                      ))}
+                      <Link
+                        href='/receipts'
+                        className='mt-1 text-[0.34rem] sm:text-[0.44rem] text-[#7c3aed]/70 hover:text-[#7c3aed] font-[600] tracking-wide transition-colors text-center'
+                      >
+                        See the proof &#8594;
+                      </Link>
+                    </>
+                  ) : (
+                    arm.right.map((item, i) => (
+                      <DomainCard
+                        key={i}
+                        {...item}
+                        tileColor={DOMAIN_COLORS[i % DOMAIN_COLORS.length]}
+                        domainIndex={armIdx === 0 ? i : undefined}
+                      />
+                    ))
+                  )}
+                </div>
+              ))}
+            />
+          </div>
+
+          {/* ── SVG CONNECTOR CURVES (mobile only, absolutely positioned over grid) ── */}
+          {curves && (
+            <svg
+              aria-hidden='true'
+              style={{
+                position: 'absolute', top: 0, left: 0,
+                width: curves.w, height: curves.h,
+                pointerEvents: 'none', zIndex: 10, overflow: 'visible',
+              }}
+              viewBox={`0 0 ${curves.w} ${curves.h}`}
+            >
+              <defs>
+                <filter id='hglow' x='-120%' y='-120%' width='340%' height='340%'>
+                  <feGaussianBlur stdDeviation='5' result='blur' />
+                </filter>
+              </defs>
+              {[...curves.leftCurves, ...curves.rightCurves].map((c, i) => (
+                <path key={`g${i}`} d={c.d} fill='none' stroke={c.color} strokeWidth='14' strokeOpacity='0.38' filter='url(#hglow)' strokeLinecap='round' />
+              ))}
+              {[...curves.leftCurves, ...curves.rightCurves].map((c, i) => (
+                <path key={`c${i}`} d={c.d} fill='none' stroke={c.color} strokeWidth='2.2' strokeOpacity='0.95' strokeLinecap='round' />
+              ))}
+              {[...curves.leftNodes, ...curves.rightNodes].map((n, i) => (
+                <g key={`n${i}`}>
+                  <circle cx={n.cx} cy={n.cy} r='4' fill={n.color} opacity='0.15' />
+                  <circle cx={n.cx} cy={n.cy} r='1.8' fill={n.color} opacity='0.88' />
+                </g>
+              ))}
+            </svg>
+          )}
+
+        </div>
+      </div>
+
     </div>
   );
 }
