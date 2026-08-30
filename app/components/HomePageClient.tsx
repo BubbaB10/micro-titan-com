@@ -2,7 +2,8 @@
 
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import HeroV5, { ARM_SUBHEADS, ArmStack, ARMS } from './HeroV5';
+import HeroV5, { ARM_SUBHEADS, ArmStack } from './HeroV5';
+import Footer from './Footer';
 
 // ─── PILLAR DATA ───────────────────────────────────────────────────────────────
 
@@ -28,54 +29,6 @@ const PILLARS = [
     cta: null,
   },
 ];
-
-// ─── ICON SVGs ─────────────────────────────────────────────────────────────────
-
-function PersonIcon({ size = 22 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='1.8' strokeLinecap='round' strokeLinejoin='round' aria-hidden='true'>
-      <circle cx='12' cy='8' r='4' />
-      <path d='M4 20c0-4 3.6-7 8-7s8 3 8 7' />
-    </svg>
-  );
-}
-
-function CodeIcon({ size = 22 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='1.8' strokeLinecap='round' strokeLinejoin='round' aria-hidden='true'>
-      <polyline points='16 18 22 12 16 6' />
-      <polyline points='8 6 2 12 8 18' />
-    </svg>
-  );
-}
-
-function CompassIcon({ size = 22 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='1.8' strokeLinecap='round' strokeLinejoin='round' aria-hidden='true'>
-      <circle cx='12' cy='12' r='10' />
-      <polygon points='16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76' />
-    </svg>
-  );
-}
-
-function InfoIcon({ size = 22 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='1.8' strokeLinecap='round' strokeLinejoin='round' aria-hidden='true'>
-      <circle cx='12' cy='12' r='10' />
-      <line x1='12' y1='16' x2='12' y2='12' />
-      <line x1='12' y1='8' x2='12.01' y2='8' />
-    </svg>
-  );
-}
-
-function TagIcon({ size = 22 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='1.8' strokeLinecap='round' strokeLinejoin='round' aria-hidden='true'>
-      <path d='M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z' />
-      <line x1='7' y1='7' x2='7.01' y2='7' />
-    </svg>
-  );
-}
 
 // ─── FEATURES (4-up block matching comp) ─────────────────────────────────────
 
@@ -122,24 +75,6 @@ const FEATURES = [
   { title: 'One Clear Screen', body: 'Get back one system that proves itself.', Icon: ScreenIcon },
 ];
 
-// ─── NAV CONFIG ───────────────────────────────────────────────────────────────
-
-type NavItem = {
-  id: string;
-  label: string;
-  Icon: React.FC<{ size?: number }>;
-  href: string | null;
-  armIndex: number | null;
-};
-
-const NAV_ITEMS: NavItem[] = [
-  { id: 'valet',   label: 'Valet',   Icon: PersonIcon,  href: null,       armIndex: 0 },
-  { id: 'studio',  label: 'Studio',  Icon: CodeIcon,    href: null,       armIndex: 3 },
-  { id: 'pivot',   label: 'Pivot',   Icon: CompassIcon, href: null,       armIndex: 2 },
-  { id: 'about',   label: 'About',   Icon: InfoIcon,    href: '/about',   armIndex: null },
-  { id: 'pricing', label: 'Pricing', Icon: TagIcon,     href: '/pricing', armIndex: null },
-];
-
 // ─── HOME PAGE CLIENT ─────────────────────────────────────────────────────────
 
 // Arm dwell. ~730ms of each cycle is crossfade (ArmStack: 380ms swap delay + 0.35s fade),
@@ -175,29 +110,6 @@ export default function HomePageClient() {
       if (timerRef.current) clearInterval(timerRef.current);
     };
   }, [reducedMotion, hoverPaused, userSelected]);
-
-  // Business arm shares the Valet nav item; all others derive from product field
-  const activeNavId = ARMS[armIndex].product.toLowerCase();
-
-  const itemStyle = (active: boolean) => ({
-    color: active ? '#7c3aed' : 'rgba(168,216,240,0.38)',
-    background: 'transparent',
-    border: 'none',
-    cursor: 'pointer',
-    textDecoration: 'none',
-  } as const);
-
-  const innerContent = (item: NavItem, active: boolean) => (
-    <div className='flex flex-col items-center gap-0.5 py-2.5 sm:py-3 px-2'>
-      <item.Icon size={20} />
-      <span
-        className='text-[0.5rem] sm:text-[0.6rem] font-[600] tracking-wide uppercase'
-        style={{ fontFamily: 'var(--font-mulish)' }}
-      >
-        {item.label}
-      </span>
-    </div>
-  );
 
   return (
     <>
@@ -394,62 +306,7 @@ export default function HomePageClient() {
         </div>
       </section>
 
-      {/* ── ICON NAV BAR (replaces Footer on homepage) ──────────────────── */}
-      <nav
-        aria-label='Main navigation'
-        style={{
-          background: 'rgba(6,11,24,0.94)',
-          backdropFilter: 'blur(12px)',
-          WebkitBackdropFilter: 'blur(12px)',
-          borderTop: '1px solid rgba(30,58,95,0.5)',
-        }}
-      >
-        <div className='max-w-sm mx-auto'>
-          <div className='flex items-stretch justify-around'>
-            {NAV_ITEMS.map(item => {
-              const active = item.id === activeNavId;
-              if (item.armIndex !== null) {
-                return (
-                  <button
-                    key={item.id}
-                    onClick={() => { setArmIndex(item.armIndex as number); setUserSelected(true); }}
-                    aria-label={item.label}
-                    aria-current={active ? 'page' : undefined}
-                    className='flex-1 flex justify-center transition-colors duration-200'
-                    style={itemStyle(active)}
-                  >
-                    {innerContent(item, active)}
-                  </button>
-                );
-              }
-              return (
-                <Link
-                  key={item.id}
-                  href={item.href as string}
-                  className='flex-1 flex justify-center transition-colors duration-200'
-                  style={itemStyle(false)}
-                  aria-label={item.label}
-                >
-                  {innerContent(item, false)}
-                </Link>
-              );
-            })}
-          </div>
-
-          {/* Legal line */}
-          <div
-            className='flex items-center justify-center gap-3 py-1.5 border-t text-[0.42rem] sm:text-[0.52rem] text-[#a8d8f0]/22'
-            style={{
-              borderColor: 'rgba(30,58,95,0.35)',
-              fontFamily: 'var(--font-mulish)',
-            }}
-          >
-            <span>© 2026 Micro Titan LLC</span>
-            <Link href='/terms' className='hover:text-[#a8d8f0]/50 transition-colors'>Terms</Link>
-            <Link href='/privacy' className='hover:text-[#a8d8f0]/50 transition-colors'>Privacy</Link>
-          </div>
-        </div>
-      </nav>
+      <Footer />
     </>
   );
 }
