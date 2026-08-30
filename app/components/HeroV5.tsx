@@ -533,7 +533,7 @@ function PhoneNeedsYou({ arm }: { arm: ArmData }) {
 
 // ─── VALET PHONE ──────────────────────────────────────────────────────────────
 
-function ValetPhone({ armIndex, reduced }: { armIndex: number; reduced: boolean }) {
+function ValetPhone({ armIndex, reduced, enhanced = false }: { armIndex: number; reduced: boolean; enhanced?: boolean }) {
   return (
     <div style={{ position: 'relative' }}>
       {/* Glow pool beneath phone — soft violet ellipse, device sits in light */}
@@ -541,12 +541,14 @@ function ValetPhone({ armIndex, reduced }: { armIndex: number; reduced: boolean 
         aria-hidden='true'
         style={{
           position: 'absolute',
-          bottom: -20,
+          bottom: enhanced ? -32 : -20,
           left: '50%',
           transform: 'translateX(-50%)',
-          width: '150%',
-          height: 72,
-          background: 'radial-gradient(ellipse 80% 100% at 50% 100%, rgba(109,40,217,0.38) 0%, rgba(109,40,217,0.12) 45%, transparent 75%)',
+          width: enhanced ? '200%' : '150%',
+          height: enhanced ? 100 : 72,
+          background: enhanced
+            ? 'radial-gradient(ellipse 80% 100% at 50% 100%, rgba(109,40,217,0.52) 0%, rgba(109,40,217,0.2) 45%, transparent 75%)'
+            : 'radial-gradient(ellipse 80% 100% at 50% 100%, rgba(109,40,217,0.38) 0%, rgba(109,40,217,0.12) 45%, transparent 75%)',
           pointerEvents: 'none',
           zIndex: 0,
         }}
@@ -559,8 +561,10 @@ function ValetPhone({ armIndex, reduced }: { armIndex: number; reduced: boolean 
           background: '#060b18',
           borderRadius: 20,
           fontFamily: 'var(--font-mulish)',
-          border: '1.5px solid rgba(109,40,217,0.55)',
-          boxShadow: '0 0 0 1px rgba(109,40,217,0.2), 0 0 32px rgba(109,40,217,0.22), 0 0 64px rgba(109,40,217,0.1), 0 8px 24px rgba(0,0,0,0.5)',
+          border: enhanced ? '1.5px solid rgba(109,40,217,0.75)' : '1.5px solid rgba(109,40,217,0.55)',
+          boxShadow: enhanced
+            ? '0 0 0 1px rgba(109,40,217,0.28), 0 0 0 3px rgba(109,40,217,0.08), 0 0 48px rgba(109,40,217,0.38), 0 0 96px rgba(109,40,217,0.18), 0 12px 36px rgba(0,0,0,0.65), inset 0 1px 0 rgba(109,40,217,0.2)'
+            : '0 0 0 1px rgba(109,40,217,0.2), 0 0 32px rgba(109,40,217,0.22), 0 0 64px rgba(109,40,217,0.1), 0 8px 24px rgba(0,0,0,0.5)',
           overflow: 'hidden',
         }}
       >
@@ -751,7 +755,7 @@ export default function HeroV5({ armIndex, reduced = false }: { armIndex: number
         <div
           style={{
             position: 'absolute', left: '1%', top: '4%',
-            width: '27%', height: '92%',
+            width: '20%', height: '92%',
             display: 'flex', flexDirection: 'column', justifyContent: 'center',
             zIndex: 1,
           }}
@@ -787,20 +791,20 @@ export default function HeroV5({ armIndex, reduced = false }: { armIndex: number
         {/* Center — phone, centred in the dark gap between ribbon clusters */}
         <div
           style={{
-            position: 'absolute', left: '35%', top: '5%',
-            width: '30%', height: '90%',
+            position: 'absolute', left: '34%', top: '5%',
+            width: '32%', height: '90%',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             zIndex: 1,
           }}
         >
-          <ValetPhone armIndex={armIndex} reduced={reduced} />
+          <ValetPhone armIndex={armIndex} reduced={reduced} enhanced={true} />
         </div>
 
         {/* Right column — annotation + domain / module cards */}
         <div
           style={{
             position: 'absolute', right: '1%', top: '4%',
-            width: '27%', height: '92%',
+            width: '20%', height: '92%',
             display: 'flex', flexDirection: 'column', justifyContent: 'center',
             zIndex: 1,
           }}
