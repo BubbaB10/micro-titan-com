@@ -692,6 +692,15 @@ function ModuleCard({ name, status, domainIndex }: Omit<RightItem, 'icon'> & { d
 export default function HeroV5({ armIndex, reduced = false }: { armIndex: number; reduced?: boolean }) {
   const gridRef = useRef<HTMLDivElement>(null);
   const [curves, setCurves] = useState<CurveSet | null>(null);
+  const [motionReduced, setMotionReduced] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    setMotionReduced(mq.matches);
+    const handler = (e: MediaQueryListEvent) => setMotionReduced(e.matches);
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, []);
+  const effectiveReduced = reduced || motionReduced;
 
   const measure = useCallback(() => {
     const grid = gridRef.current;
@@ -729,6 +738,7 @@ export default function HeroV5({ armIndex, reduced = false }: { armIndex: number
           artwork is 1536×1024 (3:2). mix-blend-mode:screen maps opaque black
           to nothing over the dark page; neon colours add additively.             */}
       <div
+        ref={gridRef}
         className='hidden lg:block relative w-full'
         style={{ aspectRatio: '1536 / 1024' }}
       >
@@ -777,11 +787,11 @@ export default function HeroV5({ armIndex, reduced = false }: { armIndex: number
           </div>
           <ArmStack
             armIndex={armIndex}
-            reduced={reduced}
-            arms={ARMS.map((arm) => (
+            reduced={effectiveReduced}
+            arms={ARMS.map((arm, armIdx) => (
               <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
                 {arm.tangle.map((card, i) => (
-                  <TangleCard key={i} {...card} tileColor={TANGLE_COLORS[i % TANGLE_COLORS.length]} />
+                  <TangleCard key={i} {...card} tileColor={TANGLE_COLORS[i % TANGLE_COLORS.length]} tangleIndex={armIdx === 0 ? i : undefined} />
                 ))}
               </div>
             ))}
@@ -797,7 +807,7 @@ export default function HeroV5({ armIndex, reduced = false }: { armIndex: number
             zIndex: 1,
           }}
         >
-          <ValetPhone armIndex={armIndex} reduced={reduced} enhanced={true} />
+          <ValetPhone armIndex={armIndex} reduced={effectiveReduced} enhanced={true} />
         </div>
 
         {/* Right column — annotation + domain / module cards */}
@@ -827,13 +837,13 @@ export default function HeroV5({ armIndex, reduced = false }: { armIndex: number
           </div>
           <ArmStack
             armIndex={armIndex}
-            reduced={reduced}
-            arms={ARMS.map((arm) => (
+            reduced={effectiveReduced}
+            arms={ARMS.map((arm, armIdx) => (
               <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
                 {arm.rightType === 'modules' ? (
                   <>
                     {arm.right.map((item, i) => (
-                      <ModuleCard key={i} name={item.name} status={item.status} />
+                      <ModuleCard key={i} name={item.name} status={item.status} domainIndex={armIdx === 0 ? i : undefined} />
                     ))}
                     <Link
                       href='/receipts'
@@ -844,13 +854,62 @@ export default function HeroV5({ armIndex, reduced = false }: { armIndex: number
                   </>
                 ) : (
                   arm.right.map((item, i) => (
-                    <DomainCard key={i} {...item} tileColor={DOMAIN_COLORS[i % DOMAIN_COLORS.length]} />
+                    <DomainCard key={i} {...item} tileColor={DOMAIN_COLORS[i % DOMAIN_COLORS.length]} domainIndex={armIdx === 0 ? i : undefined} />
                   ))
                 )}
               </div>
             ))}
           />
         </div>
+
+        {/* DOM-measured connector curves — braiding left, orderly right, glow via SVG filter */}
+        {curves && (
+          <svg
+            aria-hidden='true'
+            style={{
+              position: 'absolute', left: 0, top: 0,
+              width: '100%', height: '100%',
+              pointerEvents: 'none',
+              zIndex: 2,
+            }}
+            viewBox={`0 0 ${curves.w} ${curves.h}`}
+            preserveAspectRatio='xMidYMid meet'
+          >
+            <defs>
+              <filter id='hero-curve-glow' x='-40%' y='-40%' width='180%' height='180%' colorInterpolationFilters='sRGB'>
+                <feGaussianBlur in='SourceGraphic' stdDeviation='4' result='blur' />
+              </filter>
+            </defs>
+            {/* Glow layer */}
+            <g filter='url(#hero-curve-glow)'>
+              {curves.leftCurves.map((c, i) => (
+                <path key={`lg${i}`} d={c.d} fill='none' stroke={c.color} strokeWidth='6' strokeOpacity='0.38' strokeLinecap='round' />
+              ))}
+              {curves.rightCurves.map((c, i) => (
+                <path key={`rg${i}`} d={c.d} fill='none' stroke={c.color} strokeWidth='6' strokeOpacity='0.38' strokeLinecap='round' />
+              ))}
+              {curves.leftNodes.map((n, i) => (
+                <circle key={`lgn${i}`} cx={n.cx} cy={n.cy} r='6' fill={n.color} fillOpacity='0.45' />
+              ))}
+              {curves.rightNodes.map((n, i) => (
+                <circle key={`rgn${i}`} cx={n.cx} cy={n.cy} r='6' fill={n.color} fillOpacity='0.45' />
+              ))}
+            </g>
+            {/* Core layer — bright thin strokes */}
+            {curves.leftCurves.map((c, i) => (
+              <path key={`lc${i}`} d={c.d} fill='none' stroke={c.color} strokeWidth='0.9' strokeOpacity='0.82' strokeLinecap='round' />
+            ))}
+            {curves.rightCurves.map((c, i) => (
+              <path key={`rc${i}`} d={c.d} fill='none' stroke={c.color} strokeWidth='0.9' strokeOpacity='0.82' strokeLinecap='round' />
+            ))}
+            {curves.leftNodes.map((n, i) => (
+              <circle key={`lcn${i}`} cx={n.cx} cy={n.cy} r='2.5' fill={n.color} fillOpacity='0.88' />
+            ))}
+            {curves.rightNodes.map((n, i) => (
+              <circle key={`rcn${i}`} cx={n.cx} cy={n.cy} r='2.5' fill={n.color} fillOpacity='0.88' />
+            ))}
+          </svg>
+        )}
       </div>
 
       {/* ══ MOBILE / TABLET < 1024px: portrait ribbon artwork ══
@@ -934,7 +993,7 @@ export default function HeroV5({ armIndex, reduced = false }: { armIndex: number
         >
           <PortraitColumnStack
             armIndex={armIndex}
-            reduced={reduced}
+            reduced={effectiveReduced}
             arms={ARMS.map((arm) => (
               <div style={{ position: 'relative', width: '100%', height: '100%' }}>
                 {arm.tangle.map((card, i) => (
@@ -964,7 +1023,7 @@ export default function HeroV5({ armIndex, reduced = false }: { armIndex: number
             zIndex: 1,
           }}
         >
-          <ValetPhone armIndex={armIndex} reduced={reduced} />
+          <ValetPhone armIndex={armIndex} reduced={effectiveReduced} />
         </div>
 
         {/* Right column — 5 domain/module cards at strand node positions */}
@@ -976,7 +1035,7 @@ export default function HeroV5({ armIndex, reduced = false }: { armIndex: number
         >
           <PortraitColumnStack
             armIndex={armIndex}
-            reduced={reduced}
+            reduced={effectiveReduced}
             arms={ARMS.map((arm) => (
               <div style={{ position: 'relative', width: '100%', height: '100%' }}>
                 {arm.rightType === 'modules' ? (
