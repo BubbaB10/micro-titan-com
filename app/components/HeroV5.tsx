@@ -925,7 +925,7 @@ export default function HeroV5({ armIndex, reduced = false }: { armIndex: number
         <div
           style={{
             position: 'absolute', left: 0, top: 0,
-            width: '29%', height: '100%', zIndex: 1,
+            width: '18%', height: '100%', zIndex: 1,
           }}
         >
           <PortraitColumnStack
@@ -954,7 +954,7 @@ export default function HeroV5({ armIndex, reduced = false }: { armIndex: number
         {/* Center — phone over the vertical black band */}
         <div
           style={{
-            position: 'absolute', left: '31%', top: '10%',
+            position: 'absolute', left: '30.5%', top: '10%',
             width: '38%', height: '80%',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             zIndex: 1,
@@ -967,7 +967,7 @@ export default function HeroV5({ armIndex, reduced = false }: { armIndex: number
         <div
           style={{
             position: 'absolute', right: 0, top: 0,
-            width: '29%', height: '100%', zIndex: 1,
+            width: '19%', height: '100%', zIndex: 1,
           }}
         >
           <PortraitColumnStack
