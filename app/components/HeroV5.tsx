@@ -402,41 +402,42 @@ function TangleCard({
   return (
     <div
       {...(tangleIndex !== undefined ? { 'data-tangle': String(tangleIndex) } : {})}
-      className='relative bg-[#0c1c36] rounded-lg shadow-md shadow-black/50 flex items-stretch overflow-hidden'
+      className='relative bg-[#0c1c36] rounded-lg shadow-md shadow-black/50 overflow-hidden'
       style={{
         transform: `rotate(${rotate}deg)`,
         border: '1px solid rgba(255,255,255,0.07)',
         borderTop: '1px solid rgba(255,255,255,0.1)',
       }}
     >
-      {/* Left colored tile — holds the icon; scales with viewport via clamp */}
-      <div
-        aria-hidden='true'
-        className='flex-shrink-0 flex items-center justify-center'
-        style={{
-          width: 'clamp(1.75rem, 3.5vw, 2.8rem)',
-          minWidth: 'clamp(1.75rem, 3.5vw, 2.8rem)',
-          background: `linear-gradient(160deg, ${tileColor}30 0%, ${tileColor}18 100%)`,
-          borderRight: `1px solid ${tileColor}28`,
-        }}
-      >
-        <span className='text-[0.65rem] lg:text-[1.1rem]' style={{ lineHeight: 1 }}>{icon}</span>
-      </div>
-
-      {/* Content: source label / content text / time */}
-      <div className='flex-1 min-w-0 py-[3px] lg:py-[5px] px-1 lg:px-2'>
-        <div className='flex items-baseline justify-between gap-0.5 mb-[1px]'>
-          <span className='font-[700] uppercase tracking-widest text-[#a8d8f0]/40 truncate text-[0.3rem] lg:text-[0.52rem]'>
-            {source}
-          </span>
-          <span className='text-[#a8d8f0]/30 flex-shrink-0 ml-0.5 text-[0.28rem] lg:text-[0.48rem]'>
-            {time}
-          </span>
+      <div className='flex items-start gap-[3px] lg:gap-[6px] p-[3px] lg:p-[5px]'>
+        {/* Small flat icon badge — top-left inset, reclaims tile width */}
+        <div
+          aria-hidden='true'
+          className='flex-shrink-0 flex items-center justify-center rounded-[2px] lg:rounded-[3px]'
+          style={{
+            width: 'clamp(0.7rem, 2vw, 1.25rem)',
+            height: 'clamp(0.7rem, 2vw, 1.25rem)',
+            background: `linear-gradient(135deg, ${tileColor}28 0%, ${tileColor}14 100%)`,
+            border: `1px solid ${tileColor}24`,
+          }}
+        >
+          <span className='text-[0.42rem] lg:text-[0.72rem]' style={{ lineHeight: 1 }}>{icon}</span>
         </div>
-        {/* No line-clamp — content wraps naturally (mobile-first) */}
-        <p className='text-[#ccdff0] leading-snug break-words text-[0.4rem] lg:text-[0.7rem]'>
-          {content}
-        </p>
+
+        {/* Content: source label / content text / time */}
+        <div className='flex-1 min-w-0'>
+          <div className='flex items-baseline justify-between gap-0.5 mb-[1px]'>
+            <span className='font-[700] uppercase tracking-widest text-[#a8d8f0]/40 truncate text-[0.3rem] lg:text-[0.52rem]'>
+              {source}
+            </span>
+            <span className='text-[#a8d8f0]/30 flex-shrink-0 text-[0.28rem] lg:text-[0.48rem]'>
+              {time}
+            </span>
+          </div>
+          <p className='text-[#ccdff0] leading-snug break-words text-[0.4rem] lg:text-[0.7rem]'>
+            {content}
+          </p>
+        </div>
       </div>
     </div>
   );
@@ -637,7 +638,11 @@ function DomainCard({
     <div
       {...(domainIndex !== undefined ? { 'data-domain': String(domainIndex) } : {})}
       className='bg-[#0c1c36] rounded-lg flex items-stretch overflow-hidden shadow-sm shadow-black/40'
-      style={{ border: '1px solid rgba(255,255,255,0.07)', borderTop: '1px solid rgba(255,255,255,0.1)' }}
+      style={{
+        border: '1px solid rgba(34,197,94,0.18)',
+        borderTop: '1px solid rgba(255,255,255,0.08)',
+        boxShadow: '0 0 0 1px rgba(34,197,94,0.07), 0 0 10px rgba(34,197,94,0.13), 0 0 22px rgba(34,197,94,0.05)',
+      }}
     >
       {/* Left colored tile; scales with viewport via clamp */}
       <div
@@ -1035,8 +1040,8 @@ export default function HeroV5({ armIndex, reduced = false }: { armIndex: number
         {/* Right column — 5 domain/module cards at strand node positions */}
         <div
           style={{
-            position: 'absolute', right: 0, top: 0,
-            width: '28%', height: '100%', zIndex: 1,
+            position: 'absolute', left: '70%', top: 0,
+            width: '26%', height: '100%', zIndex: 1,
           }}
         >
           <PortraitColumnStack
