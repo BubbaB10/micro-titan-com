@@ -328,7 +328,7 @@ function TangleCard({
           </span>
         </div>
         {/* No line-clamp — content wraps naturally (mobile-first) */}
-        <p className='text-[#ccdff0] leading-snug' style={{ fontSize: '0.4rem' }}>
+        <p className='text-[#ccdff0] leading-snug break-words' style={{ fontSize: '0.4rem' }}>
           {content}
         </p>
       </div>
@@ -616,20 +616,20 @@ export default function HeroV5({ armIndex }: { armIndex: number }) {
   }, [measure]);
 
   return (
-    <div className='w-full'>
+    <div className='w-full overflow-x-hidden'>
       {/* Three-column grid — NEVER stacks, always tangle | phone | domains */}
       <div
         ref={gridRef}
         className='grid gap-1 sm:gap-2 lg:gap-3 items-start'
-        style={{ gridTemplateColumns: '1fr auto 1fr', position: 'relative' }}
+        style={{ gridTemplateColumns: 'minmax(0, 1fr) auto minmax(0, 1fr)', position: 'relative', overflow: 'hidden' }}
       >
 
         {/* ── LEFT: The tangle ─────────────────────────────────────── */}
-        <div className='relative flex flex-col w-full min-w-0'>
+        <div className='relative flex flex-col w-full min-w-0 overflow-hidden'>
           <ArmStack
             armIndex={armIndex}
             arms={ARMS.map((arm, armIdx) => (
-              <div className='flex flex-col gap-1 sm:gap-1.5'>
+              <div className='flex flex-col gap-1 sm:gap-1.5 min-w-0 w-full'>
                 {arm.tangle.map((card, i) => (
                   <TangleCard
                     key={i}
@@ -643,13 +643,13 @@ export default function HeroV5({ armIndex }: { armIndex: number }) {
           />
 
           {/* Annotation: sentence-case in DOM, uppercased via text-transform */}
-          <div className='mt-2 sm:mt-3 flex items-center gap-1.5 justify-start'>
-            <svg width='24' height='12' viewBox='0 0 36 18' fill='none' aria-hidden='true' className='flex-shrink-0'>
+          <div className='mt-2 sm:mt-3 flex items-center gap-1 min-w-0 overflow-hidden'>
+            <svg width='18' height='10' viewBox='0 0 36 18' fill='none' aria-hidden='true' className='flex-shrink-0'>
               <path d='M 4 9 C 12 9 22 14 32 9' stroke='rgba(168,216,240,0.4)' strokeWidth='1' fill='none' strokeLinecap='round' />
               <path d='M 28 6 L 32 9 L 28 12' stroke='rgba(168,216,240,0.4)' strokeWidth='1' fill='none' strokeLinecap='round' strokeLinejoin='round' />
             </svg>
             <span
-              className='text-[0.38rem] sm:text-[0.48rem] font-[700] tracking-widest text-[#a8d8f0]/55 italic'
+              className='text-[0.34rem] sm:text-[0.42rem] font-[600] text-[#a8d8f0]/50 italic truncate'
               style={{ textTransform: 'uppercase', fontFamily: 'Georgia, serif' }}
             >
               The tangle goes in.
@@ -663,15 +663,15 @@ export default function HeroV5({ armIndex }: { armIndex: number }) {
         </div>
 
         {/* ── RIGHT: Domain / module cards ────────────────────────── */}
-        <div className='w-full min-w-0'>
+        <div className='w-full min-w-0 overflow-hidden'>
           {/* Annotation: sentence-case in DOM, uppercased via text-transform */}
-          <div className='mb-2 sm:mb-3 flex items-center gap-1.5 justify-start'>
-            <svg width='24' height='12' viewBox='0 0 36 18' fill='none' aria-hidden='true' className='flex-shrink-0'>
+          <div className='mb-2 sm:mb-3 flex items-center gap-1 min-w-0 overflow-hidden'>
+            <svg width='18' height='10' viewBox='0 0 36 18' fill='none' aria-hidden='true' className='flex-shrink-0'>
               <path d='M 32 9 C 24 9 14 4 4 9' stroke='rgba(168,216,240,0.4)' strokeWidth='1' fill='none' strokeLinecap='round' />
               <path d='M 8 6 L 4 9 L 8 12' stroke='rgba(168,216,240,0.4)' strokeWidth='1' fill='none' strokeLinecap='round' strokeLinejoin='round' />
             </svg>
             <span
-              className='text-[0.38rem] sm:text-[0.48rem] font-[700] tracking-widest text-[#a8d8f0]/55 italic'
+              className='text-[0.34rem] sm:text-[0.42rem] font-[600] text-[#a8d8f0]/50 italic truncate'
               style={{ textTransform: 'uppercase', fontFamily: 'Georgia, serif' }}
             >
               One clear screen comes back.
@@ -681,7 +681,7 @@ export default function HeroV5({ armIndex }: { armIndex: number }) {
           <ArmStack
             armIndex={armIndex}
             arms={ARMS.map((arm, armIdx) => (
-              <div className='flex flex-col gap-1 sm:gap-1.5'>
+              <div className='flex flex-col gap-1 sm:gap-1.5 min-w-0 w-full'>
                 {arm.rightType === 'modules' ? (
                   <>
                     {arm.right.map((item, i) => (
