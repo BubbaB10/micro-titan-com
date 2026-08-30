@@ -62,7 +62,7 @@ export default function BottomTabBar() {
 
   return (
     <nav
-      className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-[#0a1628]/97 border-t border-[rgba(168,216,240,0.12)] backdrop-blur-md"
+      className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-black/97 border-t border-[rgba(168,216,240,0.12)] backdrop-blur-md"
       style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}
       aria-label="Primary navigation"
     >
