@@ -142,6 +142,10 @@ const NAV_ITEMS: NavItem[] = [
 
 // ─── HOME PAGE CLIENT ─────────────────────────────────────────────────────────
 
+// Arm dwell. ~730ms of each cycle is crossfade (ArmStack: 380ms swap delay + 0.35s fade),
+// so the readable hold is DWELL_MS minus that. 5000 gave only ~4.3s and was too fast to read.
+const ARM_DWELL_MS = 9000;
+
 export default function HomePageClient() {
   const [armIndex, setArmIndex] = useState(0);
   const [paused, setPaused] = useState(false);
@@ -164,7 +168,7 @@ export default function HomePageClient() {
     }
     timerRef.current = setInterval(() => {
       setArmIndex(prev => (prev + 1) % 4);
-    }, 5000);
+    }, ARM_DWELL_MS);
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
     };
