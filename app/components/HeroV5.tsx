@@ -1178,7 +1178,13 @@ export default function HeroV5({ armIndex, reduced = false }: { armIndex: number
           ref={stageRef}
           style={{ position: 'absolute', top: 0, left: 0, width: 402, height: 439, transformOrigin: 'top left' }}
         >
-          {/* Ribbon artwork — screen blend so black → transparent */}
+          {/* Ribbon artwork — two layers split at phone centre (x=201).
+              objectFit:cover + objectPosition:top → source y=0 at stage y=0 (pure black
+              at annotation corner). Tangle (source x~200-400) maps to stage x~85-171,
+              visible in gap x=84-126. Phone (x=126-276) hides the seam at x=201.
+              Layer L: left half, original colours.
+              Layer R: right half, blue-green filter (grayscale→sepia→hue-rotate 155°). */}
+          {/* Layer L — left of phone centre, original colours */}
           <picture aria-hidden='true'>
             <source type='image/avif' srcSet='/ribbons-portrait.avif' />
             <source type='image/webp' srcSet='/ribbons-portrait.webp' />
@@ -1187,15 +1193,33 @@ export default function HeroV5({ armIndex, reduced = false }: { armIndex: number
               alt=''
               decoding='async'
               style={{
-                position: 'absolute',
-                left: '50%',
-                top: 0,
-                transform: 'translateX(-50%)',
-                height: '100%',
-                width: 'auto',
+                position: 'absolute', inset: 0,
+                width: '100%', height: '100%',
+                objectFit: 'cover', objectPosition: 'top',
                 mixBlendMode: 'screen',
                 pointerEvents: 'none',
                 zIndex: 0,
+                clipPath: 'inset(0 201px 0 0)',
+              }}
+            />
+          </picture>
+          {/* Layer R — right of phone centre, blue-green */}
+          <picture aria-hidden='true'>
+            <source type='image/avif' srcSet='/ribbons-portrait.avif' />
+            <source type='image/webp' srcSet='/ribbons-portrait.webp' />
+            <img
+              src='/ribbons-portrait.png'
+              alt=''
+              decoding='async'
+              style={{
+                position: 'absolute', inset: 0,
+                width: '100%', height: '100%',
+                objectFit: 'cover', objectPosition: 'top',
+                mixBlendMode: 'screen',
+                pointerEvents: 'none',
+                zIndex: 0,
+                clipPath: 'inset(0 0 0 201px)',
+                filter: 'grayscale(1) sepia(1) hue-rotate(155deg) saturate(4)',
               }}
             />
           </picture>
