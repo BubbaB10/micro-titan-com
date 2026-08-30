@@ -219,8 +219,10 @@ export default function HomePageClient() {
               className='font-[800] tracking-tight text-[#f4f7fa] leading-[1.05] mb-2 sm:mb-3'
               style={{ fontFamily: 'var(--font-mulish)', fontSize: 'clamp(2.4rem, 9vw, 4rem)' }}
             >
-              <span className='block'>Your system,</span>
-              <span className='block'>your rules.</span>
+              {/* trailing space + full-width zero-height break forces visual wrap while keeping innerText continuous */}
+              <span>Your system, </span>
+              <span style={{ display: 'inline-block', width: '100%' }} aria-hidden='true' />
+              <span>your rules.</span>
             </h1>
 
             {/* Cycling subheads: routed through ArmStack for sequential fade (same mechanism as hero diagram) */}
