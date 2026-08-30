@@ -148,9 +148,11 @@ const ARM_DWELL_MS = 9000;
 
 export default function HomePageClient() {
   const [armIndex, setArmIndex] = useState(0);
-  const [paused, setPaused] = useState(false);
+  const [hoverPaused, setHoverPaused] = useState(false);
+  const [userSelected, setUserSelected] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(false);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const touchRef = useRef<{x: number; y: number} | null>(null);
 
   useEffect(() => {
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -161,7 +163,7 @@ export default function HomePageClient() {
   }, []);
 
   useEffect(() => {
-    if (reducedMotion || paused) {
+    if (reducedMotion || hoverPaused || userSelected) {
       if (timerRef.current) clearInterval(timerRef.current);
       timerRef.current = null;
       return;
@@ -172,7 +174,7 @@ export default function HomePageClient() {
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
     };
-  }, [reducedMotion, paused]);
+  }, [reducedMotion, hoverPaused, userSelected]);
 
   // Business arm shares the Valet nav item; all others derive from product field
   const activeNavId = ARMS[armIndex].product.toLowerCase();
@@ -202,10 +204,27 @@ export default function HomePageClient() {
       {/* ── HERO SECTION ───────────────────────────────────────────────── */}
       <section
         className='relative px-2 sm:px-4 pt-20 sm:pt-24 lg:pt-28 pb-6 overflow-hidden'
-        onMouseEnter={() => setPaused(true)}
-        onMouseLeave={() => setPaused(false)}
-        onFocus={() => setPaused(true)}
-        onBlur={() => setPaused(false)}
+        tabIndex={0}
+        aria-label='Micro Titan product showcase'
+        onMouseEnter={() => setHoverPaused(true)}
+        onMouseLeave={() => setHoverPaused(false)}
+        onFocus={() => setHoverPaused(true)}
+        onBlur={() => setHoverPaused(false)}
+        onTouchStart={(e) => { touchRef.current = { x: e.touches[0].clientX, y: e.touches[0].clientY }; }}
+        onTouchEnd={(e) => {
+          if (!touchRef.current) return;
+          const dx = e.changedTouches[0].clientX - touchRef.current.x;
+          const dy = e.changedTouches[0].clientY - touchRef.current.y;
+          if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+            setArmIndex(prev => (prev + (dx < 0 ? 1 : 3)) % 4);
+            setUserSelected(true);
+          }
+          touchRef.current = null;
+        }}
+        onKeyDown={(e) => {
+          if (e.key === 'ArrowLeft') { setArmIndex(prev => (prev + 3) % 4); setUserSelected(true); }
+          if (e.key === 'ArrowRight') { setArmIndex(prev => (prev + 1) % 4); setUserSelected(true); }
+        }}
       >
         <div
           aria-hidden='true'
@@ -242,6 +261,22 @@ export default function HomePageClient() {
 
           {/* Hero diagram */}
           <HeroV5 armIndex={armIndex} reduced={reducedMotion} />
+
+          {/* Position dots — outside scaled stage, below diagram, above feature row */}
+          <div className='flex justify-center gap-2 mt-3' aria-hidden='true'>
+            {[0, 1, 2, 3].map(i => (
+              <div
+                key={i}
+                style={{
+                  width: 6,
+                  height: 6,
+                  borderRadius: '50%',
+                  background: i === armIndex ? '#7c3aed' : 'rgba(168,216,240,0.38)',
+                  transition: 'background 0.3s',
+                }}
+              />
+            ))}
+          </div>
 
         </div>
       </section>
@@ -377,7 +412,7 @@ export default function HomePageClient() {
                 return (
                   <button
                     key={item.id}
-                    onClick={() => { setArmIndex(item.armIndex as number); setPaused(true); }}
+                    onClick={() => { setArmIndex(item.armIndex as number); setUserSelected(true); }}
                     aria-label={item.label}
                     aria-current={active ? 'page' : undefined}
                     className='flex-1 flex justify-center transition-colors duration-200'
