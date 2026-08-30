@@ -404,35 +404,32 @@ function TangleCard({
         borderTop: '1px solid rgba(255,255,255,0.1)',
       }}
     >
-      {/* Left colored tile — holds the icon */}
+      {/* Left colored tile — holds the icon; scales with viewport via clamp */}
       <div
         aria-hidden='true'
         className='flex-shrink-0 flex items-center justify-center'
         style={{
-          width: '1.75rem',
-          minWidth: '1.75rem',
+          width: 'clamp(1.75rem, 3.5vw, 2.8rem)',
+          minWidth: 'clamp(1.75rem, 3.5vw, 2.8rem)',
           background: `linear-gradient(160deg, ${tileColor}30 0%, ${tileColor}18 100%)`,
           borderRight: `1px solid ${tileColor}28`,
         }}
       >
-        <span style={{ fontSize: '0.65rem', lineHeight: 1 }}>{icon}</span>
+        <span className='text-[0.65rem] lg:text-[1.1rem]' style={{ lineHeight: 1 }}>{icon}</span>
       </div>
 
       {/* Content: source label / content text / time */}
-      <div className='flex-1 min-w-0 py-[3px] sm:py-1 px-1 sm:px-1.5'>
+      <div className='flex-1 min-w-0 py-[3px] lg:py-[5px] px-1 lg:px-2'>
         <div className='flex items-baseline justify-between gap-0.5 mb-[1px]'>
-          <span
-            className='font-[700] uppercase tracking-widest text-[#a8d8f0]/40 truncate'
-            style={{ fontSize: '0.3rem' }}
-          >
+          <span className='font-[700] uppercase tracking-widest text-[#a8d8f0]/40 truncate text-[0.3rem] lg:text-[0.52rem]'>
             {source}
           </span>
-          <span className='text-[#a8d8f0]/30 flex-shrink-0 ml-0.5' style={{ fontSize: '0.28rem' }}>
+          <span className='text-[#a8d8f0]/30 flex-shrink-0 ml-0.5 text-[0.28rem] lg:text-[0.48rem]'>
             {time}
           </span>
         </div>
         {/* No line-clamp — content wraps naturally (mobile-first) */}
-        <p className='text-[#ccdff0] leading-snug break-words' style={{ fontSize: '0.4rem' }}>
+        <p className='text-[#ccdff0] leading-snug break-words text-[0.4rem] lg:text-[0.7rem]'>
           {content}
         </p>
       </div>
@@ -638,26 +635,26 @@ function DomainCard({
       className='bg-[#0c1c36] rounded-lg flex items-stretch overflow-hidden shadow-sm shadow-black/40'
       style={{ border: '1px solid rgba(255,255,255,0.07)', borderTop: '1px solid rgba(255,255,255,0.1)' }}
     >
-      {/* Left colored tile */}
+      {/* Left colored tile; scales with viewport via clamp */}
       <div
         aria-hidden='true'
         className='flex-shrink-0 flex items-center justify-center'
         style={{
-          width: '1.65rem',
-          minWidth: '1.65rem',
+          width: 'clamp(1.65rem, 3.2vw, 2.6rem)',
+          minWidth: 'clamp(1.65rem, 3.2vw, 2.6rem)',
           background: `linear-gradient(160deg, ${tileColor}30 0%, ${tileColor}18 100%)`,
           borderRight: `1px solid ${tileColor}22`,
         }}
       >
-        <span style={{ fontSize: '0.6rem', lineHeight: 1 }}>{icon}</span>
+        <span className='text-[0.6rem] lg:text-[1rem]' style={{ lineHeight: 1 }}>{icon}</span>
       </div>
 
       {/* Name + status */}
-      <div className='flex-1 min-w-0 flex items-center justify-between px-1 sm:px-1.5 py-[3px] sm:py-1'>
-        <span className='font-[600] text-[#f4f7fa] truncate' style={{ fontSize: '0.4rem' }}>{name}</span>
+      <div className='flex-1 min-w-0 flex items-center justify-between px-1 lg:px-2 py-[3px] lg:py-[6px]'>
+        <span className='font-[600] text-[#f4f7fa] truncate text-[0.4rem] lg:text-[0.7rem]'>{name}</span>
         <div className='flex items-center gap-0.5 flex-shrink-0 ml-0.5'>
-          <span className='text-[#22c55e]' style={{ fontSize: '0.36rem' }}>&#10003;</span>
-          <span className='text-[#22c55e]/65 hidden sm:inline' style={{ fontSize: '0.34rem' }}>{status}</span>
+          <span className='text-[#22c55e] text-[0.36rem] lg:text-[0.62rem]'>&#10003;</span>
+          <span className='text-[#22c55e]/65 hidden sm:inline text-[0.34rem] lg:text-[0.58rem]'>{status}</span>
         </div>
       </div>
     </div>
@@ -678,10 +675,10 @@ function ModuleCard({ name, status, domainIndex }: Omit<RightItem, 'icon'> & { d
         padding: '3px 8px 3px 10px',
       }}
     >
-      <span className='font-[600] text-[#f4f7fa]' style={{ fontSize: '0.4rem' }}>{name}</span>
+      <span className='font-[600] text-[#f4f7fa] text-[0.4rem] lg:text-[0.7rem]'>{name}</span>
       <div className='flex items-center gap-0.5'>
-        <span className='text-[#22c55e]' style={{ fontSize: '0.36rem' }}>&#10003;</span>
-        <span className='font-[700] text-[#22c55e]/80' style={{ fontSize: '0.36rem' }}>{status}</span>
+        <span className='text-[#22c55e] text-[0.36rem] lg:text-[0.62rem]'>&#10003;</span>
+        <span className='font-[700] text-[#22c55e]/80 text-[0.36rem] lg:text-[0.62rem]'>{status}</span>
       </div>
     </div>
   );
@@ -789,7 +786,7 @@ export default function HeroV5({ armIndex, reduced = false }: { armIndex: number
             armIndex={armIndex}
             reduced={effectiveReduced}
             arms={ARMS.map((arm, armIdx) => (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                 {arm.tangle.map((card, i) => (
                   <TangleCard key={i} {...card} tileColor={TANGLE_COLORS[i % TANGLE_COLORS.length]} tangleIndex={armIdx === 0 ? i : undefined} />
                 ))}
@@ -839,7 +836,7 @@ export default function HeroV5({ armIndex, reduced = false }: { armIndex: number
             armIndex={armIndex}
             reduced={effectiveReduced}
             arms={ARMS.map((arm, armIdx) => (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                 {arm.rightType === 'modules' ? (
                   <>
                     {arm.right.map((item, i) => (
@@ -847,7 +844,8 @@ export default function HeroV5({ armIndex, reduced = false }: { armIndex: number
                     ))}
                     <Link
                       href='/receipts'
-                      style={{ marginTop: 4, fontSize: '0.44rem', color: 'rgba(124,58,237,0.7)', fontWeight: 600, letterSpacing: '0.05em', textAlign: 'center' }}
+                      className='text-[0.44rem] lg:text-[0.7rem]'
+                      style={{ marginTop: 4, color: 'rgba(124,58,237,0.7)', fontWeight: 600, letterSpacing: '0.05em', textAlign: 'center' }}
                     >
                       See the proof &#8594;
                     </Link>
