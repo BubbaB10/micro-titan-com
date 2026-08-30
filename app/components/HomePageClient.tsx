@@ -304,7 +304,7 @@ export default function HomePageClient() {
               className='text-[0.6rem] sm:text-[0.72rem] font-[600] text-[#a8d8f0]/45 hover:text-[#a8d8f0]/70 transition-colors tracking-widest uppercase'
               style={{ fontFamily: 'var(--font-mulish)' }}
             >
-              Explore the cockpit ▶
+              Explore the cockpit ⊙
             </Link>
           </div>
         </div>
