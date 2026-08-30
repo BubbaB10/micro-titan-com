@@ -638,6 +638,7 @@ function ModuleCard({ name, status, domainIndex }: Omit<RightItem, 'icon'> & { d
 
 export default function HeroV5({ armIndex, reduced = false }: { armIndex: number; reduced?: boolean }) {
   const gridRef = useRef<HTMLDivElement>(null);
+  const wrapRef = useRef<HTMLDivElement>(null);
   const [curves, setCurves] = useState<CurveSet | null>(null);
   const [motionReduced, setMotionReduced] = useState(false);
   useEffect(() => {
@@ -648,6 +649,14 @@ export default function HeroV5({ armIndex, reduced = false }: { armIndex: number
     return () => mq.removeEventListener('change', handler);
   }, []);
   const effectiveReduced = reduced || motionReduced;
+
+  const updateScale = useCallback(() => {
+    const wrap = wrapRef.current;
+    const stage = gridRef.current;
+    if (!wrap || !stage) return;
+    const scale = Math.min(1, wrap.offsetWidth / 1206);
+    stage.style.transform = `scale(${scale})`;
+  }, []);
 
   const measure = useCallback(() => {
     const grid = gridRef.current;
@@ -667,16 +676,23 @@ export default function HeroV5({ armIndex, reduced = false }: { armIndex: number
   useEffect(() => {
     const grid = gridRef.current;
     if (!grid) return;
+    updateScale();
     const raf = requestAnimationFrame(measure);
-    const ro = new ResizeObserver(() => requestAnimationFrame(measure));
+    const ro = new ResizeObserver(() => {
+      requestAnimationFrame(measure);
+      updateScale();
+    });
     ro.observe(grid);
+    if (wrapRef.current) ro.observe(wrapRef.current);
     window.addEventListener('resize', measure);
+    window.addEventListener('resize', updateScale);
     return () => {
       cancelAnimationFrame(raf);
       ro.disconnect();
       window.removeEventListener('resize', measure);
+      window.removeEventListener('resize', updateScale);
     };
-  }, [measure]);
+  }, [measure, updateScale]);
 
   return (
     <div className='w-full overflow-x-hidden'>
@@ -684,24 +700,23 @@ export default function HeroV5({ armIndex, reduced = false }: { armIndex: number
       {/* ══ DESKTOP ≥ 1024px: ribbon artwork + percentage-positioned columns ══
           artwork is 1536×1024 (3:2). mix-blend-mode:screen maps opaque black
           to nothing over the dark page; neon colours add additively.             */}
-      {/* hero-wrap: aspect-ratio scale container */}
+      {/* hero-wrap: aspect-ratio scale container — JS ResizeObserver sets stage transform */}
       <div
+        ref={wrapRef}
         style={{
           width: '100%',
           aspectRatio: '1206 / 804',
           maxHeight: '804px',
           overflow: 'hidden',
-          containerType: 'inline-size',
         } as React.CSSProperties}
       >
-      {/* hero-stage: fixed 1206×804, scaled down on narrow viewports */}
+      {/* hero-stage: fixed 1206×804, scale set by updateScale() on mount + resize */}
       <div
         ref={gridRef}
         className='relative'
         style={{
           width: '1206px',
           height: '804px',
-          transform: 'scale(min(1, calc(100cqw / 1206)))',
           transformOrigin: 'top left',
         }}
       >
