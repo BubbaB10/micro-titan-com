@@ -1172,7 +1172,7 @@ export default function HeroV5({ armIndex, reduced = false }: { armIndex: number
       <div
         ref={wrapRef}
         className='lg:hidden'
-        style={{ width: '100%', aspectRatio: '402 / 439', position: 'relative' }}
+        style={{ width: '100%', aspectRatio: '402 / 439', position: 'relative', overflow: 'hidden' }}
       >
         <div
           ref={stageRef}
