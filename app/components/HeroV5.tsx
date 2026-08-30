@@ -766,16 +766,18 @@ export default function HeroV5({ armIndex, reduced = false }: { armIndex: number
             zIndex: 1,
           }}
         >
-          <div style={{ marginBottom: 8, display: 'flex', alignItems: 'center', gap: 4 }}>
-            <svg width='12' height='16' viewBox='0 0 20 28' fill='none' aria-hidden='true' style={{ flexShrink: 0 }}>
-              <path d='M 10 2 C 10 10 10 16 10 22' stroke='rgba(168,216,240,0.4)' strokeWidth='1' fill='none' strokeLinecap='round' />
-              <path d='M 6 18 L 10 24 L 14 18' stroke='rgba(168,216,240,0.4)' strokeWidth='1' fill='none' strokeLinecap='round' strokeLinejoin='round' />
+          <div style={{ marginBottom: 8, display: 'flex', alignItems: 'center', gap: 6 }}>
+            <svg width='14' height='20' viewBox='0 0 20 32' fill='none' aria-hidden='true' style={{ flexShrink: 0 }}>
+              {/* hand-drawn down-arc arrow */}
+              <path d='M 15 2 C 18 10 14 18 9 28' stroke='rgba(168,216,240,0.55)' strokeWidth='1.2' fill='none' strokeLinecap='round' />
+              <path d='M 4 23 L 9 30 L 14 24' stroke='rgba(168,216,240,0.55)' strokeWidth='1.2' fill='none' strokeLinecap='round' strokeLinejoin='round' />
             </svg>
             <span
               style={{
-                fontSize: '0.42rem', fontWeight: 600,
-                color: 'rgba(168,216,240,0.5)', fontStyle: 'italic',
-                fontFamily: 'Georgia, serif',
+                fontSize: '0.55rem', fontWeight: 400,
+                color: 'rgba(168,216,240,0.6)',
+                fontFamily: "'Brush Script MT', 'Apple Chancery', cursive",
+                letterSpacing: '0.01em',
               }}
             >
               The tangle goes in.
@@ -815,17 +817,19 @@ export default function HeroV5({ armIndex, reduced = false }: { armIndex: number
             zIndex: 1,
           }}
         >
-          <div style={{ marginBottom: 8, display: 'flex', alignItems: 'center', gap: 4 }}>
-            <svg width='18' height='10' viewBox='0 0 36 18' fill='none' aria-hidden='true' style={{ flexShrink: 0 }}>
-              <path d='M 32 9 C 24 9 14 4 4 9' stroke='rgba(168,216,240,0.4)' strokeWidth='1' fill='none' strokeLinecap='round' />
-              <path d='M 8 6 L 4 9 L 8 12' stroke='rgba(168,216,240,0.4)' strokeWidth='1' fill='none' strokeLinecap='round' strokeLinejoin='round' />
+          <div style={{ marginBottom: 8, display: 'flex', alignItems: 'flex-start', gap: 6 }}>
+            <svg width='20' height='14' viewBox='0 0 36 22' fill='none' aria-hidden='true' style={{ flexShrink: 0, marginTop: 4 }}>
+              {/* hand-drawn left-swoop arrow */}
+              <path d='M 34 4 C 26 2 16 14 4 14' stroke='rgba(168,216,240,0.55)' strokeWidth='1.2' fill='none' strokeLinecap='round' />
+              <path d='M 9 8 L 3 14 L 9 18' stroke='rgba(168,216,240,0.55)' strokeWidth='1.2' fill='none' strokeLinecap='round' strokeLinejoin='round' />
             </svg>
             <span
               style={{
-                fontSize: '0.42rem', fontWeight: 600,
-                color: 'rgba(168,216,240,0.5)', fontStyle: 'italic',
-                fontFamily: 'Georgia, serif',
-                lineHeight: 1.3,
+                fontSize: '0.55rem', fontWeight: 400,
+                color: 'rgba(168,216,240,0.6)',
+                fontFamily: "'Brush Script MT', 'Apple Chancery', cursive",
+                letterSpacing: '0.01em',
+                lineHeight: 1.4,
               }}
             >
               One clear screen comes back.
