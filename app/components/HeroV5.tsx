@@ -192,6 +192,11 @@ const TANGLE_COLORS = ['#22d3ee', '#a78bfa', '#f87171', '#60a5fa', '#fbbf24', '#
 // Hue per domain card slot (index 0-4): blue / green / violet / amber / red
 const DOMAIN_COLORS = ['#60a5fa', '#34d399', '#a78bfa', '#fbbf24', '#f87171'];
 
+// Portrait ribbon strand node positions (fraction of image height, 941×1672).
+// Six left strands enter cards on the left; five right strands terminate on the right.
+const LEFT_NODES  = [0.15, 0.29, 0.44, 0.57, 0.70, 0.83];
+const RIGHT_NODES = [0.32, 0.42, 0.50, 0.58, 0.67];
+
 // ─── CURVE COMPUTATION (DOM-measured bezier connector lines) ─────────────────
 
 type CurveSet = {
@@ -274,6 +279,66 @@ function computeCurves(
   const rightNodes = dom.map((d, i) => ({ cx: d.left, cy: d.centerY, color: DOMAIN_COLORS[i % DOMAIN_COLORS.length] }));
 
   return { leftCurves, rightCurves, leftNodes, rightNodes, w: gr.width, h: gr.height };
+}
+
+// ─── ARMSTACK ─────────────────────────────────────────────────────────────────
+// All arms live in the DOM at once. Only one is visible (opacity). This means
+// gate anchors are always present regardless of which arm is showing.
+
+// ─── PORTRAIT COLUMN STACK ────────────────────────────────────────────────────
+// Same sequential-fade logic as ArmStack, but uses absolute stacking instead of
+// CSS grid so that each arm can fill a height-100% container and position its
+// cards with percentage top values matching the ribbon's strand node fractions.
+
+function PortraitColumnStack({
+  armIndex,
+  arms,
+  reduced = false,
+}: {
+  armIndex: number;
+  arms: ReactNode[];
+  reduced?: boolean;
+}) {
+  const [showing, setShowing] = useState(armIndex);
+  const [visible, setVisible] = useState(true);
+  const showingRef = useRef<number>(armIndex);
+
+  useEffect(() => {
+    if (armIndex === showingRef.current) return;
+    if (reduced) {
+      showingRef.current = armIndex;
+      setShowing(armIndex);
+      setVisible(true);
+      return;
+    }
+    setVisible(false);
+    const timer = setTimeout(() => {
+      showingRef.current = armIndex;
+      setShowing(armIndex);
+      setVisible(true);
+    }, 380);
+    return () => clearTimeout(timer);
+  }, [armIndex, reduced]);
+
+  return (
+    <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+      {arms.map((arm, i) => (
+        <div
+          key={i}
+          style={{
+            position: 'absolute',
+            inset: 0,
+            opacity: i === showing ? (visible ? 1 : 0) : 0,
+            transition: reduced ? 'none' : 'opacity 0.35s ease-in-out',
+            pointerEvents: i === showing && visible ? 'auto' : 'none',
+          }}
+          aria-hidden={i !== showing || undefined}
+        >
+          {arm}
+        </div>
+      ))}
+    </div>
+  );
 }
 
 // ─── ARMSTACK ─────────────────────────────────────────────────────────────────
@@ -700,7 +765,7 @@ export default function HeroV5({ armIndex, reduced = false }: { armIndex: number
               style={{
                 fontSize: '0.42rem', fontWeight: 600,
                 color: 'rgba(168,216,240,0.5)', fontStyle: 'italic',
-                textTransform: 'uppercase', fontFamily: 'Georgia, serif',
+                fontFamily: 'Georgia, serif',
               }}
             >
               The tangle goes in.
@@ -749,7 +814,7 @@ export default function HeroV5({ armIndex, reduced = false }: { armIndex: number
               style={{
                 fontSize: '0.42rem', fontWeight: 600,
                 color: 'rgba(168,216,240,0.5)', fontStyle: 'italic',
-                textTransform: 'uppercase', fontFamily: 'Georgia, serif',
+                fontFamily: 'Georgia, serif',
                 lineHeight: 1.3,
               }}
             >
@@ -784,134 +849,166 @@ export default function HeroV5({ armIndex, reduced = false }: { armIndex: number
         </div>
       </div>
 
-      {/* ══ MOBILE / TABLET < 1024px: three-column grid, SVG curves, unchanged ══ */}
-      <div className='lg:hidden'>
+      {/* ══ MOBILE / TABLET < 1024px: portrait ribbon artwork ══
+          artwork is 941×1672. mix-blend-mode:screen maps opaque black to
+          nothing over the dark page; neon colours add additively.
+          Cards sit at strand node positions (LEFT_NODES / RIGHT_NODES).   */}
+      <div
+        className='lg:hidden relative w-full'
+        style={{ aspectRatio: '941 / 1672' }}
+      >
+        {/* Portrait ribbon artwork — decorative, not LCP */}
+        <picture aria-hidden='true'>
+          <source type='image/avif' srcSet='/ribbons-portrait.avif' />
+          <source type='image/webp' srcSet='/ribbons-portrait.webp' />
+          <img
+            src='/ribbons-portrait.png'
+            alt=''
+            decoding='async'
+            style={{
+              position: 'absolute', inset: 0,
+              width: '100%', height: '100%',
+              objectFit: 'cover',
+              mixBlendMode: 'screen',
+              pointerEvents: 'none',
+              zIndex: 0,
+            }}
+          />
+        </picture>
+
+        {/* Annotation — left (tangle goes in) */}
         <div
-          ref={gridRef}
-          className='grid gap-4 sm:gap-6 items-start'
-          style={{ gridTemplateColumns: 'minmax(0, 1fr) auto minmax(0, 1fr)', position: 'relative', overflow: 'hidden' }}
+          style={{
+            position: 'absolute', left: '1%', top: '1.5%',
+            zIndex: 2, display: 'flex', alignItems: 'center', gap: 3,
+          }}
         >
-
-          {/* ── LEFT: The tangle ─────────────────────────────────────── */}
-          <div className='relative flex flex-col w-full min-w-0 overflow-hidden'>
-            <div className='mb-1.5 sm:mb-2 flex items-center gap-1 min-w-0 overflow-hidden'>
-              <svg width='12' height='16' viewBox='0 0 20 28' fill='none' aria-hidden='true' className='flex-shrink-0'>
-                <path d='M 10 2 C 10 10 10 16 10 22' stroke='rgba(168,216,240,0.4)' strokeWidth='1' fill='none' strokeLinecap='round' />
-                <path d='M 6 18 L 10 24 L 14 18' stroke='rgba(168,216,240,0.4)' strokeWidth='1' fill='none' strokeLinecap='round' strokeLinejoin='round' />
-              </svg>
-              <span
-                className='text-[0.34rem] sm:text-[0.42rem] font-[600] text-[#a8d8f0]/50 italic'
-                style={{ textTransform: 'uppercase', fontFamily: 'Georgia, serif' }}
-              >
-                The tangle goes in.
-              </span>
-            </div>
-            <ArmStack
-              armIndex={armIndex}
-              reduced={reduced}
-              arms={ARMS.map((arm, armIdx) => (
-                <div className='flex flex-col gap-1 sm:gap-1.5 min-w-0 w-full'>
-                  {arm.tangle.map((card, i) => (
-                    <TangleCard
-                      key={i}
-                      {...card}
-                      tileColor={TANGLE_COLORS[i % TANGLE_COLORS.length]}
-                      tangleIndex={armIdx === 0 ? i : undefined}
-                    />
-                  ))}
-                </div>
-              ))}
-            />
-          </div>
-
-          {/* ── CENTER: Valet phone ─────────────────────────────────── */}
-          <div className='flex-shrink-0 flex justify-center'>
-            <ValetPhone armIndex={armIndex} reduced={reduced} />
-          </div>
-
-          {/* ── RIGHT: Domain / module cards ────────────────────────── */}
-          <div className='w-full min-w-0 overflow-hidden'>
-            <div className='mb-2 sm:mb-3 flex items-center gap-1 min-w-0 overflow-hidden'>
-              <svg width='18' height='10' viewBox='0 0 36 18' fill='none' aria-hidden='true' className='flex-shrink-0'>
-                <path d='M 32 9 C 24 9 14 4 4 9' stroke='rgba(168,216,240,0.4)' strokeWidth='1' fill='none' strokeLinecap='round' />
-                <path d='M 8 6 L 4 9 L 8 12' stroke='rgba(168,216,240,0.4)' strokeWidth='1' fill='none' strokeLinecap='round' strokeLinejoin='round' />
-              </svg>
-              <span
-                className='text-[0.34rem] sm:text-[0.42rem] font-[600] text-[#a8d8f0]/50 italic leading-tight'
-                style={{ textTransform: 'uppercase', fontFamily: 'Georgia, serif' }}
-              >
-                One clear screen comes back.
-              </span>
-            </div>
-            <ArmStack
-              armIndex={armIndex}
-              reduced={reduced}
-              arms={ARMS.map((arm, armIdx) => (
-                <div className='flex flex-col gap-1 sm:gap-1.5 min-w-0 w-full'>
-                  {arm.rightType === 'modules' ? (
-                    <>
-                      {arm.right.map((item, i) => (
-                        <ModuleCard
-                          key={i}
-                          name={item.name}
-                          status={item.status}
-                          domainIndex={armIdx === 0 ? i : undefined}
-                        />
-                      ))}
-                      <Link
-                        href='/receipts'
-                        className='mt-1 text-[0.34rem] sm:text-[0.44rem] text-[#7c3aed]/70 hover:text-[#7c3aed] font-[600] tracking-wide transition-colors text-center'
-                      >
-                        See the proof &#8594;
-                      </Link>
-                    </>
-                  ) : (
-                    arm.right.map((item, i) => (
-                      <DomainCard
-                        key={i}
-                        {...item}
-                        tileColor={DOMAIN_COLORS[i % DOMAIN_COLORS.length]}
-                        domainIndex={armIdx === 0 ? i : undefined}
-                      />
-                    ))
-                  )}
-                </div>
-              ))}
-            />
-          </div>
-
-          {/* ── SVG CONNECTOR CURVES (mobile only, absolutely positioned over grid) ── */}
-          {curves && (
-            <svg
-              aria-hidden='true'
-              style={{
-                position: 'absolute', top: 0, left: 0,
-                width: curves.w, height: curves.h,
-                pointerEvents: 'none', zIndex: 10, overflow: 'visible',
-              }}
-              viewBox={`0 0 ${curves.w} ${curves.h}`}
-            >
-              <defs>
-                <filter id='hglow' x='-120%' y='-120%' width='340%' height='340%'>
-                  <feGaussianBlur stdDeviation='5' result='blur' />
-                </filter>
-              </defs>
-              {[...curves.leftCurves, ...curves.rightCurves].map((c, i) => (
-                <path key={`g${i}`} d={c.d} fill='none' stroke={c.color} strokeWidth='14' strokeOpacity='0.38' filter='url(#hglow)' strokeLinecap='round' />
-              ))}
-              {[...curves.leftCurves, ...curves.rightCurves].map((c, i) => (
-                <path key={`c${i}`} d={c.d} fill='none' stroke={c.color} strokeWidth='2.2' strokeOpacity='0.95' strokeLinecap='round' />
-              ))}
-              {[...curves.leftNodes, ...curves.rightNodes].map((n, i) => (
-                <g key={`n${i}`}>
-                  <circle cx={n.cx} cy={n.cy} r='4' fill={n.color} opacity='0.15' />
-                  <circle cx={n.cx} cy={n.cy} r='1.8' fill={n.color} opacity='0.88' />
-                </g>
-              ))}
-            </svg>
-          )}
-
+          <svg width='8' height='12' viewBox='0 0 20 28' fill='none' aria-hidden='true' style={{ flexShrink: 0 }}>
+            <path d='M 10 2 C 10 10 10 16 10 22' stroke='rgba(168,216,240,0.4)' strokeWidth='1.5' fill='none' strokeLinecap='round' />
+            <path d='M 6 18 L 10 24 L 14 18' stroke='rgba(168,216,240,0.4)' strokeWidth='1.5' fill='none' strokeLinecap='round' strokeLinejoin='round' />
+          </svg>
+          <span
+            style={{
+              fontSize: '0.3rem', fontWeight: 600,
+              color: 'rgba(168,216,240,0.5)', fontStyle: 'italic',
+              fontFamily: 'Georgia, serif',
+            }}
+          >
+            The tangle goes in.
+          </span>
         </div>
+
+        {/* Annotation — right (one clear screen) */}
+        <div
+          style={{
+            position: 'absolute', right: '1%', top: '1.5%',
+            zIndex: 2, display: 'flex', alignItems: 'center', gap: 3,
+            maxWidth: '30%',
+          }}
+        >
+          <span
+            style={{
+              fontSize: '0.3rem', fontWeight: 600,
+              color: 'rgba(168,216,240,0.5)', fontStyle: 'italic',
+              fontFamily: 'Georgia, serif', lineHeight: 1.3, textAlign: 'right',
+            }}
+          >
+            One clear screen comes back.
+          </span>
+          <svg width='8' height='12' viewBox='0 0 20 28' fill='none' aria-hidden='true' style={{ flexShrink: 0 }}>
+            <path d='M 10 2 C 10 10 10 16 10 22' stroke='rgba(168,216,240,0.4)' strokeWidth='1.5' fill='none' strokeLinecap='round' />
+            <path d='M 6 18 L 10 24 L 14 18' stroke='rgba(168,216,240,0.4)' strokeWidth='1.5' fill='none' strokeLinecap='round' strokeLinejoin='round' />
+          </svg>
+        </div>
+
+        {/* Left column — 6 tangle cards at strand node positions */}
+        <div
+          style={{
+            position: 'absolute', left: 0, top: 0,
+            width: '29%', height: '100%', zIndex: 1,
+          }}
+        >
+          <PortraitColumnStack
+            armIndex={armIndex}
+            reduced={reduced}
+            arms={ARMS.map((arm) => (
+              <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+                {arm.tangle.map((card, i) => (
+                  <div
+                    key={i}
+                    style={{
+                      position: 'absolute',
+                      top: `${LEFT_NODES[i] * 100}%`,
+                      transform: 'translateY(-50%)',
+                      left: 0, right: 0,
+                    }}
+                  >
+                    <TangleCard {...card} tileColor={TANGLE_COLORS[i % TANGLE_COLORS.length]} />
+                  </div>
+                ))}
+              </div>
+            ))}
+          />
+        </div>
+
+        {/* Center — phone over the vertical black band */}
+        <div
+          style={{
+            position: 'absolute', left: '31%', top: '10%',
+            width: '38%', height: '80%',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            zIndex: 1,
+          }}
+        >
+          <ValetPhone armIndex={armIndex} reduced={reduced} />
+        </div>
+
+        {/* Right column — 5 domain/module cards at strand node positions */}
+        <div
+          style={{
+            position: 'absolute', right: 0, top: 0,
+            width: '29%', height: '100%', zIndex: 1,
+          }}
+        >
+          <PortraitColumnStack
+            armIndex={armIndex}
+            reduced={reduced}
+            arms={ARMS.map((arm) => (
+              <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+                {arm.rightType === 'modules' ? (
+                  arm.right.map((item, i) => (
+                    <div
+                      key={i}
+                      style={{
+                        position: 'absolute',
+                        top: `${RIGHT_NODES[i] * 100}%`,
+                        transform: 'translateY(-50%)',
+                        left: 0, right: 0,
+                      }}
+                    >
+                      <ModuleCard name={item.name} status={item.status} />
+                    </div>
+                  ))
+                ) : (
+                  arm.right.map((item, i) => (
+                    <div
+                      key={i}
+                      style={{
+                        position: 'absolute',
+                        top: `${RIGHT_NODES[i] * 100}%`,
+                        transform: 'translateY(-50%)',
+                        left: 0, right: 0,
+                      }}
+                    >
+                      <DomainCard {...item} tileColor={DOMAIN_COLORS[i % DOMAIN_COLORS.length]} />
+                    </div>
+                  ))
+                )}
+              </div>
+            ))}
+          />
+        </div>
+
       </div>
 
     </div>
