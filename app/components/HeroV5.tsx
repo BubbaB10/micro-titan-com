@@ -443,16 +443,16 @@ function PhoneGreeting({ arm }: { arm: ArmData }) {
   return (
     <div className='px-2 sm:px-4 pt-2 sm:pt-3 pb-1 sm:pb-2'>
       <div
-        className='text-[0.38rem] sm:text-[0.45rem] md:text-[0.55rem] font-[700] tracking-widest uppercase text-[#a8d8f0]/45'
+        className='text-[0.38rem] sm:text-[0.45rem] md:text-[0.55rem] lg:text-[0.65rem] font-[700] tracking-widest uppercase text-[#a8d8f0]/45'
         style={{ visibility: arm.greetingLabel ? 'visible' : 'hidden' }}
       >
         {arm.greetingLabel || 'Good afternoon,'}
       </div>
       <div className='flex items-center justify-between mt-0.5'>
-        <span className='text-[0.6rem] sm:text-[0.72rem] md:text-[0.88rem] font-[800] tracking-[0.08em] text-[#f4f7fa] uppercase truncate flex-1 min-w-0'>
+        <span className='text-[0.6rem] sm:text-[0.72rem] md:text-[0.88rem] lg:text-[1rem] font-[800] tracking-[0.08em] text-[#f4f7fa] uppercase truncate flex-1 min-w-0'>
           {arm.greetingName}
         </span>
-        <span className='text-[0.36rem] sm:text-[0.42rem] md:text-[0.52rem] text-[#22c55e] font-[600] ml-1 flex-shrink-0'>
+        <span className='text-[0.36rem] sm:text-[0.42rem] md:text-[0.52rem] lg:text-[0.62rem] text-[#22c55e] font-[600] ml-1 flex-shrink-0'>
           {arm.greetingStatus}
         </span>
       </div>
@@ -471,12 +471,12 @@ function PhoneVerdict({ arm }: { arm: ArmData }) {
         }}
       >
         <div className='flex items-center gap-1 sm:gap-2'>
-          <span className='text-[#22c55e] text-[0.6rem] sm:text-sm font-[800] flex-shrink-0'>&#10003;</span>
-          <span className='text-[0.48rem] sm:text-[0.58rem] md:text-[0.7rem] font-[700] text-[#f4f7fa]'>
+          <span className='text-[#22c55e] text-[0.6rem] sm:text-sm lg:text-base font-[800] flex-shrink-0'>&#10003;</span>
+          <span className='text-[0.48rem] sm:text-[0.58rem] md:text-[0.7rem] lg:text-[0.85rem] font-[700] text-[#f4f7fa]'>
             {arm.verdictMain}
           </span>
         </div>
-        <div className='text-[0.42rem] sm:text-[0.52rem] md:text-[0.62rem] text-[#f0b429] mt-0.5 pl-3 sm:pl-6 font-[600]'>
+        <div className='text-[0.42rem] sm:text-[0.52rem] md:text-[0.62rem] lg:text-[0.75rem] text-[#f0b429] mt-0.5 pl-3 sm:pl-6 font-[600]'>
           {arm.verdictSub}
         </div>
       </div>
@@ -490,13 +490,13 @@ function PhoneHandled({ arm }: { arm: ArmData }) {
       {arm.handled.map((item, i) => (
         <div
           key={i}
-          className='flex items-center justify-between py-[2px] sm:py-[3px] border-b border-[#1e3a5f]/25 last:border-0'
+          className='flex items-center justify-between py-[2px] sm:py-[3px] lg:py-[4px] border-b border-[#1e3a5f]/25 last:border-0'
         >
           <div className='flex items-center gap-1 sm:gap-1.5 min-w-0'>
-            <span className='text-[#22c55e] text-[0.4rem] sm:text-[0.55rem] flex-shrink-0'>&#10003;</span>
-            <span className='text-[0.4rem] sm:text-[0.52rem] md:text-[0.6rem] text-[#c8dff0] truncate'>{item.text}</span>
+            <span className='text-[#22c55e] text-[0.4rem] sm:text-[0.55rem] lg:text-[0.65rem] flex-shrink-0'>&#10003;</span>
+            <span className='text-[0.4rem] sm:text-[0.52rem] md:text-[0.6rem] lg:text-[0.72rem] text-[#c8dff0] truncate'>{item.text}</span>
           </div>
-          <span className='text-[0.36rem] sm:text-[0.45rem] text-[#a8d8f0]/35 flex-shrink-0 ml-1 hidden sm:inline'>{item.time}</span>
+          <span className='text-[0.36rem] sm:text-[0.45rem] lg:text-[0.55rem] text-[#a8d8f0]/35 flex-shrink-0 ml-1 hidden sm:inline'>{item.time}</span>
         </div>
       ))}
     </div>
@@ -514,13 +514,13 @@ function PhoneNeedsYou({ arm }: { arm: ArmData }) {
         >
           <div className='flex items-center justify-between gap-1'>
             <div className='flex items-center gap-1 sm:gap-1.5 flex-1 min-w-0'>
-              <span className='text-[0.5rem] sm:text-[0.65rem] text-[#f0b429] font-[700] flex-shrink-0'>{card.icon}</span>
+              <span className='text-[0.5rem] sm:text-[0.65rem] lg:text-[0.8rem] text-[#f0b429] font-[700] flex-shrink-0'>{card.icon}</span>
               <div className='min-w-0'>
-                <div className='text-[0.42rem] sm:text-[0.55rem] md:text-[0.62rem] font-[700] text-[#f4f7fa] truncate'>{card.label}</div>
-                <div className='text-[0.38rem] sm:text-[0.48rem] text-[#a8d8f0]/50 truncate'>{card.sub}</div>
+                <div className='text-[0.42rem] sm:text-[0.55rem] md:text-[0.62rem] lg:text-[0.75rem] font-[700] text-[#f4f7fa] truncate'>{card.label}</div>
+                <div className='text-[0.38rem] sm:text-[0.48rem] lg:text-[0.58rem] text-[#a8d8f0]/50 truncate'>{card.sub}</div>
               </div>
             </div>
-            <span className='text-[#f0b429]/50 text-[0.5rem] sm:text-[0.7rem] ml-0.5 flex-shrink-0'>&#8250;</span>
+            <span className='text-[#f0b429]/50 text-[0.5rem] sm:text-[0.7rem] lg:text-[0.85rem] ml-0.5 flex-shrink-0'>&#8250;</span>
           </div>
         </div>
       ))}
@@ -538,13 +538,13 @@ function ValetPhone({ armIndex, reduced, enhanced = false }: { armIndex: number;
         aria-hidden='true'
         style={{
           position: 'absolute',
-          bottom: enhanced ? -32 : -20,
+          bottom: enhanced ? -48 : -20,
           left: '50%',
           transform: 'translateX(-50%)',
-          width: enhanced ? '200%' : '150%',
-          height: enhanced ? 100 : 72,
+          width: enhanced ? '240%' : '150%',
+          height: enhanced ? 140 : 72,
           background: enhanced
-            ? 'radial-gradient(ellipse 80% 100% at 50% 100%, rgba(109,40,217,0.52) 0%, rgba(109,40,217,0.2) 45%, transparent 75%)'
+            ? 'radial-gradient(ellipse 80% 100% at 50% 100%, rgba(109,40,217,0.65) 0%, rgba(109,40,217,0.28) 40%, transparent 72%)'
             : 'radial-gradient(ellipse 80% 100% at 50% 100%, rgba(109,40,217,0.38) 0%, rgba(109,40,217,0.12) 45%, transparent 75%)',
           pointerEvents: 'none',
           zIndex: 0,
@@ -552,30 +552,29 @@ function ValetPhone({ armIndex, reduced, enhanced = false }: { armIndex: number;
       />
       <div
         data-phone-body='true'
-        className='mx-auto relative z-10'
+        className='mx-auto relative z-10 w-[min(240px,40vw)] lg:w-[clamp(240px,24vw,320px)]'
         style={{
-          width: 'min(240px, 40vw)',
           background: '#060b18',
           borderRadius: 20,
           fontFamily: 'var(--font-mulish)',
           border: enhanced ? '1.5px solid rgba(109,40,217,0.75)' : '1.5px solid rgba(109,40,217,0.55)',
           boxShadow: enhanced
-            ? '0 0 0 1px rgba(109,40,217,0.28), 0 0 0 3px rgba(109,40,217,0.08), 0 0 48px rgba(109,40,217,0.38), 0 0 96px rgba(109,40,217,0.18), 0 12px 36px rgba(0,0,0,0.65), inset 0 1px 0 rgba(109,40,217,0.2)'
+            ? '0 0 0 1px rgba(109,40,217,0.32), 0 0 0 3px rgba(109,40,217,0.1), 0 0 56px rgba(109,40,217,0.45), 0 0 110px rgba(109,40,217,0.22), 0 12px 36px rgba(0,0,0,0.65), inset 0 1px 0 rgba(109,40,217,0.25)'
             : '0 0 0 1px rgba(109,40,217,0.2), 0 0 32px rgba(109,40,217,0.22), 0 0 64px rgba(109,40,217,0.1), 0 8px 24px rgba(0,0,0,0.5)',
           overflow: 'hidden',
         }}
       >
         {/* Status bar */}
         <div className='flex justify-between items-center px-2 sm:px-4 pt-2 sm:pt-3 pb-1'>
-          <span className='text-[0.38rem] sm:text-[0.52rem] text-[#a8d8f0]/40'>9:41</span>
-          <span className='text-[0.38rem] sm:text-[0.52rem] text-[#a8d8f0]/40'>&#9679;&#9679;&#9679;</span>
+          <span className='text-[0.38rem] sm:text-[0.52rem] lg:text-[0.65rem] text-[#a8d8f0]/40'>9:41</span>
+          <span className='text-[0.38rem] sm:text-[0.52rem] lg:text-[0.65rem] text-[#a8d8f0]/40'>&#9679;&#9679;&#9679;</span>
         </div>
 
         {/* App header */}
         <div className='flex items-center justify-between px-2 sm:px-4 py-1 sm:py-2 border-b border-[#1e3a5f]/50'>
-          <span className='text-[0.42rem] sm:text-[0.6rem] text-[#a8d8f0]/50'>&#8249;</span>
-          <span className='text-[0.45rem] sm:text-[0.62rem] font-[700] tracking-[0.2em] text-[#a8d8f0]'>V A L E T</span>
-          <span className='text-[0.42rem] sm:text-[0.6rem] text-[#a8d8f0]/50'>&#8943;</span>
+          <span className='text-[0.42rem] sm:text-[0.6rem] lg:text-[0.75rem] text-[#a8d8f0]/50'>&#8249;</span>
+          <span className='text-[0.45rem] sm:text-[0.62rem] lg:text-[0.78rem] font-[700] tracking-[0.2em] text-[#a8d8f0]'>V A L E T</span>
+          <span className='text-[0.42rem] sm:text-[0.6rem] lg:text-[0.75rem] text-[#a8d8f0]/50'>&#8943;</span>
         </div>
 
         {/* Greeting — cycles */}
@@ -586,13 +585,13 @@ function ValetPhone({ armIndex, reduced, enhanced = false }: { armIndex: number;
 
         {/* Tabs */}
         <div className='flex items-center border-b border-[#1e3a5f]/50 mx-1.5 sm:mx-3'>
-          <div className='flex-1 text-[0.36rem] sm:text-[0.52rem] font-[700] text-[#22c55e] py-1 sm:py-1.5 text-center border-b-2 border-[#22c55e]'>
+          <div className='flex-1 text-[0.36rem] sm:text-[0.52rem] lg:text-[0.65rem] font-[700] text-[#22c55e] py-1 sm:py-1.5 text-center border-b-2 border-[#22c55e]'>
             ALL CLEAR
           </div>
-          <div className='flex-1 text-[0.36rem] sm:text-[0.52rem] font-[600] text-[#f0b429] py-1 sm:py-1.5 text-center'>
+          <div className='flex-1 text-[0.36rem] sm:text-[0.52rem] lg:text-[0.65rem] font-[600] text-[#f0b429] py-1 sm:py-1.5 text-center'>
             NEEDS YOU (2)
           </div>
-          <div className='flex-1 text-[0.36rem] sm:text-[0.52rem] font-[600] text-[#a8d8f0]/35 py-1 sm:py-1.5 text-center'>
+          <div className='flex-1 text-[0.36rem] sm:text-[0.52rem] lg:text-[0.65rem] font-[600] text-[#a8d8f0]/35 py-1 sm:py-1.5 text-center'>
             ARCHIVE
           </div>
         </div>
@@ -605,16 +604,16 @@ function ValetPhone({ armIndex, reduced, enhanced = false }: { armIndex: number;
 
         {/* 47 other items — static, always in DOM */}
         <div className='mx-1.5 sm:mx-3 mb-1 sm:mb-2 bg-[#0a1c35]/70 rounded-md sm:rounded-lg px-2 sm:px-3 py-1.5 sm:py-2.5 flex items-center justify-between'>
-          <span className='text-[0.4rem] sm:text-[0.55rem] md:text-[0.64rem] text-[#a8d8f0]/60 font-[500]'>
+          <span className='text-[0.4rem] sm:text-[0.55rem] md:text-[0.64rem] lg:text-[0.76rem] text-[#a8d8f0]/60 font-[500]'>
             47 other items handled quietly
           </span>
-          <span className='text-[#a8d8f0]/30 text-[0.5rem] sm:text-xs ml-1 sm:ml-2'>&#8897;</span>
+          <span className='text-[#a8d8f0]/30 text-[0.5rem] sm:text-xs lg:text-sm ml-1 sm:ml-2'>&#8897;</span>
         </div>
 
         {/* Bottom bar */}
         <div className='flex items-center justify-around px-1 sm:px-2 py-1.5 sm:py-2 border-t border-[#1e3a5f]/50 bg-[#04080f]'>
           {['Home', 'Feed', 'Search', 'Settings'].map(item => (
-            <span key={item} className='text-[0.3rem] sm:text-[0.45rem] md:text-[0.52rem] text-[#a8d8f0]/35 font-[600]'>
+            <span key={item} className='text-[0.3rem] sm:text-[0.45rem] md:text-[0.52rem] lg:text-[0.62rem] text-[#a8d8f0]/35 font-[600]'>
               {item}
             </span>
           ))}
