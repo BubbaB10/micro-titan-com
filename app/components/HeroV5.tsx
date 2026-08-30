@@ -236,17 +236,23 @@ function computeCurves(
     return phCY + (t - 0.5) * phH * 0.45;
   });
 
-  // Convergence funnel: all left-side control points share convX, which sits
-  // inside the left column so the braiding is visible before the phone face.
-  const phoneW = ph.right - ph.left;
-  const convX = ph.left - Math.max(20, phoneW * 0.15);
-  const convY = phCY;
-
+  // Left curves: each strand leaves its card, converges toward phone-center Y
+  // (crossing strands that go the opposite direction), then fans to its entry Y.
+  // CP1 pulls all strands toward the phone's vertical midpoint — this guarantees
+  // visible crossing because cards above center map to entry points below center
+  // (SHUFFLE is inverted) and vice versa.
   const leftCurves = tang.map((t, i) => {
     const x0 = t.right, y0 = t.centerY;
     const x1 = ph.left, y1 = entryY[i];
+    const dx = Math.max(x1 - x0, 1);
+    // CP1: 40% across, 75% of the way from source Y toward phone center Y
+    const cp1x = x0 + dx * 0.40;
+    const cp1y = y0 + (phCY - y0) * 0.75;
+    // CP2: 80% across, approaching individual entry Y
+    const cp2x = x0 + dx * 0.80;
+    const cp2y = y1;
     return {
-      d: `M ${x0.toFixed(1)} ${y0.toFixed(1)} C ${convX.toFixed(1)} ${convY.toFixed(1)} ${convX.toFixed(1)} ${y1.toFixed(1)} ${x1.toFixed(1)} ${y1.toFixed(1)}`,
+      d: `M ${x0.toFixed(1)} ${y0.toFixed(1)} C ${cp1x.toFixed(1)} ${cp1y.toFixed(1)} ${cp2x.toFixed(1)} ${cp2y.toFixed(1)} ${x1.toFixed(1)} ${y1.toFixed(1)}`,
       color: TANGLE_COLORS[i % TANGLE_COLORS.length],
     };
   });
@@ -653,12 +659,26 @@ export default function HeroV5({ armIndex, reduced = false }: { armIndex: number
       {/* Three-column grid — NEVER stacks, always tangle | phone | domains */}
       <div
         ref={gridRef}
-        className='grid gap-1 sm:gap-2 lg:gap-3 items-start'
+        className='grid gap-4 sm:gap-6 lg:gap-8 items-start'
         style={{ gridTemplateColumns: 'minmax(0, 1fr) auto minmax(0, 1fr)', position: 'relative', overflow: 'hidden' }}
       >
 
         {/* ── LEFT: The tangle ─────────────────────────────────────── */}
         <div className='relative flex flex-col w-full min-w-0 overflow-hidden'>
+          {/* Annotation: top of column, arrow points down into the cards */}
+          <div className='mb-1.5 sm:mb-2 flex items-center gap-1 min-w-0 overflow-hidden'>
+            <svg width='12' height='16' viewBox='0 0 20 28' fill='none' aria-hidden='true' className='flex-shrink-0'>
+              <path d='M 10 2 C 10 10 10 16 10 22' stroke='rgba(168,216,240,0.4)' strokeWidth='1' fill='none' strokeLinecap='round' />
+              <path d='M 6 18 L 10 24 L 14 18' stroke='rgba(168,216,240,0.4)' strokeWidth='1' fill='none' strokeLinecap='round' strokeLinejoin='round' />
+            </svg>
+            <span
+              className='text-[0.34rem] sm:text-[0.42rem] font-[600] text-[#a8d8f0]/50 italic'
+              style={{ textTransform: 'uppercase', fontFamily: 'Georgia, serif' }}
+            >
+              The tangle goes in.
+            </span>
+          </div>
+
           <ArmStack
             armIndex={armIndex}
             reduced={reduced}
@@ -675,20 +695,6 @@ export default function HeroV5({ armIndex, reduced = false }: { armIndex: number
               </div>
             ))}
           />
-
-          {/* Annotation: sentence-case in DOM, uppercased via text-transform */}
-          <div className='mt-2 sm:mt-3 flex items-center gap-1 min-w-0 overflow-hidden'>
-            <svg width='18' height='10' viewBox='0 0 36 18' fill='none' aria-hidden='true' className='flex-shrink-0'>
-              <path d='M 4 9 C 12 9 22 14 32 9' stroke='rgba(168,216,240,0.4)' strokeWidth='1' fill='none' strokeLinecap='round' />
-              <path d='M 28 6 L 32 9 L 28 12' stroke='rgba(168,216,240,0.4)' strokeWidth='1' fill='none' strokeLinecap='round' strokeLinejoin='round' />
-            </svg>
-            <span
-              className='text-[0.34rem] sm:text-[0.42rem] font-[600] text-[#a8d8f0]/50 italic truncate'
-              style={{ textTransform: 'uppercase', fontFamily: 'Georgia, serif' }}
-            >
-              The tangle goes in.
-            </span>
-          </div>
         </div>
 
         {/* ── CENTER: Valet phone ─────────────────────────────────── */}
@@ -705,7 +711,7 @@ export default function HeroV5({ armIndex, reduced = false }: { armIndex: number
               <path d='M 8 6 L 4 9 L 8 12' stroke='rgba(168,216,240,0.4)' strokeWidth='1' fill='none' strokeLinecap='round' strokeLinejoin='round' />
             </svg>
             <span
-              className='text-[0.34rem] sm:text-[0.42rem] font-[600] text-[#a8d8f0]/50 italic truncate'
+              className='text-[0.34rem] sm:text-[0.42rem] font-[600] text-[#a8d8f0]/50 italic leading-tight'
               style={{ textTransform: 'uppercase', fontFamily: 'Georgia, serif' }}
             >
               One clear screen comes back.
@@ -766,34 +772,34 @@ export default function HeroV5({ armIndex, reduced = false }: { armIndex: number
             viewBox={`0 0 ${curves.w} ${curves.h}`}
           >
             <defs>
-              <filter id='hglow' x='-80%' y='-80%' width='260%' height='260%'>
-                <feGaussianBlur stdDeviation='2.8' result='blur' />
+              <filter id='hglow' x='-120%' y='-120%' width='340%' height='340%'>
+                <feGaussianBlur stdDeviation='5' result='blur' />
               </filter>
             </defs>
 
-            {/* Glow layer — wide, soft */}
+            {/* Glow layer — luminous halo */}
             {[...curves.leftCurves, ...curves.rightCurves].map((c, i) => (
               <path
                 key={`g${i}`}
                 d={c.d}
                 fill='none'
                 stroke={c.color}
-                strokeWidth='6'
-                strokeOpacity='0.18'
+                strokeWidth='14'
+                strokeOpacity='0.38'
                 filter='url(#hglow)'
                 strokeLinecap='round'
               />
             ))}
 
-            {/* Core layer — thin, bright */}
+            {/* Core layer — bright ribbon */}
             {[...curves.leftCurves, ...curves.rightCurves].map((c, i) => (
               <path
                 key={`c${i}`}
                 d={c.d}
                 fill='none'
                 stroke={c.color}
-                strokeWidth='1.1'
-                strokeOpacity='0.82'
+                strokeWidth='2.2'
+                strokeOpacity='0.95'
                 strokeLinecap='round'
               />
             ))}
