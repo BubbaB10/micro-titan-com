@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import MicroTitanMark from './MicroTitanMark';
-import HeroV5, { ARM_SUBHEADS } from './HeroV5';
+import HeroV5, { ARM_SUBHEADS, ArmStack } from './HeroV5';
 
 // ─── PILLAR DATA ───────────────────────────────────────────────────────────────
 
@@ -179,25 +179,20 @@ export default function HomePageClient() {
               Your system, your rules.
             </h1>
 
-            {/* Cycling subheads: all four in DOM, one visible via opacity */}
-            <div style={{ display: 'grid', gridTemplateAreas: '"s"', gridTemplateColumns: '1fr', minHeight: '1.6em' }}>
-              {ARM_SUBHEADS.map((sub, i) => (
+            {/* Cycling subheads: routed through ArmStack for sequential fade (same mechanism as hero diagram) */}
+            <ArmStack
+              armIndex={armIndex}
+              reduced={reducedMotion}
+              arms={ARM_SUBHEADS.map((sub, i) => (
                 <p
                   key={i}
                   className='text-[0.75rem] sm:text-base md:text-lg text-[#a8d8f0]/70 max-w-xl mx-auto leading-snug'
-                  style={{
-                    gridArea: 's',
-                    opacity: i === armIndex ? 1 : 0,
-                    transition: 'opacity 0.5s ease-in-out',
-                    pointerEvents: i === armIndex ? 'auto' : 'none',
-                    fontFamily: 'var(--font-mulish)',
-                  }}
-                  aria-hidden={i !== armIndex || undefined}
+                  style={{ fontFamily: 'var(--font-mulish)' }}
                 >
                   {sub}
                 </p>
               ))}
-            </div>
+            />
           </div>
 
           {/* Hero diagram */}

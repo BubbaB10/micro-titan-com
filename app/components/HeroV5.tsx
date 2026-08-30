@@ -276,7 +276,7 @@ function computeCurves(
 
 // Sequential fade: outgoing fades out fully before incoming fades in.
 // This prevents both arms being legible at once during transitions.
-function ArmStack({ armIndex, arms, reduced = false }: { armIndex: number; arms: ReactNode[]; reduced?: boolean }) {
+export function ArmStack({ armIndex, arms, reduced = false }: { armIndex: number; arms: ReactNode[]; reduced?: boolean }) {
   const [showing, setShowing] = useState(armIndex);
   const [visible, setVisible] = useState(true);
   const showingRef = useRef<number>(armIndex);
