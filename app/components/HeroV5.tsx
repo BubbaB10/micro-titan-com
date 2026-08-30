@@ -578,7 +578,7 @@ function ValetPhone({ armIndex, reduced, enhanced = false }: { armIndex: number;
         {/* App header */}
         <div className='flex items-center justify-between px-2 sm:px-4 py-1 sm:py-2 border-b border-[#1e3a5f]/50'>
           <span className='text-[0.42rem] sm:text-[0.6rem] lg:text-[0.75rem] text-[#a8d8f0]/50'>&#8249;</span>
-          <span className='text-[0.45rem] sm:text-[0.62rem] lg:text-[0.78rem] font-[700] tracking-[0.2em] text-[#a8d8f0]'>{ARMS[armIndex].product.split('').join(' ')}</span>
+          <span className='text-[0.45rem] sm:text-[0.62rem] lg:text-[0.78rem] font-[700] tracking-[0.2em] text-[#a8d8f0] uppercase'>{ARMS[armIndex].product.split('').join(' ')}</span>
           <span className='text-[0.42rem] sm:text-[0.6rem] lg:text-[0.75rem] text-[#a8d8f0]/50'>&#8943;</span>
         </div>
 
