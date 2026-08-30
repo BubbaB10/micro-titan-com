@@ -226,30 +226,40 @@ function computeCurves(
   const tang = tangleEls.map(el => toL(el.getBoundingClientRect()));
   const dom = domainEls.map(el => toL(el.getBoundingClientRect()));
 
-  // Shuffle entry Y on phone left — creates the crossing / braiding effect
+  // Entry Y on phone left — shuffled so strands cross each other on the way in
   const SHUFFLE = [0.58, -0.42, 0.22, -0.22, 0.08, -0.58];
-  const entryY = SHUFFLE.slice(0, tang.length).map(f => phCY + f * phH * 0.38);
+  const entryY = SHUFFLE.slice(0, tang.length).map(f => phCY + f * phH * 0.40);
 
-  // Fan exit Y on phone right — orderly and parallel
+  // Exit Y on phone right — orderly fan, no crossing
   const exitY = dom.map((_, i) => {
     const t = dom.length > 1 ? i / (dom.length - 1) : 0.5;
-    return phCY + (t - 0.5) * phH * 0.5;
+    return phCY + (t - 0.5) * phH * 0.45;
   });
 
+  // Convergence funnel: all left-side control points share convX, which sits
+  // inside the left column so the braiding is visible before the phone face.
+  const phoneW = ph.right - ph.left;
+  const convX = ph.left - Math.max(20, phoneW * 0.15);
+  const convY = phCY;
+
   const leftCurves = tang.map((t, i) => {
-    const x0 = t.right, y0 = t.centerY, x1 = ph.left, y1 = entryY[i];
-    const cpX = x0 + (x1 - x0) * 0.5;
+    const x0 = t.right, y0 = t.centerY;
+    const x1 = ph.left, y1 = entryY[i];
     return {
-      d: `M ${x0.toFixed(1)} ${y0.toFixed(1)} C ${cpX.toFixed(1)} ${y0.toFixed(1)} ${cpX.toFixed(1)} ${y1.toFixed(1)} ${x1.toFixed(1)} ${y1.toFixed(1)}`,
+      d: `M ${x0.toFixed(1)} ${y0.toFixed(1)} C ${convX.toFixed(1)} ${convY.toFixed(1)} ${convX.toFixed(1)} ${y1.toFixed(1)} ${x1.toFixed(1)} ${y1.toFixed(1)}`,
       color: TANGLE_COLORS[i % TANGLE_COLORS.length],
     };
   });
 
+  // Right side: symmetric S-curves, non-crossing, orderly fan
   const rightCurves = dom.map((d, i) => {
-    const x0 = ph.right, y0 = exitY[i], x1 = d.left, y1 = d.centerY;
-    const cpX = x0 + (x1 - x0) * 0.5;
+    const x0 = ph.right, y0 = exitY[i];
+    const x1 = d.left, y1 = d.centerY;
+    const span = Math.max(x1 - x0, 20);
+    const cp1x = x0 + span * 0.35;
+    const cp2x = x1 - span * 0.35;
     return {
-      d: `M ${x0.toFixed(1)} ${y0.toFixed(1)} C ${cpX.toFixed(1)} ${y0.toFixed(1)} ${cpX.toFixed(1)} ${y1.toFixed(1)} ${x1.toFixed(1)} ${y1.toFixed(1)}`,
+      d: `M ${x0.toFixed(1)} ${y0.toFixed(1)} C ${cp1x.toFixed(1)} ${y0.toFixed(1)} ${cp2x.toFixed(1)} ${y1.toFixed(1)} ${x1.toFixed(1)} ${y1.toFixed(1)}`,
       color: DOMAIN_COLORS[i % DOMAIN_COLORS.length],
     };
   });
@@ -264,7 +274,30 @@ function computeCurves(
 // All arms live in the DOM at once. Only one is visible (opacity). This means
 // gate anchors are always present regardless of which arm is showing.
 
-function ArmStack({ armIndex, arms }: { armIndex: number; arms: ReactNode[] }) {
+// Sequential fade: outgoing fades out fully before incoming fades in.
+// This prevents both arms being legible at once during transitions.
+function ArmStack({ armIndex, arms, reduced = false }: { armIndex: number; arms: ReactNode[]; reduced?: boolean }) {
+  const [showing, setShowing] = useState(armIndex);
+  const [visible, setVisible] = useState(true);
+  const showingRef = useRef<number>(armIndex);
+
+  useEffect(() => {
+    if (armIndex === showingRef.current) return;
+    if (reduced) {
+      showingRef.current = armIndex;
+      setShowing(armIndex);
+      setVisible(true);
+      return;
+    }
+    setVisible(false);
+    const timer = setTimeout(() => {
+      showingRef.current = armIndex;
+      setShowing(armIndex);
+      setVisible(true);
+    }, 380);
+    return () => clearTimeout(timer);
+  }, [armIndex, reduced]);
+
   return (
     <div style={{ display: 'grid', gridTemplateAreas: '"s"', gridTemplateColumns: '1fr' }}>
       {arms.map((arm, i) => (
@@ -272,11 +305,11 @@ function ArmStack({ armIndex, arms }: { armIndex: number; arms: ReactNode[] }) {
           key={i}
           style={{
             gridArea: 's',
-            opacity: i === armIndex ? 1 : 0,
-            transition: 'opacity 0.5s ease-in-out',
-            pointerEvents: i === armIndex ? 'auto' : 'none',
+            opacity: i === showing ? (visible ? 1 : 0) : 0,
+            transition: reduced ? 'none' : 'opacity 0.35s ease-in-out',
+            pointerEvents: i === showing && visible ? 'auto' : 'none',
           }}
-          aria-hidden={i !== armIndex || undefined}
+          aria-hidden={i !== showing || undefined}
         >
           {arm}
         </div>
@@ -429,7 +462,7 @@ function PhoneNeedsYou({ arm }: { arm: ArmData }) {
 
 // ─── VALET PHONE ──────────────────────────────────────────────────────────────
 
-function ValetPhone({ armIndex }: { armIndex: number }) {
+function ValetPhone({ armIndex, reduced }: { armIndex: number; reduced: boolean }) {
   return (
     <div style={{ position: 'relative' }}>
       {/* Glow pool beneath phone — soft violet ellipse, device sits in light */}
@@ -474,10 +507,10 @@ function ValetPhone({ armIndex }: { armIndex: number }) {
         </div>
 
         {/* Greeting — cycles */}
-        <ArmStack armIndex={armIndex} arms={ARMS.map(arm => <PhoneGreeting arm={arm} />)} />
+        <ArmStack armIndex={armIndex} reduced={reduced} arms={ARMS.map(arm => <PhoneGreeting arm={arm} />)} />
 
         {/* Verdict — cycles */}
-        <ArmStack armIndex={armIndex} arms={ARMS.map(arm => <PhoneVerdict arm={arm} />)} />
+        <ArmStack armIndex={armIndex} reduced={reduced} arms={ARMS.map(arm => <PhoneVerdict arm={arm} />)} />
 
         {/* Tabs */}
         <div className='flex items-center border-b border-[#1e3a5f]/50 mx-1.5 sm:mx-3'>
@@ -493,10 +526,10 @@ function ValetPhone({ armIndex }: { armIndex: number }) {
         </div>
 
         {/* Handled list — cycles */}
-        <ArmStack armIndex={armIndex} arms={ARMS.map(arm => <PhoneHandled arm={arm} />)} />
+        <ArmStack armIndex={armIndex} reduced={reduced} arms={ARMS.map(arm => <PhoneHandled arm={arm} />)} />
 
         {/* NEEDS YOU cards — cycles */}
-        <ArmStack armIndex={armIndex} arms={ARMS.map(arm => <PhoneNeedsYou arm={arm} />)} />
+        <ArmStack armIndex={armIndex} reduced={reduced} arms={ARMS.map(arm => <PhoneNeedsYou arm={arm} />)} />
 
         {/* 47 other items — static, always in DOM */}
         <div className='mx-1.5 sm:mx-3 mb-1 sm:mb-2 bg-[#0a1c35]/70 rounded-md sm:rounded-lg px-2 sm:px-3 py-1.5 sm:py-2.5 flex items-center justify-between'>
@@ -581,7 +614,7 @@ function ModuleCard({ name, status, domainIndex }: Omit<RightItem, 'icon'> & { d
 
 // ─── HERO V5 ──────────────────────────────────────────────────────────────────
 
-export default function HeroV5({ armIndex }: { armIndex: number }) {
+export default function HeroV5({ armIndex, reduced = false }: { armIndex: number; reduced?: boolean }) {
   const gridRef = useRef<HTMLDivElement>(null);
   const [curves, setCurves] = useState<CurveSet | null>(null);
 
@@ -628,6 +661,7 @@ export default function HeroV5({ armIndex }: { armIndex: number }) {
         <div className='relative flex flex-col w-full min-w-0 overflow-hidden'>
           <ArmStack
             armIndex={armIndex}
+            reduced={reduced}
             arms={ARMS.map((arm, armIdx) => (
               <div className='flex flex-col gap-1 sm:gap-1.5 min-w-0 w-full'>
                 {arm.tangle.map((card, i) => (
@@ -659,7 +693,7 @@ export default function HeroV5({ armIndex }: { armIndex: number }) {
 
         {/* ── CENTER: Valet phone ─────────────────────────────────── */}
         <div className='flex-shrink-0 flex justify-center'>
-          <ValetPhone armIndex={armIndex} />
+          <ValetPhone armIndex={armIndex} reduced={reduced} />
         </div>
 
         {/* ── RIGHT: Domain / module cards ────────────────────────── */}
@@ -680,6 +714,7 @@ export default function HeroV5({ armIndex }: { armIndex: number }) {
 
           <ArmStack
             armIndex={armIndex}
+            reduced={reduced}
             arms={ARMS.map((arm, armIdx) => (
               <div className='flex flex-col gap-1 sm:gap-1.5 min-w-0 w-full'>
                 {arm.rightType === 'modules' ? (
