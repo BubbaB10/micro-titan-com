@@ -1330,6 +1330,77 @@ export default function HeroV5({ armIndex, reduced = false }: { armIndex: number
           <div style={{ position: 'absolute', left: 126, top: 32, width: 150, height: 400, zIndex: 3 }}>
             <StagePhone armIndex={armIndex} reduced={effectiveReduced} />
           </div>
+
+          {/* Static connector curves — mirrors desktop computeCurves() using known stage coords.
+              Phone: left=126, right=276, centerY=232 (top=32, height=400).
+              Tangle right edge: 84 (left=12, width=72, card center ≈ TANGLE_Y[i]+17).
+              Domain left edge: 311 (left=311, width=77, height=42, center = DOMAIN_Y[i]+21).
+              Left entryY uses same SHUFFLE as desktop; right exitY uses same fan formula. */}
+          <svg
+            aria-hidden='true'
+            style={{ position: 'absolute', left: 0, top: 0, width: 402, height: 439, pointerEvents: 'none', zIndex: 4 }}
+            viewBox='0 0 402 439'
+          >
+            <defs>
+              <filter id='mcg' x='-50%' y='-50%' width='200%' height='200%' colorInterpolationFilters='sRGB'>
+                <feGaussianBlur in='SourceGraphic' stdDeviation='3.5' result='blur' />
+              </filter>
+            </defs>
+            {/* Glow layer */}
+            <g filter='url(#mcg)' strokeLinecap='round' fill='none'>
+              <path d='M 84 42 C 101 185 118 325 126 325' stroke='#22d3ee' strokeWidth='5' strokeOpacity='0.35'/>
+              <path d='M 84 110 C 101 202 118 165 126 165' stroke='#a78bfa' strokeWidth='5' strokeOpacity='0.35'/>
+              <path d='M 84 176 C 101 218 118 267 126 267' stroke='#f87171' strokeWidth='5' strokeOpacity='0.35'/>
+              <path d='M 84 241 C 101 234 118 197 126 197' stroke='#60a5fa' strokeWidth='5' strokeOpacity='0.35'/>
+              <path d='M 84 307 C 101 251 118 245 126 245' stroke='#fbbf24' strokeWidth='5' strokeOpacity='0.35'/>
+              <path d='M 84 366 C 101 266 118 139 126 139' stroke='#34d399' strokeWidth='5' strokeOpacity='0.35'/>
+              <path d='M 276 142 C 288 142 299 113 311 113' stroke='#60a5fa' strokeWidth='5' strokeOpacity='0.35'/>
+              <path d='M 276 187 C 288 187 299 164 311 164' stroke='#34d399' strokeWidth='5' strokeOpacity='0.35'/>
+              <path d='M 276 232 C 288 232 299 217 311 217' stroke='#a78bfa' strokeWidth='5' strokeOpacity='0.35'/>
+              <path d='M 276 277 C 288 277 299 271 311 271' stroke='#fbbf24' strokeWidth='5' strokeOpacity='0.35'/>
+              <path d='M 276 322 C 288 322 299 324 311 324' stroke='#f87171' strokeWidth='5' strokeOpacity='0.35'/>
+            </g>
+            {/* Core layer */}
+            <g strokeLinecap='round' fill='none' strokeWidth='0.9'>
+              <path d='M 84 42 C 101 185 118 325 126 325' stroke='#22d3ee' strokeOpacity='0.82'/>
+              <path d='M 84 110 C 101 202 118 165 126 165' stroke='#a78bfa' strokeOpacity='0.82'/>
+              <path d='M 84 176 C 101 218 118 267 126 267' stroke='#f87171' strokeOpacity='0.82'/>
+              <path d='M 84 241 C 101 234 118 197 126 197' stroke='#60a5fa' strokeOpacity='0.82'/>
+              <path d='M 84 307 C 101 251 118 245 126 245' stroke='#fbbf24' strokeOpacity='0.82'/>
+              <path d='M 84 366 C 101 266 118 139 126 139' stroke='#34d399' strokeOpacity='0.82'/>
+              <path d='M 276 142 C 288 142 299 113 311 113' stroke='#60a5fa' strokeOpacity='0.82'/>
+              <path d='M 276 187 C 288 187 299 164 311 164' stroke='#34d399' strokeOpacity='0.82'/>
+              <path d='M 276 232 C 288 232 299 217 311 217' stroke='#a78bfa' strokeOpacity='0.82'/>
+              <path d='M 276 277 C 288 277 299 271 311 271' stroke='#fbbf24' strokeOpacity='0.82'/>
+              <path d='M 276 322 C 288 322 299 324 311 324' stroke='#f87171' strokeOpacity='0.82'/>
+            </g>
+            {/* Node dots — glow */}
+            <g filter='url(#mcg)'>
+              <circle cx='84' cy='42' r='3' fill='#22d3ee' fillOpacity='0.45'/>
+              <circle cx='84' cy='110' r='3' fill='#a78bfa' fillOpacity='0.45'/>
+              <circle cx='84' cy='176' r='3' fill='#f87171' fillOpacity='0.45'/>
+              <circle cx='84' cy='241' r='3' fill='#60a5fa' fillOpacity='0.45'/>
+              <circle cx='84' cy='307' r='3' fill='#fbbf24' fillOpacity='0.45'/>
+              <circle cx='84' cy='366' r='3' fill='#34d399' fillOpacity='0.45'/>
+              <circle cx='311' cy='113' r='3' fill='#60a5fa' fillOpacity='0.45'/>
+              <circle cx='311' cy='164' r='3' fill='#34d399' fillOpacity='0.45'/>
+              <circle cx='311' cy='217' r='3' fill='#a78bfa' fillOpacity='0.45'/>
+              <circle cx='311' cy='271' r='3' fill='#fbbf24' fillOpacity='0.45'/>
+              <circle cx='311' cy='324' r='3' fill='#f87171' fillOpacity='0.45'/>
+            </g>
+            {/* Node dots — core */}
+            <circle cx='84' cy='42' r='1.5' fill='#22d3ee' fillOpacity='0.85'/>
+            <circle cx='84' cy='110' r='1.5' fill='#a78bfa' fillOpacity='0.85'/>
+            <circle cx='84' cy='176' r='1.5' fill='#f87171' fillOpacity='0.85'/>
+            <circle cx='84' cy='241' r='1.5' fill='#60a5fa' fillOpacity='0.85'/>
+            <circle cx='84' cy='307' r='1.5' fill='#fbbf24' fillOpacity='0.85'/>
+            <circle cx='84' cy='366' r='1.5' fill='#34d399' fillOpacity='0.85'/>
+            <circle cx='311' cy='113' r='1.5' fill='#60a5fa' fillOpacity='0.85'/>
+            <circle cx='311' cy='164' r='1.5' fill='#34d399' fillOpacity='0.85'/>
+            <circle cx='311' cy='217' r='1.5' fill='#a78bfa' fillOpacity='0.85'/>
+            <circle cx='311' cy='271' r='1.5' fill='#fbbf24' fillOpacity='0.85'/>
+            <circle cx='311' cy='324' r='1.5' fill='#f87171' fillOpacity='0.85'/>
+          </svg>
         </div>
       </div>
 
