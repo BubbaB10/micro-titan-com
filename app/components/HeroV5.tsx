@@ -37,11 +37,11 @@ export const ARMS: ArmData[] = [
     id: 'valet',
     product: 'Valet',
     tangle: [
-      { icon: '\u{1F4AC}', source: 'Text', content: 'Helen — Can you pick up milk on the way home?', time: '12:47 PM', rotate: -1.5 },
+      { icon: '\u{1F4AC}', source: 'Text Message', content: 'Helen — Can you pick up milk on the way home?', time: '12:47 PM', rotate: -1.5 },
       { icon: '✉️', source: 'Email', content: 'Andy — Re: Tuesday meeting', time: '11:32 AM', rotate: 1 },
-      { icon: '⚡', source: 'Bill', content: 'Electric Company — $247.63, due May 28', time: '10:18 AM', rotate: -0.8 },
+      { icon: '⚡', source: 'Bill Received', content: 'Electric Company — $247.63, due May 28', time: '10:18 AM', rotate: -0.8 },
       { icon: '\u{1F4C5}', source: 'Calendar', content: 'Vet Appointment — Tomorrow, 10:00 AM', time: '9:41 AM', rotate: 1.2 },
-      { icon: '\u{1F4DD}', source: 'Note', content: 'Order parts for laser trailer', time: '9:02 AM', rotate: -1 },
+      { icon: '\u{1F4DD}', source: 'Quick Note', content: 'Order parts for laser trailer', time: '9:02 AM', rotate: -1 },
       { icon: '\u{1F9FE}', source: 'Receipt', content: 'Tractor Supply — $89.47', time: 'Yesterday', rotate: 0.5 },
     ],
     greetingLabel: 'Good afternoon,',
@@ -734,6 +734,7 @@ function StageTangleCard({ icon, source, content, time, rotate, tileColor }: Tan
             letterSpacing: '0.08em',
             color: 'rgba(168,216,240,0.4)',
             overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+            flex: 1, minWidth: 0,
           }}>
             {source}
           </span>
@@ -769,11 +770,11 @@ function StageDomainCard({ icon, name, status, tileColor }: RightItem & { tileCo
       >
         <span style={{ fontSize: 9, lineHeight: 1 }}>{icon}</span>
       </div>
-      <div style={{ flex: 1, minWidth: 0, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 5px' }}>
+      <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '0 5px' }}>
         <span style={{ fontSize: 8, fontWeight: 600, color: '#f4f7fa', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{name}</span>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 2, flexShrink: 0, marginLeft: 3 }}>
-          <span style={{ fontSize: 7, color: '#22c55e' }}>&#10003;</span>
-          <span style={{ fontSize: 6.5, color: 'rgba(34,197,94,0.65)', whiteSpace: 'nowrap' }}>{status}</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+          <span style={{ fontSize: 7, color: '#22c55e', flexShrink: 0 }}>&#10003;</span>
+          <span style={{ fontSize: 6.5, color: 'rgba(34,197,94,0.65)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{status}</span>
         </div>
       </div>
     </div>
@@ -1238,47 +1239,50 @@ export default function HeroV5({ armIndex, reduced = false }: { armIndex: number
             }}
           />
 
-          {/* Left annotation — "The tangle goes in." */}
+          {/* Left annotation — "THE TANGLE GOES IN." */}
           <div
-            style={{ position: 'absolute', left: 4, top: 4, zIndex: 4, display: 'flex', alignItems: 'center', gap: 4 }}
+            style={{ position: 'absolute', left: 4, top: 4, zIndex: 4, display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 2 }}
           >
             <span
               style={{
-                fontSize: 9, fontStyle: 'italic',
+                fontSize: 8, fontStyle: 'normal', fontWeight: 700,
                 color: 'rgba(168,216,240,0.65)',
-                fontFamily: 'Georgia, serif',
-                letterSpacing: '0.01em',
+                fontFamily: 'var(--font-mulish)',
+                letterSpacing: '0.08em',
+                textTransform: 'uppercase' as const,
                 whiteSpace: 'nowrap',
+                lineHeight: 1.2,
               }}
             >
-              The tangle goes in.
+              The tangle<br />goes in.
             </span>
-            <svg width='10' height='14' viewBox='0 0 20 28' fill='none' aria-hidden='true' style={{ flexShrink: 0 }}>
+            <svg width='10' height='14' viewBox='0 0 20 28' fill='none' aria-hidden='true'>
               <path d='M 5 2 C 8 8 14 14 16 24' stroke='rgba(168,216,240,0.45)' strokeWidth='1.5' fill='none' strokeLinecap='round' />
               <path d='M 11 20 L 17 26 L 20 18' stroke='rgba(168,216,240,0.45)' strokeWidth='1.5' fill='none' strokeLinecap='round' strokeLinejoin='round' />
             </svg>
           </div>
 
-          {/* Right annotation — "One clear screen comes back." */}
+          {/* Right annotation — "ONE CLEAR SCREEN COMES BACK." */}
           <div
-            style={{ position: 'absolute', right: 4, top: 28, zIndex: 4, display: 'flex', alignItems: 'center', gap: 4, maxWidth: 108 }}
+            style={{ position: 'absolute', right: 4, top: 4, zIndex: 4, display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 2 }}
           >
-            <svg width='10' height='14' viewBox='0 0 20 28' fill='none' aria-hidden='true' style={{ flexShrink: 0 }}>
-              <path d='M 15 2 C 12 8 6 14 4 24' stroke='rgba(168,216,240,0.45)' strokeWidth='1.5' fill='none' strokeLinecap='round' />
-              <path d='M 9 20 L 3 26 L 0 18' stroke='rgba(168,216,240,0.45)' strokeWidth='1.5' fill='none' strokeLinecap='round' strokeLinejoin='round' />
-            </svg>
             <span
               style={{
-                fontSize: 9, fontStyle: 'italic',
+                fontSize: 8, fontStyle: 'normal', fontWeight: 700,
                 color: 'rgba(168,216,240,0.65)',
-                fontFamily: 'Georgia, serif',
-                letterSpacing: '0.01em',
-                lineHeight: 1.3,
+                fontFamily: 'var(--font-mulish)',
+                letterSpacing: '0.08em',
+                textTransform: 'uppercase' as const,
+                lineHeight: 1.2,
                 textAlign: 'right' as const,
               }}
             >
-              One clear screen comes back.
+              One clear screen<br />comes back.
             </span>
+            <svg width='10' height='14' viewBox='0 0 20 28' fill='none' aria-hidden='true'>
+              <path d='M 15 2 C 12 8 6 14 4 24' stroke='rgba(168,216,240,0.45)' strokeWidth='1.5' fill='none' strokeLinecap='round' />
+              <path d='M 9 20 L 3 26 L 0 18' stroke='rgba(168,216,240,0.45)' strokeWidth='1.5' fill='none' strokeLinecap='round' strokeLinejoin='round' />
+            </svg>
           </div>
 
           {/* Left + right card columns (single PortraitColumnStack — crossfades in sync) */}
