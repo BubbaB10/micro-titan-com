@@ -3,6 +3,29 @@ import Nav from "../components/Nav";
 import Footer from "../components/Footer";
 import GateDemo from "../components/GateDemo";
 
+// ─── IN THE NEWS — real, cited incidents. Add entries here; order is newest first.
+// Every entry must carry the SOURCE's publication date, not the date we found it.
+const NEWS_ITEMS = [
+  {
+    headline:
+      `A Meta AI safety researcher's agent deleted her inbox after a context compaction erased her own "don't act without permission" instruction.`,
+    mechanism:
+      `She gave the correct instruction: "Check this inbox too and suggest what you would archive or delete, don't action until I tell you to." It worked on her test inbox. Her real inbox was too large and triggered context compaction. During compaction, her original instruction was summarised away. Then the agent acted.`,
+    quotes: [
+      `"Nothing humbles you like telling your OpenClaw 'confirm before acting' and watching it speedrun deleting your inbox."`,
+      `"I couldn't stop it from my phone. I had to RUN to my Mac mini like I was defusing a bomb."`,
+      `"Turns out alignment researchers aren't immune to misalignment."`,
+    ],
+    sourceText:
+      `PCMag, Jon Martindale — "Meta Security Researcher's AI Agent Accidentally Deleted Her Emails"`,
+    sourceDate: "February 24, 2026",
+    sourceUrl:
+      "https://www.pcmag.com/news/meta-security-researchers-openclaw-ai-agent-accidentally-deleted-her-emails",
+    whatWeDo:
+      "Valet's safety-critical instructions live in files that are re-read every session — not in the conversation, where compaction can reach them. The verification gate is a mechanism the agent structurally cannot modify. Reminders are delivered by a host-side rail with no agent in its path. Micro Titan hit the same failure mode independently; the standing rules every Valet instance reads include the dated evidence: an agent compacted 17 times in one day, and a real job sat 11.8 hours untouched — \"never ignored and never lost in transit; it was summarised away. A file does not compact. That is the entire point.\"",
+  },
+];
+
 const PILLARS = [
   {
     number: "01",
@@ -151,6 +174,80 @@ export default function WhyProvablePage() {
               </div>
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* In the News */}
+      <section className="py-16 px-4 border-t border-[rgba(168,216,240,0.08)]">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-12">
+            <p className="text-xs font-semibold tracking-[0.25em] uppercase text-[#4fb8e8] mb-3">
+              In the news
+            </p>
+            <h2
+              className="text-3xl sm:text-4xl font-[300] text-[#f4f7fa] mb-4"
+              style={{ fontFamily: "var(--font-mulish)" }}
+            >
+              A guardrail that lives in the conversation
+              <br className="hidden sm:block" /> is not a guardrail.
+            </h2>
+            <p className="text-[#a8d8f0] font-light max-w-xl mx-auto text-sm leading-relaxed">
+              The industry publishes our argument for us. Real, named, cited incidents — reported as
+              they happened, with the source date shown.
+            </p>
+          </div>
+
+          <div className="flex flex-col gap-8">
+            {NEWS_ITEMS.map((item, i) => (
+              <div
+                key={i}
+                className="bg-[#0f1f38] border border-[rgba(168,216,240,0.12)] rounded-2xl p-6 sm:p-8"
+              >
+                <h3
+                  className="text-base sm:text-lg font-[500] text-[#f4f7fa] mb-4 leading-snug"
+                  style={{ fontFamily: "var(--font-mulish)" }}
+                >
+                  {item.headline}
+                </h3>
+
+                <p className="text-sm text-[#a8d8f0]/80 leading-relaxed mb-5">
+                  <span className="text-[#e2a44a] font-semibold">The mechanism: </span>
+                  {item.mechanism}
+                </p>
+
+                <div className="flex flex-col gap-3 mb-6 pl-4 border-l-2 border-[rgba(168,216,240,0.18)]">
+                  {item.quotes.map((q, qi) => (
+                    <blockquote
+                      key={qi}
+                      className="text-sm text-[#a8d8f0]/65 italic leading-relaxed"
+                    >
+                      {q}
+                    </blockquote>
+                  ))}
+                </div>
+
+                <div className="bg-[#12243d] border border-[rgba(70,207,147,0.2)] rounded-xl p-4 sm:p-5 mb-5">
+                  <p className="text-xs font-semibold uppercase tracking-wider text-[#46cf93] mb-2">
+                    What Valet does differently
+                  </p>
+                  <p className="text-sm text-[#a8d8f0]/75 leading-relaxed">{item.whatWeDo}</p>
+                </div>
+
+                <p className="text-xs text-[#a8d8f0]/35 leading-relaxed">
+                  Source:{" "}
+                  <a
+                    href={item.sourceUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[#4fb8e8]/60 hover:text-[#4fb8e8] underline underline-offset-2 transition-colors"
+                  >
+                    {item.sourceText}
+                  </a>{" "}
+                  — {item.sourceDate}
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 

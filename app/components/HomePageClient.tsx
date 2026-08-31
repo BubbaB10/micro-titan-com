@@ -254,6 +254,13 @@ export default function HomePageClient() {
             >
               Explore the cockpit ⊙
             </Link>
+            <Link
+              href='/why-provable'
+              className='text-[0.6rem] sm:text-[0.72rem] font-[600] text-[#a8d8f0]/35 hover:text-[#a8d8f0]/60 transition-colors tracking-widest uppercase'
+              style={{ fontFamily: 'var(--font-mulish)' }}
+            >
+              Why verification matters →
+            </Link>
           </div>
         </div>
       </section>
