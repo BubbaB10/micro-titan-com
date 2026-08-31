@@ -727,18 +727,18 @@ function StageTangleCard({ icon, source, content, time, rotate, tileColor }: Tan
         <span style={{ fontSize: 8, lineHeight: 1 }}>{icon}</span>
       </div>
       <div style={{ flex: 1, minWidth: 0 }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', gap: 2, marginBottom: 1 }}>
+        <div style={{ marginBottom: 1 }}>
           <span style={{
+            display: 'block',
             fontSize: 6.5, fontWeight: 700,
             textTransform: 'uppercase' as const,
             letterSpacing: '0.08em',
             color: 'rgba(168,216,240,0.4)',
             overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
-            flex: 1, minWidth: 0,
           }}>
             {source}
           </span>
-          <span style={{ fontSize: 6, color: 'rgba(168,216,240,0.3)', flexShrink: 0 }}>{time}</span>
+          <span style={{ display: 'block', fontSize: 5, color: 'rgba(168,216,240,0.25)' }}>{time}</span>
         </div>
         <p style={{ fontSize: 8, color: '#ccdff0', lineHeight: 1.3, margin: 0 }}>{content}</p>
       </div>
