@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { } from 'react';
 import Link from 'next/link';
 import HeroV5, { ARM_SUBHEADS, ArmStack } from './HeroV5';
 import Footer from './Footer';
@@ -70,73 +70,23 @@ function ScreenIcon() {
 
 const FEATURES = [
   { title: 'Smart Agents', body: 'Work in the background to get things done.', Icon: AgentIcon },
-  { title: 'Verified & Secure', body: 'Checks, operates and built-in verification.', Icon: ShieldIcon },
-  { title: 'Your Rules', body: 'You decide what and how it runs.', Icon: SlidersIcon },
-  { title: 'One Clear Screen', body: 'Get back one system that proves itself.', Icon: ScreenIcon },
+  { title: 'Verified & Secure', body: 'Checks, balances, and built-in verification.', Icon: ShieldIcon },
+  { title: 'Your Rules', body: 'You decide what matters and how it runs.', Icon: SlidersIcon },
+  { title: 'One Clear Screen', body: 'Your life, organized and always current.', Icon: ScreenIcon },
 ];
 
 // ─── HOME PAGE CLIENT ─────────────────────────────────────────────────────────
 
-// Arm dwell. ~730ms of each cycle is crossfade (ArmStack: 380ms swap delay + 0.35s fade),
-// so the readable hold is DWELL_MS minus that. 5000 gave only ~4.3s and was too fast to read.
-const ARM_DWELL_MS = 9000;
-
 export default function HomePageClient() {
-  const [armIndex, setArmIndex] = useState(0);
-  const [hoverPaused, setHoverPaused] = useState(false);
-  const [userSelected, setUserSelected] = useState(false);
-  const [reducedMotion, setReducedMotion] = useState(false);
-  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const touchRef = useRef<{x: number; y: number} | null>(null);
-
-  useEffect(() => {
-    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
-    setReducedMotion(mq.matches);
-    const onChange = (e: MediaQueryListEvent) => setReducedMotion(e.matches);
-    mq.addEventListener('change', onChange);
-    return () => mq.removeEventListener('change', onChange);
-  }, []);
-
-  useEffect(() => {
-    if (reducedMotion || hoverPaused || userSelected) {
-      if (timerRef.current) clearInterval(timerRef.current);
-      timerRef.current = null;
-      return;
-    }
-    timerRef.current = setInterval(() => {
-      setArmIndex(prev => (prev + 1) % 4);
-    }, ARM_DWELL_MS);
-    return () => {
-      if (timerRef.current) clearInterval(timerRef.current);
-    };
-  }, [reducedMotion, hoverPaused, userSelected]);
+  const armIndex = 0;
+  const reducedMotion = false;
 
   return (
     <>
       {/* ── HERO SECTION ───────────────────────────────────────────────── */}
       <section
         className='relative px-2 sm:px-4 pt-20 sm:pt-24 lg:pt-28 pb-6 overflow-hidden'
-        tabIndex={0}
         aria-label='Micro Titan product showcase'
-        onMouseEnter={() => setHoverPaused(true)}
-        onMouseLeave={() => setHoverPaused(false)}
-        onFocus={() => setHoverPaused(true)}
-        onBlur={() => setHoverPaused(false)}
-        onTouchStart={(e) => { touchRef.current = { x: e.touches[0].clientX, y: e.touches[0].clientY }; }}
-        onTouchEnd={(e) => {
-          if (!touchRef.current) return;
-          const dx = e.changedTouches[0].clientX - touchRef.current.x;
-          const dy = e.changedTouches[0].clientY - touchRef.current.y;
-          if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.5) {
-            setArmIndex(prev => (prev + (dx < 0 ? 1 : 3)) % 4);
-            setUserSelected(true);
-          }
-          touchRef.current = null;
-        }}
-        onKeyDown={(e) => {
-          if (e.key === 'ArrowLeft') { setArmIndex(prev => (prev + 3) % 4); setUserSelected(true); }
-          if (e.key === 'ArrowRight') { setArmIndex(prev => (prev + 1) % 4); setUserSelected(true); }
-        }}
       >
         <div
           aria-hidden='true'
@@ -174,21 +124,7 @@ export default function HomePageClient() {
           {/* Hero diagram */}
           <HeroV5 armIndex={armIndex} reduced={reducedMotion} />
 
-          {/* Position dots — outside scaled stage, below diagram, above feature row */}
-          <div className='flex justify-center gap-2 mt-3' aria-hidden='true'>
-            {[0, 1, 2, 3].map(i => (
-              <div
-                key={i}
-                style={{
-                  width: 6,
-                  height: 6,
-                  borderRadius: '50%',
-                  background: i === armIndex ? '#7c3aed' : 'rgba(168,216,240,0.38)',
-                  transition: 'background 0.3s',
-                }}
-              />
-            ))}
-          </div>
+
 
         </div>
       </section>
