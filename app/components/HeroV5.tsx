@@ -431,7 +431,7 @@ function TangleCard({
         {/* Content: source label / content text / time */}
         <div className='flex-1 min-w-0'>
           <div className='flex items-baseline justify-between gap-0.5 mb-[1px]'>
-            <span className='font-[700] uppercase tracking-widest text-[#a8d8f0]/40 truncate text-[0.3rem] lg:text-[0.52rem]'>
+            <span className='font-[700] uppercase tracking-wide text-[#a8d8f0]/40 text-[0.3rem] lg:text-[0.52rem]' style={{overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>
               {source}
             </span>
             <span className='text-[#a8d8f0]/30 flex-shrink-0 text-[0.28rem] lg:text-[0.48rem]'>
@@ -1025,10 +1025,11 @@ export default function HeroV5({ armIndex, reduced = false }: { armIndex: number
             </svg>
             <span
               style={{
-                fontSize: '0.55rem', fontWeight: 400,
-                color: 'rgba(168,216,240,0.6)',
-                fontFamily: "'Brush Script MT', 'Apple Chancery', cursive",
-                letterSpacing: '0.01em',
+                fontSize: '0.65rem', fontWeight: 700,
+                color: 'rgba(168,216,240,0.75)',
+                fontFamily: 'var(--font-mulish)',
+                letterSpacing: '0.08em',
+                textTransform: 'uppercase',
               }}
             >
               The tangle goes in.
@@ -1076,10 +1077,11 @@ export default function HeroV5({ armIndex, reduced = false }: { armIndex: number
             </svg>
             <span
               style={{
-                fontSize: '0.55rem', fontWeight: 400,
-                color: 'rgba(168,216,240,0.6)',
-                fontFamily: "'Brush Script MT', 'Apple Chancery', cursive",
-                letterSpacing: '0.01em',
+                fontSize: '0.65rem', fontWeight: 700,
+                color: 'rgba(168,216,240,0.75)',
+                fontFamily: 'var(--font-mulish)',
+                letterSpacing: '0.08em',
+                textTransform: 'uppercase',
                 lineHeight: 1.4,
               }}
             >
