@@ -115,7 +115,7 @@ export default function HomePageClient() {
     <>
       {/* ── HERO SECTION ───────────────────────────────────────────────── */}
       <section
-        className='relative px-2 sm:px-4 pt-20 sm:pt-24 lg:pt-28 pb-6 overflow-hidden'
+        className='relative px-2 sm:px-4 pt-16 sm:pt-20 lg:pt-28 pb-6 overflow-hidden'
         tabIndex={0}
         aria-label='Micro Titan product showcase'
         onMouseEnter={() => setHoverPaused(true)}
@@ -146,7 +146,7 @@ export default function HomePageClient() {
 
         <div className='relative z-10 max-w-6xl mx-auto'>
           {/* H1 */}
-          <div className='flex flex-col items-center text-center mb-3 sm:mb-5'>
+          <div className='flex flex-col items-center text-center mb-2 sm:mb-4'>
             <h1
               className='font-[800] tracking-tight text-[#f4f7fa] leading-[1.05] mb-2 sm:mb-3'
               style={{ fontFamily: 'var(--font-mulish)', fontSize: 'clamp(2.4rem, 9vw, 4rem)' }}

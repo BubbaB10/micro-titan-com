@@ -202,9 +202,9 @@ const DOMAIN_COLORS = ['#60a5fa', '#34d399', '#a78bfa', '#fbbf24', '#f87171'];
 const LEFT_NODES  = [0.15, 0.29, 0.44, 0.57, 0.70, 0.83];
 const RIGHT_NODES = [0.32, 0.42, 0.50, 0.58, 0.67];
 
-// Fixed y-coordinates (CSS px) for the 402 × 439 stage.
-const TANGLE_Y = [25, 93, 159, 224, 290, 349];
-const DOMAIN_Y  = [92, 143, 196, 250, 303];
+// Fixed y-coordinates (CSS px) for the 402 × 340 stage.
+const TANGLE_Y = [8, 56, 105, 153, 201, 247];
+const DOMAIN_Y  = [72, 112, 152, 192, 234];
 
 // ─── CURVE COMPUTATION (DOM-measured bezier connector lines) ─────────────────
 
@@ -718,19 +718,19 @@ function StageTangleCard({ icon, source, content, time, rotate, tileColor }: Tan
     >
       <div
         style={{
-          flexShrink: 0, width: 14, height: 14, borderRadius: 2,
+          flexShrink: 0, width: 12, height: 12, borderRadius: 2,
           background: `linear-gradient(135deg, ${tileColor}28 0%, ${tileColor}14 100%)`,
           border: `1px solid ${tileColor}24`,
           display: 'flex', alignItems: 'center', justifyContent: 'center',
         }}
       >
-        <span style={{ fontSize: 8, lineHeight: 1 }}>{icon}</span>
+        <span style={{ fontSize: 7, lineHeight: 1 }}>{icon}</span>
       </div>
       <div style={{ flex: 1, minWidth: 0 }}>
         <div style={{ marginBottom: 1 }}>
           <span style={{
             display: 'block',
-            fontSize: 6.5, fontWeight: 700,
+            fontSize: 5.5, fontWeight: 700,
             textTransform: 'uppercase' as const,
             letterSpacing: '0.08em',
             color: 'rgba(168,216,240,0.4)',
@@ -738,9 +738,9 @@ function StageTangleCard({ icon, source, content, time, rotate, tileColor }: Tan
           }}>
             {source}
           </span>
-          <span style={{ display: 'block', fontSize: 5, color: 'rgba(168,216,240,0.25)' }}>{time}</span>
+          <span style={{ display: 'block', fontSize: 4.5, color: 'rgba(168,216,240,0.25)' }}>{time}</span>
         </div>
-        <p style={{ fontSize: 8, color: '#ccdff0', lineHeight: 1.3, margin: 0 }}>{content}</p>
+        <p style={{ fontSize: 7, color: '#ccdff0', lineHeight: 1.3, margin: 0 }}>{content}</p>
       </div>
     </div>
   );
@@ -762,19 +762,19 @@ function StageDomainCard({ icon, name, status, tileColor }: RightItem & { tileCo
     >
       <div
         style={{
-          flexShrink: 0, width: 22,
+          flexShrink: 0, width: 18,
           background: `linear-gradient(160deg, ${tileColor}30 0%, ${tileColor}18 100%)`,
           borderRight: `1px solid ${tileColor}22`,
           display: 'flex', alignItems: 'center', justifyContent: 'center',
         }}
       >
-        <span style={{ fontSize: 9, lineHeight: 1 }}>{icon}</span>
+        <span style={{ fontSize: 8, lineHeight: 1 }}>{icon}</span>
       </div>
-      <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '0 5px' }}>
-        <span style={{ fontSize: 8, fontWeight: 600, color: '#f4f7fa', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{name}</span>
+      <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '0 4px' }}>
+        <span style={{ fontSize: 7, fontWeight: 600, color: '#f4f7fa', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{name}</span>
         <div style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-          <span style={{ fontSize: 7, color: '#22c55e', flexShrink: 0 }}>&#10003;</span>
-          <span style={{ fontSize: 6.5, color: 'rgba(34,197,94,0.65)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{status}</span>
+          <span style={{ fontSize: 6, color: '#22c55e', flexShrink: 0 }}>&#10003;</span>
+          <span style={{ fontSize: 5.5, color: 'rgba(34,197,94,0.65)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{status}</span>
         </div>
       </div>
     </div>
@@ -808,7 +808,7 @@ function StagePhone({ armIndex, reduced }: { armIndex: number; reduced: boolean 
     <div
       data-phone-body='true'
       style={{
-        width: 150, height: 400,
+        width: 155, height: 272,
         background: '#060b18',
         borderRadius: 14,
         border: '1.5px solid rgba(109,40,217,0.65)',
@@ -819,12 +819,12 @@ function StagePhone({ armIndex, reduced }: { armIndex: number; reduced: boolean 
       }}
     >
       {/* Status bar */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 8px 2px', flexShrink: 0 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', padding: '4px 8px 1px', flexShrink: 0 }}>
         <span style={{ fontSize: 7, color: 'rgba(168,216,240,0.4)' }}>9:41</span>
         <span style={{ fontSize: 7, color: 'rgba(168,216,240,0.4)' }}>&#9679;&#9679;&#9679;</span>
       </div>
       {/* App header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '2px 8px 3px', borderBottom: '1px solid rgba(30,58,95,0.5)', flexShrink: 0 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1px 8px 2px', borderBottom: '1px solid rgba(30,58,95,0.5)', flexShrink: 0 }}>
         <span style={{ fontSize: 9, color: 'rgba(168,216,240,0.45)' }}>&#8249;</span>
         <span style={{ fontSize: 7, fontWeight: 700, letterSpacing: '0.18em', color: 'rgba(168,216,240,0.85)', textTransform: 'uppercase' as const }}>
           {ARMS[armIndex].product.split('').join(' ')}
@@ -833,7 +833,7 @@ function StagePhone({ armIndex, reduced }: { armIndex: number; reduced: boolean 
       </div>
       {/* Greeting */}
       <ArmStack armIndex={armIndex} reduced={reduced} arms={ARMS.map(arm => (
-        <div style={{ padding: '5px 8px 2px' }}>
+        <div style={{ padding: '3px 8px 1px' }}>
           <div style={{ fontSize: 6, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase' as const, color: 'rgba(168,216,240,0.4)', visibility: (arm.greetingLabel ? 'visible' : 'hidden') as React.CSSProperties['visibility'] }}>
             {arm.greetingLabel || 'Good afternoon,'}
           </div>
@@ -847,8 +847,8 @@ function StagePhone({ armIndex, reduced }: { armIndex: number; reduced: boolean 
       ))} />
       {/* Verdict */}
       <ArmStack armIndex={armIndex} reduced={reduced} arms={ARMS.map(arm => (
-        <div style={{ padding: '0 8px 4px' }}>
-          <div style={{ background: '#0a1c35', borderRadius: 8, padding: '4px 8px', border: '1px solid rgba(30,58,95,0.6)', boxShadow: '0 0 0 1px rgba(34,197,94,0.15), 0 0 10px rgba(34,197,94,0.08)' }}>
+        <div style={{ padding: '0 8px 3px' }}>
+          <div style={{ background: '#0a1c35', borderRadius: 8, padding: '3px 8px', border: '1px solid rgba(30,58,95,0.6)', boxShadow: '0 0 0 1px rgba(34,197,94,0.15), 0 0 10px rgba(34,197,94,0.08)' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
               <span style={{ fontSize: 9, color: '#22c55e', fontWeight: 800 }}>&#10003;</span>
               <span style={{ fontSize: 8, fontWeight: 700, color: '#f4f7fa' }}>{arm.verdictMain}</span>
@@ -864,16 +864,16 @@ function StagePhone({ armIndex, reduced }: { armIndex: number; reduced: boolean 
           { label: 'NEEDS YOU (2)', color: '#f0b429', active: false },
           { label: 'ARCHIVE', color: 'rgba(168,216,240,0.35)', active: false },
         ].map(({ label, color, active }) => (
-          <div key={label} style={{ flex: 1, fontSize: 6, fontWeight: active ? 700 : 600, color, padding: '3px 0', textAlign: 'center' as const, borderBottom: active ? `1.5px solid ${color}` : 'none' }}>
+          <div key={label} style={{ flex: 1, fontSize: 6, fontWeight: active ? 700 : 600, color, padding: '2px 0', textAlign: 'center' as const, borderBottom: active ? `1.5px solid ${color}` : 'none' }}>
             {label}
           </div>
         ))}
       </div>
       {/* Handled items */}
       <ArmStack armIndex={armIndex} reduced={reduced} arms={ARMS.map(arm => (
-        <div style={{ padding: '2px 6px' }}>
+        <div style={{ padding: '1px 6px' }}>
           {arm.handled.map((item, i) => (
-            <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '2px 0', borderBottom: i < arm.handled.length - 1 ? '1px solid rgba(30,58,95,0.2)' : 'none' }}>
+            <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1px 0', borderBottom: i < arm.handled.length - 1 ? '1px solid rgba(30,58,95,0.2)' : 'none' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 3, minWidth: 0, flex: 1 }}>
                 <span style={{ fontSize: 7, color: '#22c55e', flexShrink: 0 }}>&#10003;</span>
                 <span style={{ fontSize: 7, color: '#c8dff0', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.text}</span>
@@ -885,9 +885,9 @@ function StagePhone({ armIndex, reduced }: { armIndex: number; reduced: boolean 
       ))} />
       {/* Needs You */}
       <ArmStack armIndex={armIndex} reduced={reduced} arms={ARMS.map(arm => (
-        <div style={{ padding: '2px 6px', display: 'flex', flexDirection: 'column', gap: 3 }}>
+        <div style={{ padding: '1px 6px', display: 'flex', flexDirection: 'column', gap: 3 }}>
           {arm.needsYou.map((card, i) => (
-            <div key={i} style={{ background: '#0a1c35', borderRadius: 6, padding: '4px 6px', border: '1px solid rgba(240,180,41,0.2)' }}>
+            <div key={i} style={{ background: '#0a1c35', borderRadius: 6, padding: '3px 6px', border: '1px solid rgba(240,180,41,0.2)' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 3 }}>
                 <span style={{ fontSize: 9, color: '#f0b429', fontWeight: 700, flexShrink: 0 }}>{card.icon}</span>
                 <div style={{ minWidth: 0, flex: 1 }}>
@@ -901,12 +901,12 @@ function StagePhone({ armIndex, reduced }: { armIndex: number; reduced: boolean 
         </div>
       ))} />
       {/* 47 other items — always in DOM */}
-      <div style={{ margin: '2px 6px', background: 'rgba(10,28,53,0.7)', borderRadius: 6, padding: '3px 8px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexShrink: 0 }}>
+      <div style={{ margin: '1px 6px', background: 'rgba(10,28,53,0.7)', borderRadius: 6, padding: '2px 8px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexShrink: 0 }}>
         <span style={{ fontSize: 7, color: 'rgba(168,216,240,0.6)', fontWeight: 500 }}>47 other items handled quietly</span>
         <span style={{ fontSize: 10, color: 'rgba(168,216,240,0.3)', marginLeft: 3 }}>&#8897;</span>
       </div>
       {/* Bottom bar */}
-      <div style={{ display: 'flex', justifyContent: 'space-around', padding: '4px 4px 5px', borderTop: '1px solid rgba(30,58,95,0.5)', background: '#04080f', marginTop: 'auto', flexShrink: 0 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-around', padding: '3px 4px 4px', borderTop: '1px solid rgba(30,58,95,0.5)', background: '#04080f', marginTop: 'auto', flexShrink: 0 }}>
         {['Home', 'Feed', 'Search', 'Settings'].map(item => (
           <span key={item} style={{ fontSize: 6, color: 'rgba(168,216,240,0.35)', fontWeight: 600 }}>{item}</span>
         ))}
@@ -1167,7 +1167,7 @@ export default function HeroV5({ armIndex, reduced = false }: { armIndex: number
         )}
       </div>
 
-      {/* ══ MOBILE / TABLET < 1024px: fixed-coordinate 402 × 439 stage ══
+      {/* ══ MOBILE / TABLET < 1024px: fixed-coordinate 402 × 340 stage ══
           Stage is authored at 402 CSS px (iPhone 16 Pro viewport width).
           ResizeObserver scales the stage div so it fills the actual container.
           Nothing inside reflowscales or responds to media queries — the
@@ -1175,11 +1175,11 @@ export default function HeroV5({ armIndex, reduced = false }: { armIndex: number
       <div
         ref={wrapRef}
         className='lg:hidden'
-        style={{ width: '100%', aspectRatio: '402 / 439', position: 'relative', overflow: 'hidden' }}
+        style={{ width: '100%', aspectRatio: '402 / 340', position: 'relative', overflow: 'hidden' }}
       >
         <div
           ref={stageRef}
-          style={{ position: 'absolute', top: 0, left: 0, width: 402, height: 439, transformOrigin: 'top left' }}
+          style={{ position: 'absolute', top: 0, left: 0, width: 402, height: 340, transformOrigin: 'top left' }}
         >
           {/* Ribbon artwork — two layers split at phone centre (x=201).
               objectFit:cover + objectPosition:top → source y=0 at stage y=0 (pure black
@@ -1200,6 +1200,7 @@ export default function HeroV5({ armIndex, reduced = false }: { armIndex: number
                 width: '100%', height: '100%',
                 objectFit: 'cover', objectPosition: 'top',
                 mixBlendMode: 'screen',
+                opacity: 0.75,
                 pointerEvents: 'none',
                 zIndex: 0,
                 clipPath: 'inset(0 201px 0 0)',
@@ -1219,6 +1220,7 @@ export default function HeroV5({ armIndex, reduced = false }: { armIndex: number
                 width: '100%', height: '100%',
                 objectFit: 'cover', objectPosition: 'top',
                 mixBlendMode: 'screen',
+                opacity: 0.75,
                 pointerEvents: 'none',
                 zIndex: 0,
                 clipPath: 'inset(0 0 0 201px)',
@@ -1232,8 +1234,8 @@ export default function HeroV5({ armIndex, reduced = false }: { armIndex: number
             aria-hidden='true'
             style={{
               position: 'absolute',
-              left: 126, top: 220, width: 150, height: 180,
-              background: 'radial-gradient(ellipse 80% 100% at 50% 100%, rgba(109,40,217,0.55) 0%, rgba(109,40,217,0.22) 50%, transparent 75%)',
+              left: 110, top: 130, width: 185, height: 180,
+              background: 'radial-gradient(ellipse 80% 100% at 50% 100%, rgba(109,40,217,0.50) 0%, rgba(109,40,217,0.20) 50%, transparent 75%)',
               pointerEvents: 'none', zIndex: 1,
               filter: 'blur(14px)',
             }}
@@ -1296,7 +1298,7 @@ export default function HeroV5({ armIndex, reduced = false }: { armIndex: number
                   {arm.tangle.map((card, i) => (
                     <div
                       key={`l${i}`}
-                      style={{ position: 'absolute', left: 12, width: 72, top: TANGLE_Y[i] }}
+                      style={{ position: 'absolute', left: 8, width: 70, top: TANGLE_Y[i] }}
                     >
                       <StageTangleCard {...card} tileColor={TANGLE_COLORS[i % TANGLE_COLORS.length]} />
                     </div>
@@ -1306,7 +1308,7 @@ export default function HeroV5({ armIndex, reduced = false }: { armIndex: number
                     arm.right.map((item, i) => (
                       <div
                         key={`r${i}`}
-                        style={{ position: 'absolute', left: 311, width: 77, height: 42, top: DOMAIN_Y[i] }}
+                        style={{ position: 'absolute', left: 320, width: 74, height: 34, top: DOMAIN_Y[i] }}
                       >
                         <StageModuleCard name={item.name} status={item.status} />
                       </div>
@@ -1315,7 +1317,7 @@ export default function HeroV5({ armIndex, reduced = false }: { armIndex: number
                     arm.right.map((item, i) => (
                       <div
                         key={`r${i}`}
-                        style={{ position: 'absolute', left: 311, width: 77, height: 42, top: DOMAIN_Y[i] }}
+                        style={{ position: 'absolute', left: 320, width: 74, height: 34, top: DOMAIN_Y[i] }}
                       >
                         <StageDomainCard {...item} tileColor={DOMAIN_COLORS[i % DOMAIN_COLORS.length]} />
                       </div>
@@ -1327,19 +1329,19 @@ export default function HeroV5({ armIndex, reduced = false }: { armIndex: number
           </div>
 
           {/* Phone — fixed position in the centre column */}
-          <div style={{ position: 'absolute', left: 126, top: 32, width: 150, height: 400, zIndex: 3 }}>
+          <div style={{ position: 'absolute', left: 124, top: 35, width: 155, height: 272, zIndex: 3 }}>
             <StagePhone armIndex={armIndex} reduced={effectiveReduced} />
           </div>
 
           {/* Static connector curves — mirrors desktop computeCurves() using known stage coords.
-              Phone: left=126, right=276, centerY=232 (top=32, height=400).
-              Tangle right edge: 84 (left=12, width=72, card center ≈ TANGLE_Y[i]+17).
-              Domain left edge: 311 (left=311, width=77, height=42, center = DOMAIN_Y[i]+21).
+              Phone: left=124, right=279, centerY=171 (top=35, height=272).
+              Tangle right edge: 78 (left=8, width=70, card center ≈ TANGLE_Y[i]+19).
+              Domain left edge: 320 (left=320, width=74, height=34, center = DOMAIN_Y[i]+17).
               Left entryY uses same SHUFFLE as desktop; right exitY uses same fan formula. */}
           <svg
             aria-hidden='true'
-            style={{ position: 'absolute', left: 0, top: 0, width: 402, height: 439, pointerEvents: 'none', zIndex: 4 }}
-            viewBox='0 0 402 439'
+            style={{ position: 'absolute', left: 0, top: 0, width: 402, height: 340, pointerEvents: 'none', zIndex: 4 }}
+            viewBox='0 0 402 340'
           >
             <defs>
               <filter id='mcg' x='-50%' y='-50%' width='200%' height='200%' colorInterpolationFilters='sRGB'>
@@ -1348,58 +1350,58 @@ export default function HeroV5({ armIndex, reduced = false }: { armIndex: number
             </defs>
             {/* Glow layer */}
             <g filter='url(#mcg)' strokeLinecap='round' fill='none'>
-              <path d='M 84 42 C 101 185 118 325 126 325' stroke='#22d3ee' strokeWidth='5' strokeOpacity='0.35'/>
-              <path d='M 84 110 C 101 202 118 165 126 165' stroke='#a78bfa' strokeWidth='5' strokeOpacity='0.35'/>
-              <path d='M 84 176 C 101 218 118 267 126 267' stroke='#f87171' strokeWidth='5' strokeOpacity='0.35'/>
-              <path d='M 84 241 C 101 234 118 197 126 197' stroke='#60a5fa' strokeWidth='5' strokeOpacity='0.35'/>
-              <path d='M 84 307 C 101 251 118 245 126 245' stroke='#fbbf24' strokeWidth='5' strokeOpacity='0.35'/>
-              <path d='M 84 366 C 101 266 118 139 126 139' stroke='#34d399' strokeWidth='5' strokeOpacity='0.35'/>
-              <path d='M 276 142 C 288 142 299 113 311 113' stroke='#60a5fa' strokeWidth='5' strokeOpacity='0.35'/>
-              <path d='M 276 187 C 288 187 299 164 311 164' stroke='#34d399' strokeWidth='5' strokeOpacity='0.35'/>
-              <path d='M 276 232 C 288 232 299 217 311 217' stroke='#a78bfa' strokeWidth='5' strokeOpacity='0.35'/>
-              <path d='M 276 277 C 288 277 299 271 311 271' stroke='#fbbf24' strokeWidth='5' strokeOpacity='0.35'/>
-              <path d='M 276 322 C 288 322 299 324 311 324' stroke='#f87171' strokeWidth='5' strokeOpacity='0.35'/>
+              <path d='M 78 27 C 96 135 115 234 124 234' stroke='#22d3ee' strokeWidth='5' strokeOpacity='0.35'/>
+              <path d='M 78 75 C 96 147 115 125 124 125' stroke='#a78bfa' strokeWidth='5' strokeOpacity='0.35'/>
+              <path d='M 78 124 C 96 159 115 195 124 195' stroke='#f87171' strokeWidth='5' strokeOpacity='0.35'/>
+              <path d='M 78 172 C 96 171 115 147 124 147' stroke='#60a5fa' strokeWidth='5' strokeOpacity='0.35'/>
+              <path d='M 78 220 C 96 183 115 180 124 180' stroke='#fbbf24' strokeWidth='5' strokeOpacity='0.35'/>
+              <path d='M 78 266 C 96 195 115 108 124 108' stroke='#34d399' strokeWidth='5' strokeOpacity='0.35'/>
+              <path d='M 279 110 C 293 110 306 89 320 89' stroke='#60a5fa' strokeWidth='5' strokeOpacity='0.35'/>
+              <path d='M 279 140 C 293 140 306 129 320 129' stroke='#34d399' strokeWidth='5' strokeOpacity='0.35'/>
+              <path d='M 279 171 C 293 171 306 169 320 169' stroke='#a78bfa' strokeWidth='5' strokeOpacity='0.35'/>
+              <path d='M 279 202 C 293 202 306 209 320 209' stroke='#fbbf24' strokeWidth='5' strokeOpacity='0.35'/>
+              <path d='M 279 232 C 293 232 306 251 320 251' stroke='#f87171' strokeWidth='5' strokeOpacity='0.35'/>
             </g>
             {/* Core layer */}
             <g strokeLinecap='round' fill='none' strokeWidth='0.9'>
-              <path d='M 84 42 C 101 185 118 325 126 325' stroke='#22d3ee' strokeOpacity='0.82'/>
-              <path d='M 84 110 C 101 202 118 165 126 165' stroke='#a78bfa' strokeOpacity='0.82'/>
-              <path d='M 84 176 C 101 218 118 267 126 267' stroke='#f87171' strokeOpacity='0.82'/>
-              <path d='M 84 241 C 101 234 118 197 126 197' stroke='#60a5fa' strokeOpacity='0.82'/>
-              <path d='M 84 307 C 101 251 118 245 126 245' stroke='#fbbf24' strokeOpacity='0.82'/>
-              <path d='M 84 366 C 101 266 118 139 126 139' stroke='#34d399' strokeOpacity='0.82'/>
-              <path d='M 276 142 C 288 142 299 113 311 113' stroke='#60a5fa' strokeOpacity='0.82'/>
-              <path d='M 276 187 C 288 187 299 164 311 164' stroke='#34d399' strokeOpacity='0.82'/>
-              <path d='M 276 232 C 288 232 299 217 311 217' stroke='#a78bfa' strokeOpacity='0.82'/>
-              <path d='M 276 277 C 288 277 299 271 311 271' stroke='#fbbf24' strokeOpacity='0.82'/>
-              <path d='M 276 322 C 288 322 299 324 311 324' stroke='#f87171' strokeOpacity='0.82'/>
+              <path d='M 78 27 C 96 135 115 234 124 234' stroke='#22d3ee' strokeOpacity='0.82'/>
+              <path d='M 78 75 C 96 147 115 125 124 125' stroke='#a78bfa' strokeOpacity='0.82'/>
+              <path d='M 78 124 C 96 159 115 195 124 195' stroke='#f87171' strokeOpacity='0.82'/>
+              <path d='M 78 172 C 96 171 115 147 124 147' stroke='#60a5fa' strokeOpacity='0.82'/>
+              <path d='M 78 220 C 96 183 115 180 124 180' stroke='#fbbf24' strokeOpacity='0.82'/>
+              <path d='M 78 266 C 96 195 115 108 124 108' stroke='#34d399' strokeOpacity='0.82'/>
+              <path d='M 279 110 C 293 110 306 89 320 89' stroke='#60a5fa' strokeOpacity='0.82'/>
+              <path d='M 279 140 C 293 140 306 129 320 129' stroke='#34d399' strokeOpacity='0.82'/>
+              <path d='M 279 171 C 293 171 306 169 320 169' stroke='#a78bfa' strokeOpacity='0.82'/>
+              <path d='M 279 202 C 293 202 306 209 320 209' stroke='#fbbf24' strokeOpacity='0.82'/>
+              <path d='M 279 232 C 293 232 306 251 320 251' stroke='#f87171' strokeOpacity='0.82'/>
             </g>
             {/* Node dots — glow */}
             <g filter='url(#mcg)'>
-              <circle cx='84' cy='42' r='3' fill='#22d3ee' fillOpacity='0.45'/>
-              <circle cx='84' cy='110' r='3' fill='#a78bfa' fillOpacity='0.45'/>
-              <circle cx='84' cy='176' r='3' fill='#f87171' fillOpacity='0.45'/>
-              <circle cx='84' cy='241' r='3' fill='#60a5fa' fillOpacity='0.45'/>
-              <circle cx='84' cy='307' r='3' fill='#fbbf24' fillOpacity='0.45'/>
-              <circle cx='84' cy='366' r='3' fill='#34d399' fillOpacity='0.45'/>
-              <circle cx='311' cy='113' r='3' fill='#60a5fa' fillOpacity='0.45'/>
-              <circle cx='311' cy='164' r='3' fill='#34d399' fillOpacity='0.45'/>
-              <circle cx='311' cy='217' r='3' fill='#a78bfa' fillOpacity='0.45'/>
-              <circle cx='311' cy='271' r='3' fill='#fbbf24' fillOpacity='0.45'/>
-              <circle cx='311' cy='324' r='3' fill='#f87171' fillOpacity='0.45'/>
+              <circle cx='78' cy='27' r='3' fill='#22d3ee' fillOpacity='0.45'/>
+              <circle cx='78' cy='75' r='3' fill='#a78bfa' fillOpacity='0.45'/>
+              <circle cx='78' cy='124' r='3' fill='#f87171' fillOpacity='0.45'/>
+              <circle cx='78' cy='172' r='3' fill='#60a5fa' fillOpacity='0.45'/>
+              <circle cx='78' cy='220' r='3' fill='#fbbf24' fillOpacity='0.45'/>
+              <circle cx='78' cy='266' r='3' fill='#34d399' fillOpacity='0.45'/>
+              <circle cx='320' cy='89' r='3' fill='#60a5fa' fillOpacity='0.45'/>
+              <circle cx='320' cy='129' r='3' fill='#34d399' fillOpacity='0.45'/>
+              <circle cx='320' cy='169' r='3' fill='#a78bfa' fillOpacity='0.45'/>
+              <circle cx='320' cy='209' r='3' fill='#fbbf24' fillOpacity='0.45'/>
+              <circle cx='320' cy='251' r='3' fill='#f87171' fillOpacity='0.45'/>
             </g>
             {/* Node dots — core */}
-            <circle cx='84' cy='42' r='1.5' fill='#22d3ee' fillOpacity='0.85'/>
-            <circle cx='84' cy='110' r='1.5' fill='#a78bfa' fillOpacity='0.85'/>
-            <circle cx='84' cy='176' r='1.5' fill='#f87171' fillOpacity='0.85'/>
-            <circle cx='84' cy='241' r='1.5' fill='#60a5fa' fillOpacity='0.85'/>
-            <circle cx='84' cy='307' r='1.5' fill='#fbbf24' fillOpacity='0.85'/>
-            <circle cx='84' cy='366' r='1.5' fill='#34d399' fillOpacity='0.85'/>
-            <circle cx='311' cy='113' r='1.5' fill='#60a5fa' fillOpacity='0.85'/>
-            <circle cx='311' cy='164' r='1.5' fill='#34d399' fillOpacity='0.85'/>
-            <circle cx='311' cy='217' r='1.5' fill='#a78bfa' fillOpacity='0.85'/>
-            <circle cx='311' cy='271' r='1.5' fill='#fbbf24' fillOpacity='0.85'/>
-            <circle cx='311' cy='324' r='1.5' fill='#f87171' fillOpacity='0.85'/>
+            <circle cx='78' cy='27' r='1.5' fill='#22d3ee' fillOpacity='0.85'/>
+            <circle cx='78' cy='75' r='1.5' fill='#a78bfa' fillOpacity='0.85'/>
+            <circle cx='78' cy='124' r='1.5' fill='#f87171' fillOpacity='0.85'/>
+            <circle cx='78' cy='172' r='1.5' fill='#60a5fa' fillOpacity='0.85'/>
+            <circle cx='78' cy='220' r='1.5' fill='#fbbf24' fillOpacity='0.85'/>
+            <circle cx='78' cy='266' r='1.5' fill='#34d399' fillOpacity='0.85'/>
+            <circle cx='320' cy='89' r='1.5' fill='#60a5fa' fillOpacity='0.85'/>
+            <circle cx='320' cy='129' r='1.5' fill='#34d399' fillOpacity='0.85'/>
+            <circle cx='320' cy='169' r='1.5' fill='#a78bfa' fillOpacity='0.85'/>
+            <circle cx='320' cy='209' r='1.5' fill='#fbbf24' fillOpacity='0.85'/>
+            <circle cx='320' cy='251' r='1.5' fill='#f87171' fillOpacity='0.85'/>
           </svg>
         </div>
       </div>
