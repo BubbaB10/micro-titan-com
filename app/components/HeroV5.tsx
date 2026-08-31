@@ -37,11 +37,11 @@ export const ARMS: ArmData[] = [
     id: 'valet',
     product: 'Valet',
     tangle: [
-      { icon: '\u{1F4AC}', source: 'Text Message', content: 'Helen — Can you pick up milk on the way home?', time: '12:47 PM', rotate: -1.5 },
+      { icon: '\u{1F4AC}', source: 'Text', content: 'Helen — Can you pick up milk on the way home?', time: '12:47 PM', rotate: -1.5 },
       { icon: '✉️', source: 'Email', content: 'Andy — Re: Tuesday meeting', time: '11:32 AM', rotate: 1 },
-      { icon: '⚡', source: 'Bill Received', content: 'Electric Company — $247.63, due May 28', time: '10:18 AM', rotate: -0.8 },
+      { icon: '⚡', source: 'Bill', content: 'Electric Company — $247.63, due May 28', time: '10:18 AM', rotate: -0.8 },
       { icon: '\u{1F4C5}', source: 'Calendar', content: 'Vet Appointment — Tomorrow, 10:00 AM', time: '9:41 AM', rotate: 1.2 },
-      { icon: '\u{1F4DD}', source: 'Quick Note', content: 'Order parts for laser trailer', time: '9:02 AM', rotate: -1 },
+      { icon: '\u{1F4DD}', source: 'Note', content: 'Order parts for laser trailer', time: '9:02 AM', rotate: -1 },
       { icon: '\u{1F9FE}', source: 'Receipt', content: 'Tractor Supply — $89.47', time: 'Yesterday', rotate: 0.5 },
     ],
     greetingLabel: 'Good afternoon,',
@@ -431,7 +431,7 @@ function TangleCard({
         {/* Content: source label / content text / time */}
         <div className='flex-1 min-w-0'>
           <div className='flex items-baseline justify-between gap-0.5 mb-[1px]'>
-            <span className='font-[700] uppercase tracking-wide text-[#a8d8f0]/40 text-[0.3rem] lg:text-[0.52rem]' style={{overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>
+            <span className='font-[700] uppercase tracking-wide text-[#a8d8f0]/40 truncate text-[0.3rem] lg:text-[0.52rem]'>
               {source}
             </span>
             <span className='text-[#a8d8f0]/30 flex-shrink-0 text-[0.28rem] lg:text-[0.48rem]'>
