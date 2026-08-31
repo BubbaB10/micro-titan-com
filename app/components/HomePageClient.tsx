@@ -1,6 +1,5 @@
 'use client';
 
-import { } from 'react';
 import Link from 'next/link';
 import HeroV5, { ARM_SUBHEADS, ArmStack } from './HeroV5';
 import Footer from './Footer';
