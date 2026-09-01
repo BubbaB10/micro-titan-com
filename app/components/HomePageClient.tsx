@@ -69,10 +69,10 @@ function ScreenIcon() {
 }
 
 const FEATURES = [
-  { title: 'Smart Agents', body: 'Work in the background to get things done.', Icon: AgentIcon },
-  { title: 'Verified & Secure', body: 'Checks, balances, and built-in verification.', Icon: ShieldIcon },
-  { title: 'Your Rules', body: 'You decide what matters and how it runs.', Icon: SlidersIcon },
-  { title: 'One Clear Screen', body: 'Your life, organized and always current.', Icon: ScreenIcon },
+  { title: 'Smart Agents', body: 'Work in the background to get things done.', Icon: AgentIcon, color: '#60a5fa' },
+  { title: 'Verified & Secure', body: 'Checks, balances, and built-in verification.', Icon: ShieldIcon, color: '#34d399' },
+  { title: 'Your Rules', body: 'You decide what matters and how it runs.', Icon: SlidersIcon, color: '#a78bfa' },
+  { title: 'One Clear Screen', body: 'Your life, organized and always current.', Icon: ScreenIcon, color: '#fbbf24' },
 ];
 
 // ─── HOME PAGE CLIENT ─────────────────────────────────────────────────────────
@@ -214,7 +214,7 @@ export default function HomePageClient() {
                   background: 'rgba(6,11,24,0.6)',
                 }}
               >
-                <div className='text-[#a8d8f0]/60' style={{ color: '#a8d8f0' }}>
+                <div style={{ color: feat.color }}>
                   <feat.Icon />
                 </div>
                 <div
