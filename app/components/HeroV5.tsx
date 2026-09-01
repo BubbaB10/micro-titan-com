@@ -203,8 +203,8 @@ const LEFT_NODES  = [0.15, 0.29, 0.44, 0.57, 0.70, 0.83];
 const RIGHT_NODES = [0.32, 0.42, 0.50, 0.58, 0.67];
 
 // Fixed y-coordinates (CSS px) for the 402 × 420 stage.
-const TANGLE_Y = [44, 101, 155, 215, 273, 329];
-const DOMAIN_Y  = [44, 130, 201, 276, 350];
+const TANGLE_Y = [50, 108, 166, 224, 282, 340];
+const DOMAIN_Y  = [50, 110, 170, 230, 290];
 
 // ─── CURVE COMPUTATION (DOM-measured bezier connector lines) ─────────────────
 
@@ -704,43 +704,52 @@ function StageTangleCard({ icon, source, content, time, rotate, tileColor }: Tan
     <div
       style={{
         background: '#0c1c36',
-        borderRadius: 6,
-        border: '1px solid rgba(255,255,255,0.07)',
-        borderTop: '1px solid rgba(255,255,255,0.1)',
+        borderRadius: 7,
+        border: `1px solid ${tileColor}22`,
+        borderTop: '1px solid rgba(255,255,255,0.09)',
         transform: `rotate(${rotate}deg)`,
         overflow: 'hidden',
-        padding: 4,
+        padding: '6px 7px',
         display: 'flex',
         alignItems: 'flex-start',
-        gap: 4,
-        boxShadow: '0 2px 6px rgba(0,0,0,0.5)',
+        gap: 6,
+        boxShadow: `0 2px 8px rgba(0,0,0,0.55), 0 0 0 1px ${tileColor}10`,
       }}
     >
+      {/* Circle icon */}
       <div
         style={{
-          flexShrink: 0, width: 16, height: 16, borderRadius: 3,
-          background: `linear-gradient(135deg, ${tileColor}28 0%, ${tileColor}14 100%)`,
-          border: `1px solid ${tileColor}24`,
+          flexShrink: 0, width: 22, height: 22, borderRadius: '50%',
+          background: `${tileColor}32`,
+          border: `1px solid ${tileColor}55`,
           display: 'flex', alignItems: 'center', justifyContent: 'center',
+          marginTop: 1,
         }}
       >
-        <span style={{ fontSize: 9, lineHeight: 1 }}>{icon}</span>
+        <span style={{ fontSize: 12, lineHeight: 1 }}>{icon}</span>
       </div>
       <div style={{ flex: 1, minWidth: 0 }}>
-        <div style={{ marginBottom: 1.5 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 2 }}>
           <span style={{
-            display: 'block',
-            fontSize: 6.5, fontWeight: 700,
+            fontSize: 7, fontWeight: 700,
             textTransform: 'uppercase' as const,
-            letterSpacing: '0.06em',
-            color: 'rgba(168,216,240,0.45)',
-            overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+            letterSpacing: '0.05em',
+            color: 'rgba(168,216,240,0.50)',
+            overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', flex: 1,
           }}>
             {source}
           </span>
-          <span style={{ display: 'block', fontSize: 5.5, color: 'rgba(168,216,240,0.25)' }}>{time}</span>
+          <span style={{ fontSize: 6, color: 'rgba(168,216,240,0.30)', flexShrink: 0, marginLeft: 3 }}>{time}</span>
         </div>
-        <p style={{ fontSize: 8.5, color: '#ccdff0', lineHeight: 1.35, margin: 0 }}>{content}</p>
+        <p style={{
+          fontSize: 9, color: '#ccdff0', lineHeight: 1.35, margin: 0,
+          display: '-webkit-box',
+          WebkitLineClamp: 2,
+          WebkitBoxOrient: 'vertical' as const,
+          overflow: 'hidden',
+        }}>
+          {content}
+        </p>
       </div>
     </div>
   );
@@ -752,29 +761,44 @@ function StageDomainCard({ icon, name, status, tileColor }: RightItem & { tileCo
       style={{
         height: '100%',
         background: '#0c1c36',
-        borderRadius: 6,
-        border: '1px solid rgba(34,197,94,0.18)',
+        borderRadius: 7,
+        border: '1px solid rgba(34,197,94,0.20)',
         borderTop: '1px solid rgba(255,255,255,0.08)',
         boxShadow: '0 0 0 1px rgba(34,197,94,0.07), 0 0 8px rgba(34,197,94,0.12)',
-        display: 'flex', alignItems: 'stretch', overflow: 'hidden',
+        display: 'flex', alignItems: 'center',
+        padding: '0 7px',
+        gap: 7,
         boxSizing: 'border-box' as const,
       }}
     >
+      {/* Circle icon */}
       <div
         style={{
-          flexShrink: 0, width: 24,
-          background: `linear-gradient(160deg, ${tileColor}30 0%, ${tileColor}18 100%)`,
-          borderRight: `1px solid ${tileColor}22`,
+          flexShrink: 0, width: 22, height: 22, borderRadius: '50%',
+          background: `${tileColor}28`,
+          border: `1px solid ${tileColor}50`,
           display: 'flex', alignItems: 'center', justifyContent: 'center',
         }}
       >
-        <span style={{ fontSize: 11, lineHeight: 1 }}>{icon}</span>
+        <span style={{ fontSize: 12, lineHeight: 1 }}>{icon}</span>
       </div>
-      <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '0 5px' }}>
-        <span style={{ fontSize: 9, fontWeight: 600, color: '#f4f7fa', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{name}</span>
+      {/* Name + status */}
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <span style={{
+          display: 'block', fontSize: 9, fontWeight: 600,
+          color: '#f4f7fa',
+          overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+        }}>
+          {name}
+        </span>
         <div style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-          <span style={{ fontSize: 8, color: '#22c55e', flexShrink: 0 }}>&#10003;</span>
-          <span style={{ fontSize: 7, color: 'rgba(34,197,94,0.65)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{status}</span>
+          <span style={{ fontSize: 7.5, color: '#22c55e', flexShrink: 0 }}>&#10003;</span>
+          <span style={{
+            fontSize: 7.5, color: 'rgba(34,197,94,0.65)',
+            overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+          }}>
+            {status}
+          </span>
         </div>
       </div>
     </div>
@@ -787,17 +811,26 @@ function StageModuleCard({ name, status }: { name: string; status: string }) {
       style={{
         height: '100%',
         background: '#0f1e35',
-        borderRadius: 6,
+        borderRadius: 7,
         border: '1px solid rgba(109,40,217,0.28)',
-        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        padding: '3px 6px',
+        display: 'flex', alignItems: 'center',
+        padding: '0 7px',
+        gap: 7,
         boxSizing: 'border-box' as const,
       }}
     >
-      <span style={{ fontSize: 8, fontWeight: 600, color: '#f4f7fa', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{name}</span>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 2, flexShrink: 0 }}>
-        <span style={{ fontSize: 7, color: '#22c55e' }}>&#10003;</span>
-        <span style={{ fontSize: 7, fontWeight: 700, color: 'rgba(34,197,94,0.8)' }}>{status}</span>
+      {/* Circle icon */}
+      <div style={{
+        flexShrink: 0, width: 22, height: 22, borderRadius: '50%',
+        background: 'rgba(34,197,94,0.18)',
+        border: '1px solid rgba(34,197,94,0.40)',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+      }}>
+        <span style={{ fontSize: 11, color: '#22c55e', fontWeight: 800, lineHeight: 1 }}>&#10003;</span>
+      </div>
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <span style={{ display: 'block', fontSize: 9, fontWeight: 600, color: '#f4f7fa', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{name}</span>
+        <span style={{ fontSize: 7.5, fontWeight: 700, color: 'rgba(34,197,94,0.8)' }}>{status}</span>
       </div>
     </div>
   );
@@ -808,7 +841,7 @@ function StagePhone({ armIndex, reduced }: { armIndex: number; reduced: boolean 
     <div
       data-phone-body='true'
       style={{
-        width: 150, height: 368,
+        width: 140, height: 350,
         background: '#060b18',
         borderRadius: 16,
         border: '1.5px solid rgba(109,40,217,0.65)',
@@ -1169,26 +1202,21 @@ export default function HeroV5({ armIndex, reduced = false }: { armIndex: number
         )}
       </div>
 
-      {/* ══ MOBILE / TABLET < 1024px: fixed-coordinate 402 × 340 stage ══
-          Stage is authored at 402 CSS px (iPhone 16 Pro viewport width).
-          ResizeObserver scales the stage div so it fills the actual container.
-          Nothing inside reflowscales or responds to media queries — the
-          scale() on the stage handles all responsiveness.                   */}
+      {/* ══ MOBILE / TABLET < 1024px: fixed-coordinate 402 × 460 stage ══
+          Stage authored at 402 CSS px. ResizeObserver scales to fit.
+          Phone: left=131, top=50, width=140, height=350 (fully visible).
+          Left cards: left=6, width=96. Right cards: left=300, width=96.
+          29 px gap each side between card columns and phone.              */}
       <div
         ref={wrapRef}
         className='lg:hidden'
-        style={{ width: '100%', aspectRatio: '402 / 420', position: 'relative', overflow: 'hidden' }}
+        style={{ width: '100%', aspectRatio: '402 / 460', position: 'relative', overflow: 'hidden' }}
       >
         <div
           ref={stageRef}
-          style={{ position: 'absolute', top: 0, left: 0, width: 402, height: 420, transformOrigin: 'top left' }}
+          style={{ position: 'absolute', top: 0, left: 0, width: 402, height: 460, transformOrigin: 'top left' }}
         >
-          {/* Ribbon artwork — two layers split at phone centre (x=201).
-              objectFit:cover + objectPosition:top → source y=0 at stage y=0 (pure black
-              at annotation corner). Tangle (source x~200-400) maps to stage x~85-171,
-              visible in gap x=84-126. Phone (x=126-276) hides the seam at x=201.
-              Layer L: left half, original colours.
-              Layer R: right half, blue-green filter (grayscale→sepia→hue-rotate 155°). */}
+          {/* Ribbon artwork — two layers split at phone centre (x=201). */}
           {/* Layer L — left of phone centre, original colours */}
           <picture aria-hidden='true'>
             <source type='image/avif' srcSet='/ribbons-portrait.avif' />
@@ -1202,10 +1230,10 @@ export default function HeroV5({ armIndex, reduced = false }: { armIndex: number
                 width: '100%', height: '100%',
                 objectFit: 'cover', objectPosition: 'top',
                 mixBlendMode: 'screen',
-                opacity: 0.48,
+                opacity: 0.42,
                 pointerEvents: 'none',
                 zIndex: 0,
-                clipPath: 'inset(0 201px 50px 0)',
+                clipPath: 'inset(0 201px 80px 0)',
               }}
             />
           </picture>
@@ -1222,10 +1250,10 @@ export default function HeroV5({ armIndex, reduced = false }: { armIndex: number
                 width: '100%', height: '100%',
                 objectFit: 'cover', objectPosition: 'top',
                 mixBlendMode: 'screen',
-                opacity: 0.48,
+                opacity: 0.42,
                 pointerEvents: 'none',
                 zIndex: 0,
-                clipPath: 'inset(0 0 50px 201px)',
+                clipPath: 'inset(0 0 80px 201px)',
                 filter: 'grayscale(1) sepia(1) hue-rotate(155deg) saturate(4)',
               }}
             />
@@ -1236,59 +1264,129 @@ export default function HeroV5({ armIndex, reduced = false }: { armIndex: number
             aria-hidden='true'
             style={{
               position: 'absolute',
-              left: 116, top: 72, width: 170, height: 258,
-              background: 'radial-gradient(ellipse 80% 100% at 50% 100%, rgba(109,40,217,0.22) 0%, rgba(109,40,217,0.09) 50%, transparent 70%)',
+              left: 121, top: 62, width: 160, height: 280,
+              background: 'radial-gradient(ellipse 80% 100% at 50% 100%, rgba(109,40,217,0.20) 0%, rgba(109,40,217,0.08) 50%, transparent 70%)',
               pointerEvents: 'none', zIndex: 1,
-              filter: 'blur(12px)',
+              filter: 'blur(14px)',
             }}
           />
 
+          {/* Static connector curves — z=2, behind cards (z=3) but above ribbon.
+              Phone: left=131, right=271. Left card right edge: 102. Right card left: 300.
+              Left strands braid/cross to shuffle entry points on phone left wall.
+              Right strands fan cleanly from phone right wall to domain cards. */}
+          <svg
+            aria-hidden='true'
+            style={{ position: 'absolute', left: 0, top: 0, width: 402, height: 460, pointerEvents: 'none', zIndex: 2 }}
+            viewBox='0 0 402 460'
+          >
+            <defs>
+              <filter id='mcg' x='-50%' y='-50%' width='200%' height='200%' colorInterpolationFilters='sRGB'>
+                <feGaussianBlur in='SourceGraphic' stdDeviation='2.5' result='blur' />
+              </filter>
+            </defs>
+            {/* Glow layer */}
+            <g filter='url(#mcg)' strokeLinecap='round' fill='none'>
+              <path d='M 102 74 C 114 187 125 306 131 306' stroke='#22d3ee' strokeWidth='4' strokeOpacity='0.30'/>
+              <path d='M 102 132 C 114 202 125 166 131 166' stroke='#a78bfa' strokeWidth='4' strokeOpacity='0.30'/>
+              <path d='M 102 190 C 114 216 125 256 131 256' stroke='#f87171' strokeWidth='4' strokeOpacity='0.30'/>
+              <path d='M 102 248 C 114 231 125 194 131 194' stroke='#60a5fa' strokeWidth='4' strokeOpacity='0.30'/>
+              <path d='M 102 306 C 114 245 125 236 131 236' stroke='#fbbf24' strokeWidth='4' strokeOpacity='0.30'/>
+              <path d='M 102 364 C 114 260 125 144 131 144' stroke='#34d399' strokeWidth='4' strokeOpacity='0.30'/>
+              <path d='M 271 146 C 281 146 290 75 300 75'  stroke='#60a5fa' strokeWidth='4' strokeOpacity='0.30'/>
+              <path d='M 271 186 C 281 186 290 135 300 135' stroke='#34d399' strokeWidth='4' strokeOpacity='0.30'/>
+              <path d='M 271 225 C 281 225 290 195 300 195' stroke='#a78bfa' strokeWidth='4' strokeOpacity='0.30'/>
+              <path d='M 271 264 C 281 264 290 255 300 255' stroke='#fbbf24' strokeWidth='4' strokeOpacity='0.30'/>
+              <path d='M 271 304 C 281 304 290 315 300 315' stroke='#f87171' strokeWidth='4' strokeOpacity='0.30'/>
+            </g>
+            {/* Core layer */}
+            <g strokeLinecap='round' fill='none' strokeWidth='0.9'>
+              <path d='M 102 74 C 114 187 125 306 131 306' stroke='#22d3ee' strokeOpacity='0.85'/>
+              <path d='M 102 132 C 114 202 125 166 131 166' stroke='#a78bfa' strokeOpacity='0.85'/>
+              <path d='M 102 190 C 114 216 125 256 131 256' stroke='#f87171' strokeOpacity='0.85'/>
+              <path d='M 102 248 C 114 231 125 194 131 194' stroke='#60a5fa' strokeOpacity='0.85'/>
+              <path d='M 102 306 C 114 245 125 236 131 236' stroke='#fbbf24' strokeOpacity='0.85'/>
+              <path d='M 102 364 C 114 260 125 144 131 144' stroke='#34d399' strokeOpacity='0.85'/>
+              <path d='M 271 146 C 281 146 290 75 300 75'  stroke='#60a5fa' strokeOpacity='0.85'/>
+              <path d='M 271 186 C 281 186 290 135 300 135' stroke='#34d399' strokeOpacity='0.85'/>
+              <path d='M 271 225 C 281 225 290 195 300 195' stroke='#a78bfa' strokeOpacity='0.85'/>
+              <path d='M 271 264 C 281 264 290 255 300 255' stroke='#fbbf24' strokeOpacity='0.85'/>
+              <path d='M 271 304 C 281 304 290 315 300 315' stroke='#f87171' strokeOpacity='0.85'/>
+            </g>
+            {/* Node dots — glow */}
+            <g filter='url(#mcg)'>
+              <circle cx='102' cy='74'  r='3' fill='#22d3ee' fillOpacity='0.45'/>
+              <circle cx='102' cy='132' r='3' fill='#a78bfa' fillOpacity='0.45'/>
+              <circle cx='102' cy='190' r='3' fill='#f87171' fillOpacity='0.45'/>
+              <circle cx='102' cy='248' r='3' fill='#60a5fa' fillOpacity='0.45'/>
+              <circle cx='102' cy='306' r='3' fill='#fbbf24' fillOpacity='0.45'/>
+              <circle cx='102' cy='364' r='3' fill='#34d399' fillOpacity='0.45'/>
+              <circle cx='300' cy='75'  r='3' fill='#60a5fa' fillOpacity='0.45'/>
+              <circle cx='300' cy='135' r='3' fill='#34d399' fillOpacity='0.45'/>
+              <circle cx='300' cy='195' r='3' fill='#a78bfa' fillOpacity='0.45'/>
+              <circle cx='300' cy='255' r='3' fill='#fbbf24' fillOpacity='0.45'/>
+              <circle cx='300' cy='315' r='3' fill='#f87171' fillOpacity='0.45'/>
+            </g>
+            {/* Node dots — core */}
+            <circle cx='102' cy='74'  r='1.5' fill='#22d3ee' fillOpacity='0.88'/>
+            <circle cx='102' cy='132' r='1.5' fill='#a78bfa' fillOpacity='0.88'/>
+            <circle cx='102' cy='190' r='1.5' fill='#f87171' fillOpacity='0.88'/>
+            <circle cx='102' cy='248' r='1.5' fill='#60a5fa' fillOpacity='0.88'/>
+            <circle cx='102' cy='306' r='1.5' fill='#fbbf24' fillOpacity='0.88'/>
+            <circle cx='102' cy='364' r='1.5' fill='#34d399' fillOpacity='0.88'/>
+            <circle cx='300' cy='75'  r='1.5' fill='#60a5fa' fillOpacity='0.88'/>
+            <circle cx='300' cy='135' r='1.5' fill='#34d399' fillOpacity='0.88'/>
+            <circle cx='300' cy='195' r='1.5' fill='#a78bfa' fillOpacity='0.88'/>
+            <circle cx='300' cy='255' r='1.5' fill='#fbbf24' fillOpacity='0.88'/>
+            <circle cx='300' cy='315' r='1.5' fill='#f87171' fillOpacity='0.88'/>
+          </svg>
+
           {/* Left annotation — "THE TANGLE GOES IN." */}
           <div
-            style={{ position: 'absolute', left: 4, top: 4, zIndex: 4, display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 2 }}
+            style={{ position: 'absolute', left: 4, top: 4, zIndex: 5, display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 2 }}
           >
             <span
               style={{
-                fontSize: 8, fontStyle: 'italic', fontWeight: 700,
+                fontSize: 9, fontStyle: 'italic', fontWeight: 700,
                 color: 'rgba(168,216,240,0.65)',
                 fontFamily: 'var(--font-mulish)',
-                letterSpacing: '0.08em',
+                letterSpacing: '0.06em',
                 whiteSpace: 'nowrap',
                 lineHeight: 1.2,
               }}
             >
               The tangle<br />goes in.
             </span>
-            <svg width='10' height='14' viewBox='0 0 20 28' fill='none' aria-hidden='true'>
-              <path d='M 5 2 C 8 8 14 14 16 24' stroke='rgba(168,216,240,0.45)' strokeWidth='1.5' fill='none' strokeLinecap='round' />
-              <path d='M 11 20 L 17 26 L 20 18' stroke='rgba(168,216,240,0.45)' strokeWidth='1.5' fill='none' strokeLinecap='round' strokeLinejoin='round' />
+            <svg width='12' height='16' viewBox='0 0 24 32' fill='none' aria-hidden='true'>
+              <path d='M 6 2 C 10 8 18 16 20 28' stroke='rgba(168,216,240,0.50)' strokeWidth='1.5' fill='none' strokeLinecap='round' />
+              <path d='M 14 23 L 21 30 L 24 21' stroke='rgba(168,216,240,0.50)' strokeWidth='1.5' fill='none' strokeLinecap='round' strokeLinejoin='round' />
             </svg>
           </div>
 
           {/* Right annotation — "ONE CLEAR SCREEN COMES BACK." */}
           <div
-            style={{ position: 'absolute', right: 4, top: 4, zIndex: 4, display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 2 }}
+            style={{ position: 'absolute', right: 4, top: 4, zIndex: 5, display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 2 }}
           >
             <span
               style={{
-                fontSize: 8, fontStyle: 'italic', fontWeight: 700,
+                fontSize: 9, fontStyle: 'italic', fontWeight: 700,
                 color: 'rgba(168,216,240,0.65)',
                 fontFamily: 'var(--font-mulish)',
-                letterSpacing: '0.08em',
+                letterSpacing: '0.06em',
                 lineHeight: 1.2,
                 textAlign: 'right' as const,
               }}
             >
               One clear screen<br />comes back.
             </span>
-            <svg width='10' height='14' viewBox='0 0 20 28' fill='none' aria-hidden='true'>
-              <path d='M 15 2 C 12 8 6 14 4 24' stroke='rgba(168,216,240,0.45)' strokeWidth='1.5' fill='none' strokeLinecap='round' />
-              <path d='M 9 20 L 3 26 L 0 18' stroke='rgba(168,216,240,0.45)' strokeWidth='1.5' fill='none' strokeLinecap='round' strokeLinejoin='round' />
+            <svg width='12' height='16' viewBox='0 0 24 32' fill='none' aria-hidden='true'>
+              <path d='M 18 2 C 14 8 6 16 4 28' stroke='rgba(168,216,240,0.50)' strokeWidth='1.5' fill='none' strokeLinecap='round' />
+              <path d='M 10 23 L 3 30 L 0 21' stroke='rgba(168,216,240,0.50)' strokeWidth='1.5' fill='none' strokeLinecap='round' strokeLinejoin='round' />
             </svg>
           </div>
 
-          {/* Left + right card columns (single PortraitColumnStack — crossfades in sync) */}
-          <div style={{ position: 'absolute', inset: 0, zIndex: 2 }}>
+          {/* Left + right card columns — z=3, above SVG strands */}
+          <div style={{ position: 'absolute', inset: 0, zIndex: 3 }}>
             <PortraitColumnStack
               armIndex={armIndex}
               reduced={effectiveReduced}
@@ -1298,7 +1396,7 @@ export default function HeroV5({ armIndex, reduced = false }: { armIndex: number
                   {arm.tangle.map((card, i) => (
                     <div
                       key={`l${i}`}
-                      style={{ position: 'absolute', left: 8, width: 92, top: TANGLE_Y[i] }}
+                      style={{ position: 'absolute', left: 6, width: 96, top: TANGLE_Y[i] }}
                     >
                       <StageTangleCard {...card} tileColor={TANGLE_COLORS[i % TANGLE_COLORS.length]} />
                     </div>
@@ -1308,7 +1406,7 @@ export default function HeroV5({ armIndex, reduced = false }: { armIndex: number
                     arm.right.map((item, i) => (
                       <div
                         key={`r${i}`}
-                        style={{ position: 'absolute', left: 296, width: 98, height: 55, top: DOMAIN_Y[i] }}
+                        style={{ position: 'absolute', left: 300, width: 96, height: 50, top: DOMAIN_Y[i] }}
                       >
                         <StageModuleCard name={item.name} status={item.status} />
                       </div>
@@ -1317,7 +1415,7 @@ export default function HeroV5({ armIndex, reduced = false }: { armIndex: number
                     arm.right.map((item, i) => (
                       <div
                         key={`r${i}`}
-                        style={{ position: 'absolute', left: 296, width: 98, height: 55, top: DOMAIN_Y[i] }}
+                        style={{ position: 'absolute', left: 300, width: 96, height: 50, top: DOMAIN_Y[i] }}
                       >
                         <StageDomainCard {...item} tileColor={DOMAIN_COLORS[i % DOMAIN_COLORS.length]} />
                       </div>
@@ -1328,80 +1426,11 @@ export default function HeroV5({ armIndex, reduced = false }: { armIndex: number
             />
           </div>
 
-          {/* Phone — fixed position in the centre column */}
-          <div style={{ position: 'absolute', left: 126, top: 18, width: 150, height: 368, zIndex: 3 }}>
+          {/* Phone — fixed position in the centre column, always on top */}
+          <div style={{ position: 'absolute', left: 131, top: 50, width: 140, height: 350, zIndex: 4 }}>
             <StagePhone armIndex={armIndex} reduced={effectiveReduced} />
           </div>
 
-          {/* Static connector curves — mirrors desktop computeCurves() using known stage coords.
-              Phone: left=126, right=276, top=18, height=368.
-              Tangle right edge: 100 (left=8, width=92, center ≈ TANGLE_Y[i]+24).
-              Domain left edge: 296 (left=296, width=98, height=55, center = DOMAIN_Y[i]+28). */}
-          <svg
-            aria-hidden='true'
-            style={{ position: 'absolute', left: 0, top: 0, width: 402, height: 420, pointerEvents: 'none', zIndex: 2 }}
-            viewBox='0 0 402 420'
-          >
-            <defs>
-              <filter id='mcg' x='-50%' y='-50%' width='200%' height='200%' colorInterpolationFilters='sRGB'>
-                <feGaussianBlur in='SourceGraphic' stdDeviation='2.5' result='blur' />
-              </filter>
-            </defs>
-            {/* Glow layer — left strands braid, right strands fan cleanly */}
-            <g filter='url(#mcg)' strokeLinecap='round' fill='none'>
-              <path d='M 100 68 C 109 205 118 300 126 300' stroke='#22d3ee' strokeWidth='4' strokeOpacity='0.28'/>
-              <path d='M 100 125 C 109 219 118 146 126 146' stroke='#a78bfa' strokeWidth='4' strokeOpacity='0.28'/>
-              <path d='M 100 179 C 109 232 118 245 126 245' stroke='#f87171' strokeWidth='4' strokeOpacity='0.28'/>
-              <path d='M 100 239 C 109 247 118 177 126 177' stroke='#60a5fa' strokeWidth='4' strokeOpacity='0.28'/>
-              <path d='M 100 297 C 109 262 118 223 126 223' stroke='#fbbf24' strokeWidth='4' strokeOpacity='0.28'/>
-              <path d='M 100 353 C 109 276 118 122 126 122' stroke='#34d399' strokeWidth='4' strokeOpacity='0.28'/>
-              <path d='M 276 124 C 283 124 289 72 296 72' stroke='#60a5fa' strokeWidth='4' strokeOpacity='0.28'/>
-              <path d='M 276 168 C 283 168 289 158 296 158' stroke='#34d399' strokeWidth='4' strokeOpacity='0.28'/>
-              <path d='M 276 211 C 283 211 289 229 296 229' stroke='#a78bfa' strokeWidth='4' strokeOpacity='0.28'/>
-              <path d='M 276 254 C 283 254 289 304 296 304' stroke='#fbbf24' strokeWidth='4' strokeOpacity='0.28'/>
-              <path d='M 276 298 C 283 298 289 378 296 378' stroke='#f87171' strokeWidth='4' strokeOpacity='0.28'/>
-            </g>
-            {/* Core layer */}
-            <g strokeLinecap='round' fill='none' strokeWidth='0.9'>
-              <path d='M 100 68 C 109 205 118 300 126 300' stroke='#22d3ee' strokeOpacity='0.82'/>
-              <path d='M 100 125 C 109 219 118 146 126 146' stroke='#a78bfa' strokeOpacity='0.82'/>
-              <path d='M 100 179 C 109 232 118 245 126 245' stroke='#f87171' strokeOpacity='0.82'/>
-              <path d='M 100 239 C 109 247 118 177 126 177' stroke='#60a5fa' strokeOpacity='0.82'/>
-              <path d='M 100 297 C 109 262 118 223 126 223' stroke='#fbbf24' strokeOpacity='0.82'/>
-              <path d='M 100 353 C 109 276 118 122 126 122' stroke='#34d399' strokeOpacity='0.82'/>
-              <path d='M 276 124 C 283 124 289 72 296 72' stroke='#60a5fa' strokeOpacity='0.82'/>
-              <path d='M 276 168 C 283 168 289 158 296 158' stroke='#34d399' strokeOpacity='0.82'/>
-              <path d='M 276 211 C 283 211 289 229 296 229' stroke='#a78bfa' strokeOpacity='0.82'/>
-              <path d='M 276 254 C 283 254 289 304 296 304' stroke='#fbbf24' strokeOpacity='0.82'/>
-              <path d='M 276 298 C 283 298 289 378 296 378' stroke='#f87171' strokeOpacity='0.82'/>
-            </g>
-            {/* Node dots — glow */}
-            <g filter='url(#mcg)'>
-              <circle cx='100' cy='68' r='3' fill='#22d3ee' fillOpacity='0.45'/>
-              <circle cx='100' cy='125' r='3' fill='#a78bfa' fillOpacity='0.45'/>
-              <circle cx='100' cy='179' r='3' fill='#f87171' fillOpacity='0.45'/>
-              <circle cx='100' cy='239' r='3' fill='#60a5fa' fillOpacity='0.45'/>
-              <circle cx='100' cy='297' r='3' fill='#fbbf24' fillOpacity='0.45'/>
-              <circle cx='100' cy='353' r='3' fill='#34d399' fillOpacity='0.45'/>
-              <circle cx='296' cy='72' r='3' fill='#60a5fa' fillOpacity='0.45'/>
-              <circle cx='296' cy='158' r='3' fill='#34d399' fillOpacity='0.45'/>
-              <circle cx='296' cy='229' r='3' fill='#a78bfa' fillOpacity='0.45'/>
-              <circle cx='296' cy='304' r='3' fill='#fbbf24' fillOpacity='0.45'/>
-              <circle cx='296' cy='378' r='3' fill='#f87171' fillOpacity='0.45'/>
-            </g>
-            {/* Node dots — core */}
-            <circle cx='100' cy='68' r='1.5' fill='#22d3ee' fillOpacity='0.85'/>
-            <circle cx='100' cy='125' r='1.5' fill='#a78bfa' fillOpacity='0.85'/>
-            <circle cx='100' cy='179' r='1.5' fill='#f87171' fillOpacity='0.85'/>
-            <circle cx='100' cy='239' r='1.5' fill='#60a5fa' fillOpacity='0.85'/>
-            <circle cx='100' cy='297' r='1.5' fill='#fbbf24' fillOpacity='0.85'/>
-            <circle cx='100' cy='353' r='1.5' fill='#34d399' fillOpacity='0.85'/>
-            <circle cx='296' cy='72' r='1.5' fill='#60a5fa' fillOpacity='0.85'/>
-            <circle cx='296' cy='158' r='1.5' fill='#34d399' fillOpacity='0.85'/>
-            <circle cx='296' cy='229' r='1.5' fill='#a78bfa' fillOpacity='0.85'/>
-            <circle cx='296' cy='304' r='1.5' fill='#fbbf24' fillOpacity='0.85'/>
-            <circle cx='296' cy='378' r='1.5' fill='#f87171' fillOpacity='0.85'/>
-          </svg>
         </div>
       </div>
 
