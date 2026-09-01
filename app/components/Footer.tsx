@@ -36,6 +36,8 @@ export default function Footer() {
           </div>
         </div>
       </div>
+      {/* Clearance for fixed bottom nav on mobile (56px + safe-area) */}
+      <div className='lg:hidden' style={{ height: 'calc(3.5rem + env(safe-area-inset-bottom, 0px))', minHeight: '3.5rem' }} aria-hidden='true' />
     </footer>
   );
 }
