@@ -714,7 +714,7 @@ function StagePhone({ armIndex, reduced }: { armIndex: number; reduced: boolean 
     <div
       data-phone-body='true'
       style={{
-        width: 140, height: 350,
+        width: 116, height: 350,
         background: '#060b18',
         borderRadius: 16,
         border: '1.5px solid rgba(109,40,217,0.65)',
@@ -995,19 +995,19 @@ export default function HeroV5({ armIndex, reduced = false }: { armIndex: number
 
       </div>
 
-      {/* ══ MOBILE / TABLET < 1024px: fixed-coordinate 402 × 460 stage ══
+      {/* ══ MOBILE / TABLET < 1024px: fixed-coordinate 402 × 420 stage ══
           Stage authored at 402 CSS px. ResizeObserver scales to fit.
-          Phone: left=131, top=50, width=140, height=350 (fully visible).
+          Phone: left=143, top=50, width=116, height=350 (fully visible).
           Left cards: left=6, width=96. Right cards: left=300, width=96.
           29 px gap each side between card columns and phone.              */}
       <div
         ref={wrapRef}
         className='lg:hidden'
-        style={{ width: '100%', aspectRatio: '402 / 460', position: 'relative', overflow: 'hidden' }}
+        style={{ width: '100%', aspectRatio: '402 / 420', position: 'relative', overflow: 'hidden' }}
       >
         <div
           ref={stageRef}
-          style={{ position: 'absolute', top: 0, left: 0, width: 402, height: 460, transformOrigin: 'top left' }}
+          style={{ position: 'absolute', top: 0, left: 0, width: 402, height: 420, transformOrigin: 'top left' }}
         >
           {/* Ribbon artwork — two layers split at phone centre (x=201). */}
           {/* Layer L — left of phone centre, original colours */}
@@ -1023,10 +1023,10 @@ export default function HeroV5({ armIndex, reduced = false }: { armIndex: number
                 width: '100%', height: '100%',
                 objectFit: 'cover', objectPosition: 'top',
                 mixBlendMode: 'screen',
-                opacity: 0.42,
+                opacity: 0.28,
                 pointerEvents: 'none',
                 zIndex: 0,
-                clipPath: 'inset(0 201px 80px 0)',
+                clipPath: 'inset(0 201px 82px 0)',
               }}
             />
           </picture>
@@ -1043,10 +1043,10 @@ export default function HeroV5({ armIndex, reduced = false }: { armIndex: number
                 width: '100%', height: '100%',
                 objectFit: 'cover', objectPosition: 'top',
                 mixBlendMode: 'screen',
-                opacity: 0.42,
+                opacity: 0.28,
                 pointerEvents: 'none',
                 zIndex: 0,
-                clipPath: 'inset(0 0 80px 201px)',
+                clipPath: 'inset(0 0 82px 201px)',
                 filter: 'grayscale(1) sepia(1) hue-rotate(155deg) saturate(4)',
               }}
             />
@@ -1057,8 +1057,8 @@ export default function HeroV5({ armIndex, reduced = false }: { armIndex: number
             aria-hidden='true'
             style={{
               position: 'absolute',
-              left: 121, top: 62, width: 160, height: 280,
-              background: 'radial-gradient(ellipse 80% 100% at 50% 100%, rgba(109,40,217,0.20) 0%, rgba(109,40,217,0.08) 50%, transparent 70%)',
+              left: 143, top: 62, width: 116, height: 280,
+              background: 'radial-gradient(ellipse 80% 100% at 50% 100%, rgba(109,40,217,0.14) 0%, rgba(109,40,217,0.05) 50%, transparent 70%)',
               pointerEvents: 'none', zIndex: 1,
               filter: 'blur(14px)',
             }}
@@ -1071,8 +1071,8 @@ export default function HeroV5({ armIndex, reduced = false }: { armIndex: number
               Braid: strand 0 straight, pairs (1,2) and (3,4) swap — one crossing each, none more. */}
           <svg
             aria-hidden='true'
-            style={{ position: 'absolute', left: 0, top: 0, width: 402, height: 460, pointerEvents: 'none', zIndex: 2 }}
-            viewBox='0 0 402 460'
+            style={{ position: 'absolute', left: 0, top: 0, width: 402, height: 420, pointerEvents: 'none', zIndex: 2 }}
+            viewBox='0 0 402 420'
           >
             <defs>
               <filter id='mcg' x='-50%' y='-50%' width='200%' height='200%' colorInterpolationFilters='sRGB'>
@@ -1084,7 +1084,7 @@ export default function HeroV5({ armIndex, reduced = false }: { armIndex: number
             </defs>
 
             {/* Phone glow pool */}
-            <ellipse cx='201' cy='430' rx='80' ry='28' fill='rgba(109,40,217,0.30)' filter='url(#phone-glow)' />
+            <ellipse cx='201' cy='407' rx='55' ry='16' fill='rgba(109,40,217,0.22)' filter='url(#phone-glow)' />
 
             {/* Card shells — painted as stable SVG artwork */}
             {/* Left card shells */}
@@ -1103,30 +1103,30 @@ export default function HeroV5({ armIndex, reduced = false }: { armIndex: number
             {/* Braid strands — left cards → phone left wall (with deterministic pair-swap crossings) */}
             <g filter='url(#mcg)' strokeLinecap='round' fill='none'>
               {/* Glow layer */}
-              <path d='M102,75  C109,75  124,75  131,75'  stroke='#22d3ee' strokeWidth='4' strokeOpacity='0.30'/>
-              <path d='M102,133 C109,133 124,191 131,191' stroke='#a78bfa' strokeWidth='4' strokeOpacity='0.30'/>
-              <path d='M102,191 C109,191 124,133 131,133' stroke='#f87171' strokeWidth='4' strokeOpacity='0.30'/>
-              <path d='M102,249 C109,249 124,307 131,307' stroke='#60a5fa' strokeWidth='4' strokeOpacity='0.30'/>
-              <path d='M102,307 C109,307 124,249 131,249' stroke='#fbbf24' strokeWidth='4' strokeOpacity='0.30'/>
+              <path d='M102,75  C121,75  122,75  143,75'  stroke='#22d3ee' strokeWidth='4' strokeOpacity='0.30'/>
+              <path d='M102,133 C122,133 123,191 143,191' stroke='#a78bfa' strokeWidth='4' strokeOpacity='0.30'/>
+              <path d='M102,191 C122,191 123,133 143,133' stroke='#f87171' strokeWidth='4' strokeOpacity='0.30'/>
+              <path d='M102,249 C122,249 123,307 143,307' stroke='#60a5fa' strokeWidth='4' strokeOpacity='0.30'/>
+              <path d='M102,307 C122,307 123,249 143,249' stroke='#fbbf24' strokeWidth='4' strokeOpacity='0.30'/>
               {/* Output strands — phone right wall → right cards */}
-              <path d='M271,75  C281,75  291,75  300,75'  stroke='#60a5fa' strokeWidth='4' strokeOpacity='0.30'/>
-              <path d='M271,135 C281,135 291,135 300,135' stroke='#34d399' strokeWidth='4' strokeOpacity='0.30'/>
-              <path d='M271,195 C281,195 291,195 300,195' stroke='#a78bfa' strokeWidth='4' strokeOpacity='0.30'/>
-              <path d='M271,255 C281,255 291,255 300,255' stroke='#fbbf24' strokeWidth='4' strokeOpacity='0.30'/>
-              <path d='M271,315 C281,315 291,315 300,315' stroke='#f87171' strokeWidth='4' strokeOpacity='0.30'/>
+              <path d='M259,75  C269,75  280,75  300,75'  stroke='#60a5fa' strokeWidth='4' strokeOpacity='0.30'/>
+              <path d='M259,135 C269,135 280,135 300,135' stroke='#34d399' strokeWidth='4' strokeOpacity='0.30'/>
+              <path d='M259,195 C269,195 280,195 300,195' stroke='#a78bfa' strokeWidth='4' strokeOpacity='0.30'/>
+              <path d='M259,255 C269,255 280,255 300,255' stroke='#fbbf24' strokeWidth='4' strokeOpacity='0.30'/>
+              <path d='M259,315 C269,315 280,315 300,315' stroke='#f87171' strokeWidth='4' strokeOpacity='0.30'/>
             </g>
             {/* Core strands */}
             <g strokeLinecap='round' fill='none' strokeWidth='0.9'>
-              <path d='M102,75  C109,75  124,75  131,75'  stroke='#22d3ee' strokeOpacity='0.85'/>
-              <path d='M102,133 C109,133 124,191 131,191' stroke='#a78bfa' strokeOpacity='0.85'/>
-              <path d='M102,191 C109,191 124,133 131,133' stroke='#f87171' strokeOpacity='0.85'/>
-              <path d='M102,249 C109,249 124,307 131,307' stroke='#60a5fa' strokeOpacity='0.85'/>
-              <path d='M102,307 C109,307 124,249 131,249' stroke='#fbbf24' strokeOpacity='0.85'/>
-              <path d='M271,75  C281,75  291,75  300,75'  stroke='#60a5fa' strokeOpacity='0.85'/>
-              <path d='M271,135 C281,135 291,135 300,135' stroke='#34d399' strokeOpacity='0.85'/>
-              <path d='M271,195 C281,195 291,195 300,195' stroke='#a78bfa' strokeOpacity='0.85'/>
-              <path d='M271,255 C281,255 291,255 300,255' stroke='#fbbf24' strokeOpacity='0.85'/>
-              <path d='M271,315 C281,315 291,315 300,315' stroke='#f87171' strokeOpacity='0.85'/>
+              <path d='M102,75  C121,75  122,75  143,75'  stroke='#22d3ee' strokeOpacity='0.85'/>
+              <path d='M102,133 C122,133 123,191 143,191' stroke='#a78bfa' strokeOpacity='0.85'/>
+              <path d='M102,191 C122,191 123,133 143,133' stroke='#f87171' strokeOpacity='0.85'/>
+              <path d='M102,249 C122,249 123,307 143,307' stroke='#60a5fa' strokeOpacity='0.85'/>
+              <path d='M102,307 C122,307 123,249 143,249' stroke='#fbbf24' strokeOpacity='0.85'/>
+              <path d='M259,75  C269,75  280,75  300,75'  stroke='#60a5fa' strokeOpacity='0.85'/>
+              <path d='M259,135 C269,135 280,135 300,135' stroke='#34d399' strokeOpacity='0.85'/>
+              <path d='M259,195 C269,195 280,195 300,195' stroke='#a78bfa' strokeOpacity='0.85'/>
+              <path d='M259,255 C269,255 280,255 300,255' stroke='#fbbf24' strokeOpacity='0.85'/>
+              <path d='M259,315 C269,315 280,315 300,315' stroke='#f87171' strokeOpacity='0.85'/>
             </g>
 
             {/* Port dots — glow layer */}
@@ -1138,17 +1138,17 @@ export default function HeroV5({ armIndex, reduced = false }: { armIndex: number
               <circle cx='102' cy='249' r='3.5' fill='#60a5fa' fillOpacity='0.28'/>
               <circle cx='102' cy='307' r='3.5' fill='#fbbf24' fillOpacity='0.28'/>
               {/* Phone left entries (post-braid, positions match strand end-points) */}
-              <circle cx='131' cy='75'  r='3.5' fill='#22d3ee' fillOpacity='0.28'/>
-              <circle cx='131' cy='191' r='3.5' fill='#a78bfa' fillOpacity='0.28'/>
-              <circle cx='131' cy='133' r='3.5' fill='#f87171' fillOpacity='0.28'/>
-              <circle cx='131' cy='307' r='3.5' fill='#60a5fa' fillOpacity='0.28'/>
-              <circle cx='131' cy='249' r='3.5' fill='#fbbf24' fillOpacity='0.28'/>
+              <circle cx='143' cy='75'  r='3.5' fill='#22d3ee' fillOpacity='0.28'/>
+              <circle cx='143' cy='191' r='3.5' fill='#a78bfa' fillOpacity='0.28'/>
+              <circle cx='143' cy='133' r='3.5' fill='#f87171' fillOpacity='0.28'/>
+              <circle cx='143' cy='307' r='3.5' fill='#60a5fa' fillOpacity='0.28'/>
+              <circle cx='143' cy='249' r='3.5' fill='#fbbf24' fillOpacity='0.28'/>
               {/* Phone right exits */}
-              <circle cx='271' cy='75'  r='3.5' fill='#60a5fa' fillOpacity='0.28'/>
-              <circle cx='271' cy='135' r='3.5' fill='#34d399' fillOpacity='0.28'/>
-              <circle cx='271' cy='195' r='3.5' fill='#a78bfa' fillOpacity='0.28'/>
-              <circle cx='271' cy='255' r='3.5' fill='#fbbf24' fillOpacity='0.28'/>
-              <circle cx='271' cy='315' r='3.5' fill='#f87171' fillOpacity='0.28'/>
+              <circle cx='259' cy='75'  r='3.5' fill='#60a5fa' fillOpacity='0.28'/>
+              <circle cx='259' cy='135' r='3.5' fill='#34d399' fillOpacity='0.28'/>
+              <circle cx='259' cy='195' r='3.5' fill='#a78bfa' fillOpacity='0.28'/>
+              <circle cx='259' cy='255' r='3.5' fill='#fbbf24' fillOpacity='0.28'/>
+              <circle cx='259' cy='315' r='3.5' fill='#f87171' fillOpacity='0.28'/>
               {/* Right card ports */}
               <circle cx='300' cy='75'  r='3.5' fill='#60a5fa' fillOpacity='0.28'/>
               <circle cx='300' cy='135' r='3.5' fill='#34d399' fillOpacity='0.28'/>
@@ -1162,16 +1162,16 @@ export default function HeroV5({ armIndex, reduced = false }: { armIndex: number
             <circle cx='102' cy='191' r='2' fill='#f87171' fillOpacity='0.92'/>
             <circle cx='102' cy='249' r='2' fill='#60a5fa' fillOpacity='0.92'/>
             <circle cx='102' cy='307' r='2' fill='#fbbf24' fillOpacity='0.92'/>
-            <circle cx='131' cy='75'  r='2' fill='#22d3ee' fillOpacity='0.92'/>
-            <circle cx='131' cy='191' r='2' fill='#a78bfa' fillOpacity='0.92'/>
-            <circle cx='131' cy='133' r='2' fill='#f87171' fillOpacity='0.92'/>
-            <circle cx='131' cy='307' r='2' fill='#60a5fa' fillOpacity='0.92'/>
-            <circle cx='131' cy='249' r='2' fill='#fbbf24' fillOpacity='0.92'/>
-            <circle cx='271' cy='75'  r='2' fill='#60a5fa' fillOpacity='0.92'/>
-            <circle cx='271' cy='135' r='2' fill='#34d399' fillOpacity='0.92'/>
-            <circle cx='271' cy='195' r='2' fill='#a78bfa' fillOpacity='0.92'/>
-            <circle cx='271' cy='255' r='2' fill='#fbbf24' fillOpacity='0.92'/>
-            <circle cx='271' cy='315' r='2' fill='#f87171' fillOpacity='0.92'/>
+            <circle cx='143' cy='75'  r='2' fill='#22d3ee' fillOpacity='0.92'/>
+            <circle cx='143' cy='191' r='2' fill='#a78bfa' fillOpacity='0.92'/>
+            <circle cx='143' cy='133' r='2' fill='#f87171' fillOpacity='0.92'/>
+            <circle cx='143' cy='307' r='2' fill='#60a5fa' fillOpacity='0.92'/>
+            <circle cx='143' cy='249' r='2' fill='#fbbf24' fillOpacity='0.92'/>
+            <circle cx='259' cy='75'  r='2' fill='#60a5fa' fillOpacity='0.92'/>
+            <circle cx='259' cy='135' r='2' fill='#34d399' fillOpacity='0.92'/>
+            <circle cx='259' cy='195' r='2' fill='#a78bfa' fillOpacity='0.92'/>
+            <circle cx='259' cy='255' r='2' fill='#fbbf24' fillOpacity='0.92'/>
+            <circle cx='259' cy='315' r='2' fill='#f87171' fillOpacity='0.92'/>
             <circle cx='300' cy='75'  r='2' fill='#60a5fa' fillOpacity='0.92'/>
             <circle cx='300' cy='135' r='2' fill='#34d399' fillOpacity='0.92'/>
             <circle cx='300' cy='195' r='2' fill='#a78bfa' fillOpacity='0.92'/>
@@ -1181,11 +1181,11 @@ export default function HeroV5({ armIndex, reduced = false }: { armIndex: number
 
           {/* Left annotation — "THE TANGLE GOES IN." */}
           <div
-            style={{ position: 'absolute', left: 4, top: 4, zIndex: 5, display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 2 }}
+            style={{ position: 'absolute', left: 4, top: 8, zIndex: 5, display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 2 }}
           >
             <span
               style={{
-                fontSize: 9, fontStyle: 'italic', fontWeight: 700,
+                fontSize: 11, fontStyle: 'italic', fontWeight: 700,
                 color: 'rgba(168,216,240,0.65)',
                 fontFamily: 'var(--font-mulish)',
                 letterSpacing: '0.06em',
@@ -1195,7 +1195,7 @@ export default function HeroV5({ armIndex, reduced = false }: { armIndex: number
             >
               The tangle<br />goes in.
             </span>
-            <svg width='12' height='16' viewBox='0 0 24 32' fill='none' aria-hidden='true'>
+            <svg width='16' height='22' viewBox='0 0 24 32' fill='none' aria-hidden='true'>
               <path d='M 6 2 C 10 8 18 16 20 28' stroke='rgba(168,216,240,0.50)' strokeWidth='1.5' fill='none' strokeLinecap='round' />
               <path d='M 14 23 L 21 30 L 24 21' stroke='rgba(168,216,240,0.50)' strokeWidth='1.5' fill='none' strokeLinecap='round' strokeLinejoin='round' />
             </svg>
@@ -1203,11 +1203,11 @@ export default function HeroV5({ armIndex, reduced = false }: { armIndex: number
 
           {/* Right annotation — "ONE CLEAR SCREEN COMES BACK." */}
           <div
-            style={{ position: 'absolute', right: 4, top: 4, zIndex: 5, display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 2 }}
+            style={{ position: 'absolute', right: 4, top: 8, zIndex: 5, display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 2 }}
           >
             <span
               style={{
-                fontSize: 9, fontStyle: 'italic', fontWeight: 700,
+                fontSize: 11, fontStyle: 'italic', fontWeight: 700,
                 color: 'rgba(168,216,240,0.65)',
                 fontFamily: 'var(--font-mulish)',
                 letterSpacing: '0.06em',
@@ -1217,7 +1217,7 @@ export default function HeroV5({ armIndex, reduced = false }: { armIndex: number
             >
               One clear screen<br />comes back.
             </span>
-            <svg width='12' height='16' viewBox='0 0 24 32' fill='none' aria-hidden='true'>
+            <svg width='16' height='22' viewBox='0 0 24 32' fill='none' aria-hidden='true'>
               <path d='M 18 2 C 14 8 6 16 4 28' stroke='rgba(168,216,240,0.50)' strokeWidth='1.5' fill='none' strokeLinecap='round' />
               <path d='M 10 23 L 3 30 L 0 21' stroke='rgba(168,216,240,0.50)' strokeWidth='1.5' fill='none' strokeLinecap='round' strokeLinejoin='round' />
             </svg>
@@ -1265,7 +1265,7 @@ export default function HeroV5({ armIndex, reduced = false }: { armIndex: number
           </div>
 
           {/* Phone — fixed position in the centre column, always on top */}
-          <div style={{ position: 'absolute', left: 131, top: 50, width: 140, height: 350, zIndex: 4 }}>
+          <div style={{ position: 'absolute', left: 143, top: 50, width: 116, height: 350, zIndex: 4 }}>
             <StagePhone armIndex={armIndex} reduced={effectiveReduced} />
           </div>
 
