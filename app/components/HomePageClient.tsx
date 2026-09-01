@@ -198,7 +198,7 @@ export default function HomePageClient() {
         <div className='max-w-2xl mx-auto'>
           {/* 4-up grid */}
           <div
-            className='grid grid-cols-4 gap-0 mb-6 sm:mb-8'
+            className='grid grid-cols-4 gap-0 mb-4 sm:mb-5'
             style={{
               border: '1px solid rgba(30,58,95,0.5)',
               borderRadius: 12,
@@ -234,10 +234,10 @@ export default function HomePageClient() {
           </div>
 
           {/* CTAs */}
-          <div className='flex flex-col items-center gap-2.5'>
+          <div className='flex flex-col items-center gap-2'>
             <Link
               href='https://download.micro-titan.com'
-              className='flex items-center justify-center gap-2 px-6 py-2.5 sm:px-8 sm:py-3 rounded-lg text-xs sm:text-sm font-[700] text-[#a8d8f0] transition-all duration-200 hover:bg-[rgba(168,216,240,0.08)] hover:border-[#a8d8f0]/60'
+              className='flex items-center justify-center gap-2 px-5 py-2 sm:px-7 sm:py-2.5 rounded-lg text-xs sm:text-sm font-[700] text-[#a8d8f0] transition-all duration-200 hover:bg-[rgba(168,216,240,0.08)] hover:border-[#a8d8f0]/60'
               style={{
                 border: '1px solid rgba(168,216,240,0.35)',
                 fontFamily: 'var(--font-mulish)',
@@ -253,13 +253,6 @@ export default function HomePageClient() {
               style={{ fontFamily: 'var(--font-mulish)' }}
             >
               Explore the cockpit ⊙
-            </Link>
-            <Link
-              href='/why-provable'
-              className='text-[0.6rem] sm:text-[0.72rem] font-[600] text-[#a8d8f0]/35 hover:text-[#a8d8f0]/60 transition-colors tracking-widest uppercase'
-              style={{ fontFamily: 'var(--font-mulish)' }}
-            >
-              Why verification matters →
             </Link>
           </div>
         </div>
