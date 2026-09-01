@@ -190,8 +190,8 @@ export const ARM_SUBHEADS: string[] = [
 
 // Hue per tangle card slot (index 0-4): cyan / violet / red / blue / amber
 const TANGLE_COLORS = ['#22d3ee', '#a78bfa', '#f87171', '#60a5fa', '#fbbf24'];
-// Hue per domain card slot (index 0-4): blue / green / violet / amber / red
-const DOMAIN_COLORS = ['#60a5fa', '#34d399', '#a78bfa', '#fbbf24', '#f87171'];
+// Hue per domain card slot (index 0-4): blue / green / sky / teal / lime — all cool output palette
+const DOMAIN_COLORS = ['#60a5fa', '#34d399', '#38bdf8', '#2dd4bf', '#4ade80'];
 
 // Fixed y-coordinates (CSS px) for the 402 × 460 stage.
 const TANGLE_Y = [50, 108, 166, 224, 282];
@@ -213,15 +213,10 @@ const _DOMAIN_SLOTS = 5;
   }
 })();
 
-// ─── ARMSTACK ─────────────────────────────────────────────────────────────────
-// All arms live in the DOM at once. Only one is visible (opacity). This means
-// gate anchors are always present regardless of which arm is showing.
-
 // ─── PORTRAIT COLUMN STACK ────────────────────────────────────────────────────
-// Simultaneous crossfade: opacity derives directly from armIndex — no timer state.
-// Safety: at every React render, exactly one arm has opacity 1 (i === armIndex).
-// CSS transitions handle the fade-out/in concurrently. No zero-content frame
-// is possible: the DOM commit always has a visible arm before the transition runs.
+// Atomic swap: visibility toggled instantly — no crossfade. All arms stay in the
+// DOM so gate anchors are always present. At every frame exactly one arm is
+// visible; inactive arms are invisible but still occupy their layout slot.
 
 function PortraitColumnStack({
   armIndex,
@@ -240,8 +235,7 @@ function PortraitColumnStack({
           style={{
             position: 'absolute',
             inset: 0,
-            opacity: i === armIndex ? 1 : 0,
-            transition: reduced ? 'none' : 'opacity 0.38s ease-in-out',
+            visibility: i === armIndex ? 'visible' : 'hidden',
             pointerEvents: i === armIndex ? 'auto' : 'none',
           }}
           aria-hidden={i !== armIndex || undefined}
@@ -254,9 +248,9 @@ function PortraitColumnStack({
 }
 
 // ─── ARMSTACK ─────────────────────────────────────────────────────────────────
-// All arms live in the DOM at once. Only one is visible (opacity). This means
-// gate anchors are always present regardless of which arm is showing.
-// Simultaneous crossfade: stateless, same safety guarantee as PortraitColumnStack.
+// Atomic swap: visibility toggled instantly — no crossfade. All arms stay in the
+// DOM so gate anchors are always present. At every frame exactly one arm is
+// visible; inactive arms are invisible but still occupy their layout slot.
 export function ArmStack({ armIndex, arms, reduced = false }: { armIndex: number; arms: ReactNode[]; reduced?: boolean }) {
   return (
     <div style={{ display: 'grid', gridTemplateAreas: '"s"', gridTemplateColumns: '1fr' }}>
@@ -265,8 +259,7 @@ export function ArmStack({ armIndex, arms, reduced = false }: { armIndex: number
           key={i}
           style={{
             gridArea: 's',
-            opacity: i === armIndex ? 1 : 0,
-            transition: reduced ? 'none' : 'opacity 0.38s ease-in-out',
+            visibility: i === armIndex ? 'visible' : 'hidden',
             pointerEvents: i === armIndex ? 'auto' : 'none',
           }}
           aria-hidden={i !== armIndex || undefined}
@@ -724,44 +717,44 @@ function StagePhone({ armIndex, reduced }: { armIndex: number; reduced: boolean 
         fontFamily: 'var(--font-mulish)',
       }}
     >
-      {/* Status bar */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 10px 1px', flexShrink: 0 }}>
-        <span style={{ fontSize: 9, color: 'rgba(168,216,240,0.4)' }}>9:41</span>
-        <span style={{ fontSize: 9, color: 'rgba(168,216,240,0.4)' }}>&#9679;&#9679;&#9679;</span>
+      {/* Status bar — miniature scale */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', padding: '4px 10px 1px', flexShrink: 0 }}>
+        <span style={{ fontSize: 7, color: 'rgba(168,216,240,0.4)' }}>9:41</span>
+        <span style={{ fontSize: 7, color: 'rgba(168,216,240,0.4)' }}>&#9679;&#9679;&#9679;</span>
       </div>
       {/* App header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '2px 10px 3px', borderBottom: '1px solid rgba(30,58,95,0.5)', flexShrink: 0 }}>
-        <span style={{ fontSize: 11, color: 'rgba(168,216,240,0.45)' }}>&#8249;</span>
-        <span style={{ fontSize: 9, fontWeight: 700, letterSpacing: '0.18em', color: 'rgba(168,216,240,0.85)', textTransform: 'uppercase' as const }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1px 10px 2px', borderBottom: '1px solid rgba(30,58,95,0.5)', flexShrink: 0 }}>
+        <span style={{ fontSize: 9, color: 'rgba(168,216,240,0.45)' }}>&#8249;</span>
+        <span style={{ fontSize: 9, fontWeight: 700, letterSpacing: '0.12em', color: 'rgba(168,216,240,0.85)', textTransform: 'uppercase' as const }}>
           {ARMS[armIndex].product.split('').join(' ')}
         </span>
-        <span style={{ fontSize: 11, color: 'rgba(168,216,240,0.45)' }}>&#8943;</span>
+        <span style={{ fontSize: 9, color: 'rgba(168,216,240,0.45)' }}>&#8943;</span>
       </div>
       {/* Greeting */}
       <ArmStack armIndex={armIndex} reduced={reduced} arms={ARMS.map(arm => (
-        <div style={{ padding: '5px 10px 2px' }}>
-          <div style={{ fontSize: 8, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase' as const, color: 'rgba(168,216,240,0.5)' }}>
+        <div style={{ padding: '3px 10px 1px' }}>
+          <div style={{ fontSize: 6, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase' as const, color: 'rgba(168,216,240,0.5)' }}>
             {arm.greetingLabel || 'Good afternoon,'}
           </div>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 1 }}>
-            <span style={{ fontSize: 12, fontWeight: 800, letterSpacing: '0.07em', color: '#f4f7fa', textTransform: 'uppercase' as const, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', flex: 1 }}>
+            <span style={{ fontSize: 9, fontWeight: 800, letterSpacing: '0.05em', color: '#f4f7fa', textTransform: 'uppercase' as const, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', flex: 1 }}>
               {arm.greetingName}
             </span>
-            <span style={{ fontSize: 8, color: '#22c55e', fontWeight: 600, flexShrink: 0, marginLeft: 4 }}>{arm.greetingStatus}</span>
+            <span style={{ fontSize: 6, color: '#22c55e', fontWeight: 600, flexShrink: 0, marginLeft: 4 }}>{arm.greetingStatus}</span>
           </div>
         </div>
       ))} />
       {/* Verdict */}
       <ArmStack armIndex={armIndex} reduced={reduced} arms={ARMS.map(arm => (
-        <div style={{ padding: '0 10px 3px' }}>
-          <div style={{ background: '#0a1c35', borderRadius: 10, padding: '5px 10px', border: '1px solid rgba(30,58,95,0.6)', boxShadow: '0 0 0 1px rgba(34,197,94,0.15), 0 0 10px rgba(34,197,94,0.08)' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-              <div style={{ flexShrink: 0, width: 22, height: 22, borderRadius: '50%', background: '#22c55e', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 8px rgba(34,197,94,0.5)' }}>
-                <span style={{ fontSize: 13, color: '#fff', fontWeight: 900, lineHeight: 1, marginTop: -1 }}>&#10003;</span>
+        <div style={{ padding: '0 10px 2px' }}>
+          <div style={{ background: '#0a1c35', borderRadius: 8, padding: '3px 8px', border: '1px solid rgba(30,58,95,0.6)', boxShadow: '0 0 0 1px rgba(34,197,94,0.12), 0 0 8px rgba(34,197,94,0.06)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+              <div style={{ flexShrink: 0, width: 16, height: 16, borderRadius: '50%', background: '#22c55e', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 6px rgba(34,197,94,0.4)' }}>
+                <span style={{ fontSize: 10, color: '#fff', fontWeight: 900, lineHeight: 1 }}>&#10003;</span>
               </div>
-              <span style={{ fontSize: 10, fontWeight: 700, color: '#f4f7fa' }}>{arm.verdictMain}</span>
+              <span style={{ fontSize: 8, fontWeight: 700, color: '#f4f7fa' }}>{arm.verdictMain}</span>
             </div>
-            <div style={{ fontSize: 8, color: '#f0b429', marginTop: 2, paddingLeft: 29, fontWeight: 600 }}>{arm.verdictSub}</div>
+            <div style={{ fontSize: 6, color: '#f0b429', marginTop: 2, paddingLeft: 21, fontWeight: 600 }}>{arm.verdictSub}</div>
           </div>
         </div>
       ))} />
@@ -772,51 +765,51 @@ function StagePhone({ armIndex, reduced }: { armIndex: number; reduced: boolean 
           { label: 'NEEDS YOU (2)', color: '#f0b429', active: false },
           { label: 'ARCHIVE', color: 'rgba(168,216,240,0.35)', active: false },
         ].map(({ label, color, active }) => (
-          <div key={label} style={{ flex: 1, fontSize: 8, fontWeight: active ? 700 : 600, color, padding: '3px 0', textAlign: 'center' as const, borderBottom: active ? `1.5px solid ${color}` : 'none' }}>
+          <div key={label} style={{ flex: 1, fontSize: 6, fontWeight: active ? 700 : 600, color, padding: '2px 0', textAlign: 'center' as const, borderBottom: active ? `1.5px solid ${color}` : 'none' }}>
             {label}
           </div>
         ))}
       </div>
       {/* Handled items */}
       <ArmStack armIndex={armIndex} reduced={reduced} arms={ARMS.map(arm => (
-        <div style={{ padding: '3px 8px' }}>
+        <div style={{ padding: '2px 8px' }}>
           {arm.handled.map((item, i) => (
-            <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '3px 0', borderBottom: i < arm.handled.length - 1 ? '1px solid rgba(30,58,95,0.2)' : 'none' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 4, minWidth: 0, flex: 1 }}>
-                <span style={{ fontSize: 9, color: '#22c55e', flexShrink: 0 }}>&#10003;</span>
-                <span style={{ fontSize: 9, color: '#c8dff0', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.text}</span>
+            <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '2px 0', borderBottom: i < arm.handled.length - 1 ? '1px solid rgba(30,58,95,0.2)' : 'none' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 3, minWidth: 0, flex: 1 }}>
+                <span style={{ fontSize: 7, color: '#22c55e', flexShrink: 0 }}>&#10003;</span>
+                <span style={{ fontSize: 7, color: '#c8dff0', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.text}</span>
               </div>
-              <span style={{ fontSize: 7, color: 'rgba(168,216,240,0.35)', flexShrink: 0, marginLeft: 3 }}>{item.time}</span>
+              <span style={{ fontSize: 5, color: 'rgba(168,216,240,0.35)', flexShrink: 0, marginLeft: 3 }}>{item.time}</span>
             </div>
           ))}
         </div>
       ))} />
       {/* Needs You */}
       <ArmStack armIndex={armIndex} reduced={reduced} arms={ARMS.map(arm => (
-        <div style={{ padding: '3px 8px', display: 'flex', flexDirection: 'column', gap: 5 }}>
+        <div style={{ padding: '2px 8px', display: 'flex', flexDirection: 'column', gap: 3 }}>
           {arm.needsYou.map((card, i) => (
-            <div key={i} style={{ background: '#0a1c35', borderRadius: 7, padding: '5px 8px', border: '1px solid rgba(240,180,41,0.2)' }}>
+            <div key={i} style={{ background: '#0a1c35', borderRadius: 6, padding: '3px 7px', border: '1px solid rgba(240,180,41,0.2)' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 3 }}>
-                <span style={{ fontSize: 12, color: '#f0b429', fontWeight: 700, flexShrink: 0 }}>{card.icon}</span>
+                <span style={{ fontSize: 9, color: '#f0b429', fontWeight: 700, flexShrink: 0 }}>{card.icon}</span>
                 <div style={{ minWidth: 0, flex: 1 }}>
-                  <div style={{ fontSize: 9, fontWeight: 700, color: '#f4f7fa', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{card.label}</div>
-                  <div style={{ fontSize: 8, color: 'rgba(168,216,240,0.5)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{card.sub}</div>
+                  <div style={{ fontSize: 7, fontWeight: 700, color: '#f4f7fa', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{card.label}</div>
+                  <div style={{ fontSize: 6, color: 'rgba(168,216,240,0.5)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{card.sub}</div>
                 </div>
-                <span style={{ fontSize: 13, color: 'rgba(240,180,41,0.5)', flexShrink: 0 }}>&#8250;</span>
+                <span style={{ fontSize: 10, color: 'rgba(240,180,41,0.5)', flexShrink: 0 }}>&#8250;</span>
               </div>
             </div>
           ))}
         </div>
       ))} />
       {/* 47 other items — always in DOM */}
-      <div style={{ margin: '2px 8px', background: 'rgba(10,28,53,0.7)', borderRadius: 7, padding: '4px 10px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexShrink: 0 }}>
-        <span style={{ fontSize: 9, color: 'rgba(168,216,240,0.6)', fontWeight: 500 }}>47 other items handled quietly</span>
-        <span style={{ fontSize: 12, color: 'rgba(168,216,240,0.3)', marginLeft: 3 }}>&#8897;</span>
+      <div style={{ margin: '1px 8px', background: 'rgba(10,28,53,0.7)', borderRadius: 6, padding: '2px 8px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexShrink: 0 }}>
+        <span style={{ fontSize: 7, color: 'rgba(168,216,240,0.6)', fontWeight: 500 }}>47 other items handled quietly</span>
+        <span style={{ fontSize: 9, color: 'rgba(168,216,240,0.3)', marginLeft: 3 }}>&#8897;</span>
       </div>
-      {/* Bottom bar */}
-      <div style={{ display: 'flex', justifyContent: 'space-around', padding: '5px 6px 6px', borderTop: '1px solid rgba(30,58,95,0.5)', background: '#04080f', marginTop: 'auto', flexShrink: 0 }}>
+      {/* Bottom bar — marginTop:auto pushes it down only if space remains */}
+      <div style={{ display: 'flex', justifyContent: 'space-around', padding: '3px 5px 4px', borderTop: '1px solid rgba(30,58,95,0.5)', background: '#04080f', marginTop: 'auto', flexShrink: 0 }}>
         {['Home', 'Feed', 'Search', 'Settings'].map(item => (
-          <span key={item} style={{ fontSize: 8, color: 'rgba(168,216,240,0.35)', fontWeight: 600 }}>{item}</span>
+          <span key={item} style={{ fontSize: 6, color: 'rgba(168,216,240,0.35)', fontWeight: 600 }}>{item}</span>
         ))}
       </div>
     </div>
@@ -1108,12 +1101,12 @@ export default function HeroV5({ armIndex, reduced = false }: { armIndex: number
               <path d='M102,191 C122,191 123,133 143,133' stroke='#f87171' strokeWidth='4' strokeOpacity='0.30'/>
               <path d='M102,249 C122,249 123,307 143,307' stroke='#60a5fa' strokeWidth='4' strokeOpacity='0.30'/>
               <path d='M102,307 C122,307 123,249 143,249' stroke='#fbbf24' strokeWidth='4' strokeOpacity='0.30'/>
-              {/* Output strands — phone right wall → right cards */}
+              {/* Output strands — phone right wall → right cards (all blue/green/teal) */}
               <path d='M259,75  C269,75  280,75  300,75'  stroke='#60a5fa' strokeWidth='4' strokeOpacity='0.30'/>
               <path d='M259,135 C269,135 280,135 300,135' stroke='#34d399' strokeWidth='4' strokeOpacity='0.30'/>
-              <path d='M259,195 C269,195 280,195 300,195' stroke='#a78bfa' strokeWidth='4' strokeOpacity='0.30'/>
-              <path d='M259,255 C269,255 280,255 300,255' stroke='#fbbf24' strokeWidth='4' strokeOpacity='0.30'/>
-              <path d='M259,315 C269,315 280,315 300,315' stroke='#f87171' strokeWidth='4' strokeOpacity='0.30'/>
+              <path d='M259,195 C269,195 280,195 300,195' stroke='#38bdf8' strokeWidth='4' strokeOpacity='0.30'/>
+              <path d='M259,255 C269,255 280,255 300,255' stroke='#2dd4bf' strokeWidth='4' strokeOpacity='0.30'/>
+              <path d='M259,315 C269,315 280,315 300,315' stroke='#4ade80' strokeWidth='4' strokeOpacity='0.30'/>
             </g>
             {/* Core strands */}
             <g strokeLinecap='round' fill='none' strokeWidth='0.9'>
@@ -1124,9 +1117,9 @@ export default function HeroV5({ armIndex, reduced = false }: { armIndex: number
               <path d='M102,307 C122,307 123,249 143,249' stroke='#fbbf24' strokeOpacity='0.85'/>
               <path d='M259,75  C269,75  280,75  300,75'  stroke='#60a5fa' strokeOpacity='0.85'/>
               <path d='M259,135 C269,135 280,135 300,135' stroke='#34d399' strokeOpacity='0.85'/>
-              <path d='M259,195 C269,195 280,195 300,195' stroke='#a78bfa' strokeOpacity='0.85'/>
-              <path d='M259,255 C269,255 280,255 300,255' stroke='#fbbf24' strokeOpacity='0.85'/>
-              <path d='M259,315 C269,315 280,315 300,315' stroke='#f87171' strokeOpacity='0.85'/>
+              <path d='M259,195 C269,195 280,195 300,195' stroke='#38bdf8' strokeOpacity='0.85'/>
+              <path d='M259,255 C269,255 280,255 300,255' stroke='#2dd4bf' strokeOpacity='0.85'/>
+              <path d='M259,315 C269,315 280,315 300,315' stroke='#4ade80' strokeOpacity='0.85'/>
             </g>
 
             {/* Port dots — glow layer */}
@@ -1146,15 +1139,15 @@ export default function HeroV5({ armIndex, reduced = false }: { armIndex: number
               {/* Phone right exits */}
               <circle cx='259' cy='75'  r='3.5' fill='#60a5fa' fillOpacity='0.28'/>
               <circle cx='259' cy='135' r='3.5' fill='#34d399' fillOpacity='0.28'/>
-              <circle cx='259' cy='195' r='3.5' fill='#a78bfa' fillOpacity='0.28'/>
-              <circle cx='259' cy='255' r='3.5' fill='#fbbf24' fillOpacity='0.28'/>
-              <circle cx='259' cy='315' r='3.5' fill='#f87171' fillOpacity='0.28'/>
+              <circle cx='259' cy='195' r='3.5' fill='#38bdf8' fillOpacity='0.28'/>
+              <circle cx='259' cy='255' r='3.5' fill='#2dd4bf' fillOpacity='0.28'/>
+              <circle cx='259' cy='315' r='3.5' fill='#4ade80' fillOpacity='0.28'/>
               {/* Right card ports */}
               <circle cx='300' cy='75'  r='3.5' fill='#60a5fa' fillOpacity='0.28'/>
               <circle cx='300' cy='135' r='3.5' fill='#34d399' fillOpacity='0.28'/>
-              <circle cx='300' cy='195' r='3.5' fill='#a78bfa' fillOpacity='0.28'/>
-              <circle cx='300' cy='255' r='3.5' fill='#fbbf24' fillOpacity='0.28'/>
-              <circle cx='300' cy='315' r='3.5' fill='#f87171' fillOpacity='0.28'/>
+              <circle cx='300' cy='195' r='3.5' fill='#38bdf8' fillOpacity='0.28'/>
+              <circle cx='300' cy='255' r='3.5' fill='#2dd4bf' fillOpacity='0.28'/>
+              <circle cx='300' cy='315' r='3.5' fill='#4ade80' fillOpacity='0.28'/>
             </g>
             {/* Port dots — core */}
             <circle cx='102' cy='75'  r='2' fill='#22d3ee' fillOpacity='0.92'/>
@@ -1169,14 +1162,14 @@ export default function HeroV5({ armIndex, reduced = false }: { armIndex: number
             <circle cx='143' cy='249' r='2' fill='#fbbf24' fillOpacity='0.92'/>
             <circle cx='259' cy='75'  r='2' fill='#60a5fa' fillOpacity='0.92'/>
             <circle cx='259' cy='135' r='2' fill='#34d399' fillOpacity='0.92'/>
-            <circle cx='259' cy='195' r='2' fill='#a78bfa' fillOpacity='0.92'/>
-            <circle cx='259' cy='255' r='2' fill='#fbbf24' fillOpacity='0.92'/>
-            <circle cx='259' cy='315' r='2' fill='#f87171' fillOpacity='0.92'/>
+            <circle cx='259' cy='195' r='2' fill='#38bdf8' fillOpacity='0.92'/>
+            <circle cx='259' cy='255' r='2' fill='#2dd4bf' fillOpacity='0.92'/>
+            <circle cx='259' cy='315' r='2' fill='#4ade80' fillOpacity='0.92'/>
             <circle cx='300' cy='75'  r='2' fill='#60a5fa' fillOpacity='0.92'/>
             <circle cx='300' cy='135' r='2' fill='#34d399' fillOpacity='0.92'/>
-            <circle cx='300' cy='195' r='2' fill='#a78bfa' fillOpacity='0.92'/>
-            <circle cx='300' cy='255' r='2' fill='#fbbf24' fillOpacity='0.92'/>
-            <circle cx='300' cy='315' r='2' fill='#f87171' fillOpacity='0.92'/>
+            <circle cx='300' cy='195' r='2' fill='#38bdf8' fillOpacity='0.92'/>
+            <circle cx='300' cy='255' r='2' fill='#2dd4bf' fillOpacity='0.92'/>
+            <circle cx='300' cy='315' r='2' fill='#4ade80' fillOpacity='0.92'/>
           </svg>
 
           {/* Left annotation — "THE TANGLE GOES IN." */}
