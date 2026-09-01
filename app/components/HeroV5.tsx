@@ -6,7 +6,7 @@
 
 import type { ReactNode } from 'react';
 import Link from 'next/link';
-import { useRef, useEffect, useState, useCallback } from 'react';
+import { useRef, useEffect, useState } from 'react';
 
 // ─── TYPES ────────────────────────────────────────────────────────────────────
 
@@ -42,7 +42,6 @@ export const ARMS: ArmData[] = [
       { icon: '⚡', source: 'Bill Received', content: 'Electric Company — $247.63, due May 28', time: '10:18 AM', rotate: -0.8 },
       { icon: '\u{1F4C5}', source: 'Calendar', content: 'Vet Appointment — Tomorrow, 10:00 AM', time: '9:41 AM', rotate: 1.2 },
       { icon: '\u{1F4DD}', source: 'Quick Note', content: 'Order parts for laser trailer', time: '9:02 AM', rotate: -1 },
-      { icon: '\u{1F9FE}', source: 'Receipt', content: 'Tractor Supply — $89.47', time: 'Yesterday', rotate: 0.5 },
     ],
     greetingLabel: 'Good afternoon,',
     greetingName: 'Bubba',
@@ -79,7 +78,6 @@ export const ARMS: ArmData[] = [
       { icon: '⚡', source: 'Bill', content: 'Fleet insurance — $612.00, due Sep 12', time: '10:22 AM', rotate: -0.8 },
       { icon: '\u{1F4C5}', source: 'Calendar', content: 'Crew scheduling — Monday, 6:30 AM', time: '9:35 AM', rotate: 1.2 },
       { icon: '\u{1F4DD}', source: 'Note', content: 'Reorder shop consumables before Fulton', time: '9:10 AM', rotate: -1 },
-      { icon: '\u{1F9FE}', source: 'Receipt', content: 'Fastener supply — $211.80', time: 'yesterday', rotate: 0.5 },
     ],
     greetingLabel: 'Good afternoon,',
     greetingName: 'Ray',
@@ -116,7 +114,6 @@ export const ARMS: ArmData[] = [
       { icon: '\u{1F514}', source: 'Reminder', content: 'Certification renewal opens Sep 15', time: '11:20 AM', rotate: -0.8 },
       { icon: '\u{1F4C5}', source: 'Calendar', content: 'Informational call — Wednesday, 4:00 PM', time: '10:05 AM', rotate: 1.2 },
       { icon: '\u{1F4DD}', source: 'Note', content: 'Ask Marcus who runs hiring at the co-op', time: '9:30 AM', rotate: -1 },
-      { icon: '\u{1F516}', source: 'Saved', content: 'Three roles worth a closer look', time: 'yesterday', rotate: 0.5 },
     ],
     greetingLabel: 'Good afternoon,',
     greetingName: 'Nora',
@@ -153,7 +150,6 @@ export const ARMS: ArmData[] = [
       { icon: '\u{1F4AC}', source: 'Text thread', content: 'Scheduling, in a group chat, since 2023', time: '10:05 AM', rotate: -0.8 },
       { icon: '\u{1F4DD}', source: 'Whiteboard', content: 'Crew board — photographed daily', time: '9:30 AM', rotate: 1.2 },
       { icon: '\u{1F5A5}️', source: 'Legacy tool', content: 'Quoting software nobody has the login for', time: '9:02 AM', rotate: -1 },
-      { icon: '\u{1F4CC}', source: 'Sticky notes', content: 'Callbacks, on the monitor', time: 'yesterday', rotate: 0.5 },
     ],
     greetingLabel: '',
     greetingName: 'Fulton Operations',
@@ -192,112 +188,40 @@ export const ARM_SUBHEADS: string[] = [
 
 // ─── COLORS ───────────────────────────────────────────────────────────────────
 
-// Hue per tangle card slot (index 0-5): cyan / violet / red / blue / amber / teal
-const TANGLE_COLORS = ['#22d3ee', '#a78bfa', '#f87171', '#60a5fa', '#fbbf24', '#34d399'];
+// Hue per tangle card slot (index 0-4): cyan / violet / red / blue / amber
+const TANGLE_COLORS = ['#22d3ee', '#a78bfa', '#f87171', '#60a5fa', '#fbbf24'];
 // Hue per domain card slot (index 0-4): blue / green / violet / amber / red
 const DOMAIN_COLORS = ['#60a5fa', '#34d399', '#a78bfa', '#fbbf24', '#f87171'];
 
-// Portrait ribbon strand node positions (fraction of image height, 941×1672).
-// Six left strands enter cards on the left; five right strands terminate on the right.
-const LEFT_NODES  = [0.15, 0.29, 0.44, 0.57, 0.70, 0.83];
-const RIGHT_NODES = [0.32, 0.42, 0.50, 0.58, 0.67];
-
-// Fixed y-coordinates (CSS px) for the 402 × 420 stage.
-const TANGLE_Y = [50, 108, 166, 224, 282, 340];
+// Fixed y-coordinates (CSS px) for the 402 × 460 stage.
+const TANGLE_Y = [50, 108, 166, 224, 282];
 const DOMAIN_Y  = [50, 110, 170, 230, 290];
 
-// ─── CURVE COMPUTATION (DOM-measured bezier connector lines) ─────────────────
-
-type CurveSet = {
-  leftCurves: Array<{ d: string; color: string }>;
-  rightCurves: Array<{ d: string; color: string }>;
-  leftNodes: Array<{ cx: number; cy: number; color: string }>;
-  rightNodes: Array<{ cx: number; cy: number; color: string }>;
-  w: number;
-  h: number;
-};
-
-function computeCurves(
-  grid: HTMLElement,
-  tangleEls: Element[],
-  phoneEl: Element,
-  domainEls: Element[],
-): CurveSet | null {
-  const gr = grid.getBoundingClientRect();
-  if (gr.width < 1 || tangleEls.length === 0 || domainEls.length === 0) return null;
-
-  const toL = (r: DOMRect) => ({
-    left: r.left - gr.left,
-    right: r.right - gr.left,
-    centerY: (r.top + r.bottom) / 2 - gr.top,
-  });
-
-  const phRect = phoneEl.getBoundingClientRect();
-  const ph = toL(phRect);
-  const phH = phRect.height;
-  const phCY = ph.centerY;
-
-  const tang = tangleEls.map(el => toL(el.getBoundingClientRect()));
-  const dom = domainEls.map(el => toL(el.getBoundingClientRect()));
-
-  // Entry Y on phone left — shuffled so strands cross each other on the way in
-  const SHUFFLE = [0.58, -0.42, 0.22, -0.22, 0.08, -0.58];
-  const entryY = SHUFFLE.slice(0, tang.length).map(f => phCY + f * phH * 0.40);
-
-  // Exit Y on phone right — orderly fan, no crossing
-  const exitY = dom.map((_, i) => {
-    const t = dom.length > 1 ? i / (dom.length - 1) : 0.5;
-    return phCY + (t - 0.5) * phH * 0.45;
-  });
-
-  // Left curves: each strand leaves its card, converges toward phone-center Y
-  // (crossing strands that go the opposite direction), then fans to its entry Y.
-  // CP1 pulls all strands toward the phone's vertical midpoint — this guarantees
-  // visible crossing because cards above center map to entry points below center
-  // (SHUFFLE is inverted) and vice versa.
-  const leftCurves = tang.map((t, i) => {
-    const x0 = t.right, y0 = t.centerY;
-    const x1 = ph.left, y1 = entryY[i];
-    const dx = Math.max(x1 - x0, 1);
-    // CP1: 40% across, 75% of the way from source Y toward phone center Y
-    const cp1x = x0 + dx * 0.40;
-    const cp1y = y0 + (phCY - y0) * 0.75;
-    // CP2: 80% across, approaching individual entry Y
-    const cp2x = x0 + dx * 0.80;
-    const cp2y = y1;
-    return {
-      d: `M ${x0.toFixed(1)} ${y0.toFixed(1)} C ${cp1x.toFixed(1)} ${cp1y.toFixed(1)} ${cp2x.toFixed(1)} ${cp2y.toFixed(1)} ${x1.toFixed(1)} ${y1.toFixed(1)}`,
-      color: TANGLE_COLORS[i % TANGLE_COLORS.length],
-    };
-  });
-
-  // Right side: symmetric S-curves, non-crossing, orderly fan
-  const rightCurves = dom.map((d, i) => {
-    const x0 = ph.right, y0 = exitY[i];
-    const x1 = d.left, y1 = d.centerY;
-    const span = Math.max(x1 - x0, 20);
-    const cp1x = x0 + span * 0.35;
-    const cp2x = x1 - span * 0.35;
-    return {
-      d: `M ${x0.toFixed(1)} ${y0.toFixed(1)} C ${cp1x.toFixed(1)} ${y0.toFixed(1)} ${cp2x.toFixed(1)} ${y1.toFixed(1)} ${x1.toFixed(1)} ${y1.toFixed(1)}`,
-      color: DOMAIN_COLORS[i % DOMAIN_COLORS.length],
-    };
-  });
-
-  const leftNodes = tang.map((t, i) => ({ cx: t.right, cy: t.centerY, color: TANGLE_COLORS[i % TANGLE_COLORS.length] }));
-  const rightNodes = dom.map((d, i) => ({ cx: d.left, cy: d.centerY, color: DOMAIN_COLORS[i % DOMAIN_COLORS.length] }));
-
-  return { leftCurves, rightCurves, leftNodes, rightNodes, w: gr.width, h: gr.height };
-}
+// ─── TOPOLOGY ASSERTIONS ──────────────────────────────────────────────────────
+// Throw at module load if any slot count diverges from the declared composition.
+// Counts that must all agree: TANGLE_SLOTS (5) and DOMAIN_SLOTS (5).
+const _TANGLE_SLOTS = 5;
+const _DOMAIN_SLOTS = 5;
+(() => {
+  if (TANGLE_COLORS.length !== _TANGLE_SLOTS) throw new Error(`HeroV5: TANGLE_COLORS must have ${_TANGLE_SLOTS} entries, has ${TANGLE_COLORS.length}`);
+  if (TANGLE_Y.length     !== _TANGLE_SLOTS) throw new Error(`HeroV5: TANGLE_Y must have ${_TANGLE_SLOTS} entries, has ${TANGLE_Y.length}`);
+  if (DOMAIN_COLORS.length !== _DOMAIN_SLOTS) throw new Error(`HeroV5: DOMAIN_COLORS must have ${_DOMAIN_SLOTS} entries, has ${DOMAIN_COLORS.length}`);
+  if (DOMAIN_Y.length      !== _DOMAIN_SLOTS) throw new Error(`HeroV5: DOMAIN_Y must have ${_DOMAIN_SLOTS} entries, has ${DOMAIN_Y.length}`);
+  for (const arm of ARMS) {
+    if (arm.tangle.length !== _TANGLE_SLOTS) throw new Error(`HeroV5: ARM "${arm.id}" tangle must have ${_TANGLE_SLOTS} entries, has ${arm.tangle.length}`);
+    if (arm.right.length  !== _DOMAIN_SLOTS) throw new Error(`HeroV5: ARM "${arm.id}" right must have ${_DOMAIN_SLOTS} entries, has ${arm.right.length}`);
+  }
+})();
 
 // ─── ARMSTACK ─────────────────────────────────────────────────────────────────
 // All arms live in the DOM at once. Only one is visible (opacity). This means
 // gate anchors are always present regardless of which arm is showing.
 
 // ─── PORTRAIT COLUMN STACK ────────────────────────────────────────────────────
-// Same sequential-fade logic as ArmStack, but uses absolute stacking instead of
-// CSS grid so that each arm can fill a height-100% container and position its
-// cards with percentage top values matching the ribbon's strand node fractions.
+// Simultaneous crossfade: opacity derives directly from armIndex — no timer state.
+// Safety: at every React render, exactly one arm has opacity 1 (i === armIndex).
+// CSS transitions handle the fade-out/in concurrently. No zero-content frame
+// is possible: the DOM commit always has a visible arm before the transition runs.
 
 function PortraitColumnStack({
   armIndex,
@@ -308,27 +232,6 @@ function PortraitColumnStack({
   arms: ReactNode[];
   reduced?: boolean;
 }) {
-  const [showing, setShowing] = useState(armIndex);
-  const [visible, setVisible] = useState(true);
-  const showingRef = useRef<number>(armIndex);
-
-  useEffect(() => {
-    if (armIndex === showingRef.current) return;
-    if (reduced) {
-      showingRef.current = armIndex;
-      setShowing(armIndex);
-      setVisible(true);
-      return;
-    }
-    setVisible(false);
-    const timer = setTimeout(() => {
-      showingRef.current = armIndex;
-      setShowing(armIndex);
-      setVisible(true);
-    }, 380);
-    return () => clearTimeout(timer);
-  }, [armIndex, reduced]);
-
   return (
     <div style={{ position: 'relative', width: '100%', height: '100%' }}>
       {arms.map((arm, i) => (
@@ -337,11 +240,11 @@ function PortraitColumnStack({
           style={{
             position: 'absolute',
             inset: 0,
-            opacity: i === showing ? (visible ? 1 : 0) : 0,
-            transition: reduced ? 'none' : 'opacity 0.35s ease-in-out',
-            pointerEvents: i === showing && visible ? 'auto' : 'none',
+            opacity: i === armIndex ? 1 : 0,
+            transition: reduced ? 'none' : 'opacity 0.38s ease-in-out',
+            pointerEvents: i === armIndex ? 'auto' : 'none',
           }}
-          aria-hidden={i !== showing || undefined}
+          aria-hidden={i !== armIndex || undefined}
         >
           {arm}
         </div>
@@ -353,31 +256,8 @@ function PortraitColumnStack({
 // ─── ARMSTACK ─────────────────────────────────────────────────────────────────
 // All arms live in the DOM at once. Only one is visible (opacity). This means
 // gate anchors are always present regardless of which arm is showing.
-
-// Sequential fade: outgoing fades out fully before incoming fades in.
-// This prevents both arms being legible at once during transitions.
+// Simultaneous crossfade: stateless, same safety guarantee as PortraitColumnStack.
 export function ArmStack({ armIndex, arms, reduced = false }: { armIndex: number; arms: ReactNode[]; reduced?: boolean }) {
-  const [showing, setShowing] = useState(armIndex);
-  const [visible, setVisible] = useState(true);
-  const showingRef = useRef<number>(armIndex);
-
-  useEffect(() => {
-    if (armIndex === showingRef.current) return;
-    if (reduced) {
-      showingRef.current = armIndex;
-      setShowing(armIndex);
-      setVisible(true);
-      return;
-    }
-    setVisible(false);
-    const timer = setTimeout(() => {
-      showingRef.current = armIndex;
-      setShowing(armIndex);
-      setVisible(true);
-    }, 380);
-    return () => clearTimeout(timer);
-  }, [armIndex, reduced]);
-
   return (
     <div style={{ display: 'grid', gridTemplateAreas: '"s"', gridTemplateColumns: '1fr' }}>
       {arms.map((arm, i) => (
@@ -385,11 +265,11 @@ export function ArmStack({ armIndex, arms, reduced = false }: { armIndex: number
           key={i}
           style={{
             gridArea: 's',
-            opacity: i === showing ? (visible ? 1 : 0) : 0,
-            transition: reduced ? 'none' : 'opacity 0.35s ease-in-out',
-            pointerEvents: i === showing && visible ? 'auto' : 'none',
+            opacity: i === armIndex ? 1 : 0,
+            transition: reduced ? 'none' : 'opacity 0.38s ease-in-out',
+            pointerEvents: i === armIndex ? 'auto' : 'none',
           }}
-          aria-hidden={i !== showing || undefined}
+          aria-hidden={i !== armIndex || undefined}
         >
           {arm}
         </div>
@@ -703,17 +583,14 @@ function StageTangleCard({ icon, source, content, time, rotate, tileColor }: Tan
   return (
     <div
       style={{
-        background: '#0c1c36',
+        background: 'transparent',
         borderRadius: 7,
-        border: `1px solid ${tileColor}22`,
-        borderTop: '1px solid rgba(255,255,255,0.09)',
         transform: `rotate(${rotate}deg)`,
         overflow: 'hidden',
         padding: '6px 7px',
         display: 'flex',
         alignItems: 'flex-start',
         gap: 6,
-        boxShadow: `0 2px 8px rgba(0,0,0,0.55), 0 0 0 1px ${tileColor}10`,
       }}
     >
       {/* Circle icon */}
@@ -760,11 +637,8 @@ function StageDomainCard({ icon, name, status, tileColor }: RightItem & { tileCo
     <div
       style={{
         height: '100%',
-        background: '#0c1c36',
+        background: 'transparent',
         borderRadius: 7,
-        border: '1px solid rgba(34,197,94,0.20)',
-        borderTop: '1px solid rgba(255,255,255,0.08)',
-        boxShadow: '0 0 0 1px rgba(34,197,94,0.07), 0 0 8px rgba(34,197,94,0.12)',
         display: 'flex', alignItems: 'center',
         padding: '0 7px',
         gap: 7,
@@ -810,9 +684,8 @@ function StageModuleCard({ name, status }: { name: string; status: string }) {
     <div
       style={{
         height: '100%',
-        background: '#0f1e35',
+        background: 'transparent',
         borderRadius: 7,
-        border: '1px solid rgba(109,40,217,0.28)',
         display: 'flex', alignItems: 'center',
         padding: '0 7px',
         gap: 7,
@@ -953,10 +826,8 @@ function StagePhone({ armIndex, reduced }: { armIndex: number; reduced: boolean 
 // ─── HERO V5 ──────────────────────────────────────────────────────────────────
 
 export default function HeroV5({ armIndex, reduced = false }: { armIndex: number; reduced?: boolean }) {
-  const gridRef = useRef<HTMLDivElement>(null);
   const wrapRef  = useRef<HTMLDivElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
-  const [curves, setCurves] = useState<CurveSet | null>(null);
   const [motionReduced, setMotionReduced] = useState(false);
   useEffect(() => {
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -966,35 +837,6 @@ export default function HeroV5({ armIndex, reduced = false }: { armIndex: number
     return () => mq.removeEventListener('change', handler);
   }, []);
   const effectiveReduced = reduced || motionReduced;
-
-  const measure = useCallback(() => {
-    const grid = gridRef.current;
-    if (!grid) return;
-    const tangleEls = Array.from(grid.querySelectorAll('[data-tangle]')).sort(
-      (a, b) => Number(a.getAttribute('data-tangle')) - Number(b.getAttribute('data-tangle'))
-    );
-    const phoneEl = grid.querySelector('[data-phone-body]');
-    const domainEls = Array.from(grid.querySelectorAll('[data-domain]')).sort(
-      (a, b) => Number(a.getAttribute('data-domain')) - Number(b.getAttribute('data-domain'))
-    );
-    if (!phoneEl) return;
-    const result = computeCurves(grid, tangleEls, phoneEl, domainEls);
-    setCurves(result);
-  }, []);
-
-  useEffect(() => {
-    const grid = gridRef.current;
-    if (!grid) return;
-    const raf = requestAnimationFrame(measure);
-    const ro = new ResizeObserver(() => requestAnimationFrame(measure));
-    ro.observe(grid);
-    window.addEventListener('resize', measure);
-    return () => {
-      cancelAnimationFrame(raf);
-      ro.disconnect();
-      window.removeEventListener('resize', measure);
-    };
-  }, [measure]);
 
   // Scale the fixed 402-px mobile stage to match actual viewport width.
   // Clamped to 0.90–1.10; desktop (≥1024px) shows the lg:block section instead.
@@ -1021,7 +863,6 @@ export default function HeroV5({ armIndex, reduced = false }: { armIndex: number
           artwork is 1536×1024 (3:2). mix-blend-mode:screen maps opaque black
           to nothing over the dark page; neon colours add additively.             */}
       <div
-        ref={gridRef}
         className='hidden lg:block relative w-full'
         style={{ aspectRatio: '1536 / 1024' }}
       >
@@ -1152,54 +993,6 @@ export default function HeroV5({ armIndex, reduced = false }: { armIndex: number
           />
         </div>
 
-        {/* DOM-measured connector curves — braiding left, orderly right, glow via SVG filter */}
-        {curves && (
-          <svg
-            aria-hidden='true'
-            style={{
-              position: 'absolute', left: 0, top: 0,
-              width: '100%', height: '100%',
-              pointerEvents: 'none',
-              zIndex: 2,
-            }}
-            viewBox={`0 0 ${curves.w} ${curves.h}`}
-            preserveAspectRatio='xMidYMid meet'
-          >
-            <defs>
-              <filter id='hero-curve-glow' x='-40%' y='-40%' width='180%' height='180%' colorInterpolationFilters='sRGB'>
-                <feGaussianBlur in='SourceGraphic' stdDeviation='4' result='blur' />
-              </filter>
-            </defs>
-            {/* Glow layer */}
-            <g filter='url(#hero-curve-glow)'>
-              {curves.leftCurves.map((c, i) => (
-                <path key={`lg${i}`} d={c.d} fill='none' stroke={c.color} strokeWidth='6' strokeOpacity='0.38' strokeLinecap='round' />
-              ))}
-              {curves.rightCurves.map((c, i) => (
-                <path key={`rg${i}`} d={c.d} fill='none' stroke={c.color} strokeWidth='6' strokeOpacity='0.38' strokeLinecap='round' />
-              ))}
-              {curves.leftNodes.map((n, i) => (
-                <circle key={`lgn${i}`} cx={n.cx} cy={n.cy} r='6' fill={n.color} fillOpacity='0.45' />
-              ))}
-              {curves.rightNodes.map((n, i) => (
-                <circle key={`rgn${i}`} cx={n.cx} cy={n.cy} r='6' fill={n.color} fillOpacity='0.45' />
-              ))}
-            </g>
-            {/* Core layer — bright thin strokes */}
-            {curves.leftCurves.map((c, i) => (
-              <path key={`lc${i}`} d={c.d} fill='none' stroke={c.color} strokeWidth='0.9' strokeOpacity='0.82' strokeLinecap='round' />
-            ))}
-            {curves.rightCurves.map((c, i) => (
-              <path key={`rc${i}`} d={c.d} fill='none' stroke={c.color} strokeWidth='0.9' strokeOpacity='0.82' strokeLinecap='round' />
-            ))}
-            {curves.leftNodes.map((n, i) => (
-              <circle key={`lcn${i}`} cx={n.cx} cy={n.cy} r='2.5' fill={n.color} fillOpacity='0.88' />
-            ))}
-            {curves.rightNodes.map((n, i) => (
-              <circle key={`rcn${i}`} cx={n.cx} cy={n.cy} r='2.5' fill={n.color} fillOpacity='0.88' />
-            ))}
-          </svg>
-        )}
       </div>
 
       {/* ══ MOBILE / TABLET < 1024px: fixed-coordinate 402 × 460 stage ══
@@ -1271,10 +1064,11 @@ export default function HeroV5({ armIndex, reduced = false }: { armIndex: number
             }}
           />
 
-          {/* Static connector curves — z=2, behind cards (z=3) but above ribbon.
-              Phone: left=131, right=271. Left card right edge: 102. Right card left: 300.
-              Left strands braid/cross to shuffle entry points on phone left wall.
-              Right strands fan cleanly from phone right wall to domain cards. */}
+          {/* Locked static artwork — z=2. Card shells, braid strands, output strands, port dots.
+              Coordinate system: 402 × 460 stage (authored width).
+              Left cards: x=6, width=96. Right cards: x=300, width=96. Phone: x=131, width=140.
+              Left card centers (y): 75, 133, 191, 249, 307. Right card centers: 75, 135, 195, 255, 315.
+              Braid: strand 0 straight, pairs (1,2) and (3,4) swap — one crossing each, none more. */}
           <svg
             aria-hidden='true'
             style={{ position: 'absolute', left: 0, top: 0, width: 402, height: 460, pointerEvents: 'none', zIndex: 2 }}
@@ -1284,61 +1078,105 @@ export default function HeroV5({ armIndex, reduced = false }: { armIndex: number
               <filter id='mcg' x='-50%' y='-50%' width='200%' height='200%' colorInterpolationFilters='sRGB'>
                 <feGaussianBlur in='SourceGraphic' stdDeviation='2.5' result='blur' />
               </filter>
+              <filter id='phone-glow' x='-30%' y='-10%' width='160%' height='120%' colorInterpolationFilters='sRGB'>
+                <feGaussianBlur in='SourceGraphic' stdDeviation='10' result='blur' />
+              </filter>
             </defs>
-            {/* Glow layer */}
+
+            {/* Phone glow pool */}
+            <ellipse cx='201' cy='430' rx='80' ry='28' fill='rgba(109,40,217,0.30)' filter='url(#phone-glow)' />
+
+            {/* Card shells — painted as stable SVG artwork */}
+            {/* Left card shells */}
+            <rect x='6'   y='50'  width='96' height='50' rx='7' fill='#0c1c36' stroke='rgba(255,255,255,0.07)' strokeWidth='1'/>
+            <rect x='6'   y='108' width='96' height='50' rx='7' fill='#0c1c36' stroke='rgba(255,255,255,0.07)' strokeWidth='1'/>
+            <rect x='6'   y='166' width='96' height='50' rx='7' fill='#0c1c36' stroke='rgba(255,255,255,0.07)' strokeWidth='1'/>
+            <rect x='6'   y='224' width='96' height='50' rx='7' fill='#0c1c36' stroke='rgba(255,255,255,0.07)' strokeWidth='1'/>
+            <rect x='6'   y='282' width='96' height='50' rx='7' fill='#0c1c36' stroke='rgba(255,255,255,0.07)' strokeWidth='1'/>
+            {/* Right card shells */}
+            <rect x='300' y='50'  width='96' height='50' rx='7' fill='#0c1c36' stroke='rgba(34,197,94,0.18)'   strokeWidth='1'/>
+            <rect x='300' y='110' width='96' height='50' rx='7' fill='#0c1c36' stroke='rgba(34,197,94,0.18)'   strokeWidth='1'/>
+            <rect x='300' y='170' width='96' height='50' rx='7' fill='#0c1c36' stroke='rgba(34,197,94,0.18)'   strokeWidth='1'/>
+            <rect x='300' y='230' width='96' height='50' rx='7' fill='#0c1c36' stroke='rgba(34,197,94,0.18)'   strokeWidth='1'/>
+            <rect x='300' y='290' width='96' height='50' rx='7' fill='#0c1c36' stroke='rgba(34,197,94,0.18)'   strokeWidth='1'/>
+
+            {/* Braid strands — left cards → phone left wall (with deterministic pair-swap crossings) */}
             <g filter='url(#mcg)' strokeLinecap='round' fill='none'>
-              <path d='M 102 74 C 114 187 125 306 131 306' stroke='#22d3ee' strokeWidth='4' strokeOpacity='0.30'/>
-              <path d='M 102 132 C 114 202 125 166 131 166' stroke='#a78bfa' strokeWidth='4' strokeOpacity='0.30'/>
-              <path d='M 102 190 C 114 216 125 256 131 256' stroke='#f87171' strokeWidth='4' strokeOpacity='0.30'/>
-              <path d='M 102 248 C 114 231 125 194 131 194' stroke='#60a5fa' strokeWidth='4' strokeOpacity='0.30'/>
-              <path d='M 102 306 C 114 245 125 236 131 236' stroke='#fbbf24' strokeWidth='4' strokeOpacity='0.30'/>
-              <path d='M 102 364 C 114 260 125 144 131 144' stroke='#34d399' strokeWidth='4' strokeOpacity='0.30'/>
-              <path d='M 271 146 C 281 146 290 75 300 75'  stroke='#60a5fa' strokeWidth='4' strokeOpacity='0.30'/>
-              <path d='M 271 186 C 281 186 290 135 300 135' stroke='#34d399' strokeWidth='4' strokeOpacity='0.30'/>
-              <path d='M 271 225 C 281 225 290 195 300 195' stroke='#a78bfa' strokeWidth='4' strokeOpacity='0.30'/>
-              <path d='M 271 264 C 281 264 290 255 300 255' stroke='#fbbf24' strokeWidth='4' strokeOpacity='0.30'/>
-              <path d='M 271 304 C 281 304 290 315 300 315' stroke='#f87171' strokeWidth='4' strokeOpacity='0.30'/>
+              {/* Glow layer */}
+              <path d='M102,75  C109,75  124,75  131,75'  stroke='#22d3ee' strokeWidth='4' strokeOpacity='0.30'/>
+              <path d='M102,133 C109,133 124,191 131,191' stroke='#a78bfa' strokeWidth='4' strokeOpacity='0.30'/>
+              <path d='M102,191 C109,191 124,133 131,133' stroke='#f87171' strokeWidth='4' strokeOpacity='0.30'/>
+              <path d='M102,249 C109,249 124,307 131,307' stroke='#60a5fa' strokeWidth='4' strokeOpacity='0.30'/>
+              <path d='M102,307 C109,307 124,249 131,249' stroke='#fbbf24' strokeWidth='4' strokeOpacity='0.30'/>
+              {/* Output strands — phone right wall → right cards */}
+              <path d='M271,75  C281,75  291,75  300,75'  stroke='#60a5fa' strokeWidth='4' strokeOpacity='0.30'/>
+              <path d='M271,135 C281,135 291,135 300,135' stroke='#34d399' strokeWidth='4' strokeOpacity='0.30'/>
+              <path d='M271,195 C281,195 291,195 300,195' stroke='#a78bfa' strokeWidth='4' strokeOpacity='0.30'/>
+              <path d='M271,255 C281,255 291,255 300,255' stroke='#fbbf24' strokeWidth='4' strokeOpacity='0.30'/>
+              <path d='M271,315 C281,315 291,315 300,315' stroke='#f87171' strokeWidth='4' strokeOpacity='0.30'/>
             </g>
-            {/* Core layer */}
+            {/* Core strands */}
             <g strokeLinecap='round' fill='none' strokeWidth='0.9'>
-              <path d='M 102 74 C 114 187 125 306 131 306' stroke='#22d3ee' strokeOpacity='0.85'/>
-              <path d='M 102 132 C 114 202 125 166 131 166' stroke='#a78bfa' strokeOpacity='0.85'/>
-              <path d='M 102 190 C 114 216 125 256 131 256' stroke='#f87171' strokeOpacity='0.85'/>
-              <path d='M 102 248 C 114 231 125 194 131 194' stroke='#60a5fa' strokeOpacity='0.85'/>
-              <path d='M 102 306 C 114 245 125 236 131 236' stroke='#fbbf24' strokeOpacity='0.85'/>
-              <path d='M 102 364 C 114 260 125 144 131 144' stroke='#34d399' strokeOpacity='0.85'/>
-              <path d='M 271 146 C 281 146 290 75 300 75'  stroke='#60a5fa' strokeOpacity='0.85'/>
-              <path d='M 271 186 C 281 186 290 135 300 135' stroke='#34d399' strokeOpacity='0.85'/>
-              <path d='M 271 225 C 281 225 290 195 300 195' stroke='#a78bfa' strokeOpacity='0.85'/>
-              <path d='M 271 264 C 281 264 290 255 300 255' stroke='#fbbf24' strokeOpacity='0.85'/>
-              <path d='M 271 304 C 281 304 290 315 300 315' stroke='#f87171' strokeOpacity='0.85'/>
+              <path d='M102,75  C109,75  124,75  131,75'  stroke='#22d3ee' strokeOpacity='0.85'/>
+              <path d='M102,133 C109,133 124,191 131,191' stroke='#a78bfa' strokeOpacity='0.85'/>
+              <path d='M102,191 C109,191 124,133 131,133' stroke='#f87171' strokeOpacity='0.85'/>
+              <path d='M102,249 C109,249 124,307 131,307' stroke='#60a5fa' strokeOpacity='0.85'/>
+              <path d='M102,307 C109,307 124,249 131,249' stroke='#fbbf24' strokeOpacity='0.85'/>
+              <path d='M271,75  C281,75  291,75  300,75'  stroke='#60a5fa' strokeOpacity='0.85'/>
+              <path d='M271,135 C281,135 291,135 300,135' stroke='#34d399' strokeOpacity='0.85'/>
+              <path d='M271,195 C281,195 291,195 300,195' stroke='#a78bfa' strokeOpacity='0.85'/>
+              <path d='M271,255 C281,255 291,255 300,255' stroke='#fbbf24' strokeOpacity='0.85'/>
+              <path d='M271,315 C281,315 291,315 300,315' stroke='#f87171' strokeOpacity='0.85'/>
             </g>
-            {/* Node dots — glow */}
+
+            {/* Port dots — glow layer */}
             <g filter='url(#mcg)'>
-              <circle cx='102' cy='74'  r='3' fill='#22d3ee' fillOpacity='0.45'/>
-              <circle cx='102' cy='132' r='3' fill='#a78bfa' fillOpacity='0.45'/>
-              <circle cx='102' cy='190' r='3' fill='#f87171' fillOpacity='0.45'/>
-              <circle cx='102' cy='248' r='3' fill='#60a5fa' fillOpacity='0.45'/>
-              <circle cx='102' cy='306' r='3' fill='#fbbf24' fillOpacity='0.45'/>
-              <circle cx='102' cy='364' r='3' fill='#34d399' fillOpacity='0.45'/>
-              <circle cx='300' cy='75'  r='3' fill='#60a5fa' fillOpacity='0.45'/>
-              <circle cx='300' cy='135' r='3' fill='#34d399' fillOpacity='0.45'/>
-              <circle cx='300' cy='195' r='3' fill='#a78bfa' fillOpacity='0.45'/>
-              <circle cx='300' cy='255' r='3' fill='#fbbf24' fillOpacity='0.45'/>
-              <circle cx='300' cy='315' r='3' fill='#f87171' fillOpacity='0.45'/>
+              {/* Left card ports */}
+              <circle cx='102' cy='75'  r='3.5' fill='#22d3ee' fillOpacity='0.28'/>
+              <circle cx='102' cy='133' r='3.5' fill='#a78bfa' fillOpacity='0.28'/>
+              <circle cx='102' cy='191' r='3.5' fill='#f87171' fillOpacity='0.28'/>
+              <circle cx='102' cy='249' r='3.5' fill='#60a5fa' fillOpacity='0.28'/>
+              <circle cx='102' cy='307' r='3.5' fill='#fbbf24' fillOpacity='0.28'/>
+              {/* Phone left entries (post-braid, positions match strand end-points) */}
+              <circle cx='131' cy='75'  r='3.5' fill='#22d3ee' fillOpacity='0.28'/>
+              <circle cx='131' cy='191' r='3.5' fill='#a78bfa' fillOpacity='0.28'/>
+              <circle cx='131' cy='133' r='3.5' fill='#f87171' fillOpacity='0.28'/>
+              <circle cx='131' cy='307' r='3.5' fill='#60a5fa' fillOpacity='0.28'/>
+              <circle cx='131' cy='249' r='3.5' fill='#fbbf24' fillOpacity='0.28'/>
+              {/* Phone right exits */}
+              <circle cx='271' cy='75'  r='3.5' fill='#60a5fa' fillOpacity='0.28'/>
+              <circle cx='271' cy='135' r='3.5' fill='#34d399' fillOpacity='0.28'/>
+              <circle cx='271' cy='195' r='3.5' fill='#a78bfa' fillOpacity='0.28'/>
+              <circle cx='271' cy='255' r='3.5' fill='#fbbf24' fillOpacity='0.28'/>
+              <circle cx='271' cy='315' r='3.5' fill='#f87171' fillOpacity='0.28'/>
+              {/* Right card ports */}
+              <circle cx='300' cy='75'  r='3.5' fill='#60a5fa' fillOpacity='0.28'/>
+              <circle cx='300' cy='135' r='3.5' fill='#34d399' fillOpacity='0.28'/>
+              <circle cx='300' cy='195' r='3.5' fill='#a78bfa' fillOpacity='0.28'/>
+              <circle cx='300' cy='255' r='3.5' fill='#fbbf24' fillOpacity='0.28'/>
+              <circle cx='300' cy='315' r='3.5' fill='#f87171' fillOpacity='0.28'/>
             </g>
-            {/* Node dots — core */}
-            <circle cx='102' cy='74'  r='1.5' fill='#22d3ee' fillOpacity='0.88'/>
-            <circle cx='102' cy='132' r='1.5' fill='#a78bfa' fillOpacity='0.88'/>
-            <circle cx='102' cy='190' r='1.5' fill='#f87171' fillOpacity='0.88'/>
-            <circle cx='102' cy='248' r='1.5' fill='#60a5fa' fillOpacity='0.88'/>
-            <circle cx='102' cy='306' r='1.5' fill='#fbbf24' fillOpacity='0.88'/>
-            <circle cx='102' cy='364' r='1.5' fill='#34d399' fillOpacity='0.88'/>
-            <circle cx='300' cy='75'  r='1.5' fill='#60a5fa' fillOpacity='0.88'/>
-            <circle cx='300' cy='135' r='1.5' fill='#34d399' fillOpacity='0.88'/>
-            <circle cx='300' cy='195' r='1.5' fill='#a78bfa' fillOpacity='0.88'/>
-            <circle cx='300' cy='255' r='1.5' fill='#fbbf24' fillOpacity='0.88'/>
-            <circle cx='300' cy='315' r='1.5' fill='#f87171' fillOpacity='0.88'/>
+            {/* Port dots — core */}
+            <circle cx='102' cy='75'  r='2' fill='#22d3ee' fillOpacity='0.92'/>
+            <circle cx='102' cy='133' r='2' fill='#a78bfa' fillOpacity='0.92'/>
+            <circle cx='102' cy='191' r='2' fill='#f87171' fillOpacity='0.92'/>
+            <circle cx='102' cy='249' r='2' fill='#60a5fa' fillOpacity='0.92'/>
+            <circle cx='102' cy='307' r='2' fill='#fbbf24' fillOpacity='0.92'/>
+            <circle cx='131' cy='75'  r='2' fill='#22d3ee' fillOpacity='0.92'/>
+            <circle cx='131' cy='191' r='2' fill='#a78bfa' fillOpacity='0.92'/>
+            <circle cx='131' cy='133' r='2' fill='#f87171' fillOpacity='0.92'/>
+            <circle cx='131' cy='307' r='2' fill='#60a5fa' fillOpacity='0.92'/>
+            <circle cx='131' cy='249' r='2' fill='#fbbf24' fillOpacity='0.92'/>
+            <circle cx='271' cy='75'  r='2' fill='#60a5fa' fillOpacity='0.92'/>
+            <circle cx='271' cy='135' r='2' fill='#34d399' fillOpacity='0.92'/>
+            <circle cx='271' cy='195' r='2' fill='#a78bfa' fillOpacity='0.92'/>
+            <circle cx='271' cy='255' r='2' fill='#fbbf24' fillOpacity='0.92'/>
+            <circle cx='271' cy='315' r='2' fill='#f87171' fillOpacity='0.92'/>
+            <circle cx='300' cy='75'  r='2' fill='#60a5fa' fillOpacity='0.92'/>
+            <circle cx='300' cy='135' r='2' fill='#34d399' fillOpacity='0.92'/>
+            <circle cx='300' cy='195' r='2' fill='#a78bfa' fillOpacity='0.92'/>
+            <circle cx='300' cy='255' r='2' fill='#fbbf24' fillOpacity='0.92'/>
+            <circle cx='300' cy='315' r='2' fill='#f87171' fillOpacity='0.92'/>
           </svg>
 
           {/* Left annotation — "THE TANGLE GOES IN." */}
@@ -1392,7 +1230,7 @@ export default function HeroV5({ armIndex, reduced = false }: { armIndex: number
               reduced={effectiveReduced}
               arms={ARMS.map((arm) => (
                 <div style={{ position: 'relative', width: '100%', height: '100%' }}>
-                  {/* Left column — 6 tangle cards */}
+                  {/* Left column — 5 tangle cards */}
                   {arm.tangle.map((card, i) => (
                     <div
                       key={`l${i}`}

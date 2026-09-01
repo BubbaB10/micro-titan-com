@@ -77,8 +77,8 @@ const FEATURES = [
 
 // ─── HOME PAGE CLIENT ─────────────────────────────────────────────────────────
 
-// Arm dwell. ~730ms of each cycle is crossfade (ArmStack: 380ms swap delay + 0.35s fade),
-// so the readable hold is DWELL_MS minus that. 5000 gave only ~4.3s and was too fast to read.
+// Arm dwell. ~380ms of each cycle is simultaneous crossfade (PortraitColumnStack/ArmStack opacity transition).
+// 9000ms gives ~8.6s readable hold per arm.
 const ARM_DWELL_MS = 9000;
 
 export default function HomePageClient() {
