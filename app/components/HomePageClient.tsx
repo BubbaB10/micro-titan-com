@@ -194,7 +194,7 @@ export default function HomePageClient() {
       </section>
 
       {/* ── LOWER HERO BLOCK: 4-up features + CTAs (matches comp) ─────── */}
-      <section className='px-4 pb-6 sm:pb-8'>
+      <section className='px-4 pb-24 sm:pb-8'>
         <div className='max-w-2xl mx-auto'>
           {/* 4-up grid */}
           <div
