@@ -309,13 +309,13 @@ export default function ProofPage() {
                 step: "02",
                 color: "#818cf8",
                 title: "The host runs owner-defined checks",
-                body: "The owner (Bubba) writes the acceptance criteria — what the gate checks for each app. The agent doesn't choose the checks and can't modify them. The host clones the trusted mirror and runs the checks against it.",
+                body: "The owner writes the acceptance criteria — what the gate checks for each app. The agent doesn't choose the checks and can't modify them. The host clones the trusted mirror and runs the checks against it.",
               },
               {
                 step: "03",
                 color: "#e2a44a",
                 title: "PASS, FAIL, or HALT — with a receipt",
-                body: "PASS means the work counts as complete. FAIL returns exactly what failed so it can be fixed. HALT means an integrity issue — leaked secret, removed test, out-of-scope edit — work stops and escalates to Bubba. The agent cannot clear a HALT.",
+                body: "PASS means the work counts as complete. FAIL returns exactly what failed so it can be fixed. HALT means an integrity issue — leaked secret, removed test, out-of-scope edit — work stops and escalates to the owner. The agent cannot clear a HALT.",
               },
             ].map((s) => (
               <div key={s.step} className="flex gap-5">
@@ -387,7 +387,7 @@ export default function ProofPage() {
             </p>
             <p className="text-[#a8d8f0] leading-relaxed">
               An integrity failure — a secret leaked, a test removed, an edit out of scope — halts everything
-              and escalates directly to Bubba. The agent can&apos;t clear it. That&apos;s by design: integrity
+              and escalates directly to the owner. The agent can&apos;t clear it. That&apos;s by design: integrity
               failures are not agent-resolvable. They require a human decision.
             </p>
           </div>

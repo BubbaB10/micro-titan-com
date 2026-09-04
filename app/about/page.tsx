@@ -34,8 +34,8 @@ export default function AboutPage() {
           <div>
             <p className="text-xs font-semibold tracking-[0.25em] uppercase text-[#4fb8e8] mb-4">The founder</p>
             <p className="text-[#a8d8f0] leading-relaxed mb-4">
-              Bubba Bell — former professional baseball player, self-taught builder, founder of Micro Titan LLC —
-              runs six AI-automated businesses from Paris, Texas. Not because he has a large team, but because he built
+              Micro Titan&apos;s founder — a former professional baseball player and self-taught builder —
+              runs six AI-automated businesses. Not because he has a large team, but because he built
               a system designed to run without one.
             </p>
             <p className="text-[#a8d8f0] leading-relaxed">
@@ -77,7 +77,7 @@ export default function AboutPage() {
                 {
                   label: "Run",
                   color: "#818cf8",
-                  text: "Greg — Micro Titan&apos;s own Valet instance — manages all six operations. Monitoring, backup, anomaly detection, customer escalations. Bubba decides strategy; Greg handles execution.",
+                  text: "Micro Titan&apos;s own Valet instance manages all six operations: monitoring, backup, anomaly detection, and customer escalations. The owner decides strategy; the operating team handles execution.",
                 },
               ].map((step) => (
                 <div key={step.label} className="flex gap-4">

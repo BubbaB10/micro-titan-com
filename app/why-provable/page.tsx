@@ -58,7 +58,7 @@ This is what makes autonomy safe enough to actually deploy. Valet earns the righ
 autonomously by demonstrating it knows when not to. Every time it escalates correctly,
 that's not a failure — that's the gate working as designed.`,
     examples: [
-      "An integrity check fails → work halts, Bubba is notified, nothing proceeds.",
+      "An integrity check fails → work halts, the owner is notified, nothing proceeds.",
       "An edit touches something out of scope → gate flags it before it lands.",
       "Valet is uncertain about a judgment call → it surfaces the question instead of guessing.",
     ],
