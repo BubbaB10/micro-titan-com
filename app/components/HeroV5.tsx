@@ -214,9 +214,8 @@ const _DOMAIN_SLOTS = 5;
 })();
 
 // ─── PORTRAIT COLUMN STACK ────────────────────────────────────────────────────
-// Atomic swap: visibility toggled instantly — no crossfade. All arms stay in the
-// DOM so gate anchors are always present. At every frame exactly one arm is
-// visible; inactive arms are invisible but still occupy their layout slot.
+// Opacity crossfade: all arms stay in the DOM so gate anchors are always present.
+// Inactive arms are invisible (opacity:0) and non-interactive (pointerEvents:none).
 
 function PortraitColumnStack({
   armIndex,
@@ -227,6 +226,7 @@ function PortraitColumnStack({
   arms: ReactNode[];
   reduced?: boolean;
 }) {
+  const dur = reduced ? 0 : 380;
   return (
     <div style={{ position: 'relative', width: '100%', height: '100%' }}>
       {arms.map((arm, i) => (
@@ -235,7 +235,8 @@ function PortraitColumnStack({
           style={{
             position: 'absolute',
             inset: 0,
-            visibility: i === armIndex ? 'visible' : 'hidden',
+            opacity: i === armIndex ? 1 : 0,
+            transition: `opacity ${dur}ms ease`,
             pointerEvents: i === armIndex ? 'auto' : 'none',
           }}
           aria-hidden={i !== armIndex || undefined}
@@ -248,10 +249,10 @@ function PortraitColumnStack({
 }
 
 // ─── ARMSTACK ─────────────────────────────────────────────────────────────────
-// Atomic swap: visibility toggled instantly — no crossfade. All arms stay in the
-// DOM so gate anchors are always present. At every frame exactly one arm is
-// visible; inactive arms are invisible but still occupy their layout slot.
+// Opacity crossfade: all arms stay in the DOM so gate anchors are always present.
+// Inactive arms are invisible (opacity:0) and non-interactive (pointerEvents:none).
 export function ArmStack({ armIndex, arms, reduced = false }: { armIndex: number; arms: ReactNode[]; reduced?: boolean }) {
+  const dur = reduced ? 0 : 380;
   return (
     <div style={{ display: 'grid', gridTemplateAreas: '"s"', gridTemplateColumns: '1fr' }}>
       {arms.map((arm, i) => (
@@ -259,7 +260,8 @@ export function ArmStack({ armIndex, arms, reduced = false }: { armIndex: number
           key={i}
           style={{
             gridArea: 's',
-            visibility: i === armIndex ? 'visible' : 'hidden',
+            opacity: i === armIndex ? 1 : 0,
+            transition: `opacity ${dur}ms ease`,
             pointerEvents: i === armIndex ? 'auto' : 'none',
           }}
           aria-hidden={i !== armIndex || undefined}
