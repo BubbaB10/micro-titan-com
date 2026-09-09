@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import HeroV5, { ARM_SUBHEADS, ArmStack } from './HeroV5';
+import HeroV5, { ARM_SUBHEADS } from './HeroV5';
 import Footer from './Footer';
 
 // ─── PILLAR DATA ───────────────────────────────────────────────────────────────
@@ -155,20 +155,38 @@ export default function HomePageClient() {
               <span className='block'>your rules.</span>
             </h1>
 
-            {/* Cycling subheads: routed through ArmStack for sequential fade (same mechanism as hero diagram) */}
-            <ArmStack
-              armIndex={armIndex}
-              reduced={reducedMotion}
-              arms={ARM_SUBHEADS.map((sub, i) => (
-                <p
-                  key={i}
-                  className='text-[0.75rem] sm:text-base md:text-lg text-[#a8d8f0]/70 max-w-xl mx-auto leading-snug'
-                  style={{ fontFamily: 'var(--font-mulish)' }}
-                >
-                  {sub}
-                </p>
-              ))}
-            />
+            {/* Cycling subheads — two-clause sequential crossfade, all 4 arms in DOM for gate anchors */}
+            <div style={{ display: 'grid', gridTemplateAreas: '"s"', gridTemplateColumns: '1fr' }}>
+              {ARM_SUBHEADS.map((sub, i) => {
+                const sep = sub.indexOf('. ');
+                const clause1 = sep >= 0 ? sub.slice(0, sep + 1) : sub;
+                const clause2 = sep >= 0 ? sub.slice(sep + 2) : '';
+                const active = i === armIndex;
+                const dur = reducedMotion ? 0 : 320;
+                const lag = reducedMotion ? 0 : 110;
+                return (
+                  <div
+                    key={i}
+                    style={{ gridArea: 's', pointerEvents: active ? 'auto' : 'none' }}
+                    aria-hidden={!active || undefined}
+                  >
+                    <p
+                      className='text-[0.75rem] sm:text-base md:text-lg text-[#a8d8f0]/70 max-w-xl mx-auto leading-snug'
+                      style={{ fontFamily: 'var(--font-mulish)' }}
+                    >
+                      <span style={{ display: 'block', opacity: active ? 1 : 0, transition: `opacity ${dur}ms ease` }}>
+                        {clause1}
+                      </span>
+                      {clause2 && (
+                        <span style={{ display: 'block', opacity: active ? 1 : 0, transition: `opacity ${dur}ms ease ${active ? lag : 0}ms` }}>
+                          {clause2}
+                        </span>
+                      )}
+                    </p>
+                  </div>
+                );
+              })}
+            </div>
           </div>
 
           {/* Hero diagram */}
