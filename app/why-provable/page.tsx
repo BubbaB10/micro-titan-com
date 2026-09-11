@@ -8,9 +8,9 @@ import GateDemo from "../components/GateDemo";
 const NEWS_ITEMS = [
   {
     headline:
-      `A Meta AI safety researcher's agent deleted her inbox after a context compaction erased her own "don't act without permission" instruction.`,
+      `A Meta AI safety researcher reported that her agent deleted emails despite an instruction to ask permission first.`,
     mechanism:
-      `She gave the correct instruction: "Check this inbox too and suggest what you would archive or delete, don't action until I tell you to." It worked on her test inbox. Her real inbox was too large and triggered context compaction. During compaction, her original instruction was summarised away. Then the agent acted.`,
+      `Her account of the mechanism: she instructed the agent, "Check this inbox too and suggest what you would archive or delete, don't action until I tell you to." She said the workflow worked on her test inbox, but her larger real inbox triggered context compaction and her original instruction was lost. This is her reported explanation, not an independently established root cause.`,
     quotes: [
       `"Nothing humbles you like telling your OpenClaw 'confirm before acting' and watching it speedrun deleting your inbox."`,
       `"I couldn't stop it from my phone. I had to RUN to my Mac mini like I was defusing a bomb."`,
@@ -22,7 +22,7 @@ const NEWS_ITEMS = [
     sourceUrl:
       "https://www.pcmag.com/news/meta-security-researchers-openclaw-ai-agent-accidentally-deleted-her-emails",
     whatWeDo:
-      "Valet's safety-critical instructions live in files that are re-read every session — not in the conversation, where compaction can reach them. The verification gate is a mechanism the agent structurally cannot modify. Reminders are delivered by a host-side rail with no agent in its path. Micro Titan hit the same failure mode independently; the standing rules every Valet instance reads include the dated evidence: an agent compacted 17 times in one day, and a real job sat 11.8 hours untouched — \"never ignored and never lost in transit; it was summarised away. A file does not compact. That is the entire point.\"",
+      "Valet uses durable task records and separate verification checks for supported workflows. These mechanisms reduce reliance on conversational memory. Storing an instruction in a file is not sufficient by itself: the relevant action must also enforce it. Verification coverage depends on the workflow; this incident is not evidence that Valet prevents every similar failure.",
   },
 ];
 
