@@ -16,7 +16,6 @@ const SCENARIOS = [
     failAt: null as number | null,
     conflict: null as string | null,
     verdict: "VERIFIED",
-    receipt: { gateId: "g-2a4f9c", checks: "4 / 4", elapsed: "51 ms" },
     outcomeText: "Reaches you — stamped 🔒",
   },
   {
@@ -24,7 +23,7 @@ const SCENARIOS = [
     label: "CAUGHT claim",
     claim: "Added everyone's plans to the family calendar — all set.",
     checks: [
-      "Emma's soccer — Mon 3:30 pm",
+      "Emma's soccer — Tue 4:00 pm",
       "Dad's dentist — Tue 4:00 pm",
       "Grocery pickup — Wed 12:00 pm",
       "No two events overlap",
@@ -32,7 +31,6 @@ const SCENARIOS = [
     failAt: 3 as number | null,
     conflict: "Double-booked: Emma's soccer & the dentist, Tue 4:00 pm",
     verdict: "UNVERIFIED — HELD",
-    receipt: null,
     outcomeText: "Does NOT reach you as done. Flagged, fail-closed.",
   },
 ];
@@ -133,14 +131,14 @@ export default function GateDemo() {
             </svg>
           </div>
           <div className="flex-1">
-            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#4fb8e8] mb-1.5">Valet says</p>
+            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#4fb8e8] mb-1.5">Example claim</p>
             <p className="text-sm text-[#f4f7fa] leading-relaxed italic">&ldquo;{scenario.claim}&rdquo;</p>
           </div>
         </div>
 
         {/* Gate checks */}
         <div className="px-6 py-5 border-b border-[rgba(168,216,240,0.07)]">
-          <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#a8d8f0]/30 mb-4">Gate running checks</p>
+          <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#a8d8f0]/30 mb-4">Illustrated checks</p>
           <div className="flex flex-col gap-3.5">
             {scenario.checks.map((check, i) => {
               const state = checkStates[i];
@@ -185,7 +183,7 @@ export default function GateDemo() {
         {/* Conflict detail — caught only, after done */}
         {phase === "done" && !isClean && (
           <div className="px-6 py-4 border-b border-[rgba(168,216,240,0.07)] bg-[#3a0a0a]/40">
-            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#e74c3c] mb-1.5">Conflict detected</p>
+            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#e74c3c] mb-1.5">Example conflict</p>
             <p className="text-sm text-[#f4f7fa]">{scenario.conflict}</p>
           </div>
         )}
@@ -197,14 +195,14 @@ export default function GateDemo() {
               onClick={runDemo}
               className="w-full py-3 rounded-xl bg-[#12243d] border border-[rgba(168,216,240,0.15)] text-[#a8d8f0] text-sm font-semibold hover:bg-[#1e3a5f] hover:text-[#f4f7fa] hover:border-[rgba(168,216,240,0.25)] transition-all duration-200"
             >
-              Run the gate →
+              Play example →
             </button>
           )}
 
           {phase === "running" && (
             <div className="flex items-center justify-center gap-2.5 py-3">
               <Spinner />
-              <span className="text-sm text-[#a8d8f0]/50">Gate running…</span>
+              <span className="text-sm text-[#a8d8f0]/50">Playing example…</span>
             </div>
           )}
 
@@ -216,13 +214,13 @@ export default function GateDemo() {
                   <path d="M8 12.5l3 3 5-6" stroke="#46cf93" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
                 <div>
-                  <p className="text-sm font-bold text-[#46cf93] tracking-widest">VERIFIED</p>
+                  <p className="text-sm font-bold text-[#46cf93] tracking-widest">EXAMPLE — VERIFIED</p>
                   <p className="text-xs text-[#a8d8f0]/50 mt-0.5">
-                    Gate ID {scenario.receipt?.gateId} · {scenario.receipt?.checks} checks · {scenario.receipt?.elapsed}
+                    Illustrated result · {scenario.checks.length} checks shown
                   </p>
                 </div>
               </div>
-              <p className="text-sm text-center text-[#a8d8f0]">Reaches you — stamped 🔒</p>
+              <p className="text-sm text-center text-[#a8d8f0]">Example outcome: accepted after the illustrated checks.</p>
               <div className="text-center">
                 <button onClick={runDemo} className="text-xs text-[#a8d8f0]/35 hover:text-[#a8d8f0] transition-colors">
                   ↺ Replay
@@ -239,12 +237,12 @@ export default function GateDemo() {
                   <path d="M12 7v5.5M12 16.5v.5" stroke="#e74c3c" strokeWidth="2.5" strokeLinecap="round" />
                 </svg>
                 <div>
-                  <p className="text-sm font-bold text-[#e74c3c] tracking-widest">UNVERIFIED — HELD</p>
-                  <p className="text-xs text-[#a8d8f0]/50 mt-0.5">1 check failed · claim not delivered</p>
+                  <p className="text-sm font-bold text-[#e74c3c] tracking-widest">EXAMPLE — HELD</p>
+                  <p className="text-xs text-[#a8d8f0]/50 mt-0.5">Illustrated hold · conflicting example events</p>
                 </div>
               </div>
               <p className="text-sm text-center text-[#a8d8f0]/80">
-                Does <strong className="text-[#f4f7fa]">NOT</strong> reach you as done. Flagged, fail-closed.
+                Example outcome: the conflict needs resolving before the claim can be accepted.
               </p>
               <div className="text-center">
                 <button onClick={runDemo} className="text-xs text-[#a8d8f0]/35 hover:text-[#a8d8f0] transition-colors">

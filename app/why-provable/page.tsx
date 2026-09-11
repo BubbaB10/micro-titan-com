@@ -105,20 +105,20 @@ export default function WhyProvablePage() {
         </div>
       </section>
 
-      {/* Gate demo — live interactive proof */}
+      {/* Gate demo — illustrative preset outcomes */}
       <section className="py-20 px-4 border-b border-[rgba(168,216,240,0.08)]">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-10">
-            <p className="text-xs font-semibold tracking-[0.25em] uppercase text-[#4fb8e8] mb-3">Live proof</p>
+            <p className="text-xs font-semibold tracking-[0.25em] uppercase text-[#4fb8e8] mb-3">Interactive illustration</p>
             <h2
               className="text-3xl sm:text-4xl font-[300] text-[#f4f7fa] mb-4"
               style={{ fontFamily: "var(--font-mulish)" }}
             >
-              See the gate run.
+              Explore verification outcomes.
             </h2>
             <p className="text-[#a8d8f0] font-light max-w-lg mx-auto text-sm leading-relaxed">
-              Two everyday scenarios. Pick one, click run — watch what gets stamped and what gets held.
-              The &ldquo;held&rdquo; moment is the one that matters.
+              Two fictional scenarios with preset outcomes. Explore an accepted claim and a held claim.
+              This illustration does not access accounts or run a production verification.
             </p>
           </div>
           <GateDemo />
