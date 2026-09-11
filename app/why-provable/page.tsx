@@ -32,17 +32,13 @@ const PILLARS = [
     title: "Provable, not plausible.",
     color: "#46cf93",
     lead: "Any AI can sound confident. That’s not the bar.",
-    body: `Valet doesn't claim to have done something — it proves it. Every task that can be
-mechanically verified goes through the gate before it reaches you. If the gate can't verify it,
-Valet tells you that clearly instead of asserting confidence it doesn't have.
+    body: `Valet uses mechanical checks in supported, configured workflows. A result is verified only for the operation and evidence that its check covers. A passing code build does not establish that every answer is factually correct.
 
-The distinction matters because a plausible answer that's wrong costs more than an honest
-"I can't verify this." Most AI optimizes for sounding right. Valet optimizes for being right
-— and being transparent about the difference.`,
+Coverage varies by workflow. Factual-answer verification is still being validated; do not assume that every response or action has passed an independent check.`,
     examples: [
-      "A payout calculation is verified zero-sum before money moves.",
-      "A reconciliation is verified against source data before any number is reported.",
-      "A schedule change is confirmed with the relevant systems before you're told it's done.",
+      "A code-change gate checks for secrets, removed tests, and build failures.",
+      "A durable task record distinguishes a completion claim from a verified completion.",
+      "An enabled factual-review policy can hold a supported response when required review evidence is missing.",
     ],
   },
   {
@@ -103,6 +99,15 @@ export default function WhyProvablePage() {
             everything. Provability isn&apos;t a feature tier. It&apos;s the floor.
           </p>
         </div>
+      </section>
+
+      <section className="px-4 pt-8" aria-label="Verification coverage">
+        <p className="max-w-3xl mx-auto rounded-xl border border-[rgba(168,216,240,0.15)] bg-[#0f1f38] p-5 text-sm text-[#a8d8f0] leading-relaxed">
+          <strong className="text-[#f4f7fa]">Coverage matters.</strong>{" "}
+          Verification currently applies to supported, configured workflows. The principles on this
+          page describe the standard we are building toward; they do not establish that every answer
+          or action is verified. Check the evidence for the workflow you plan to use.
+        </p>
       </section>
 
       {/* Gate demo — illustrative preset outcomes */}
