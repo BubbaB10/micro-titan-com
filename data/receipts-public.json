@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-09-13T20:23:38.817Z",
+  "generatedAt": "2026-09-13T20:53:58.830Z",
   "windowDays": 90,
-  "totalInWindow": 457,
+  "totalInWindow": 482,
   "perApp": {
-    "micro-titan-hq": 121,
-    "micro-titan-web": 99,
+    "micro-titan-hq": 145,
+    "micro-titan-web": 100,
     "client-34d279": 3,
     "client-a3c7b8": 5,
     "client-c74f31": 4,
@@ -19,6 +19,156 @@
   },
   "failuresRecordedSince": null,
   "receipts": [
+    {
+      "app": "micro-titan-hq",
+      "verifiedAt": "2026-09-13T20:53:27.926Z",
+      "head": "53778388",
+      "filesChanged": 1
+    },
+    {
+      "app": "micro-titan-hq",
+      "verifiedAt": "2026-09-13T20:52:44.440Z",
+      "head": "db3e4194",
+      "filesChanged": 1
+    },
+    {
+      "app": "micro-titan-hq",
+      "verifiedAt": "2026-09-13T20:51:46.806Z",
+      "head": "2a5e1fe3",
+      "filesChanged": 1
+    },
+    {
+      "app": "micro-titan-hq",
+      "verifiedAt": "2026-09-13T20:50:42.372Z",
+      "head": "b0527f29",
+      "filesChanged": 1
+    },
+    {
+      "app": "micro-titan-hq",
+      "verifiedAt": "2026-09-13T20:49:42.611Z",
+      "head": "50532acb",
+      "filesChanged": 1
+    },
+    {
+      "app": "micro-titan-hq",
+      "verifiedAt": "2026-09-13T20:48:53.916Z",
+      "head": "652c800a",
+      "filesChanged": 1
+    },
+    {
+      "app": "micro-titan-hq",
+      "verifiedAt": "2026-09-13T20:48:05.353Z",
+      "head": "158dfb15",
+      "filesChanged": 1
+    },
+    {
+      "app": "micro-titan-hq",
+      "verifiedAt": "2026-09-13T20:47:03.614Z",
+      "head": "8d0ad5b2",
+      "filesChanged": 1
+    },
+    {
+      "app": "micro-titan-hq",
+      "verifiedAt": "2026-09-13T20:46:09.195Z",
+      "head": "08d1c26b",
+      "filesChanged": 1
+    },
+    {
+      "app": "micro-titan-hq",
+      "verifiedAt": "2026-09-13T20:45:14.131Z",
+      "head": "655ceac9",
+      "filesChanged": 1
+    },
+    {
+      "app": "micro-titan-hq",
+      "verifiedAt": "2026-09-13T20:44:08.552Z",
+      "head": "122e3e34",
+      "filesChanged": 1
+    },
+    {
+      "app": "micro-titan-hq",
+      "verifiedAt": "2026-09-13T20:43:07.967Z",
+      "head": "e04cdebe",
+      "filesChanged": 1
+    },
+    {
+      "app": "micro-titan-hq",
+      "verifiedAt": "2026-09-13T20:42:13.606Z",
+      "head": "f5826371",
+      "filesChanged": 1
+    },
+    {
+      "app": "micro-titan-hq",
+      "verifiedAt": "2026-09-13T20:41:17.902Z",
+      "head": "707c424d",
+      "filesChanged": 1
+    },
+    {
+      "app": "micro-titan-hq",
+      "verifiedAt": "2026-09-13T20:38:12.392Z",
+      "head": "fb469fff",
+      "filesChanged": 1
+    },
+    {
+      "app": "micro-titan-web",
+      "verifiedAt": "2026-09-13T20:37:14.241Z",
+      "head": "f4f893e5",
+      "filesChanged": 1
+    },
+    {
+      "app": "micro-titan-hq",
+      "verifiedAt": "2026-09-13T20:36:45.853Z",
+      "head": "16c1efde",
+      "filesChanged": 1
+    },
+    {
+      "app": "micro-titan-hq",
+      "verifiedAt": "2026-09-13T20:35:39.786Z",
+      "head": "75ece589",
+      "filesChanged": 1
+    },
+    {
+      "app": "micro-titan-hq",
+      "verifiedAt": "2026-09-13T20:34:47.572Z",
+      "head": "e3ccea1d",
+      "filesChanged": 1
+    },
+    {
+      "app": "micro-titan-hq",
+      "verifiedAt": "2026-09-13T20:33:42.993Z",
+      "head": "459102c0",
+      "filesChanged": 1
+    },
+    {
+      "app": "micro-titan-hq",
+      "verifiedAt": "2026-09-13T20:32:37.258Z",
+      "head": "ce9b49a7",
+      "filesChanged": 1
+    },
+    {
+      "app": "micro-titan-hq",
+      "verifiedAt": "2026-09-13T20:31:33.825Z",
+      "head": "ffc6a256",
+      "filesChanged": 1
+    },
+    {
+      "app": "micro-titan-hq",
+      "verifiedAt": "2026-09-13T20:27:36.009Z",
+      "head": "52604819",
+      "filesChanged": 1
+    },
+    {
+      "app": "micro-titan-hq",
+      "verifiedAt": "2026-09-13T20:26:41.195Z",
+      "head": "fed9ec57",
+      "filesChanged": 1
+    },
+    {
+      "app": "micro-titan-hq",
+      "verifiedAt": "2026-09-13T20:24:38.485Z",
+      "head": "af5905b2",
+      "filesChanged": 1
+    },
     {
       "app": "micro-titan-hq",
       "verifiedAt": "2026-09-13T20:23:26.364Z",
