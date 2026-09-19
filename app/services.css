@@ -24,7 +24,7 @@
 
 /* A dimensional brand scene, with a brief entrance rather than continuous motion. */
 .service-hero{position:relative;isolation:isolate}
-.service-hero::before{content:"";position:absolute;z-index:-1;pointer-events:none;inset:0 -30px;background:radial-gradient(ellipse at 90% 40%,#cbdcff70,transparent 65%)}
+.service-hero::before{content:"";position:absolute;z-index:-1;pointer-events:none;inset:0;background:radial-gradient(ellipse at 90% 40%,#cbdcff70,transparent 65%)}
 .brand-scene{min-width:0;position:relative}
 .brand-scene-art{height:555px;position:relative;isolation:isolate;perspective:1100px}
 .scene-halo{position:absolute;inset:0 -12px 50px;background:radial-gradient(ellipse at 55% 32%,#9cc6ff80,transparent 65%);border-radius:50%}
