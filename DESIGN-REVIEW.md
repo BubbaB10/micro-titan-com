@@ -19,8 +19,10 @@ Original Valet page is unchanged; original pricing content is retained at /valet
 - git diff --check: no whitespace errors.
 - Local homepage HTTP: 200. Visual/mobile review and browser interaction verification remain pending: browser inventory returned no available browsers.
 
-Baseline from existing local-seo-probe.mjs and site-crawl.mjs against micro-titan.com: both exit 0. Old homepage title/description sell the assistant, one H1 “Your system,your rules.”; robots and sitemap return 404, no JSON-LD found. Probe's “analytics NONE” is not accepted: source contains Vercel Analytics. No new probes written. Existing probe forces HTTPS, so after measurements require an HTTPS preview or the eventual owner-approved deployment. No claim of production improvement yet.
+Baseline from existing local-seo-probe.mjs and site-crawl.mjs against micro-titan.com: both exit 0. Old homepage title/description sell the assistant, one H1 “Your system,your rules.”; robots and sitemap return 404, no JSON-LD found. Probe's “analytics NONE” is not accepted: source contains Vercel Analytics. No new probes written.
+
+HTTPS draft preview: https://micro-titan-com-git-redesign-0d3538-billywbelljr-4327s-projects.vercel.app . Vercel check SUCCESS for draft PR #5. Existing SEO probe returned HTTP 200 with the new services title/H1, one ProfessionalService JSON-LD block, robots 200 and sitemap 200. Its LocalBusiness matcher does not recognize ProfessionalService; its analytics matcher misses Vercel Analytics. Neither negative is accepted as a finding. The existing crawler also ran successfully, but followed the sitemap's canonical micro-titan.com URLs back to production, so its page findings do NOT measure the draft. Production /valet/pricing 404 is expected before this branch is merged. Full candidate crawl remains pending; no production improvement is claimed.
 
 ## Next review
 
-Owner reaction to visual direction, then refine. Before merge proposal: finish legacy-page navigation/copy consistency, verify responsive rendering and quote interactions, run existing after probes on HTTPS candidate, run app's mechanical gates. User merges; PR #4 must be integrated first.
+Owner reaction to visual direction, then refine. Before merge proposal: finish legacy-page navigation/copy consistency, verify responsive rendering and quote interactions, resolve candidate crawl coverage, run app's mechanical gates. User merges; PR #4 must be integrated first.
