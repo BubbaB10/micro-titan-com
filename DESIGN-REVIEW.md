@@ -1,5 +1,11 @@
 # Services redesign — first review, September 19, 2026
 
+## Browser verification — September 19, evening
+
+Chrome extension connected successfully. Tested the HTTPS draft in a real Chrome tab: homepage quote CTA opens /pricing#quote; multiple locations and all three extras produce the correct separately-quoted list and update the mailto draft link; clearing selections restores the base package and link. No email input is present. At mobile width, the custom software checkbox and monthly-fee FAQ both respond. No email was sent or mail application opened.
+
+Inspected homepage at 390×844 and pricing at 390×844 and 320×740; inspected Custom Software and About at 320×740. Document scroll widths were 375 and 305 respectively (no horizontal overflow). Screenshots showed readable stacked content and visible controls. Header wraps at the narrowest width without clipping. Desktop/default homepage screenshot also inspected. These are responsive browser checks, not physical-device certification or an exhaustive accessibility audit. A full-page screenshot attempt timed out; viewport screenshots succeeded. Temporary viewport override reset afterward. Prior notes below describing the browser connection as unavailable are historical.
+
 ## Owner-approved follow-up
 
 Owner approved the warm visual direction and the headline “Small business. Big presence.” The About and Custom Software pages now use the services design; shared legacy navigation returns visitors to services while retaining Valet and Pivot. Valet copy is preserved, with its pricing link corrected to /valet/pricing. No customer capacity or unapproved price was added. Mobile headline size now scales down on narrow screens; visual verification still requires an available browser.
