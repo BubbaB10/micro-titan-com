@@ -4,17 +4,22 @@ import Link from "next/link";
 import { useState } from "react";
 
 const NAV_LINKS = [
-  { href: "/valet",        label: "Valet",       desc: "the agent" },
-  { href: "/studio",       label: "The Studio",  desc: "custom builds" },
-  { href: "/pivot",        label: "Pivot",        desc: "what's next" },
-  { href: "/about",        label: "About",        desc: "the operator story" },
-  { href: "/pricing",      label: "Pricing",      desc: null },
+  { href: "/#services", label: "Services", desc: null },
+  { href: "/studio", label: "Custom software", desc: null },
+  { href: "/about", label: "About", desc: null },
+  { href: "/pricing", label: "Pricing", desc: null },
+  { href: "/valet", label: "Valet", desc: "the agent" },
 ];
 
 // Mobile hamburger shows the overflow items the tab bar doesn't cover
 const MOBILE_OVERFLOW = [
-  { href: "/why-provable", label: "How it works" },
-  { href: "https://download.micro-titan.com", label: "Meet Valet" },
+  { href: "/", label: "Micro Titan services" },
+  { href: "/studio", label: "Custom software" },
+  { href: "/about", label: "About" },
+  { href: "/valet", label: "Meet Valet" },
+  { href: "/valet/pricing", label: "Valet plans" },
+  { href: "/why-provable", label: "How verification works" },
+  { href: "/pivot", label: "Pivot" },
 ];
 
 export default function Nav() {
@@ -64,7 +69,7 @@ export default function Nav() {
               href="/pricing"
               className="bg-[#2563eb] hover:bg-[#1d4ed8] text-white text-sm font-semibold px-5 py-2 rounded-lg transition-colors"
             >
-              Start a build
+              Build your quote
             </Link>
           </div>
 
@@ -105,7 +110,7 @@ export default function Nav() {
               className="text-sm font-semibold text-[#2563eb] hover:text-[#60a5fa] transition-colors"
               onClick={() => setMenuOpen(false)}
             >
-              Start a build →
+              Build your quote →
             </Link>
           </div>
         )}

@@ -25,8 +25,8 @@ const TABS = [
     ),
   },
   {
-    href: "/pivot",
-    label: "Pivot",
+    href: "/",
+    label: "Services",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" width="22" height="22" aria-hidden="true">
         <circle cx="12" cy="12" r="9" />
@@ -59,7 +59,7 @@ const TABS = [
 
 export default function BottomTabBar() {
   const pathname = usePathname();
-  if (pathname === "/" || pathname === "/pricing") return null;
+  if (["/", "/pricing", "/studio", "/about"].includes(pathname)) return null;
 
   return (
     <nav
