@@ -1,5 +1,11 @@
 # Services redesign — first review, September 19, 2026
 
+## Owner-approved follow-up
+
+Owner approved the warm visual direction and the headline “Small business. Big presence.” The About and Custom Software pages now use the services design; shared legacy navigation returns visitors to services while retaining Valet and Pivot. Valet copy is preserved, with its pricing link corrected to /valet/pricing. No customer capacity or unapproved price was added. Mobile headline size now scales down on narrow screens; visual verification still requires an available browser.
+
+Existing integrity gate ran against fbfaeb2...6832a41: no_secrets PASS (gitleaks), no_tests_removed PASS, gate_untouched PASS. Public-copy privacy check PASS. No company queue or gate records were updated. Browser inventory again returned no apps/browsers; owner was asked to connect the extension. Quote interaction and responsive visual checks are pending, and this PR remains draft. Existing Terms and Privacy pages retain their draft-placeholder notices and are not represented as finalized policies.
+
 Scope: homepage, services pricing and contact-free quote builder. Owner-authorized exception to Codex's auditor role; no changes to company operations or customer apps.
 
 Based on SEO PR #4, commit fbfaeb2701e8eb7603ad5b36aa1ce1d4392cc4c9. Keep its robots, sitemap, metadataBase and ProfessionalService schema. No street address or phone added. No production merge authorized.
