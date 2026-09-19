@@ -4,7 +4,56 @@ import BottomTabBar from "./components/BottomTabBar";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
+/**
+ * LocalBusiness structured data — added 2026-09-19.
+ *
+ * Measured that day: micro-titan.com served ZERO JSON-LD blocks, while the competitor we intend to
+ * displace (Hibu, for Nu-Tek Foundation Solutions) ships LocalBusiness with PostalAddress,
+ * GeoCoordinates and OpeningHoursSpecification. Selling local search from a site with no structured
+ * data is a position that does not survive the first question.
+ *
+ * ⚠️ NO STREET ADDRESS, DELIBERATELY. The address on file for this business is a private residence.
+ * A street address measurably helps local ranking, and publishing a home is irreversible once
+ * crawled — so that is the OWNER'S decision, not a default. If Micro Titan takes a commercial
+ * address or opens a Google Business Profile, add `streetAddress` + `postalCode` here and point
+ * `sameAs` at the GBP.
+ *
+ * ⚠️ NO `telephone`. There is no business number on this site today. Do not invent one: an
+ * inconsistent NAP (name / address / phone) across the web actively damages local ranking, which
+ * is the exact service being sold.
+ */
+const ORGANIZATION_JSON_LD = {
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  "@id": "https://micro-titan.com/#organization",
+  name: "Micro Titan",
+  legalName: "Micro Titan LLC",
+  url: "https://micro-titan.com",
+  email: "hello@micro-titan.com",
+  description:
+    "Micro Titan builds and runs the software a small business needs — operations apps, websites and local search — with mechanical verification behind every change.",
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Paris",
+    addressRegion: "TX",
+    addressCountry: "US",
+  },
+  areaServed: [
+    { "@type": "AdministrativeArea", name: "Northeast Texas" },
+    { "@type": "Country", name: "United States" },
+  ],
+  knowsAbout: [
+    "custom business software",
+    "business operating systems",
+    "local search optimization",
+    "verifiable AI agents",
+  ],
+};
+
 export const metadata: Metadata = {
+  // Without metadataBase, Next resolves the relative OG/Twitter image paths below against
+  // localhost at build time and warns. Set explicitly so social cards work from production.
+  metadataBase: new URL("https://micro-titan.com"),
   title: "Micro Titan — Provable software, end to end.",
   description: "We build your app or OS — and hand you the AI agent that runs it. Gate-verified either way. Valet by Micro Titan is the provable AI chief-of-staff from Paris, Texas.",
   keywords: ["Micro Titan", "Valet", "provable AI agent", "verifiable AI", "AI chief of staff", "The Studio", "AI app builder", "Paris Texas", "Fairway Bets", "Mineral Ledger"],
@@ -29,6 +78,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        {/* Structured data. Rendered server-side so crawlers see it without executing JS. */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(ORGANIZATION_JSON_LD) }}
+        />
+      </head>
       {/* pb-24 on mobile leaves room for the fixed bottom tab bar (56px bar + safe-area) */}
       <body className="antialiased pb-24 lg:pb-0">
         {children}
