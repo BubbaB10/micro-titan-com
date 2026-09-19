@@ -6,14 +6,14 @@ export default function BrandScene() {
       <div className="scene-orbit" />
       <svg className="scene-monogram" viewBox="210 120 740 540" fill="none">
         <defs>
-          <linearGradient id="scene-metal" x1="260" y1="160" x2="810" y2="590" gradientUnits="userSpaceOnUse"><stop stopColor="#ffffff"/><stop offset=".28" stopColor="#b9d8ff"/><stop offset=".53" stopColor="#f3f8ff"/><stop offset=".73" stopColor="#6088ed"/><stop offset="1" stopColor="#2741a5"/></linearGradient>
-          <linearGradient id="scene-blue" x1="480" y1="430" x2="650" y2="590" gradientUnits="userSpaceOnUse"><stop stopColor="#77d4ff"/><stop offset=".5" stopColor="#4278ff"/><stop offset="1" stopColor="#2440bd"/></linearGradient>
+          <linearGradient id="scene-metal" x1="260" y1="160" x2="810" y2="590" gradientUnits="userSpaceOnUse"><stop stopColor="#ffffff"/><stop offset=".28" stopColor="#d4d5dc"/><stop offset=".53" stopColor="#ffffff"/><stop offset=".73" stopColor="#9b9faa"/><stop offset="1" stopColor="#5e6370"/></linearGradient>
+          <linearGradient id="scene-blue" x1="480" y1="430" x2="650" y2="590" gradientUnits="userSpaceOnUse"><stop stopColor="#b7b0ff"/><stop offset=".5" stopColor="#8174e4"/><stop offset="1" stopColor="#51439e"/></linearGradient>
           <path id="scene-m" d="M258 175 H345 L567 365 L793 175 H881 V578 H783 V548 H849 V205 H806 L567 405 L331 205 H289 V548 H359 V578 H258 Z"/>
           <path id="scene-t" d="M483 437 H655 V478 H590 V578 H548 V478 H483 Z"/>
         </defs>
-        {[24,20,16,12,8,4].map(offset=><g key={offset} transform={`translate(${offset} ${offset*.7})`} fill="#263f84" stroke="#6689d1" strokeWidth="1"><use href="#scene-m"/><use href="#scene-t"/></g>)}
-        <use href="#scene-m" fill="url(#scene-metal)" stroke="#ecf5ff" strokeWidth="1.5"/>
-        <use href="#scene-t" fill="url(#scene-blue)" stroke="#98c5ff" strokeWidth="1.5"/>
+        {[24,20,16,12,8,4].map(offset=><g key={offset} transform={`translate(${offset} ${offset*.7})`} fill="#454957" stroke="#898c99" strokeWidth="1"><use href="#scene-m"/><use href="#scene-t"/></g>)}
+        <use href="#scene-m" fill="url(#scene-metal)" stroke="#ffffff" strokeWidth="1.5"/>
+        <use href="#scene-t" fill="url(#scene-blue)" stroke="#c4bdff" strokeWidth="1.5"/>
       </svg>
       <div className="scene-connector" />
       <div className="scene-window scene-website">
