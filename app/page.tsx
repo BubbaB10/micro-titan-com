@@ -1,5 +1,6 @@
 import Link from "next/link";
 import ServicesShell from "./components/ServicesShell";
+import BrandScene from "./components/BrandScene";
 import { dollars, offer } from "./services-offer";
 
 export default function HomePage() {
@@ -13,13 +14,7 @@ export default function HomePage() {
         <div className="hero-actions"><Link className="button" href="/pricing#quote">Build your quote <span aria-hidden="true">↗</span></Link><a className="text-link" href="#services">See what&apos;s included ↓</a></div>
         <p className="fine-print">No email needed to see your price. Custom software quoted separately.</p>
       </div>
-      <div className="business-board" aria-label="Illustration of a connected business workflow">
-        <div className="board-top"><span className="eyebrow">THE BIGGER PICTURE</span><span className="board-mark" aria-hidden="true">↗</span></div>
-        <h2>From being found<br/>to following through.</h2>
-        <div className="workflow"><div><span>01</span><p>Get found<small>Website · Search · Social</small></p><b aria-hidden="true">↗</b></div><div><span>02</span><p>Start a conversation<small>Calls · Inquiries</small></p><b aria-hidden="true">↗</b></div><div><span>03</span><p>Do the work<small>Estimates · Jobs · Invoices</small></p><b aria-hidden="true">↗</b></div></div>
-        <div className="board-bottom"><span className="board-star" aria-hidden="true">✳</span><p>A website opens the door.<br/><strong>The right software connects what happens next.</strong></p></div>
-        <p className="board-note">Workflow illustration. Operations integration is scoped per business.</p>
-      </div>
+      <BrandScene />
     </section>
     <div className="service-strip"><div className="wrap"><span>WEBSITES</span><i aria-hidden="true">✳</i><span>LOCAL SEARCH</span><i aria-hidden="true">✳</i><span>SOCIAL & REVIEWS</span><i aria-hidden="true">✳</i><span>BUSINESS SOFTWARE</span></div></div>
     <section className="section wrap" id="services">
