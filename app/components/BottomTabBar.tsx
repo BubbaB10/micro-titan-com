@@ -59,6 +59,7 @@ const TABS = [
 
 export default function BottomTabBar() {
   const pathname = usePathname();
+  if (pathname === "/" || pathname === "/pricing") return null;
 
   return (
     <nav

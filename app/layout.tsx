@@ -54,12 +54,12 @@ export const metadata: Metadata = {
   // Without metadataBase, Next resolves the relative OG/Twitter image paths below against
   // localhost at build time and warns. Set explicitly so social cards work from production.
   metadataBase: new URL("https://micro-titan.com"),
-  title: "Micro Titan — Provable software, end to end.",
-  description: "We build your app or OS — and hand you the AI agent that runs it. Gate-verified either way. Valet by Micro Titan is the provable AI chief-of-staff from Paris, Texas.",
-  keywords: ["Micro Titan", "Valet", "provable AI agent", "verifiable AI", "AI chief of staff", "The Studio", "AI app builder", "Paris Texas", "Fairway Bets", "Mineral Ledger"],
+  title: "Micro Titan — Websites, Marketing & Business Software",
+  description: "Websites, local search, social content, and custom business software for small businesses. Based in Paris, Texas. Website and marketing: $2,500 setup + $750/month.",
+  keywords: ["Micro Titan", "small business websites", "local SEO", "social media", "custom business software", "Northeast Texas", "Paris Texas", "Fairway Bets", "Mineral Ledger"],
   openGraph: {
-    title: "Micro Titan — Provable software, end to end.",
-    description: "We build your app or OS — and hand you the AI agent that runs it. Gate-verified either way.",
+    title: "Micro Titan — Websites, Marketing & Business Software",
+    description: "Websites, marketing, and custom software for small businesses in Northeast Texas.",
     url: "https://micro-titan.com",
     siteName: "Micro Titan",
     type: "website",

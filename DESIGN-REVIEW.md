@@ -1,0 +1,26 @@
+# Services redesign — first review, September 19, 2026
+
+Scope: homepage, services pricing and contact-free quote builder. Owner-authorized exception to Codex's auditor role; no changes to company operations or customer apps.
+
+Based on SEO PR #4, commit fbfaeb2701e8eb7603ad5b36aa1ce1d4392cc4c9. Keep its robots, sitemap, metadataBase and ProfessionalService schema. No street address or phone added. No production merge authorized.
+
+## Decisions carried into this draft
+
+Micro Titan brand. Single-location website/marketing package: $2,500 setup and $750 monthly; eight social posts across two channels, website care, GBP, local SEO, review requests and reporting. Custom operations software and extras quoted separately. Public pricing and quote without an email gate. No customer-capacity number, countdown, ranking or earnings guarantee. Scope and start date agreed before commitment.
+
+Original Valet page is unchanged; original pricing content is retained at /valet/pricing (relative imports adjusted). This draft does not certify the older Valet claims. Other legacy pages and their navigation still need a consistency pass after design feedback.
+
+## Checks
+
+- npm ci --no-audit --no-fund: exit 0, 363 packages installed.
+- npm run build: exit 0; 28 generated pages, including /valet/pricing.
+- ESLint on changed TypeScript/TSX files: exit 0.
+- npm run test:public-copy: exit 0.
+- git diff --check: no whitespace errors.
+- Local homepage HTTP: 200. Visual/mobile review and browser interaction verification remain pending: browser inventory returned no available browsers.
+
+Baseline from existing local-seo-probe.mjs and site-crawl.mjs against micro-titan.com: both exit 0. Old homepage title/description sell the assistant, one H1 “Your system,your rules.”; robots and sitemap return 404, no JSON-LD found. Probe's “analytics NONE” is not accepted: source contains Vercel Analytics. No new probes written. Existing probe forces HTTPS, so after measurements require an HTTPS preview or the eventual owner-approved deployment. No claim of production improvement yet.
+
+## Next review
+
+Owner reaction to visual direction, then refine. Before merge proposal: finish legacy-page navigation/copy consistency, verify responsive rendering and quote interactions, run existing after probes on HTTPS candidate, run app's mechanical gates. User merges; PR #4 must be integrated first.
