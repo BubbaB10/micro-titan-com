@@ -5,7 +5,7 @@ import { dollars, offer } from "./services-offer";
 
 export default function HomePage() {
   return <ServicesShell>
-    <section className="service-hero wrap">
+    <div className="hero-band"><section className="service-hero wrap">
       <div className="hero-copy">
         <p className="eyebrow"><span className="live-dot"/> DIGITAL SERVICES · NORTHEAST TEXAS</p>
         <h1>Small business.<br/><em>Big presence.</em></h1>
@@ -15,7 +15,7 @@ export default function HomePage() {
         <p className="fine-print">No email needed to see your price. Custom software quoted separately.</p>
       </div>
       <BrandScene />
-    </section>
+    </section></div>
     <div className="service-strip"><div className="wrap"><span>WEBSITES</span><i aria-hidden="true">✳</i><span>LOCAL SEARCH</span><i aria-hidden="true">✳</i><span>SOCIAL & REVIEWS</span><i aria-hidden="true">✳</i><span>BUSINESS SOFTWARE</span></div></div>
     <section className="section wrap" id="services">
       <div className="section-heading"><p className="eyebrow">01 / WHAT WE DO</p><h2>A front door.<br/>And everything behind it.</h2><p>You shouldn&apos;t have to become a web designer, a marketer, and a software developer to run your business.</p></div>
