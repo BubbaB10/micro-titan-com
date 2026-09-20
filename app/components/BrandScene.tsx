@@ -11,7 +11,7 @@ export default function BrandScene() {
           <path id="scene-m" d="M258 175 H345 L567 365 L793 175 H881 V578 H783 V548 H849 V205 H806 L567 405 L331 205 H289 V548 H359 V578 H258 Z"/>
           <path id="scene-t" d="M483 437 H655 V478 H590 V578 H548 V478 H483 Z"/>
         </defs>
-        {[24,20,16,12,8,4].map(offset=><g key={offset} transform={`translate(${offset} ${offset*.7})`} fill="#454957" stroke="#898c99" strokeWidth="1"><use href="#scene-m"/><use href="#scene-t"/></g>)}
+        {[24,20,16,12,8,4].map(offset=><g key={offset} transform={`translate(${offset} ${offset*.7})`} fill="#25262e" stroke="#656873" strokeWidth="1"><use href="#scene-m"/><use href="#scene-t"/></g>)}
         <use href="#scene-m" fill="url(#scene-metal)" stroke="#ffffff" strokeWidth="1.5"/>
         <use href="#scene-t" fill="url(#scene-blue)" stroke="#c4bdff" strokeWidth="1.5"/>
       </svg>

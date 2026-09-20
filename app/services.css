@@ -47,3 +47,13 @@
 @media(max-width:700px){.service-hero::before{inset:0;background:radial-gradient(ellipse at 80% 75%,#e3e0f460,transparent 55%)}.brand-scene-art{height:525px}.scene-monogram{height:270px}.scene-website{top:222px;width:94%;left:1%}.scene-operations{top:389px;right:0;width:94%}.scene-site-body>strong{font-size:23px}.services-site .scene-caption{margin-top:30px}.scene-window{backdrop-filter:blur(8px)}}
 @media(max-width:360px){.scene-record strong{font-size:9px}.scene-window-bar{font-size:7px;padding-inline:10px}.scene-steps{font-size:9px;padding-inline:10px}.scene-steps span{padding-inline:7px}.scene-record{margin-inline:10px}.scene-site-art{right:3%;width:27%}}
 @media(prefers-reduced-motion:reduce){.scene-monogram,.scene-window{animation:none}}
+
+/* Small charcoal accents anchor the white, silver, and indigo palette. */
+.services-site{--ink:#101116}
+.service-header{border-bottom-color:#10111626}
+.scene-window{border-color:#10111626;box-shadow:0 17px 46px #10111624,inset 0 1px 0 #fff}
+.scene-window-bar{color:#292a34;border-bottom-color:#10111620}
+.scene-dots{color:#292a34}
+.scene-mini-button,.scene-record-icon{background:#171820}
+.work-grid article,.package-card,.quote-summary{border-color:#10111630}
+.operations-section{background:radial-gradient(ellipse at 0% 100%,#252438 0%,transparent 65%),#101116}
