@@ -58,19 +58,10 @@
 .work-grid article,.package-card,.quote-summary{border-color:#10111630}
 .operations-section{background:radial-gradient(ellipse at 0% 100%,#252438 0%,transparent 65%),#101116}
 
-/* A dark hero gives the first screen contrast even before the artwork appears. */
-.hero-band{background:radial-gradient(ellipse at 85% 30%,#292440 0%,transparent 65%),#0c1421;color:#fff}
-.hero-band .service-hero::before{background:none}
-.hero-band .hero-copy h1 em{color:#bcb3ff}
-.hero-band .hero-description{color:#d4d8e2}
-.hero-band .hero-price,.hero-band .fine-print{color:#bcc3d1}
-.hero-band .hero-price strong{color:#fff}
-.hero-band .live-dot{background:#bcb3ff;box-shadow:0 0 0 4px #bcb3ff20}
-.hero-band .hero-actions .button{background:#bcb3ff;border-color:#bcb3ff;color:#141124}
-.hero-band .hero-actions .button:hover{background:#d0c9ff;border-color:#d0c9ff}
-.hero-band .hero-actions .text-link{color:#fff}
-.hero-band :focus-visible{outline-color:#d0c9ff}
-.hero-band .scene-window{color:#101116;background:linear-gradient(125deg,#fff,#f5f3fcf2);border-color:#ffffffa0}
-.hero-band .scene-halo{opacity:.55}
-.hero-band .scene-caption{color:#c5c9d6}
-.hero-band+.service-strip{border-top:1px solid #ffffff24}
+/* Keep the hero predominantly white; concentrate contrast in small accents. */
+.hero-band{background:#fff;color:var(--ink)}
+.hero-band .hero-copy>.eyebrow{display:inline-block;background:#15151c;color:#fff;padding:10px 12px;border-left:4px solid #8f7bea;border-radius:0 4px 4px 0;font-size:clamp(7px,1.8vw,10px);letter-spacing:.1em}
+.hero-band .hero-copy>.eyebrow .live-dot{background:#bcb3ff;box-shadow:none}
+.hero-band .hero-price{border-left:3px solid var(--accent);padding-left:14px}
+.hero-band .hero-actions .button{background:#15151c;border-color:#15151c;color:#fff}
+.hero-band .hero-actions .button:hover{background:#302745;border-color:#302745}
