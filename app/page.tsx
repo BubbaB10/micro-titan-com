@@ -9,7 +9,7 @@ export default function HomePage() {
       <div className="hero-copy">
         <p className="eyebrow"><span className="live-dot"/> DIGITAL SERVICES · NORTHEAST TEXAS</p>
         <h1>Small business.<br/><em>Big presence.</em></h1>
-        <p className="hero-description">Websites, local search, social content, and custom software for small businesses. Built for you. Kept running by us.</p>
+        <p className="hero-description">Websites, local search, social content, and custom software—built around what your business needs.</p>
         <p className="hero-price">Website + ongoing marketing <strong>{dollars(offer.setup)} setup · {dollars(offer.monthly)}/mo</strong></p>
         <div className="hero-actions"><Link className="button" href="/pricing#quote">Build your quote <span aria-hidden="true">↗</span></Link><a className="text-link" href="#services">See what&apos;s included ↓</a></div>
         <p className="fine-print">No email needed to see your price. Custom software quoted separately.</p>
