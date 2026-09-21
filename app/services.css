@@ -60,7 +60,7 @@
 
 /* Keep the hero predominantly white; concentrate contrast in small accents. */
 .hero-band{background:#fff;color:var(--ink)}
-.hero-band .hero-copy>.eyebrow{display:inline-block;background:#15151c;color:#fff;padding:10px 12px;border-left:4px solid #8f7bea;border-radius:0 4px 4px 0;font-size:clamp(7px,1.8vw,10px);letter-spacing:.1em}
+.hero-band .hero-copy>.eyebrow{display:inline-block;background:#15151c;color:#fff;padding:10px 12px;border-left:4px solid #8f7bea;border-radius:0 4px 4px 0;font-size:clamp(13px,2.5vw,16px);letter-spacing:.1em}
 .hero-band .hero-copy>.eyebrow .live-dot{background:#bcb3ff;box-shadow:none}
 .hero-band .hero-price{border-left:3px solid var(--accent);padding-left:14px}
 .hero-band .hero-actions .button{background:#15151c;border-color:#15151c;color:#fff}
