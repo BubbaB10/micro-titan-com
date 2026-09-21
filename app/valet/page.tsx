@@ -602,7 +602,7 @@ export default function ValetPage() {
             See the plans — a one-time build fee, then flat monthly. No upsells, no per-seat fees.
           </p>
           <Link
-            href="/pricing"
+            href="/valet/pricing"
             className="inline-flex items-center gap-2 bg-[#2563eb] hover:bg-[#1d4ed8] text-white font-semibold px-8 py-4 rounded-xl text-sm transition-all duration-200"
           >
             See pricing →

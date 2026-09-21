@@ -12,13 +12,15 @@ export default function Footer() {
               <MicroTitanMark height={32} idPrefix="ft" />
               <span className="text-sm font-semibold tracking-widest">MICRO TITAN™</span>
             </Link>
-            <p className="text-sm text-[#a8d8f0]/60">Provable software, end to end.</p>
+            <p className="text-sm text-[#a8d8f0]/60">Small business. Big presence.</p>
             <a href="mailto:hello@micro-titan.com" className="text-sm text-[#2563eb] hover:text-[#60a5fa] transition-colors">
               hello@micro-titan.com
             </a>
           </div>
           {/* Nav */}
           <div className="flex flex-col gap-2 text-sm text-[#a8d8f0]/60">
+            <Link href="/" className="hover:text-[#f4f7fa] transition-colors">Services</Link>
+            <Link href="/valet/pricing" className="hover:text-[#f4f7fa] transition-colors">Valet plans</Link>
             <Link href="/valet" className="hover:text-[#f4f7fa] transition-colors">Valet</Link>
             <Link href="/studio" className="hover:text-[#f4f7fa] transition-colors">The Studio</Link>
             <Link href="/pivot" className="hover:text-[#f4f7fa] transition-colors">Pivot</Link>
