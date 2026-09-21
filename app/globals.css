@@ -119,3 +119,9 @@ body {
   .fade-in-up-5 { animation: fade-in-up 0.55s ease 0.7s both; }
   .fade-in-up-6 { animation: fade-in-up 0.55s ease 0.85s both; }
 }
+
+/* "Not included yet" — deliberately quieter than the included list. Same palette, no new
+   colours: it is information, not a feature. Added 2026-09-21 with the accuracy pass. */
+.package-card .not-yet-label { margin-top: 1.25rem; opacity: 0.6; }
+.package-card ul.not-yet { margin-top: 0.4rem; opacity: 0.55; }
+.package-card ul.not-yet li { text-decoration: none; }

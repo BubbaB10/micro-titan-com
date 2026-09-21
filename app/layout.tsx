@@ -54,12 +54,13 @@ export const metadata: Metadata = {
   // Without metadataBase, Next resolves the relative OG/Twitter image paths below against
   // localhost at build time and warns. Set explicitly so social cards work from production.
   metadataBase: new URL("https://micro-titan.com"),
-  title: "Micro Titan — Websites, Marketing & Business Software",
-  description: "Websites, local search, social content, and custom business software for small businesses. Based in Paris, Texas. Website and marketing: $2,500 setup + $750/month.",
-  keywords: ["Micro Titan", "small business websites", "local SEO", "social media", "custom business software", "Northeast Texas", "Paris Texas", "Fairway Bets", "Mineral Ledger"],
+  title: "Micro Titan — Business Software, Operations & Digital Services",
+  description: "Custom business software and operations for small businesses, with an assistant built in — plus a website we build and keep running. Based in Paris, Texas. Website and monthly care: $2,500 setup + $750/month.",
+  // "social media" removed: it is on the not-yet list, and a keyword is a claim about what we do.
+  keywords: ["Micro Titan", "custom business software", "business operations software", "small business websites", "local SEO", "Northeast Texas", "Paris Texas", "Fairway Bets", "Mineral Ledger"],
   openGraph: {
-    title: "Micro Titan — Websites, Marketing & Business Software",
-    description: "Websites, marketing, and custom software for small businesses in Northeast Texas.",
+    title: "Micro Titan — Business Software, Operations & Digital Services",
+    description: "Custom business software and operations for small businesses, with an assistant built in, plus websites and local search.",
     url: "https://micro-titan.com",
     siteName: "Micro Titan",
     type: "website",
