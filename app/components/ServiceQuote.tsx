@@ -2,7 +2,14 @@
 import { useState } from "react";
 import { dollars, offer } from "../services-offer";
 
-const extras = ["Custom operations software", "Paid advertising", "Photography or video"];
+// Each extra carries its OWN note. One shared "Quoted separately" label told a visitor we would
+// price advertising, photography and video. We do not offer those, so the tool must not offer
+// to quote them.
+const extras = [
+  { name: "Custom operations software", note: "Quoted separately" },
+  { name: "Paid advertising", note: "Not offered" },
+  { name: "Photography or video", note: "Not offered" },
+];
 export default function ServiceQuote() {
   const [locations, setLocations] = useState("one");
   const [selected, setSelected] = useState<string[]>([]);
@@ -10,7 +17,7 @@ export default function ServiceQuote() {
   return <section className="quote-grid" id="quote">
     <div><p className="eyebrow">BUILD YOUR QUOTE</p><h2>Just the price.<br/>No email required.</h2><p>Start with the standard package. Choose any additional needs to see what would be quoted separately.</p>
       <fieldset><legend>How many business locations?</legend><div className="quote-options">{[["one","One location"],["multiple","More than one"]].map(([value,label])=><label key={value}><input type="radio" name="locations" value={value} checked={locations===value} onChange={()=>setLocations(value)}/>{label}</label>)}</div></fieldset>
-      <fieldset><legend>Anything else you need?</legend>{extras.map(extra=><label className="quote-check" key={extra}><input type="checkbox" checked={selected.includes(extra)} onChange={event=>setSelected(event.target.checked ? [...selected,extra] : selected.filter(item=>item!==extra))}/>{extra}<span>Quoted separately</span></label>)}</fieldset>
+      <fieldset><legend>Anything else you need?</legend>{extras.map(extra=><label className="quote-check" key={extra.name}><input type="checkbox" checked={selected.includes(extra.name)} onChange={event=>setSelected(event.target.checked ? [...selected,extra.name] : selected.filter(item=>item!==extra.name))}/>{extra.name}<span>{extra.note}</span></label>)}</fieldset>
     </div>
     <div className="quote-summary" aria-live="polite" aria-atomic="true"><p className="eyebrow">{custom ? "YOUR PACKAGE + ADDITIONAL SCOPE" : "YOUR STANDARD PACKAGE"}</p><h3>Website + monthly care</h3><p>Single-location package</p><dl><div><dt>One-time setup</dt><dd>{dollars(offer.setup)}</dd></div><div><dt>Monthly service</dt><dd>{dollars(offer.monthly)}<small>/mo</small></dd></div></dl>
       <p className="fine-print">Standard website, website care and updates, on-page local search setup, and monthly reporting. Google Business Profile management, review requests, and social posting are not included.</p>
