@@ -103,3 +103,26 @@
 .work-grid.plain h3{font-size:22px;margin-bottom:14px}
 .work-grid.plain p:last-child{font-size:14px}
 .closing-sub{max-width:52ch;margin-inline:auto;color:var(--muted);font-size:16px}
+
+/* Workspace panel: illustrative task/status rows in place of the old website mockup. Same
+   palette and panel chrome — only the panel's contents changed.
+
+   The sizing here is tight on purpose. The connected-workflow panel overlaps this one by design,
+   and the rows are the point of the illustration, so they have to clear that overlap. Measured
+   against the panels as positioned: at the old blurb's sizing the content ran 210px inside a
+   175px box, and the lower two rows sat 15px and 37px behind the workflow panel. These values
+   fit all three rows above it without moving either panel. If you change the row padding, the
+   heading size or the body padding, re-measure — the panel positions are the fixed constraint. */
+.scene-tasks{list-style:none;margin:2px 0 0;padding:0;position:relative;z-index:1;width:64%}
+.scene-tasks li{display:flex;align-items:center;gap:8px;font-size:8px;color:#3e577c;line-height:1.2;
+  padding:2px 6px;margin-bottom:1px;background:#f7f6fc;border:1px solid #e4e0f2;border-radius:5px}
+.scene-tasks li:last-child{margin-bottom:0}
+.scene-tasks b{margin-left:auto;font-weight:600;color:#292a34}
+.scene-tasks .dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.scene-tasks .dot.done{background:#6254ce}
+.scene-tasks .dot.next{background:#b8b3ff}
+.scene-tasks .dot.flag{background:#292a34}
+.scene-website .scene-mini-logo{margin-bottom:4px}
+.scene-website .scene-site-body{padding-top:10px}
+.scene-website .scene-site-body>strong{font-size:17px;line-height:1.12}
+@media(max-width:360px){.scene-tasks{width:70%}}

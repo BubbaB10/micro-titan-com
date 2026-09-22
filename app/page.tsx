@@ -7,9 +7,9 @@ export default function HomePage() {
   return <ServicesShell>
     <div className="hero-band"><section className="service-hero wrap">
       <div className="hero-copy">
-        <p className="eyebrow"><span className="live-dot"/> PARIS, TEXAS</p>
+        <p className="eyebrow"><span className="live-dot"/> DIGITAL SERVICES</p>
         <h1>Custom software, automation,<br/><em>and practical AI help.</em></h1>
-        <p className="hero-description">We build software around how work actually gets done — and we help people get the new tools set up properly and learn to use them on their own real tasks. You don&apos;t need a business, or a custom app, to get something useful out of us.</p>
+        <p className="hero-description">Apps built around your work. Automation for repetitive tasks. Hands-on help getting more from AI—for your business or yourself.</p>
         <div className="hero-actions"><a className="button" href="#for-business">For your business <span aria-hidden="true">→</span></a><a className="text-link" href="#for-you">For you →</a></div>
       </div>
       <BrandScene />
@@ -62,6 +62,6 @@ export default function HomePage() {
 <ul className="not-yet">{offer.withAccess.map(item=><li key={item}><span aria-hidden="true">·</span>{item}</li>)}</ul>
 <p className="fine-print">Writing and preparing is our side. Publishing to your accounts, or managing your listing, needs permission only you can give — an onboarding step, not an extra charge.</p><Link className="button" href="/pricing#quote">Build your website quote ↗</Link><p className="fine-print">Custom operations software is scoped and quoted separately. Advertising, photography and video are not part of this package. Scope and start date agreed before you commit.</p></div></section>
 
-    <section className="closing wrap"><p className="eyebrow">A LOCAL PARTNER, FOR BUSINESSES AND FOR PEOPLE.</p><h2>Let&apos;s make your<br/>next step a useful one.</h2><p className="closing-sub">Whether you run a business or just want the new tools working properly for you, start by telling us what you&apos;re trying to do.</p><a className="button" href="mailto:hello@micro-titan.com?subject=What%20I%27m%20trying%20to%20do">Tell us what you&apos;re trying to do ↗</a></section>
+    <section className="closing wrap" id="contact"><p className="eyebrow">A LOCAL PARTNER, FOR BUSINESSES AND FOR PEOPLE.</p><h2>Let&apos;s make your<br/>next step a useful one.</h2><p className="closing-sub">Whether you run a business or just want the new tools working properly for you, start by telling us what you&apos;re trying to do.</p><a className="button" href="mailto:hello@micro-titan.com?subject=What%20I%27m%20trying%20to%20do">Tell us what you&apos;re trying to do ↗</a></section>
   </ServicesShell>;
 }
