@@ -1,6 +1,6 @@
 /** Original MT geometry, rendered as a layered sculpture. Decorative, not a product screenshot. */
 export default function BrandScene() {
-  return <div className="brand-scene" role="img" aria-label="Illustration: the Micro Titan mark above connected website and operations panels. Custom operations software is scoped separately.">
+  return <div className="brand-scene" role="img" aria-label="Illustration: the Micro Titan mark above an example workspace panel and a connected-workflow panel. Illustrative interface, not a screenshot of a delivered app.">
     <div className="brand-scene-art" aria-hidden="true">
       <div className="scene-halo" />
       <div className="scene-orbit" />
@@ -17,8 +17,15 @@ export default function BrandScene() {
       </svg>
       <div className="scene-connector" />
       <div className="scene-window scene-website">
-        <div className="scene-window-bar"><span className="scene-dots">● ● ●</span><span>YOUR WEBSITE</span><span>↗</span></div>
-        <div className="scene-site-body"><span className="scene-mini-logo">YOUR BUSINESS</span><strong>A great first<br/>impression.</strong><div className="scene-text-lines"><i/><i/></div><span className="scene-mini-button">Let&apos;s talk ↗</span><div className="scene-site-art"><span/><span/><span/></div></div>
+        <div className="scene-window-bar"><span className="scene-dots">● ● ●</span><span>YOUR WORKSPACE</span><span>↗</span></div>
+        <div className="scene-site-body"><span className="scene-mini-logo">YOUR BUSINESS</span><strong>Everything you&apos;re<br/>working on.</strong>
+          <ul className="scene-tasks">
+            <li><i className="dot done"/>Today&apos;s tasks<b>4</b></li>
+            <li><i className="dot next"/>Upcoming<b>7</b></li>
+            <li><i className="dot flag"/>Needs your attention<b>2</b></li>
+          </ul>
+          <div className="scene-site-art"><span/><span/><span/></div>
+        </div>
       </div>
       <div className="scene-window scene-operations">
         <div className="scene-window-bar"><span className="scene-status"/> <span>BEHIND THE BUSINESS</span><span>↗</span></div>
@@ -26,6 +33,6 @@ export default function BrandScene() {
         <div className="scene-record"><span className="scene-record-icon">↗</span><div><strong>From first hello to follow-through.</strong><small>Your workflow, connected.</small></div></div>
       </div>
     </div>
-    <p className="scene-caption">WEBSITE + OPERATIONS <span>Illustration · custom software scoped separately</span></p>
+    <p className="scene-caption">WORKSPACE + CONNECTED WORKFLOW <span>Illustrative interface · not a delivered app</span></p>
   </div>;
 }

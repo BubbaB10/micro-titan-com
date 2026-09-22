@@ -31,7 +31,7 @@ const ORGANIZATION_JSON_LD = {
   url: "https://micro-titan.com",
   email: "hello@micro-titan.com",
   description:
-    "Micro Titan builds and runs the software a small business needs — operations apps, websites and local search — with mechanical verification behind every change.",
+    "Micro Titan builds custom software and automation for small businesses, and provides practical AI setup and hands-on guidance for individuals. An assistant can be scoped into a build where it helps. Websites and local search are available as supporting services.",
   address: {
     "@type": "PostalAddress",
     addressLocality: "Paris",
@@ -54,13 +54,12 @@ export const metadata: Metadata = {
   // Without metadataBase, Next resolves the relative OG/Twitter image paths below against
   // localhost at build time and warns. Set explicitly so social cards work from production.
   metadataBase: new URL("https://micro-titan.com"),
-  title: "Micro Titan — Business Software, Operations & Digital Services",
-  description: "Custom business software and operations for small businesses, with an assistant built in — plus a website we build and keep running. Based in Paris, Texas. Website and monthly care: $2,500 setup + $750/month.",
-  // "social media" removed: it is on the not-yet list, and a keyword is a claim about what we do.
-  keywords: ["Micro Titan", "custom business software", "business operations software", "small business websites", "local SEO", "Northeast Texas", "Paris Texas", "Fairway Bets", "Mineral Ledger"],
+  title: "Micro Titan — Custom Software, Automation & Practical AI Help",
+  description: "Custom software and automation for small businesses, plus practical AI setup and hands-on guidance for individuals. An assistant is scoped in where it helps, not assumed. Based in Paris, Texas. Websites and monthly care are available separately: $2,500 setup + $750/month.",
+  keywords: ["Micro Titan", "custom business software", "business automation", "AI tool setup", "AI help", "business operations software", "small business websites", "local SEO", "Northeast Texas", "Paris Texas", "Fairway Bets", "Mineral Ledger"],
   openGraph: {
-    title: "Micro Titan — Business Software, Operations & Digital Services",
-    description: "Custom business software and operations for small businesses, with an assistant built in, plus websites and local search.",
+    title: "Micro Titan — Custom Software, Automation & Practical AI Help",
+    description: "Custom software and automation for small businesses, plus practical AI setup and hands-on guidance for individuals.",
     url: "https://micro-titan.com",
     siteName: "Micro Titan",
     type: "website",
