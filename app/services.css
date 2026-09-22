@@ -96,3 +96,10 @@
   .path-band{grid-template-columns:1fr;gap:26px;padding:26px}
   .path-band.single{padding:26px}
 }
+
+/* Functionality examples carry no client monogram, so the card leads with the category. */
+.work-grid.plain article{display:flex;flex-direction:column;padding:30px}
+.work-grid.plain .eyebrow{margin-bottom:12px}
+.work-grid.plain h3{font-size:22px;margin-bottom:14px}
+.work-grid.plain p:last-child{font-size:14px}
+.closing-sub{max-width:52ch;margin-inline:auto;color:var(--muted);font-size:16px}
