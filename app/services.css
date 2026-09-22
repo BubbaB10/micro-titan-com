@@ -65,3 +65,34 @@
 .hero-band .hero-price{border-left:3px solid var(--accent);padding-left:14px}
 .hero-band .hero-actions .button{background:#15151c;border-color:#15151c;color:#fff}
 .hero-band .hero-actions .button:hover{background:#302745;border-color:#302745}
+
+/* Two audience paths, and the personal section. Built from the existing tokens so the page
+   keeps one visual language: white ground, charcoal ink, indigo accent. */
+.path-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px;margin-top:40px}
+.path-grid article{background:#fff;border:1px solid #10111630;padding:34px;display:flex;flex-direction:column}
+.path-tag{display:inline-block;align-self:flex-start;font-size:9px;font-weight:700;letter-spacing:.12em;color:var(--accent);background:#f3f1fb;border:1px solid #d9d3f3;border-radius:999px;padding:6px 13px;margin-bottom:22px}
+.path-grid h3{font-size:24px;margin-bottom:14px}
+.path-grid>article>p{font-size:15px;color:var(--muted)}
+.path-grid ul{list-style:none;margin:6px 0 24px;padding:0;flex:1}
+.path-grid li{position:relative;padding-left:20px;font-size:14px;color:var(--muted);margin-bottom:11px}
+.path-grid li::before{content:"";position:absolute;left:0;top:.55em;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+.path-grid .text-link{align-self:flex-start}
+
+.path-band{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:40px;margin-top:22px;background:linear-gradient(135deg,#fff,#f9f9fc);border:1px solid #10111630;padding:34px}
+.path-band.single{grid-template-columns:1fr}
+.path-band h3{font-size:19px;margin-bottom:12px}
+.path-band p{font-size:14px;color:var(--muted);max-width:60ch}
+.path-band p:last-of-type{margin-bottom:0}
+.path-band .text-link{display:inline-block;margin-top:16px}
+
+#personal .service-columns{margin-bottom:34px}
+.not-yet-label{margin-top:4px}
+
+@media(max-width:1000px){.path-band{gap:28px}}
+@media(max-width:700px){
+  .path-grid{grid-template-columns:1fr;gap:16px;margin-top:30px}
+  .path-grid article{padding:26px}
+  .path-grid h3{font-size:22px}
+  .path-band{grid-template-columns:1fr;gap:26px;padding:26px}
+  .path-band.single{padding:26px}
+}
