@@ -1,9 +1,9 @@
 {
-  "generatedAt": "2026-10-14T13:47:55.784Z",
+  "generatedAt": "2026-10-14T14:18:25.777Z",
   "windowDays": 90,
-  "totalInWindow": 677,
+  "totalInWindow": 678,
   "perApp": {
-    "micro-titan-hq": 304,
+    "micro-titan-hq": 305,
     "client-bf2ef7": 57,
     "client-222c5c": 40,
     "client-a3c7b8": 7,
@@ -20,6 +20,12 @@
   },
   "failuresRecordedSince": null,
   "receipts": [
+    {
+      "app": "micro-titan-hq",
+      "verifiedAt": "2026-10-14T13:58:11.099Z",
+      "head": "9ac10e08",
+      "filesChanged": 3
+    },
     {
       "app": "micro-titan-hq",
       "verifiedAt": "2026-10-14T13:23:00.734Z",
