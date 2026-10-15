@@ -24,7 +24,12 @@ test('no fake state: nothing on the page is called connected or live', () => {
 });
 
 test('the one way in is the real intake on The Download, and the page says it connects nothing', () => {
-  assert.ok(src.includes('https://download.micro-titan.com/#/studio'));
+  // The CTA target is The Download's PUBLIC intake (/#/intake — "about 30 minutes, 7 topics"), not the Studio
+  // scoping form; 2026-10-15 independent audit: this line pinned the wrong target and the suite was outside the gate.
+  assert.match(src, /const INTAKE_URL = "https:\/\/download\.micro-titan\.com\/#\/intake";/);
+  assert.match(src, /href=\{INTAKE_URL\}/);
+  assert.ok(!src.includes('/#/studio'), 'the Studio scoping form is not the onboarding entry');
+  assert.match(src, /About 30 minutes on your phone, in 7 topics/);
   assert.match(src, /Start the intake/);
   assert.match(src, /does not connect anything and it is not a sign-up form/);
   assert.match(src, /read\s+back before anyone calls it connected/i);
