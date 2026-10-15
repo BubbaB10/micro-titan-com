@@ -14,12 +14,15 @@ import Footer from "../components/Footer";
  * Server-rendered: there is no state to keep and nothing to toggle.
  */
 
-const INTAKE_URL = "https://download.micro-titan.com/#/studio";
+// The approved personal intake (projects/onboarding-2026-10-06/FLOW-MAP.md stage 0) is The Download's public intake at /#/intake — a
+// conversation of about 30 minutes across 7 topics. /#/studio is the business scoping form (20–30 minutes, 3 documents) and is not
+// this journey. Independent destination check 2026-10-15 22:14Z found the earlier link and the "few minutes" promise did not match.
+const INTAKE_URL = "https://download.micro-titan.com/#/intake";
 
 const STEPS: Array<{ title: string; desc: string }> = [
   {
     title: "Tell us what you want off your plate",
-    desc: "A short intake from your phone — what you handle today, what you want handled, and what must never be touched. Nothing is printed, signed on paper or mailed.",
+    desc: "An intake conversation from your phone — about 30 minutes across 7 topics: how your life runs, what you handle today, what you want handled, and what must never be touched. You can stop and come back. Nothing is printed, signed on paper or mailed.",
   },
   {
     title: "A consented capability check",
@@ -98,7 +101,7 @@ export default function OnboardingPage() {
             Start the intake →
           </a>
           <p className="text-center text-xs text-[#a8d8f0]/40 mt-5">
-            Takes a few minutes on your phone. We reply to you; nothing is set up until you have agreed to it.
+            About 30 minutes on your phone, in 7 topics — you can stop and come back. We reply to you; nothing is set up until you have agreed to it.
           </p>
 
           <p className="text-center text-xs text-[#a8d8f0]/40 mt-10">
