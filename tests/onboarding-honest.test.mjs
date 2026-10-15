@@ -28,7 +28,8 @@ test('the one way in is the real intake on The Download, and the page says it co
   // scoping form; 2026-10-15 independent audit: this line pinned the wrong target and the suite was outside the gate.
   assert.match(src, /const INTAKE_URL = "https:\/\/download\.micro-titan\.com\/#\/intake";/);
   assert.match(src, /href=\{INTAKE_URL\}/);
-  assert.ok(!src.includes('/#/studio'), 'the Studio scoping form is not the onboarding entry');
+  // The Studio scoping form may be NAMED in a comment, but never as a link target or string literal.
+  assert.ok(!/["'`][^"'`\n]*#\/studio/.test(src), 'the Studio scoping form is not the onboarding entry');
   assert.match(src, /About 30 minutes on your phone, in 7 topics/);
   assert.match(src, /Start the intake/);
   assert.match(src, /does not connect anything and it is not a sign-up form/);
