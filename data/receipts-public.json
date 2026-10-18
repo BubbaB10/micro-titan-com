@@ -1,12 +1,12 @@
 {
-  "generatedAt": "2026-10-18T01:32:25.772Z",
+  "generatedAt": "2026-10-18T02:02:55.787Z",
   "windowDays": 90,
-  "totalInWindow": 718,
+  "totalInWindow": 713,
   "perApp": {
     "the-download": 110,
     "micro-titan-hq": 324,
     "micro-titan-web": 107,
-    "client-bf2ef7": 45,
+    "client-bf2ef7": 40,
     "client-222c5c": 40,
     "client-a3c7b8": 7,
     "hq-dashboard": 26,
@@ -4297,36 +4297,6 @@
       "verifiedAt": "2026-07-20T03:29:25.545Z",
       "head": "f495d03",
       "filesChanged": 1
-    },
-    {
-      "app": "client-bf2ef7",
-      "verifiedAt": "2026-07-20T02:01:25.199Z",
-      "head": "9909ee85",
-      "filesChanged": 5
-    },
-    {
-      "app": "client-bf2ef7",
-      "verifiedAt": "2026-07-20T01:56:11.776Z",
-      "head": "9909ee85",
-      "filesChanged": 5
-    },
-    {
-      "app": "client-bf2ef7",
-      "verifiedAt": "2026-07-20T01:52:28.947Z",
-      "head": "0e694378",
-      "filesChanged": 1
-    },
-    {
-      "app": "client-bf2ef7",
-      "verifiedAt": "2026-07-20T01:49:33.654Z",
-      "head": "0e694378",
-      "filesChanged": 1
-    },
-    {
-      "app": "client-bf2ef7",
-      "verifiedAt": "2026-07-20T01:34:36.056Z",
-      "head": "c6b34048",
-      "filesChanged": 3
     }
   ]
 }
