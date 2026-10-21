@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-10-21T19:05:45.790Z",
+  "generatedAt": "2026-10-21T20:06:22.979Z",
   "windowDays": 90,
-  "totalInWindow": 697,
+  "totalInWindow": 696,
   "perApp": {
     "micro-titan-hq": 325,
     "the-download": 110,
@@ -14,7 +14,7 @@
     "client-34d279": 4,
     "client-c74f31": 4,
     "micro-titan-com": 25,
-    "client-a97f1f": 23,
+    "client-a97f1f": 22,
     "greg-installer": 1
   },
   "failuresRecordedSince": null,
@@ -4194,12 +4194,6 @@
       "verifiedAt": "2026-07-23T20:54:22.915Z",
       "head": "299e07d5",
       "filesChanged": 5
-    },
-    {
-      "app": "client-a97f1f",
-      "verifiedAt": "2026-07-23T19:56:47.436Z",
-      "head": "90aea0ce",
-      "filesChanged": 4
     }
   ]
 }
