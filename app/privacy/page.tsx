@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 // v1 — owner-approved 2026-10-24 ("Publish v1"). Facts checked against the running system on that date:
 // the email form posts to our own service at download.micro-titan.com (app/components/EmailCapture.tsx);
-// that service is hosted on Railway; operator backups go to encrypted cloud storage (Google Drive).
+// that service is hosted on Railway; operator backups go to Google Drive (encrypted at rest by Google; no encryption layer of our own).
 // Not yet reviewed by an attorney; that is stated to the reader below.
 const sections: { title: string; body: string[]; bullets?: string[] }[] = [
   {
@@ -34,7 +34,7 @@ const sections: { title: string; body: string[]; bullets?: string[] }[] = [
     title: "3. Where it lives",
     body: [
       "Your assistant runs on a computer you own or control, or on a server we run for you by arrangement, paired to a private page only you can open.",
-      "Intake and private-page data are held on our service at download.micro-titan.com, hosted on Railway. Backups of operator records are kept in encrypted cloud storage (Google Drive).",
+      "Intake and private-page data are held on our service at download.micro-titan.com, hosted on Railway. Backups of operator records are kept in Google Drive, which encrypts stored data at rest; we do not add an encryption layer of our own.",
       "Messages your assistant sends to a model provider in order to think are processed by that provider under its own terms; you may choose to carry that account in your own name.",
     ],
   },
