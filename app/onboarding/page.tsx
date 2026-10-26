@@ -19,7 +19,7 @@ import Footer from "../components/Footer";
 // this journey. Independent destination check 2026-10-15 22:14Z found the earlier link and the "few minutes" promise did not match.
 const INTAKE_URL = "https://download.micro-titan.com/#/intake";
 
-const STEPS: Array<{ title: string; desc: string }> = [
+const STEPS: Array<{ title: string; desc: string; more?: string; links?: Array<{ label: string; href: string }> }> = [
   {
     title: "Tell us what you want off your plate",
     desc: "An intake conversation from your phone — about 30 minutes across 7 topics: how your life runs, what you handle today, what you want handled, and what must never be touched. You can stop and come back. Nothing is printed, signed on paper or mailed.",
@@ -27,6 +27,12 @@ const STEPS: Array<{ title: string; desc: string }> = [
   {
     title: "A consented capability check",
     desc: "With your yes, we check what your situation actually supports and write down the result: what works now, what has a limit, and what we will not claim.",
+    // The computer part is a published, read-only check you can run yourself (nanoclaw scripts/box-check, package 0.1.0; thresholds measured 2026-10-25).
+    more: "You can run the computer part yourself before anyone asks you anything: download the check, unpack it, and run `sh run-check.sh` on a Linux computer or Windows with WSL2. It installs nothing, changes nothing and sends nothing. It shows one of four results: Ready, Needs preparation, Dedicated box recommended, or Check incomplete. Its thresholds (8 GB of memory, 20 GB free) were measured on our own box. Adding the result to your intake happens later, with your yes, through the code shown on your phone.",
+    links: [
+      { label: "Download the check (mt-box-check 0.1.0)", href: "/check/mt-box-check-0.1.0.tar.gz" },
+      { label: "Checksum", href: "/check/mt-box-check-0.1.0.tar.gz.sha256" },
+    ],
   },
   {
     title: "Findings, the setup that fits, and the terms",
@@ -78,6 +84,16 @@ export default function OnboardingPage() {
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-semibold text-[#f4f7fa]">{s.title}</p>
                   <p className="text-xs text-[#a8d8f0]/70 mt-1 leading-relaxed">{s.desc}</p>
+                  {s.more && <p className="text-xs text-[#a8d8f0]/70 mt-2 leading-relaxed">{s.more}</p>}
+                  {s.links && (
+                    <p className="text-xs mt-2 flex flex-wrap gap-x-4 gap-y-1">
+                      {s.links.map((l) => (
+                        <a key={l.href} href={l.href} className="text-[#2563eb] hover:text-[#60a5fa] transition-colors">
+                          {l.label} →
+                        </a>
+                      ))}
+                    </p>
+                  )}
                 </div>
               </li>
             ))}
