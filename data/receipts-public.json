@@ -1,24 +1,324 @@
 {
-  "generatedAt": "2026-10-22T23:14:55.814Z",
+  "generatedAt": "2026-11-02T21:15:03.979Z",
   "windowDays": 90,
-  "totalInWindow": 681,
+  "totalInWindow": 679,
   "perApp": {
-    "micro-titan-hq": 326,
-    "the-download": 110,
-    "micro-titan-web": 106,
-    "client-bf2ef7": 26,
-    "client-222c5c": 33,
-    "client-a3c7b8": 6,
+    "micro-titan-hq": 338,
+    "the-download": 119,
+    "client-222c5c": 55,
+    "micro-titan-web": 94,
+    "client-bf2ef7": 3,
+    "client-a3c7b8": 5,
     "hq-dashboard": 26,
     "client-445f51": 1,
     "client-34d279": 4,
-    "client-c74f31": 4,
+    "client-c74f31": 3,
     "micro-titan-com": 25,
-    "client-a97f1f": 13,
+    "client-a97f1f": 5,
     "greg-installer": 1
   },
   "failuresRecordedSince": null,
   "receipts": [
+    {
+      "app": "micro-titan-hq",
+      "verifiedAt": "2026-10-31T01:21:34.953Z",
+      "head": "3ed12c50",
+      "filesChanged": 4
+    },
+    {
+      "app": "micro-titan-hq",
+      "verifiedAt": "2026-10-31T00:18:26.342Z",
+      "head": "3de41aab",
+      "filesChanged": 8
+    },
+    {
+      "app": "micro-titan-hq",
+      "verifiedAt": "2026-10-30T19:23:39.355Z",
+      "head": "85a735c1",
+      "filesChanged": 6
+    },
+    {
+      "app": "micro-titan-hq",
+      "verifiedAt": "2026-10-30T16:31:13.869Z",
+      "head": "fa8e8dfd",
+      "filesChanged": 9
+    },
+    {
+      "app": "micro-titan-hq",
+      "verifiedAt": "2026-10-30T01:12:51.374Z",
+      "head": "e72c7402",
+      "filesChanged": 4
+    },
+    {
+      "app": "micro-titan-hq",
+      "verifiedAt": "2026-10-29T14:03:10.817Z",
+      "head": "d201f203",
+      "filesChanged": 1
+    },
+    {
+      "app": "micro-titan-hq",
+      "verifiedAt": "2026-10-29T12:57:24.633Z",
+      "head": "47c03da3",
+      "filesChanged": 6
+    },
+    {
+      "app": "the-download",
+      "verifiedAt": "2026-10-29T00:53:36.466Z",
+      "head": "0187baf2",
+      "filesChanged": 2
+    },
+    {
+      "app": "the-download",
+      "verifiedAt": "2026-10-28T21:25:22.950Z",
+      "head": "27c1c05a",
+      "filesChanged": 4
+    },
+    {
+      "app": "the-download",
+      "verifiedAt": "2026-10-28T19:09:33.890Z",
+      "head": "25edfaf4",
+      "filesChanged": 9
+    },
+    {
+      "app": "micro-titan-hq",
+      "verifiedAt": "2026-10-28T14:44:22.124Z",
+      "head": "2085d175",
+      "filesChanged": 1
+    },
+    {
+      "app": "the-download",
+      "verifiedAt": "2026-10-28T12:42:03.250Z",
+      "head": "4c5561f7",
+      "filesChanged": 4
+    },
+    {
+      "app": "micro-titan-hq",
+      "verifiedAt": "2026-10-27T22:28:31.389Z",
+      "head": "832aa936",
+      "filesChanged": 2
+    },
+    {
+      "app": "client-222c5c",
+      "verifiedAt": "2026-10-27T12:43:27.039Z",
+      "head": "b8eaed82",
+      "filesChanged": 5
+    },
+    {
+      "app": "client-222c5c",
+      "verifiedAt": "2026-10-27T02:31:15.448Z",
+      "head": "b3bdebe4",
+      "filesChanged": 5
+    },
+    {
+      "app": "client-222c5c",
+      "verifiedAt": "2026-10-26T18:26:38.700Z",
+      "head": "3ee0d0d5",
+      "filesChanged": 16
+    },
+    {
+      "app": "client-222c5c",
+      "verifiedAt": "2026-10-26T16:20:39.600Z",
+      "head": "e35bdffe",
+      "filesChanged": 3
+    },
+    {
+      "app": "the-download",
+      "verifiedAt": "2026-10-26T16:19:34.228Z",
+      "head": "2012f4d5",
+      "filesChanged": 5
+    },
+    {
+      "app": "client-222c5c",
+      "verifiedAt": "2026-10-26T16:14:25.844Z",
+      "head": "d31cb564",
+      "filesChanged": 3
+    },
+    {
+      "app": "client-222c5c",
+      "verifiedAt": "2026-10-26T16:13:59.256Z",
+      "head": "fe801d12",
+      "filesChanged": 4
+    },
+    {
+      "app": "client-222c5c",
+      "verifiedAt": "2026-10-26T16:13:16.824Z",
+      "head": "a142eedd",
+      "filesChanged": 3
+    },
+    {
+      "app": "client-222c5c",
+      "verifiedAt": "2026-10-26T16:12:53.396Z",
+      "head": "e9808d64",
+      "filesChanged": 4
+    },
+    {
+      "app": "client-222c5c",
+      "verifiedAt": "2026-10-26T16:12:29.744Z",
+      "head": "e97cb626",
+      "filesChanged": 4
+    },
+    {
+      "app": "client-222c5c",
+      "verifiedAt": "2026-10-26T16:08:52.861Z",
+      "head": "10127ec4",
+      "filesChanged": 4
+    },
+    {
+      "app": "client-222c5c",
+      "verifiedAt": "2026-10-26T16:08:26.241Z",
+      "head": "7366e89f",
+      "filesChanged": 5
+    },
+    {
+      "app": "client-222c5c",
+      "verifiedAt": "2026-10-26T16:03:03.413Z",
+      "head": "dbf18487",
+      "filesChanged": 3
+    },
+    {
+      "app": "client-222c5c",
+      "verifiedAt": "2026-10-26T16:01:15.741Z",
+      "head": "4baddc9c",
+      "filesChanged": 3
+    },
+    {
+      "app": "client-222c5c",
+      "verifiedAt": "2026-10-26T15:56:59.725Z",
+      "head": "16f620c6",
+      "filesChanged": 4
+    },
+    {
+      "app": "the-download",
+      "verifiedAt": "2026-10-26T15:53:48.901Z",
+      "head": "9176d604",
+      "filesChanged": 5
+    },
+    {
+      "app": "client-222c5c",
+      "verifiedAt": "2026-10-26T15:51:53.757Z",
+      "head": "163b85b8",
+      "filesChanged": 4
+    },
+    {
+      "app": "the-download",
+      "verifiedAt": "2026-10-26T15:50:17.861Z",
+      "head": "24fa2a96",
+      "filesChanged": 5
+    },
+    {
+      "app": "client-222c5c",
+      "verifiedAt": "2026-10-26T15:43:10.257Z",
+      "head": "d5d379f5",
+      "filesChanged": 5
+    },
+    {
+      "app": "client-222c5c",
+      "verifiedAt": "2026-10-26T15:41:43.433Z",
+      "head": "2ebed381",
+      "filesChanged": 5
+    },
+    {
+      "app": "client-222c5c",
+      "verifiedAt": "2026-10-26T15:36:15.545Z",
+      "head": "bf930f27",
+      "filesChanged": 10
+    },
+    {
+      "app": "client-222c5c",
+      "verifiedAt": "2026-10-26T15:30:06.453Z",
+      "head": "a228197b",
+      "filesChanged": 4
+    },
+    {
+      "app": "the-download",
+      "verifiedAt": "2026-10-26T15:28:36.509Z",
+      "head": "ff8ca8b2",
+      "filesChanged": 3
+    },
+    {
+      "app": "client-222c5c",
+      "verifiedAt": "2026-10-26T15:09:11.141Z",
+      "head": "c9e219b4",
+      "filesChanged": 10
+    },
+    {
+      "app": "client-222c5c",
+      "verifiedAt": "2026-10-26T14:59:32.349Z",
+      "head": "bb7ed73c",
+      "filesChanged": 4
+    },
+    {
+      "app": "client-222c5c",
+      "verifiedAt": "2026-10-26T14:52:05.229Z",
+      "head": "5b460f6d",
+      "filesChanged": 3
+    },
+    {
+      "app": "client-222c5c",
+      "verifiedAt": "2026-10-26T14:35:49.765Z",
+      "head": "75bd2713",
+      "filesChanged": 6
+    },
+    {
+      "app": "micro-titan-web",
+      "verifiedAt": "2026-10-26T00:23:35.506Z",
+      "head": "bd0d39e1",
+      "filesChanged": 3
+    },
+    {
+      "app": "micro-titan-web",
+      "verifiedAt": "2026-10-25T21:25:27.669Z",
+      "head": "65287367",
+      "filesChanged": 1
+    },
+    {
+      "app": "micro-titan-web",
+      "verifiedAt": "2026-10-25T13:16:16.501Z",
+      "head": "edc565cf",
+      "filesChanged": 2
+    },
+    {
+      "app": "micro-titan-web",
+      "verifiedAt": "2026-10-25T13:14:21.165Z",
+      "head": "bb2bd3c2",
+      "filesChanged": 2
+    },
+    {
+      "app": "the-download",
+      "verifiedAt": "2026-10-24T00:46:07.938Z",
+      "head": "51df5a80",
+      "filesChanged": 1
+    },
+    {
+      "app": "micro-titan-web",
+      "verifiedAt": "2026-10-23T16:51:17.649Z",
+      "head": "87bc360a",
+      "filesChanged": 3
+    },
+    {
+      "app": "micro-titan-hq",
+      "verifiedAt": "2026-10-23T15:13:23.458Z",
+      "head": "36d6c959",
+      "filesChanged": 25
+    },
+    {
+      "app": "micro-titan-hq",
+      "verifiedAt": "2026-10-23T12:54:34.914Z",
+      "head": "3362cb66",
+      "filesChanged": 14
+    },
+    {
+      "app": "micro-titan-hq",
+      "verifiedAt": "2026-10-23T12:53:48.033Z",
+      "head": "c0f68e6d",
+      "filesChanged": 2
+    },
+    {
+      "app": "micro-titan-hq",
+      "verifiedAt": "2026-10-23T01:12:22.976Z",
+      "head": "443c0fd6",
+      "filesChanged": 5
+    },
     {
       "app": "micro-titan-hq",
       "verifiedAt": "2026-10-22T22:55:21.331Z",
@@ -3792,318 +4092,6 @@
       "verifiedAt": "2026-08-05T02:15:59.447Z",
       "head": "9ecfcc2a",
       "filesChanged": 49
-    },
-    {
-      "app": "micro-titan-hq",
-      "verifiedAt": "2026-08-03T03:04:43.926Z",
-      "head": "5e36ad1b",
-      "filesChanged": 50
-    },
-    {
-      "app": "micro-titan-web",
-      "verifiedAt": "2026-08-03T02:21:37.325Z",
-      "head": "46f454ff",
-      "filesChanged": 4
-    },
-    {
-      "app": "client-a3c7b8",
-      "verifiedAt": "2026-08-03T02:20:25.414Z",
-      "head": "8f44a3df",
-      "filesChanged": 2
-    },
-    {
-      "app": "client-a97f1f",
-      "verifiedAt": "2026-08-02T21:51:18.335Z",
-      "head": "826056dd",
-      "filesChanged": 2
-    },
-    {
-      "app": "client-a97f1f",
-      "verifiedAt": "2026-08-02T20:15:15.538Z",
-      "head": "842da32",
-      "filesChanged": 2
-    },
-    {
-      "app": "client-a97f1f",
-      "verifiedAt": "2026-08-02T20:10:36.577Z",
-      "head": "8a2a5e0",
-      "filesChanged": 1
-    },
-    {
-      "app": "client-a97f1f",
-      "verifiedAt": "2026-08-02T18:51:39.491Z",
-      "head": "6db6148",
-      "filesChanged": 4
-    },
-    {
-      "app": "client-c74f31",
-      "verifiedAt": "2026-08-02T12:52:37.861Z",
-      "head": "3a0e84b6",
-      "filesChanged": 53
-    },
-    {
-      "app": "client-222c5c",
-      "verifiedAt": "2026-08-02T12:51:40.287Z",
-      "head": "749075a3",
-      "filesChanged": 12
-    },
-    {
-      "app": "client-bf2ef7",
-      "verifiedAt": "2026-08-02T01:20:07.697Z",
-      "head": "14704bae",
-      "filesChanged": 1
-    },
-    {
-      "app": "client-a97f1f",
-      "verifiedAt": "2026-08-02T00:38:08.340Z",
-      "head": "04a2e63",
-      "filesChanged": 2
-    },
-    {
-      "app": "client-a97f1f",
-      "verifiedAt": "2026-08-01T13:14:48.946Z",
-      "head": "068226c",
-      "filesChanged": 1
-    },
-    {
-      "app": "client-bf2ef7",
-      "verifiedAt": "2026-08-01T05:36:34.491Z",
-      "head": "6b6957a",
-      "filesChanged": 60
-    },
-    {
-      "app": "micro-titan-web",
-      "verifiedAt": "2026-07-31T15:06:17.084Z",
-      "head": "4172bdf",
-      "filesChanged": 3
-    },
-    {
-      "app": "micro-titan-web",
-      "verifiedAt": "2026-07-31T13:22:00.602Z",
-      "head": "23fbe0d",
-      "filesChanged": 5
-    },
-    {
-      "app": "micro-titan-web",
-      "verifiedAt": "2026-07-31T12:36:33.386Z",
-      "head": "12cb618",
-      "filesChanged": 1
-    },
-    {
-      "app": "client-bf2ef7",
-      "verifiedAt": "2026-07-29T19:54:05.583Z",
-      "head": "827361a0",
-      "filesChanged": 1
-    },
-    {
-      "app": "micro-titan-web",
-      "verifiedAt": "2026-07-28T23:04:06.356Z",
-      "head": "5dc4ff8",
-      "filesChanged": 6
-    },
-    {
-      "app": "micro-titan-web",
-      "verifiedAt": "2026-07-28T22:17:55.768Z",
-      "head": "d75e933",
-      "filesChanged": 1
-    },
-    {
-      "app": "micro-titan-web",
-      "verifiedAt": "2026-07-28T21:20:43.873Z",
-      "head": "953a548",
-      "filesChanged": 3
-    },
-    {
-      "app": "micro-titan-web",
-      "verifiedAt": "2026-07-28T19:28:27.140Z",
-      "head": "6710b80",
-      "filesChanged": 3
-    },
-    {
-      "app": "micro-titan-web",
-      "verifiedAt": "2026-07-28T18:08:56.613Z",
-      "head": "29eb389",
-      "filesChanged": 4
-    },
-    {
-      "app": "micro-titan-web",
-      "verifiedAt": "2026-07-28T03:22:13.191Z",
-      "head": "ef4fa5b",
-      "filesChanged": 3
-    },
-    {
-      "app": "micro-titan-web",
-      "verifiedAt": "2026-07-28T03:06:04.881Z",
-      "head": "b4782d3",
-      "filesChanged": 1
-    },
-    {
-      "app": "micro-titan-web",
-      "verifiedAt": "2026-07-28T03:03:25.803Z",
-      "head": "072c186",
-      "filesChanged": 10
-    },
-    {
-      "app": "micro-titan-web",
-      "verifiedAt": "2026-07-27T14:49:23.380Z",
-      "head": "2f625ffa",
-      "filesChanged": 3
-    },
-    {
-      "app": "client-a97f1f",
-      "verifiedAt": "2026-07-27T14:26:15.084Z",
-      "head": "355492d2",
-      "filesChanged": 1
-    },
-    {
-      "app": "micro-titan-web",
-      "verifiedAt": "2026-07-27T12:58:27.330Z",
-      "head": "5a8ddc5b",
-      "filesChanged": 1
-    },
-    {
-      "app": "client-a97f1f",
-      "verifiedAt": "2026-07-27T12:27:51.290Z",
-      "head": "0bf7120f",
-      "filesChanged": 1
-    },
-    {
-      "app": "client-bf2ef7",
-      "verifiedAt": "2026-07-27T02:47:43.291Z",
-      "head": "ae5f175b",
-      "filesChanged": 3
-    },
-    {
-      "app": "micro-titan-web",
-      "verifiedAt": "2026-07-27T00:41:49.928Z",
-      "head": "cdf29412",
-      "filesChanged": 1
-    },
-    {
-      "app": "micro-titan-web",
-      "verifiedAt": "2026-07-26T23:37:50.385Z",
-      "head": "9843704b",
-      "filesChanged": 1
-    },
-    {
-      "app": "client-bf2ef7",
-      "verifiedAt": "2026-07-26T23:36:41.004Z",
-      "head": "ae5f175b",
-      "filesChanged": 3
-    },
-    {
-      "app": "client-bf2ef7",
-      "verifiedAt": "2026-07-26T21:22:03.661Z",
-      "head": "fc53431b",
-      "filesChanged": 5
-    },
-    {
-      "app": "client-bf2ef7",
-      "verifiedAt": "2026-07-26T20:06:22.600Z",
-      "head": "d7f26bdf",
-      "filesChanged": 1
-    },
-    {
-      "app": "client-bf2ef7",
-      "verifiedAt": "2026-07-26T19:52:30.054Z",
-      "head": "83b8df68",
-      "filesChanged": 1
-    },
-    {
-      "app": "client-bf2ef7",
-      "verifiedAt": "2026-07-26T19:47:14.603Z",
-      "head": "b632d3b3",
-      "filesChanged": 1
-    },
-    {
-      "app": "client-bf2ef7",
-      "verifiedAt": "2026-07-26T19:42:39.256Z",
-      "head": "03cf8e7b",
-      "filesChanged": 1
-    },
-    {
-      "app": "client-bf2ef7",
-      "verifiedAt": "2026-07-26T19:00:03.923Z",
-      "head": "3d3eb2a1",
-      "filesChanged": 2
-    },
-    {
-      "app": "client-bf2ef7",
-      "verifiedAt": "2026-07-26T17:47:21.896Z",
-      "head": "7640ca1",
-      "filesChanged": 1
-    },
-    {
-      "app": "client-bf2ef7",
-      "verifiedAt": "2026-07-26T15:01:49.528Z",
-      "head": "78a57705",
-      "filesChanged": 8
-    },
-    {
-      "app": "client-bf2ef7",
-      "verifiedAt": "2026-07-26T03:46:04.284Z",
-      "head": "e4fd340f",
-      "filesChanged": 2
-    },
-    {
-      "app": "client-bf2ef7",
-      "verifiedAt": "2026-07-26T03:42:05.779Z",
-      "head": "a163c203",
-      "filesChanged": 6
-    },
-    {
-      "app": "client-bf2ef7",
-      "verifiedAt": "2026-07-26T00:52:20.595Z",
-      "head": "a1107438",
-      "filesChanged": 1
-    },
-    {
-      "app": "client-bf2ef7",
-      "verifiedAt": "2026-07-26T00:40:50.638Z",
-      "head": "f95a263c",
-      "filesChanged": 2
-    },
-    {
-      "app": "client-bf2ef7",
-      "verifiedAt": "2026-07-25T23:52:21.341Z",
-      "head": "e3d92340",
-      "filesChanged": 1
-    },
-    {
-      "app": "micro-titan-web",
-      "verifiedAt": "2026-07-25T14:39:58.637Z",
-      "head": "4ba86ae",
-      "filesChanged": 3
-    },
-    {
-      "app": "client-bf2ef7",
-      "verifiedAt": "2026-07-25T06:08:47.994Z",
-      "head": "66d21d6c",
-      "filesChanged": 1
-    },
-    {
-      "app": "client-bf2ef7",
-      "verifiedAt": "2026-07-25T06:04:06.002Z",
-      "head": "bfc49265",
-      "filesChanged": 1
-    },
-    {
-      "app": "client-bf2ef7",
-      "verifiedAt": "2026-07-25T05:59:55.849Z",
-      "head": "958bf0f0",
-      "filesChanged": 1
-    },
-    {
-      "app": "client-bf2ef7",
-      "verifiedAt": "2026-07-25T05:50:53.066Z",
-      "head": "ac2cf843",
-      "filesChanged": 1
-    },
-    {
-      "app": "client-bf2ef7",
-      "verifiedAt": "2026-07-25T05:46:00.691Z",
-      "head": "a8d38392",
-      "filesChanged": 1
     }
   ]
 }
