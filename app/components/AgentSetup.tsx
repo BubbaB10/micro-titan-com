@@ -1,4 +1,5 @@
 import AgentInquiry from "./AgentInquiry";
+import AgentFlowVisuals from "./AgentFlowVisuals";
 
 const tiers = [
   {
@@ -75,6 +76,7 @@ export default function AgentSetup() {
           <p>Only major-vendor, client-owned agents are offered. You own your agent account. Passwords never pass through Micro Titan, and an agent asks for your approval before sending, buying, or acting on your behalf. We do not offer self-hosted or open-source agents.</p>
         </div>
       </div>
+      <AgentFlowVisuals />
       <AgentInquiry />
     </section>
   );
