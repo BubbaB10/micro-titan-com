@@ -2,6 +2,7 @@ import Link from "next/link";
 import ServicesShell from "./components/ServicesShell";
 import BrandScene from "./components/BrandScene";
 import { dollars, offer } from "./services-offer";
+import AgentSetup from "./components/AgentSetup";
 
 export default function HomePage() {
   return <ServicesShell>
@@ -56,6 +57,8 @@ export default function HomePage() {
       <div className="service-columns"><article><span className="service-number">01</span><h3>Setup</h3><p>Working out which tool actually fits what you do — sometimes the answer is that you don&apos;t need one — then getting it working on your own machine and your own accounts.</p><span className="service-label">CHOOSING + INSTALLING</span></article><article><span className="service-number">02</span><h3>Hands-on guidance</h3><p>We sit down with your real work: the emails you write, the files you keep, the things you look up every week. We work through your real tasks and leave you with practical steps to use afterward.</p><span className="service-label">WORKING SESSION</span></article><article><span className="service-number">03</span><h3>Personal automation</h3><p>The small repeated jobs handled for you. We build something custom only when a tool that already exists won&apos;t do it.</p><span className="service-label">SMALL BUILDS</span></article></div>
       <div className="path-band single"><div><h3>How it works</h3><p>Most of this is a one-time setup or a guidance session: we get things working, show you how to use them, and you carry on from there. Everything stays in your own accounts, set up by you. If you&apos;d like us around afterwards, ongoing support is available — we&apos;ll talk about what&apos;s actually worth having.</p><a className="text-link" href="mailto:hello@micro-titan.com?subject=Practical%20AI%20help">Tell us what you&apos;re trying to do ↗</a></div></div>
     </section>
+
+    <AgentSetup />
 
     <section className="package-section wrap" id="websites"><div><p className="eyebrow">05 / ADDITIONAL SERVICES</p><h2>Websites<br/>and marketing.<br/><em>One clear price.</em></h2><p>Available on their own, or alongside the software. This is a separate service with its own price — it isn&apos;t part of a custom software quote, and custom software is scoped and quoted separately.</p></div><div className="package-card"><p className="eyebrow">WEBSITE + MONTHLY CARE</p><div className="package-price">{dollars(offer.monthly)}<small>/ month</small></div><p className="setup-price">+ {dollars(offer.setup)} one-time setup</p><ul>{offer.includes.map(item=><li key={item}><span aria-hidden="true">✓</span>{item}</li>)}</ul>
 <p className="eyebrow not-yet-label">INCLUDED, ONCE YOU GRANT ACCESS</p>
