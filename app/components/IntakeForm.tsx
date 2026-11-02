@@ -110,6 +110,10 @@ export default function IntakeForm() {
   const [errors, setErrors] = useState<string[]>([]);
   const [copied, setCopied] = useState(false);
   const [reference, setReference] = useState("");
+  const [website, setWebsite] = useState("");
+  const [submitState, setSubmitState] = useState<"idle" | "sending" | "sent" | "error">("idle");
+  const [serverReference, setServerReference] = useState("");
+  const [serverError, setServerError] = useState("");
 
   const pricing = lane ? PRICING[lane] : null;
 
@@ -174,6 +178,50 @@ export default function IntakeForm() {
   const mailto = `mailto:hello@micro-titan.com?subject=${encodeURIComponent(
     `Micro Titan intake — ${lane} — ${reference}`,
   )}&body=${encodeURIComponent(summary)}`;
+
+  async function submitIntake() {
+    if (!lane || !pricing) return;
+    setServerError("");
+    setSubmitState("sending");
+    const payloadAnswers = QUESTIONS[lane].map((q, i) => ({
+      question: q,
+      answer: answers[`${lane}-${i}`] || "",
+    }));
+    try {
+      const res = await fetch("/api/intake", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          lane,
+          name,
+          email,
+          phone,
+          agent,
+          plate,
+          answers: payloadAnswers,
+          reference,
+          website,
+        }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || !data.ok) {
+        const detail =
+          data?.errors && typeof data.errors === "object"
+            ? Object.values(data.errors as Record<string, string>).join(" ")
+            : data?.message || "The intake could not be sent just now.";
+        setServerError(detail);
+        setSubmitState("error");
+        return;
+      }
+      setServerReference(data.reference || reference);
+      setSubmitState("sent");
+    } catch {
+      setServerError(
+        "The intake could not be sent just now. Use the email fallback below — it opens your email app with everything pre-filled.",
+      );
+      setSubmitState("error");
+    }
+  }
 
   async function copySummary() {
     try {
@@ -366,16 +414,51 @@ export default function IntakeForm() {
           <pre style={{ whiteSpace: "pre-wrap", wordBreak: "break-word", fontSize: 14, lineHeight: 1.5, border: "1px solid #ddd", borderRadius: 10, padding: 16, background: "#fff", margin: 0 }}>
             {summary}
           </pre>
-          <a
-            href={mailto}
-            style={{ display: "block", textAlign: "center", padding: 14, fontSize: 17, borderRadius: 10, background: "#4f46e5", color: "#fff", textDecoration: "none" }}
-          >
-            Send intake by email
-          </a>
-          <p style={{ fontSize: 13, color: "#555", margin: 0 }}>
-            This opens your email app with everything pre-filled, addressed to hello@micro-titan.com.
-            Nothing is sent until you press send in your own email app.
-          </p>
+          {submitState === "sent" ? (
+            <div style={{ border: "2px solid #15803d", borderRadius: 10, padding: 16, background: "#f0fdf4" }}>
+              <strong>Intake sent.</strong>
+              <p style={{ fontSize: 15, lineHeight: 1.5, margin: "8px 0 0" }}>
+                Your intake reference is <strong>{serverReference}</strong>. Micro Titan has
+                received it at hello@micro-titan.com. Filling this out charges nothing — sending
+                it starts the process.
+              </p>
+            </div>
+          ) : (
+            <>
+              <button
+                type="button"
+                onClick={submitIntake}
+                disabled={submitState === "sending"}
+                style={{ padding: 14, fontSize: 17, borderRadius: 10, border: "none", background: submitState === "sending" ? "#ccc" : "#4f46e5", color: "#fff", cursor: submitState === "sending" ? "default" : "pointer" }}
+              >
+                {submitState === "sending" ? "Sending…" : "Send intake"}
+              </button>
+              <p style={{ fontSize: 13, color: "#555", margin: 0 }}>
+                One tap sends your intake directly to Micro Titan. No second send in your email
+                app is needed.
+              </p>
+              {submitState === "error" && serverError && (
+                <div style={{ border: "2px solid #b91c1c", borderRadius: 10, padding: 14, background: "#fef2f2" }}>
+                  <strong>Could not send directly:</strong> {serverError}
+                </div>
+              )}
+              <a
+                href={mailto}
+                style={{ display: "block", textAlign: "center", padding: 14, fontSize: 16, borderRadius: 10, border: "1px solid #ccc", background: "#fff", color: "#111", textDecoration: "none" }}
+              >
+                Send by email instead (fallback)
+              </a>
+              <p style={{ fontSize: 13, color: "#555", margin: 0 }}>
+                Fallback only, if the direct send fails: this opens your email app with everything
+                pre-filled, addressed to hello@micro-titan.com. Nothing is sent until you press
+                send in your own email app.
+              </p>
+            </>
+          )}
+          <label style={{ position: "absolute", left: "-9999px", top: "auto", width: 1, height: 1, overflow: "hidden" }} aria-hidden="true">
+            Website
+            <input tabIndex={-1} autoComplete="off" value={website} onChange={(e) => setWebsite(e.target.value)} />
+          </label>
           <button type="button" onClick={copySummary} style={{ padding: 14, fontSize: 16, borderRadius: 10, border: "1px solid #ccc", background: "#fff", cursor: "pointer" }}>
             {copied ? "Copied" : "Copy summary"}
           </button>
