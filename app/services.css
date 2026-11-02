@@ -136,9 +136,20 @@
 /* Hero loop: SVG scales to its panel, never cropped. */
 .vision-loop{position:relative;min-width:0;max-width:100%;overflow:hidden;border-radius:24px;background:linear-gradient(180deg,#f5f3ff,#eef2ff);padding:18px}
 .vision-loop-svg{display:block;width:100%;height:auto;max-width:100%;object-fit:contain}
-.vision-float{position:absolute;background:rgba(255,255,255,.88);border:1px solid #e0e7ff;border-radius:14px;box-shadow:0 12px 30px #1e3a8a22;padding:12px 14px;backdrop-filter:blur(8px);max-width:72%}
-.vision-float p{margin:0 0 4px;font-size:11px;font-weight:700;letter-spacing:.08em;color:#475569}
-.vision-float strong{font-size:14px}
+.vision-float{position:absolute;background:rgba(255,255,255,.72);border:1px solid rgba(255,255,255,.9);border-radius:16px;box-shadow:0 12px 30px #1e3a8a22;padding:18px 20px;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);max-width:72%}
+.vision-float p{margin:0 0 6px;font-size:13px;font-weight:700;letter-spacing:.08em;color:#475569;display:flex;align-items:center;gap:10px}
+.vision-float strong{font-size:16px}
+.vision-float-badge{display:inline-grid;place-items:center;width:34px;height:34px;border-radius:10px;color:#fff;flex-shrink:0}
+.vision-float-badge-purple{background:#7c3aed}
+.vision-float-badge-blue{background:#2563eb}
+.vision-float-badge-grad{background:var(--vision-grad)}
+/* Hero primary button: the earlier .hero-band rule set it black; this
+   later, more specific rule restores the purple-to-blue gradient. */
+.services-site .hero-band .hero-actions .button{background:var(--vision-grad);border-color:transparent;color:#fff}
+.services-site .hero-band .hero-actions .button:hover{background:linear-gradient(135deg,#6d28d9,#1d4ed8);border-color:transparent}
+/* Service strip: light vision system, not the old black strip. */
+.services-site .service-strip{background:linear-gradient(180deg,#f5f3ff,#eef2ff);color:var(--ink);border-block:1px solid #e0e7ff}
+.services-site .service-strip i{color:#7c3aed}
 .vision-float-inbox{top:10%;left:4%}
 .vision-float-calendar{top:38%;right:3%}
 .vision-float-ok{bottom:8%;left:8%}
@@ -183,8 +194,8 @@
 @media(max-width:700px){
   .vision-loop{padding:10px}
   .vision-loop-svg{width:100%;height:auto;object-fit:contain}
-  .vision-float{padding:8px 10px}
-  .vision-float strong{font-size:12px}
+  .vision-float{padding:12px 14px;max-width:78%}
+  .vision-float strong{font-size:13px}
   .vision-trust-strip{grid-template-columns:1fr;gap:12px;padding-block:22px}
   .vision-flow-steps{grid-template-columns:1fr}
   .tier-player{grid-template-columns:1fr}
