@@ -1,6 +1,6 @@
 import Link from "next/link";
 import ServicesShell from "./components/ServicesShell";
-import BrandScene from "./components/BrandScene";
+import VisionHeroLoop from "./components/VisionHeroLoop";
 import { dollars, offer } from "./services-offer";
 import AgentSetup from "./components/AgentSetup";
 
@@ -13,9 +13,10 @@ export default function HomePage() {
         <p className="hero-description">Apps built around your work. Automation for repetitive tasks. Hands-on help getting more from AI—for your business or yourself.</p>
         <div className="hero-actions"><a className="button" href="#for-business">For your business <span aria-hidden="true">→</span></a><a className="text-link" href="#for-you">For you →</a></div>
       </div>
-      <BrandScene />
+      <VisionHeroLoop />
     </section></div>
     <div className="service-strip"><div className="wrap"><span>CUSTOM SOFTWARE</span><i aria-hidden="true">✳</i><span>AUTOMATION</span><i aria-hidden="true">✳</i><span>PRACTICAL AI HELP</span><i aria-hidden="true">✳</i><span>WEBSITES</span></div></div>
+    <section className="vision-trust-strip wrap"><div><strong>You own the agent</strong><p>Your account, your data.</p></div><div><strong>You approve the actions</strong><p>Nothing sent or bought without your OK.</p></div><div><strong>Proof at every step</strong><p>A checkable record, not just a chat reply.</p></div></section>
 
     <section className="section wrap" id="paths">
       <div className="section-heading"><p className="eyebrow">TWO WAYS TO WORK WITH US</p><h2>Same people, same approach.<br/><em>Two starting points.</em></h2></div>
