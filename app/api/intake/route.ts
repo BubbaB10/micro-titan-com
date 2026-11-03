@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { randomBytes } from "node:crypto";
+import { appendIntakeRow } from "../../lib/crm";
 
 /**
  * Server-side Micro Titan intake submission.
@@ -22,9 +23,19 @@ import { randomBytes } from "node:crypto";
  * The /intake form then falls back to its existing mailto draft, so a
  * missing key or a backend outage never loses an intake.
  *
- * No CRM write happens in this route. CRM logging stays manual:
- * hello@ -> CRM row (see the PR description). No prospect data is stored
- * by this route, and no PII is logged.
+ * CRM write (Gap 1, intake -> CRM closed loop): AFTER the email is
+ * sent successfully, the route also appends one row to the "Micro
+ * Titan CRM" Google Sheet via a Google service account (see
+ * app/lib/crm.ts for the exact env vars and setup steps). The row is
+ * Status "Intake received", Next action "Completeness check", with
+ * the lane totals derived server-side and discovery answers verbatim,
+ * and it is idempotent on the intake reference — a retry with the
+ * same reference appends nothing. The CRM write is secondary: if
+ * its env vars are absent, or Sheets fails, the intake email still
+ * counts as sent and the response reports `crm` as
+ * "not_configured" or "failed" so the manual fallback checklist can
+ * catch that row. No prospect data is stored by this route beyond
+ * the email and that one CRM row, and no PII is logged.
  */
 
 export const runtime = "nodejs";
@@ -352,7 +363,17 @@ export async function POST(req: NextRequest) {
       { status: 502 },
     );
   }
-  return NextResponse.json({ ok: true, reference: payload.reference });
+  // CRM second, email first: a CRM failure must never turn a sent
+  // intake into a failure, and must never be retried blindly here.
+  // appendIntakeRow never throws for a Sheets/token failure; it
+  // returns a status string, and no PII is logged either way.
+  let crm: string;
+  try {
+    crm = await appendIntakeRow(payload);
+  } catch {
+    crm = "failed";
+  }
+  return NextResponse.json({ ok: true, reference: payload.reference, crm });
 }
 
 export function GET() {
