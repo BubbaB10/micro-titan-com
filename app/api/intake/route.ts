@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { randomBytes } from "node:crypto";
+import { recordIntake } from "../../lib/erm/store";
 
 /**
  * Server-side Micro Titan intake submission.
@@ -22,9 +23,17 @@ import { randomBytes } from "node:crypto";
  * The /intake form then falls back to its existing mailto draft, so a
  * missing key or a backend outage never loses an intake.
  *
- * No CRM write happens in this route. CRM logging stays manual:
- * hello@ -> CRM row (see the PR description). No prospect data is stored
- * by this route, and no PII is logged.
+ * Own CRM/ERM, first slice (supersedes the Gap 1 Sheet write in this
+ * branch): BEFORE the email is sent, the route records the intake in
+ * Micro Titan's own Postgres database (see app/lib/erm/store.ts) when
+ * ERM_DATABASE_URL is set — Client + Intake + AuditLog in one
+ * transaction, idempotent on the intake reference (a re-POST with
+ * the same reference records nothing twice and sends no duplicate
+ * email). The email to hello@micro-titan.com then becomes a BACKUP
+ * COPY, not the source of truth. If the database is absent or the
+ * write fails, the route falls back to the previous email-only path
+ * (and, in this branch, does not call the Sheet writer), so a missing
+ * database can never lose an intake. No PII is logged.
  */
 
 export const runtime = "nodejs";
@@ -332,27 +341,44 @@ export async function POST(req: NextRequest) {
   const from = process.env.INTAKE_FROM_EMAIL || "Micro Titan Intake <onboarding@resend.dev>";
   const subject = `Micro Titan intake — ${payload.lane} — ${payload.reference}`;
 
-  let res: Response;
+  // Own ERM first, email as backup copy. Order matters:
+  // 1. Record in the database when configured (Client + Intake +
+  //    AuditLog, one transaction, idempotent on reference).
+  // 2. If the reference already exists, stop: the first submission
+  //    is already the record, and no duplicate email is sent.
+  // 3. Otherwise send ONE email to hello@ as a backup copy.
+  // 4. If the database did NOT record it and the email fails, this
+  //    is a 502, as before — an intake must never silently vanish.
+  //    If the database DID record it, the intake counts as received
+  //    even if the backup email fails, and that is reported.
+  let erm: string;
   try {
-    res = await fetch("https://api.resend.com/emails", {
+    erm = (await recordIntake(payload)).status;
+  } catch {
+    erm = "failed";
+  }
+  if (erm === "already_exists") {
+    return NextResponse.json({ ok: true, reference: payload.reference, erm, email: "already_sent" });
+  }
+  let email: string;
+  try {
+    const res = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
       body: JSON.stringify({ from, to: [to], subject, text: buildEmailBody(payload) }),
     });
+    email = res.ok ? "sent" : "failed";
   } catch {
-    return NextResponse.json(
-      { ok: false, error: "email_send_failed", message: "Could not send the intake just now. Please use the email fallback on the form." },
-      { status: 502 },
-    );
+    email = "failed";
   }
-  if (!res.ok) {
+  if (email === "failed" && erm !== "written") {
     // Never echo the provider's error body: it can contain account details.
     return NextResponse.json(
       { ok: false, error: "email_send_failed", message: "Could not send the intake just now. Please use the email fallback on the form." },
       { status: 502 },
     );
   }
-  return NextResponse.json({ ok: true, reference: payload.reference });
+  return NextResponse.json({ ok: true, reference: payload.reference, erm, email });
 }
 
 export function GET() {
