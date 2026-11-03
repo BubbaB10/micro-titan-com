@@ -286,18 +286,18 @@ export const PITCH_SHEETS: Record<string, PitchSheet> = {
   "gatz-nottingham": {
     slug: "gatz-nottingham",
     clientName: "Gatz Nottingham",
-    lane: "To be confirmed",
-    eyebrow: "For Gatz Nottingham, Nu-Tek Foundation Solutions",
+    lane: "Solo entrepreneur",
+    eyebrow: "For Gatz Nottingham, Nu-Tek Foundation Solitions",
     headline: "A one-person business,",
     headlineAccent: "without everything depending on you.",
-    sub: "For the single owner of Nu-Tek Foundation Solutions — a business where everything depends on him, and operating it has become overwhelming.",
+    sub: "For the single owner of Nu-Tek Foundation Solitions in Paris, Texas — a business where everything depends on him, and operating it has become overwhelming.",
     floatingCards: [
       { label: "Calls triaged", text: "Messages sorted so nothing is dropped." },
       { label: "Ready for your OK", text: "Draft replies wait for your approval." },
       { label: "Follow-through", text: "Invoicing and estimates tracked to done." },
     ],
     intro:
-      "This is what a setup could look like for a one-person operation. These are examples to react to in discovery — not promises about a specific tool, and not a claim about how Nu-Tek already runs. You tell us where the burden actually lands, and the setup is built around that. Nu-Tek's location is a fact about your business, not a limit on Micro Titan's service, which is delivered remotely, anywhere in the US.",
+      "This is what a setup could look like for a one-person operation. These are examples to react to in discovery — not promises about a specific tool, and not a claim about how Nu-Tek already runs. You tell us where the burden actually lands, and the setup is built around that. Nu-Tek's location in Paris, Texas is a fact about your business, not a limit on Micro Titan's service, which is delivered remotely, anywhere in the US.",
     useCases: [
       {
         title: "Phone calls and messages, triaged",
@@ -324,9 +324,17 @@ export const PITCH_SHEETS: Record<string, PitchSheet> = {
       { title: "First workflow", body: "Exactly one workflow, built end to end, ending in a checkable record plus your approval." },
       { title: "Proof and handoff", body: "A plain-language runbook, a 30-day check-in, and contact through Micro Titan." },
     ],
-    pricing: [],
+    pricing: [
+      { label: "Discovery", value: "$500 (credited)" },
+      { label: "Setup", value: "$1,500" },
+      { label: "First workflow", value: "$3,500" },
+      { label: "Program total", value: "$5,500" },
+      { label: "Total after credit", value: "$5,000" },
+      { label: "Monthly operate plan (optional)", value: "$350/mo" },
+      { label: "Additional workflows", value: "$1,500–$3,500 each" },
+    ],
     pricingNote:
-      "No tier price is shown on this page yet, because Gatz's lane has not been confirmed. Pricing is added only after the lane is confirmed — start with discovery, not a price.",
+      "Solo founder tier pricing. Discovery is credited toward the program total. Additional workflows are scoped separately. The intake itself charges nothing.",
     ctaMailto: true,
   },
 };

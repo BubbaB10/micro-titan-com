@@ -25,21 +25,26 @@ test("all three pitch sheets exist with their lane pricing", () => {
 
 test("pitch sheets never publish the owner's last name, a Paris focus, or PHI handling", () => {
   assert.ok(!data.includes("Bell"), "owner last name must not appear");
-  assert.ok(!data.includes("Paris, Texas") && !data.includes("Paris, TX"));
+  // Paris, Texas is allowed ONLY as Gatz's business location (a client fact),
+  // never as Micro Titan service-area framing on any other sheet.
+  const beforeGatz = data.slice(0, data.indexOf('"gatz-nottingham"'));
+  assert.ok(!beforeGatz.includes("Paris, Texas") && !beforeGatz.includes("Paris, TX"));
+  assert.ok(!data.includes("Built in Paris"));
   assert.ok(!data.toLowerCase().includes("patient health information will be"));
   assert.ok(data.includes("does not handle patient health information"));
   assert.ok(data.includes("illustrative"));
 });
 
-test("gatz sheet carries no tier price and names the four pain points", () => {
+test("gatz sheet uses the confirmed spelling and Solo pricing, and names the four pain points", () => {
   assert.ok(data.includes('"gatz-nottingham"'));
   const gatz = data.slice(data.indexOf('"gatz-nottingham"'));
-  assert.ok(!gatz.includes("$"), "gatz entry must not contain a price");
-  assert.ok(gatz.includes("phone calls") || gatz.includes("Phone calls"));
+  assert.ok(gatz.includes("Nu-Tek Foundation Solitions"), "exact spelling Solitions");
+  assert.ok(!gatz.includes("Nu-Tek Foundation Solutions"), "must not 'correct' Solitions to Solutions");
+  assert.ok(gatz.includes("$500") && gatz.includes("$5,500") && gatz.includes("$5,000") && gatz.includes("$350/mo"));
+  assert.ok(gatz.includes("Solo entrepreneur"));
+  assert.ok(gatz.includes("Phone calls") || gatz.includes("phone calls"));
   assert.ok(gatz.includes("invoicing"));
   assert.ok(gatz.includes("estimating"));
-  assert.ok(gatz.includes("Nu-Tek Foundation Solutions"));
-  assert.ok(gatz.includes("To be confirmed"));
 });
 
 test("shared template and dynamic route exist", () => {
