@@ -1,0 +1,40 @@
+/* Use-case library: shared styles for /use-cases.
+   Scoped to .use-cases so it never leaks into other site pages.
+   Phone width: everything collapses to a single column, no overflow. */
+.use-cases { background:#fff; color:#081727; font-family:Arial,Helvetica,sans-serif; line-height:1.55; overflow-x:hidden; }
+.use-cases * { box-sizing:border-box; min-width:0; }
+.use-cases a { color:#2b2a7a; }
+.use-cases-header { width:min(1100px,calc(100% - 40px)); margin:0 auto; display:flex; justify-content:space-between; align-items:center; gap:16px; padding:20px 0; border-bottom:1px solid #d4ddef; flex-wrap:wrap; }
+.use-cases-brand { font-weight:800; letter-spacing:.05em; text-decoration:none; color:#081727; }
+.use-cases-header nav { display:flex; gap:18px; font-size:13px; flex-wrap:wrap; }
+.use-cases-hero { background:linear-gradient(115deg,#7c5cff 0%,#4f7cff 45%,#2f9fd8 100%); color:#fff; padding:64px 0 56px; }
+.use-cases-hero > * { width:min(1100px,calc(100% - 40px)); margin-left:auto; margin-right:auto; }
+.use-cases-eyebrow { font-size:11px; letter-spacing:.14em; font-weight:700; text-transform:uppercase; margin:0 0 20px; }
+.use-cases-hero h1 { font-size:clamp(42px,5.5vw,72px); line-height:1.02; letter-spacing:-.04em; margin:0 0 20px; font-weight:500; }
+.use-cases-hero h1 em { font-family:Georgia,serif; font-weight:400; }
+.use-cases-sub { font-size:18px; max-width:640px; margin:0 0 20px; color:#eef0ff; }
+.use-cases-notice { font-size:14px; max-width:720px; margin:0; color:#eef0ff; border-left:3px solid rgba(255,255,255,.6); padding-left:14px; }
+.use-cases-section { width:min(1100px,calc(100% - 40px)); margin:0 auto; padding:48px 0 24px; }
+.use-cases-filters { display:flex; gap:10px; flex-wrap:wrap; }
+.use-cases-filters button { border:1px solid #6254ce; background:#fff; color:#2b2a7a; padding:10px 18px; border-radius:6px; font-weight:600; cursor:pointer; }
+.use-cases-filters button[aria-pressed="true"] { background:#2b2a7a; color:#fff; }
+.use-cases-count { font-size:14px; color:#475569; margin:18px 0 28px; }
+.use-cases-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:18px; }
+.use-case-card { border-top:1px solid #ccd6ea; padding-top:20px; }
+.use-case-lane { font-size:12px; letter-spacing:.1em; font-weight:700; text-transform:uppercase; color:#6254ce; margin:0 0 8px; }
+.use-case-card h2 { font-size:22px; margin:0 0 10px; }
+.use-case-pain { color:#475569; font-style:italic; margin:0 0 12px; }
+.use-case-card ol { padding-left:20px; color:#334155; font-size:14px; }
+.use-case-card li { margin:6px 0; }
+.use-case-gets, .use-case-does-not { font-size:14px; color:#334155; }
+.use-case-cta { display:inline-block; margin-top:8px; font-weight:700; font-size:14px; }
+.use-cases-next { background:#f8f7ff; border:1px solid #ddd6fe; border-radius:12px; padding:28px; margin-top:48px; }
+.use-cases-next h2 { font-size:clamp(26px,4vw,38px); letter-spacing:-.03em; margin:0 0 14px; font-weight:500; }
+.use-cases-next p { color:#334155; max-width:720px; }
+.use-cases-cta { display:inline-block; background:#2b2a7a; color:#fff !important; text-decoration:none; padding:12px 22px; border-radius:6px; font-weight:700; margin:8px 0; }
+.use-cases-fine { font-size:13px; color:#64748b; }
+.use-cases-footer { width:min(1100px,calc(100% - 40px)); margin:0 auto; padding:32px 0 48px; border-top:1px solid #dbe2f1; font-size:13px; color:#64748b; }
+@media (max-width: 640px) {
+  .use-cases-grid { grid-template-columns:1fr; }
+  .use-cases-hero { padding:44px 0 40px; }
+}
