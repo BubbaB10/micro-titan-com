@@ -126,3 +126,81 @@
 .scene-website .scene-site-body{padding-top:10px}
 .scene-website .scene-site-body>strong{font-size:17px;line-height:1.12}
 @media(max-width:360px){.scene-tasks{width:70%}}
+
+/* ---- Vision rollout (approved purple-blue gradient system) ---- */
+.services-site{--vision-purple:#7c3aed;--vision-blue:#2563eb;--vision-grad:linear-gradient(135deg,#7c3aed,#2563eb);--vision-navy:#0b1530}
+.services-site .button{background:var(--vision-grad);border-color:transparent;box-shadow:0 6px 18px #5b21b633}
+.services-site .button:hover{background:linear-gradient(135deg,#6d28d9,#1d4ed8);border-color:transparent}
+.services-site h1 em,.services-site h2 em,.services-site h3 em{color:#6d28d9}
+.service-header .button{background:var(--vision-grad)}
+/* Hero loop: SVG scales to its panel, never cropped. */
+.vision-loop{position:relative;min-width:0;max-width:100%;overflow:hidden;border-radius:24px;background:linear-gradient(180deg,#f5f3ff,#eef2ff);padding:18px}
+.vision-loop-svg{display:block;width:100%;height:auto;max-width:100%;object-fit:contain}
+.vision-float{position:absolute;background:rgba(255,255,255,.72);border:1px solid rgba(255,255,255,.9);border-radius:16px;box-shadow:0 12px 30px #1e3a8a22;padding:18px 20px;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);max-width:72%}
+.vision-float p{margin:0 0 6px;font-size:13px;font-weight:700;letter-spacing:.08em;color:#475569;display:flex;align-items:center;gap:10px}
+.vision-float strong{font-size:16px}
+.vision-float-badge{display:inline-grid;place-items:center;width:34px;height:34px;border-radius:10px;color:#fff;flex-shrink:0}
+.vision-float-badge-purple{background:#7c3aed}
+.vision-float-badge-blue{background:#2563eb}
+.vision-float-badge-grad{background:var(--vision-grad)}
+/* Hero primary button: the earlier .hero-band rule set it black; this
+   later, more specific rule restores the purple-to-blue gradient. */
+.services-site .hero-band .hero-actions .button{background:var(--vision-grad);border-color:transparent;color:#fff}
+.services-site .hero-band .hero-actions .button:hover{background:linear-gradient(135deg,#6d28d9,#1d4ed8);border-color:transparent}
+/* Service strip: light vision system, not the old black strip. */
+.services-site .service-strip{background:linear-gradient(180deg,#f5f3ff,#eef2ff);color:var(--ink);border-block:1px solid #e0e7ff}
+.services-site .service-strip i{color:#7c3aed}
+.vision-float-inbox{top:10%;left:4%}
+.vision-float-calendar{top:38%;right:3%}
+.vision-float-ok{bottom:8%;left:8%}
+.vision-float-ok div{display:flex;gap:8px;margin-top:6px}
+.vision-ok-yes{background:var(--vision-grad);color:#fff;border-radius:999px;padding:6px 12px;font-size:12px;font-weight:700}
+.vision-ok-no{border:1px solid #cbd5e1;border-radius:999px;padding:6px 12px;font-size:12px}
+.vision-trust-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;padding-block:32px}
+.vision-trust-strip div{border-top:3px solid transparent;border-image:var(--vision-grad) 1;padding-top:14px}
+.vision-trust-strip p{color:var(--muted);font-size:14px;margin:6px 0 0}
+/* Dark navy flow band */
+.vision-flow-band{background:var(--vision-navy);color:#fff;border-radius:20px;padding:36px;margin-top:48px}
+.vision-flow-band .eyebrow{color:#c7d2fe}
+.vision-flow-band h2{color:#fff;margin-bottom:24px}
+.vision-flow-band h2 em{color:#c4b5fd}
+.vision-flow-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.vision-flow-steps article{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);border-radius:14px;padding:20px}
+.vision-flow-steps span{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--vision-grad);font-weight:700;margin-bottom:12px}
+.vision-flow-steps h3{color:#fff;font-size:19px;margin-bottom:8px}
+.vision-flow-steps p{color:#cbd5e1;font-size:14px;margin:0}
+/* Tier demos */
+.tier-tabs{display:flex;gap:10px;margin-top:28px;flex-wrap:wrap}
+.tier-tab{border:1px solid #cbd5e1;background:#fff;border-radius:999px;padding:10px 20px;font-weight:700;cursor:pointer}
+.tier-tab.active{background:var(--vision-grad);color:#fff;border-color:transparent}
+.tier-player{display:grid;grid-template-columns:1.6fr 1fr;gap:22px;margin-top:20px}
+.tier-scene,.tier-checklist{background:#fff;border:1px solid #dbe2f5;border-radius:18px;padding:28px}
+.tier-kicker{font-size:11px;font-weight:700;letter-spacing:.12em;color:#6d28d9}
+.tier-subtitle{color:var(--muted)}
+.tier-card{border:1px solid #e0e7ff;border-radius:14px;padding:20px;background:linear-gradient(180deg,#fafaff,#eef2ff);margin-top:16px}
+.tier-card ul{list-style:none;margin:12px 0 0;padding:0}
+.tier-card li{font-size:14px;padding:6px 0;border-top:1px solid #e0e7ff}
+.tier-progress{height:8px;background:#e2e8f0;border-radius:999px;overflow:hidden;margin-top:18px}
+.tier-progress span{display:block;height:100%;background:var(--vision-grad);transition:width .5s ease}
+.tier-controls{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+.tier-controls button,.tier-dot{border:1px solid #cbd5e1;background:#fff;border-radius:999px;padding:9px 14px;cursor:pointer;font-weight:600}
+.tier-controls button:disabled{opacity:.45;cursor:default}
+.tier-dots{display:flex;gap:8px;margin-top:14px}
+.tier-dot{width:14px;height:14px;padding:0}
+.tier-dot.active{background:var(--vision-grad);border-color:transparent}
+.tier-checklist ul{list-style:none;margin:16px 0;padding:0}
+.tier-checklist li{padding:9px 0;border-top:1px solid #e2e8f0;color:#64748b}
+.tier-checklist li.done{color:#0f172a;font-weight:600}
+@media(max-width:700px){
+  .vision-loop{padding:10px}
+  .vision-loop-svg{width:100%;height:auto;object-fit:contain}
+  .vision-float{padding:12px 14px;max-width:78%}
+  .vision-float strong{font-size:13px}
+  .vision-trust-strip{grid-template-columns:1fr;gap:12px;padding-block:22px}
+  .vision-flow-steps{grid-template-columns:1fr}
+  .tier-player{grid-template-columns:1fr}
+  .tier-scene,.tier-checklist{padding:20px}
+}
+@media(prefers-reduced-motion:reduce){
+  .tier-progress span{transition:none}
+}
