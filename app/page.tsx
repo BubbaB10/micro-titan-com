@@ -3,21 +3,29 @@ import ServicesShell from "./components/ServicesShell";
 import VisionHeroLoop from "./components/VisionHeroLoop";
 import { dollars, offer } from "./services-offer";
 import AgentSetup from "./components/AgentSetup";
+import VisionIcon from "./components/VisionIcon";
+import VisionFlowBand from "./components/VisionFlowBand";
+import "./vision-home.css";
 
 export default function HomePage() {
-  return <ServicesShell>
-    <div className="hero-band"><section className="service-hero wrap">
-      <div className="hero-copy">
-        <p className="eyebrow"><span className="live-dot"/> DIGITAL SERVICES</p>
-        <h1>Custom software, automation,<br/><em>and practical AI help.</em></h1>
-        <p className="hero-description">Apps built around your work. Automation for repetitive tasks. Hands-on help getting more from AI—for your business or yourself.</p>
-        <div className="hero-actions"><a className="button" href="#for-business">For your business <span aria-hidden="true">→</span></a><a className="text-link" href="#for-you">For you →</a></div>
+  return <ServicesShell vision>
+    <section className="mtv-hero" aria-labelledby="mtv-title">
+      <div className="mtv-hero-main">
+        <div className="mtv-hero-copy">
+          <h1 id="mtv-title">Your own AI agent,<br/><em>set up, wired in,</em><br/>and <span className="mtv-highlight">actually working.</span></h1>
+          <p>Your own agent. Connected to your calendar, inbox, and real work. Set up remotely, then handed back with proof it works.</p>
+          <div className="mtv-hero-actions"><Link className="mtv-button" href="/intake">Tell us what you&apos;re trying to do <VisionIcon name="arrow"/></Link><a className="mtv-button mtv-button-outline" href="#see-it-work">See it work</a></div>
+        </div>
+        <VisionHeroLoop />
       </div>
-      <VisionHeroLoop />
-    </section></div>
-    <div className="service-strip"><div className="wrap"><span>CUSTOM SOFTWARE</span><i aria-hidden="true">✳</i><span>AUTOMATION</span><i aria-hidden="true">✳</i><span>PRACTICAL AI HELP</span><i aria-hidden="true">✳</i><span>WEBSITES</span></div></div>
-    <section className="vision-trust-strip wrap"><div><strong>You own the agent</strong><p>Your account, your data.</p></div><div><strong>You approve the actions</strong><p>Nothing sent or bought without your OK.</p></div><div><strong>Proof at every step</strong><p>A checkable record, not just a chat reply.</p></div></section>
-
+      <div className="mtv-trust"><div><VisionIcon name="layers"/><strong>You own the agent</strong></div><div><VisionIcon name="shield"/><strong>You approve the actions</strong></div><div><VisionIcon name="proof"/><strong>Proof at every step</strong></div></div>
+    </section>
+    <VisionFlowBand />
+    <section className="mtv-steps" id="how-it-works" aria-labelledby="mtv-steps-title">
+      <h2 id="mtv-steps-title">Four steps.<br/><em>An agent that&apos;s yours.</em></h2>
+      <ol>{([{ name: "Consult", icon: "chat" }, { name: "Set up", icon: "setup" }, { name: "Switchover", icon: "switch" }, { name: "Handoff", icon: "flag" }] as const).map(step => <li key={step.name}><span><VisionIcon name={step.icon}/></span><strong>{step.name}</strong></li>)}</ol>
+    </section>
+    <div className="mtv-more-heading wrap"><p className="eyebrow">BUILT AROUND YOUR WORK</p><h2>A useful first step.<br/><em>Room to grow from there.</em></h2><p>Agent setup, custom software, automation, websites, and hands-on guidance. Start with what you need.</p></div>
     <section className="section wrap" id="paths">
       <div className="section-heading"><p className="eyebrow">TWO WAYS TO WORK WITH US</p><h2>Same people, same approach.<br/><em>Two starting points.</em></h2></div>
       <div className="path-grid">
