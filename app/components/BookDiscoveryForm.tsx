@@ -34,6 +34,10 @@ export default function BookDiscoveryForm() {
   const [preferred, setPreferred] = useState<string[]>(["", "", ""]);
   const [errors, setErrors] = useState<string[]>([]);
   const [copied, setCopied] = useState(false);
+  const [website, setWebsite] = useState("");
+  const [submitState, setSubmitState] = useState<"idle" | "sending" | "sent" | "error">("idle");
+  const [serverError, setServerError] = useState("");
+  const [serverReference, setServerReference] = useState("");
 
   function validateEssentials() {
     const missing: string[] = [];
@@ -69,6 +73,43 @@ export default function BookDiscoveryForm() {
   const mailto = `mailto:hello@micro-titan.com?subject=${encodeURIComponent(
     `Discovery booking request — ${reference}`,
   )}&body=${encodeURIComponent(summary)}`;
+
+  async function submitBookingRequest() {
+    setServerError("");
+    setSubmitState("sending");
+    try {
+      const res = await fetch("/api/book-discovery", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          reference,
+          name,
+          email,
+          phone,
+          lane,
+          preferred,
+          website,
+        }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || !data.ok) {
+        const detail =
+          data?.errors && typeof data.errors === "object"
+            ? Object.values(data.errors as Record<string, string>).join(" ")
+            : data?.message || "The booking request could not be sent just now.";
+        setServerError(detail);
+        setSubmitState("error");
+        return;
+      }
+      setServerReference(data.reference || reference);
+      setSubmitState("sent");
+    } catch {
+      setServerError(
+        "The booking request could not be sent just now. Use the email fallback below — it opens your email app with everything pre-filled.",
+      );
+      setSubmitState("error");
+    }
+  }
 
   async function copySummary() {
     try {
@@ -112,9 +153,9 @@ export default function BookDiscoveryForm() {
         page does not book a calendar slot.
       </p>
       <p style={{ fontSize: 15, lineHeight: 1.5, color: "#333" }}>
-        Nothing is sent until you press send in your own email app. There is
-        no server-side sending, no backend, and no calendar booking made by
-        this page.
+        One tap sends your booking request directly to Micro Titan. If the
+        direct send fails, the email fallback below opens your email app with
+        everything pre-filled. No calendar booking is made by this page.
       </p>
 
       {step === 1 && (
@@ -277,27 +318,69 @@ export default function BookDiscoveryForm() {
           >
             {summary}
           </pre>
-          <a
-            href={mailto}
-            style={{
-              display: "block",
-              textAlign: "center",
-              padding: 14,
-              fontSize: 17,
-              borderRadius: 10,
-              background: "#4f46e5",
-              color: "#fff",
-              textDecoration: "none",
-            }}
-          >
-            Send booking request by email
-          </a>
-          <p style={{ fontSize: 13, color: "#555", margin: 0 }}>
-            This opens your email app with everything pre-filled, addressed
-            to hello@micro-titan.com. Nothing is sent until you press send in
-            your own email app. No server-side sending, no backend, and no
-            calendar booking is made by this page.
-          </p>
+          {submitState === "sent" ? (
+            <div style={{ border: "2px solid #15803d", borderRadius: 10, padding: 16, background: "#f0fdf4" }}>
+              <strong>Booking request sent.</strong>
+              <p style={{ fontSize: 15, lineHeight: 1.5, margin: "8px 0 0" }}>
+                Your intake reference is <strong>{serverReference}</strong>. Micro Titan has
+                received your booking request at hello@micro-titan.com. Your preferred times are
+                preferences only, not confirmed availability — this page does not book a calendar slot.
+              </p>
+            </div>
+          ) : (
+            <>
+              <button
+                type="button"
+                onClick={submitBookingRequest}
+                disabled={submitState === "sending"}
+                style={{
+                  padding: 14,
+                  fontSize: 17,
+                  borderRadius: 10,
+                  border: "none",
+                  background: submitState === "sending" ? "#ccc" : "#4f46e5",
+                  color: "#fff",
+                  cursor: submitState === "sending" ? "default" : "pointer",
+                }}
+              >
+                {submitState === "sending" ? "Sending…" : "Send booking request"}
+              </button>
+              <p style={{ fontSize: 13, color: "#555", margin: 0 }}>
+                One tap sends your booking request directly to Micro Titan. No second send in your email
+                app is needed.
+              </p>
+              {submitState === "error" && serverError && (
+                <div style={{ border: "2px solid #b91c1c", borderRadius: 10, padding: 14, background: "#fef2f2" }}>
+                  <strong>Could not send directly:</strong> {serverError}
+                </div>
+              )}
+              <a
+                href={mailto}
+                style={{
+                  display: "block",
+                  textAlign: "center",
+                  padding: 14,
+                  fontSize: 16,
+                  borderRadius: 10,
+                  border: "1px solid #ccc",
+                  background: "#fff",
+                  color: "#111",
+                  textDecoration: "none",
+                }}
+              >
+                Send by email instead (fallback)
+              </a>
+              <p style={{ fontSize: 13, color: "#555", margin: 0 }}>
+                Fallback only, if the direct send fails: this opens your email app with everything
+                pre-filled, addressed to hello@micro-titan.com. Nothing is sent until you press
+                send in your own email app. No calendar booking is made by this page.
+              </p>
+            </>
+          )}
+          <label style={{ position: "absolute", left: "-9999px", top: "auto", width: 1, height: 1, overflow: "hidden" }} aria-hidden="true">
+            Website
+            <input tabIndex={-1} autoComplete="off" value={website} onChange={(e) => setWebsite(e.target.value)} />
+          </label>
           <button
             type="button"
             onClick={copySummary}
