@@ -185,14 +185,15 @@ export default function AgreementForm() {
       >
         <strong>Before you accept — read the Scope &amp; Terms first.</strong>
         <p style={{ fontSize: 15, lineHeight: 1.5, margin: "8px 0 0" }}>
-          The full document is the <strong>Micro Titan Scope and Terms</strong>{" "}
-          page sent to you with your intake. This page does not re-host its
-          full text — please read that document before accepting. If you do
-          not have it,{" "}
-          <a href="mailto:hello@micro-titan.com?subject=Please%20send%20the%20Micro%20Titan%20Scope%20and%20Terms">
-            email Micro Titan at hello@micro-titan.com
+          Please read the{" "}
+          <a
+            href="https://muse.ai/s/micro-titan-scope-and-terms-pt6xbepxlxixsxzl/reYI3C2ZjGjON1OHgPWYXgbj8pL3CozSSc9Fl_y875g"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Micro Titan Scope and Terms
           </a>{" "}
-          and ask for it before you accept.
+          before accepting. This page does not re-host its full text.
         </p>
       </div>
       <p style={{ fontSize: 15, lineHeight: 1.5, color: "#333" }}>

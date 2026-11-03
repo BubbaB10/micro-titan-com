@@ -73,6 +73,16 @@ test('form keeps the mailto fallback and adds a one-tap send', () => {
   assert.ok(!form.includes('api.resend.com'), 'the browser form must never call the email provider directly');
 });
 
+test('form links to the shared Micro Titan Scope and Terms, opening in a new tab', () => {
+  assert.ok(
+    form.includes('https://muse.ai/s/micro-titan-scope-and-terms-pt6xbepxlxixsxzl/reYI3C2ZjGjON1OHgPWYXgbj8pL3CozSSc9Fl_y875g'),
+    'form must link to the exact shared Scope and Terms URL',
+  );
+  assert.ok(form.includes('Micro Titan Scope and Terms'), 'link must be labeled Micro Titan Scope and Terms');
+  assert.ok(form.includes('target="_blank"'), 'link must open in a new tab');
+  assert.ok(!form.includes('Please%20send%20the%20Micro%20Titan%20Scope%20and%20Terms'), 'mailto-to-request-it workaround must be replaced by the link');
+});
+
 test('page does not re-host the Scope and Terms text', () => {
   assert.match(page, /is not re-hosted here/);
   assert.match(form, /does not re-host its/);
