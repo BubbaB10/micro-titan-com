@@ -31,6 +31,17 @@ test("pitch sheets never publish the owner's last name, a Paris focus, or PHI ha
   assert.ok(data.includes("illustrative"));
 });
 
+test("gatz sheet carries no tier price and names the four pain points", () => {
+  assert.ok(data.includes('"gatz-nottingham"'));
+  const gatz = data.slice(data.indexOf('"gatz-nottingham"'));
+  assert.ok(!gatz.includes("$"), "gatz entry must not contain a price");
+  assert.ok(gatz.includes("phone calls") || gatz.includes("Phone calls"));
+  assert.ok(gatz.includes("invoicing"));
+  assert.ok(gatz.includes("estimating"));
+  assert.ok(gatz.includes("Nu-Tek Foundation Solutions"));
+  assert.ok(gatz.includes("To be confirmed"));
+});
+
 test("shared template and dynamic route exist", () => {
   assert.ok(existsSync(path.join(root, "app/components/PitchSheet.tsx")));
   assert.ok(existsSync(path.join(root, "app/pitch/[slug]/page.tsx")));

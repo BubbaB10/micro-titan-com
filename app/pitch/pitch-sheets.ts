@@ -283,6 +283,52 @@ export const PITCH_SHEETS: Record<string, PitchSheet> = {
       "All pricing above is proposed, not agreed with Jason. Discovery is credited toward the program total. Travel and on-site work are never included in tier totals and would be separate scope and price, if agreed.",
     ctaMailto: true,
   },
+  "gatz-nottingham": {
+    slug: "gatz-nottingham",
+    clientName: "Gatz Nottingham",
+    lane: "To be confirmed",
+    eyebrow: "For Gatz Nottingham, Nu-Tek Foundation Solutions",
+    headline: "A one-person business,",
+    headlineAccent: "without everything depending on you.",
+    sub: "For the single owner of Nu-Tek Foundation Solutions — a business where everything depends on him, and operating it has become overwhelming.",
+    floatingCards: [
+      { label: "Calls triaged", text: "Messages sorted so nothing is dropped." },
+      { label: "Ready for your OK", text: "Draft replies wait for your approval." },
+      { label: "Follow-through", text: "Invoicing and estimates tracked to done." },
+    ],
+    intro:
+      "This is what a setup could look like for a one-person operation. These are examples to react to in discovery — not promises about a specific tool, and not a claim about how Nu-Tek already runs. You tell us where the burden actually lands, and the setup is built around that. Nu-Tek's location is a fact about your business, not a limit on Micro Titan's service, which is delivered remotely, anywhere in the US.",
+    useCases: [
+      {
+        title: "Phone calls and messages, triaged",
+        body: "Calls and emails sorted into what needs you, what can wait, and what is already handled — so a missed call does not become a lost job. Possibility to confirm in discovery: where do messages actually get dropped today?",
+        steps: ["Calls and messages triaged by urgency", "Draft replies ready for your approval", "Nothing sent without your OK"],
+      },
+      {
+        title: "Invoicing follow-through",
+        body: "Invoices tracked from sent to paid, with follow-ups that do not depend on your memory — so work you already did does not sit unpaid because the chase slipped.",
+      },
+      {
+        title: "Estimating intake and organization",
+        body: "Estimate requests organized in one place, with the details each estimate needs gathered up front — so an estimate does not stall waiting on a fact nobody collected.",
+      },
+      {
+        title: "One owner, one brief",
+        body: "A single daily view of what needs you today — calls to return, invoices to chase, estimates to finish — instead of the whole business living in your head and your inbox at once.",
+      },
+    ],
+    flowTitle: "How the setup works, start to finish",
+    flowSteps: [
+      { title: "Discovery", body: "We map where the burden actually lands — calls, emails, invoicing, estimating." },
+      { title: "Setup", body: "Your own major-vendor agent, set up on your accounts, with approval rules you agree." },
+      { title: "First workflow", body: "Exactly one workflow, built end to end, ending in a checkable record plus your approval." },
+      { title: "Proof and handoff", body: "A plain-language runbook, a 30-day check-in, and contact through Micro Titan." },
+    ],
+    pricing: [],
+    pricingNote:
+      "No tier price is shown on this page yet, because Gatz's lane has not been confirmed. Pricing is added only after the lane is confirmed — start with discovery, not a price.",
+    ctaMailto: true,
+  },
 };
 
 export const PITCH_SLUGS = Object.keys(PITCH_SHEETS);

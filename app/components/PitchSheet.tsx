@@ -183,14 +183,18 @@ export default function PitchSheet({ sheet }: { sheet: PitchSheet }) {
 
         <section className="pitch-section" aria-labelledby="pricing">
           <h2 id="pricing">Pricing — {sheet.lane}</h2>
-          <dl className="pitch-pricing">
-            {sheet.pricing.map((row) => (
-              <div key={row.label}>
-                <dt>{row.label}</dt>
-                <dd>{row.value}</dd>
-              </div>
-            ))}
-          </dl>
+          {sheet.pricing.length > 0 ? (
+            <dl className="pitch-pricing">
+              {sheet.pricing.map((row) => (
+                <div key={row.label}>
+                  <dt>{row.label}</dt>
+                  <dd>{row.value}</dd>
+                </div>
+              ))}
+            </dl>
+          ) : (
+            <p>Pricing to be confirmed after discovery — no tier price is shown yet.</p>
+          )}
           <p className="pitch-fine">{sheet.pricingNote}</p>
         </section>
 
