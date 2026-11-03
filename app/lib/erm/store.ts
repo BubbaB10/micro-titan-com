@@ -52,7 +52,7 @@ export interface IntakeInput {
 export async function recordIntake(
   input: IntakeInput,
 ): Promise<RecordIntakeResult> {
-  const url = process.env.ERM_DATABASE_URL;
+  const url = process.env.ERM_DATABASE_URL ?? process.env.ERM_DATABASE_DATABASE_URL;
   if (!url) return { status: "not_configured" };
   try {
     // Dynamic import: the pg package is a server-only dependency and
@@ -132,7 +132,7 @@ export interface OwnerSummary {
 export async function ownerSummary(): Promise<
   { status: "ok"; summary: OwnerSummary } | { status: "not_configured" } | { status: "failed" }
 > {
-  const url = process.env.ERM_DATABASE_URL;
+  const url = process.env.ERM_DATABASE_URL ?? process.env.ERM_DATABASE_DATABASE_URL;
   if (!url) return { status: "not_configured" };
   try {
     const { Pool } = await import("pg");
