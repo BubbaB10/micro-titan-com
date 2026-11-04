@@ -148,6 +148,11 @@ export function validateAgreement(body: unknown): { errors: Record<string, strin
   };
 }
 
+export function payLinkForReference(reference: string): string {
+  const base = (process.env.MICRO_TITAN_SITE_URL ?? "https://micro-titan.com").replace(/\/+$/, "");
+  return `${base}/pay?reference=${encodeURIComponent(reference)}`;
+}
+
 export function buildEmailBody(p: AgreementPayload): string {
   const totals = LANE_TOTALS[p.lane];
   const lines: string[] = [
@@ -166,6 +171,9 @@ export function buildEmailBody(p: AgreementPayload): string {
     lines.push("", `Typed signature/acceptance text (typed text, not a legal e-signature): ${p.signature}`);
   }
   lines.push(
+    "",
+    "Next step — pay the discovery fee, credited toward the program total, before booking discovery:",
+    payLinkForReference(p.reference),
     "",
     "This is not claimed as a legal e-signature. Nothing typed on the acceptance page is saved by the page itself.",
     "Acceptance is captured by this email plus a row in the Micro Titan CRM Agreements tab, logged on receipt.",
