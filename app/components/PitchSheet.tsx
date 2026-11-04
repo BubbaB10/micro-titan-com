@@ -182,7 +182,7 @@ export default function PitchSheet({ sheet }: { sheet: PitchSheet }) {
         ) : null}
 
         <section className="pitch-section" aria-labelledby="pricing">
-          <h2 id="pricing">Pricing — {sheet.lane}</h2>
+          <h2 id="pricing">Pricing —{" "}{sheet.lane}</h2>
           {sheet.pricing.length > 0 ? (
             <dl className="pitch-pricing">
               {sheet.pricing.map((row) => (
