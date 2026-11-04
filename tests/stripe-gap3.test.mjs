@@ -49,6 +49,39 @@ test('lane discovery amounts are exactly the approved fees in cents', () => {
   assert.equal(normalizeLane('Unknown'), null);
 });
 
+test('lane normalization is case-insensitive: shared-link lowercase lanes are accepted, not unknown_lane', () => {
+  // Shared Stripe payment links carry lane lowercase ("family" / "solo" /
+  // "business"); the pre-fix case-sensitive check rejected every such
+  // payment with unknown_lane. Fixtures are invented, not real events.
+  assert.equal(normalizeLane('family'), 'Family');
+  assert.equal(normalizeLane('Family'), 'Family');
+  assert.equal(normalizeLane('FAMILY'), 'Family');
+  assert.equal(normalizeLane('  family  '), 'Family');
+  assert.equal(normalizeLane('solo'), 'Solo entrepreneur');
+  assert.equal(normalizeLane('Solo'), 'Solo entrepreneur');
+  assert.equal(normalizeLane('business'), 'Business');
+  assert.equal(normalizeLane('BUSINESS'), 'Business');
+  assert.equal(normalizeLane('Platinum'), null);
+  assert.equal(normalizeLane(''), null);
+  assert.equal(normalizeLane(null), null);
+  assert.equal(normalizeLane(123), null);
+});
+
+test('parse: lowercase shared-link lane with no intake_reference parses ok with null reference (unlinked path)', () => {
+  // Mirrors a shared-link checkout.session.completed payload: lane
+  // lowercase, no intake_reference. It must parse ok with reference
+  // null (so the store records it as unlinked), not unknown_lane.
+  // This fixture is invented; it is NOT the Nov 2 refunded test event
+  // and must never be recorded as a paid discovery record.
+  const event = checkoutEvent({ id: 'evt_test_lowercase', amount: 15000, lane: 'family' });
+  delete event.data.object.metadata.intake_reference;
+  const parsed = parseDiscoveryEvent(event);
+  assert.equal(parsed.ok, true);
+  assert.equal(parsed.payment.lane, 'Family');
+  assert.equal(parsed.payment.amountCents, 15000);
+  assert.equal(parsed.payment.reference, null);
+});
+
 test('signature verification: valid passes, tampered/wrong/old/missing fail', () => {
   const payload = JSON.stringify(checkoutEvent());
   assert.equal(verifyStripeSignature(payload, sign(payload), SECRET, NOW), true);

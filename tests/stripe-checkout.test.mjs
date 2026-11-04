@@ -48,6 +48,17 @@ test('lane normalization accepts Solo alias, rejects unknowns', () => {
   assert.equal(normalizeCheckoutLane(''), null);
 });
 
+test('lane normalization is case-insensitive, consistent with stripe.ts normalizeLane', () => {
+  assert.equal(normalizeCheckoutLane('family'), 'Family');
+  assert.equal(normalizeCheckoutLane('FAMILY'), 'Family');
+  assert.equal(normalizeCheckoutLane('solo'), 'Solo entrepreneur');
+  assert.equal(normalizeCheckoutLane('business'), 'Business');
+  assert.equal(normalizeCheckoutLane('BUSINESS'), 'Business');
+  assert.equal(normalizeCheckoutLane('  solo  '), 'Solo entrepreneur');
+  assert.equal(normalizeCheckoutLane(null), null);
+  assert.equal(normalizeCheckoutLane(123), null);
+});
+
 test('session params carry intake_reference + lane + intake_type on BOTH session and PaymentIntent metadata', () => {
   for (const [lane, cents] of [['Family', 15000], ['Solo entrepreneur', 50000], ['Business', 100000]]) {
     const p = buildCheckoutSessionParams('MT-20261103-TEST', lane, 'https://micro-titan.com/');

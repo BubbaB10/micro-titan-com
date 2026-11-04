@@ -43,10 +43,20 @@ export const DISCOVERY_CENTS: Record<Lane, number> = {
   Business: 100000,
 };
 
-/** Accept the short "Solo" alias Stripe metadata might carry. */
+/**
+ * Accept the short "Solo" alias Stripe metadata might carry.
+ * Case-insensitive (trim + lowercase compare): the existing shared
+ * Stripe payment links carry lane lowercase ("family" / "solo" /
+ * "business"), and a case-sensitive check rejected every shared-link
+ * payment with unknown_lane instead of recording it as unlinked.
+ * Anything else is still rejected as null (unknown_lane).
+ */
 export function normalizeLane(value: unknown): Lane | null {
-  if (value === "Family" || value === "Business") return value;
-  if (value === "Solo entrepreneur" || value === "Solo") return "Solo entrepreneur";
+  if (typeof value !== "string") return null;
+  const lane = value.trim().toLowerCase();
+  if (lane === "family") return "Family";
+  if (lane === "business") return "Business";
+  if (lane === "solo entrepreneur" || lane === "solo") return "Solo entrepreneur";
   return null;
 }
 
