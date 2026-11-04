@@ -9,10 +9,10 @@
 .pitch-header nav { display:flex; gap:18px; font-size:13px; flex-wrap:wrap; }
 .pitch-hero { background:linear-gradient(115deg,#7c5cff 0%,#4f7cff 45%,#2f9fd8 100%); color:#fff; padding:64px 0 56px; }
 .pitch-hero > * { width:min(1100px,calc(100% - 40px)); margin-left:auto; margin-right:auto; }
-.pitch-eyebrow { font-size:11px; letter-spacing:.14em; font-weight:700; text-transform:uppercase; margin:0 0 20px; }
-.pitch-hero h1 { font-size:clamp(42px,5.5vw,72px); line-height:1.02; letter-spacing:-.04em; margin:0 0 20px; font-weight:500; }
+.pitch-eyebrow { font-size:11px; letter-spacing:.14em; font-weight:700; text-transform:uppercase; margin:0 auto 20px; }
+.pitch-hero h1 { font-size:clamp(42px,5.5vw,72px); line-height:1.02; letter-spacing:-.04em; margin:0 auto 20px; font-weight:500; }
 .pitch-hero h1 em { font-family:Georgia,serif; font-weight:400; }
-.pitch-sub { font-size:18px; max-width:640px; margin:0 0 32px; color:#eef0ff; }
+.pitch-sub { font-size:18px; max-width:640px; margin:0 auto 32px; color:#eef0ff; }
 .pitch-cards { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
 .pitch-card { background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.45); border-radius:10px; padding:18px; backdrop-filter:blur(6px); }
 .pitch-card strong { display:block; margin-bottom:6px; }
@@ -45,8 +45,8 @@
 .pitch-proof p { margin:6px 0 0; color:#334155; font-size:14px; }
 .pitch-dark { background:#0b1226; color:#f1f5f9; margin-top:56px; padding:56px 0; }
 .pitch-dark > * { width:min(1100px,calc(100% - 40px)); margin-left:auto; margin-right:auto; }
-.pitch-dark h2 { font-size:clamp(30px,4vw,46px); letter-spacing:-.04em; margin:0 0 28px; font-weight:500; }
-.pitch-flow { list-style:none; padding:0; margin:0; display:grid; grid-template-columns:repeat(4,1fr); gap:18px; }
+.pitch-dark h2 { font-size:clamp(30px,4vw,46px); letter-spacing:-.04em; margin:0 auto 28px; font-weight:500; }
+.pitch-flow { list-style:none; padding:0; margin:0 auto; display:grid; grid-template-columns:repeat(4,1fr); gap:18px; }
 .pitch-flow li span { display:inline-block; font-family:Georgia,serif; font-style:italic; font-size:28px; color:#a5b4fc; }
 .pitch-flow strong { display:block; margin:8px 0 6px; }
 .pitch-flow p { color:#cbd5e1; font-size:14px; margin:0; }
