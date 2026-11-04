@@ -57,10 +57,13 @@ export function isValidReference(value: unknown): value is string {
   return typeof value === "string" && INTAKE_REFERENCE_PATTERN.test(value);
 }
 
-/** Accept the short "Solo" alias, same as stripe.ts normalizeLane. */
+/** Accept the short "Solo" alias, same as stripe.ts normalizeLane. Case-insensitive for consistency with stripe.ts: a client-supplied lane in lowercase ("family" / "solo" / "business") must normalize, not fail as bad_input. */
 export function normalizeCheckoutLane(value: unknown): CheckoutLane | null {
-  if (value === "Family" || value === "Business") return value;
-  if (value === "Solo entrepreneur" || value === "Solo") return "Solo entrepreneur";
+  if (typeof value !== "string") return null;
+  const lane = value.trim().toLowerCase();
+  if (lane === "family") return "Family";
+  if (lane === "business") return "Business";
+  if (lane === "solo entrepreneur" || lane === "solo") return "Solo entrepreneur";
   return null;
 }
 
