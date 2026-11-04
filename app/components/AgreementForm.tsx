@@ -161,7 +161,7 @@ export default function AgreementForm() {
           fontSize: 13,
           letterSpacing: 2,
           fontWeight: 700,
-          color: "#555",
+          color: "#cbd5e1",
         }}
       >
         MICRO TITAN SCOPE &amp; TERMS — ACCEPTANCE
@@ -169,7 +169,7 @@ export default function AgreementForm() {
       <h1 style={{ fontSize: 32, lineHeight: 1.15, margin: "8px 0" }}>
         Accept the Scope &amp; Terms.
       </h1>
-      <p style={{ fontSize: 17, lineHeight: 1.5, color: "#333" }}>
+      <p style={{ fontSize: 17, lineHeight: 1.5, color: "#e5e7eb" }}>
         Use this page to accept the Micro Titan Scope &amp; Terms for your
         lane. One tap sends your acceptance directly to Micro Titan. If the
         direct send fails, the email fallback below opens your email app with
@@ -181,6 +181,7 @@ export default function AgreementForm() {
           borderRadius: 10,
           padding: 16,
           background: "#eef2ff",
+          color: "#111",
         }}
       >
         <strong>Before you accept — read the Scope &amp; Terms first.</strong>
@@ -196,7 +197,7 @@ export default function AgreementForm() {
           before accepting. This page does not re-host its full text.
         </p>
       </div>
-      <p style={{ fontSize: 15, lineHeight: 1.5, color: "#333" }}>
+      <p style={{ fontSize: 15, lineHeight: 1.5, color: "#e5e7eb" }}>
         This is not claimed as a legal e-signature. Acceptance is captured by
         the email this page sends, plus a row in the Micro Titan CRM
         Agreements tab, logged on receipt. Nothing typed on this page is saved
@@ -212,6 +213,7 @@ export default function AgreementForm() {
                 borderRadius: 10,
                 padding: 14,
                 background: "#fef2f2",
+                color: "#111",
               }}
             >
               <strong>
@@ -241,7 +243,7 @@ export default function AgreementForm() {
               onChange={(e) => setReference(e.target.value)}
               autoComplete="off"
             />
-            <p style={{ fontSize: 13, color: "#555" }}>
+            <p style={{ fontSize: 13, color: "#d1d5db" }}>
               The reference from your intake, for example MT-20261102-AB12.
             </p>
           </div>
@@ -294,7 +296,7 @@ export default function AgreementForm() {
               onChange={(e) => setSignature(e.target.value)}
               autoComplete="off"
             />
-            <p style={{ fontSize: 13, color: "#555" }}>
+            <p style={{ fontSize: 13, color: "#d1d5db" }}>
               Typed text only. This is not a legal e-signature.
             </p>
           </div>
@@ -345,13 +347,14 @@ export default function AgreementForm() {
               borderRadius: 10,
               padding: 16,
               background: "#fff",
+              color: "#111",
               margin: 0,
             }}
           >
             {summary}
           </pre>
           {submitState === "sent" ? (
-            <div style={{ border: "2px solid #15803d", borderRadius: 10, padding: 16, background: "#f0fdf4" }}>
+            <div style={{ border: "2px solid #15803d", borderRadius: 10, padding: 16, background: "#f0fdf4", color: "#111" }}>
               <strong>Acceptance sent.</strong>
               <p style={{ fontSize: 15, lineHeight: 1.5, margin: "8px 0 0" }}>
                 Your intake reference is <strong>{serverReference}</strong>. Micro Titan has
@@ -377,12 +380,12 @@ export default function AgreementForm() {
               >
                 {submitState === "sending" ? "Sending…" : "Accept & send"}
               </button>
-              <p style={{ fontSize: 13, color: "#555", margin: 0 }}>
+              <p style={{ fontSize: 13, color: "#d1d5db", margin: 0 }}>
                 One tap sends your acceptance directly to Micro Titan. No second send in your email
                 app is needed.
               </p>
               {submitState === "error" && serverError && (
-                <div style={{ border: "2px solid #b91c1c", borderRadius: 10, padding: 14, background: "#fef2f2" }}>
+                <div style={{ border: "2px solid #b91c1c", borderRadius: 10, padding: 14, background: "#fef2f2", color: "#111" }}>
                   <strong>Could not send directly:</strong> {serverError}
                 </div>
               )}
@@ -402,7 +405,7 @@ export default function AgreementForm() {
               >
                 Send by email instead (fallback)
               </a>
-              <p style={{ fontSize: 13, color: "#555", margin: 0 }}>
+              <p style={{ fontSize: 13, color: "#d1d5db", margin: 0 }}>
                 Fallback only, if the direct send fails: this opens your email app with everything
                 pre-filled, addressed to hello@micro-titan.com. Nothing is sent until you press
                 send in your own email app.
