@@ -226,7 +226,7 @@ export const PITCH_SHEETS: Record<string, PitchSheet> = {
       { label: "Ready for your OK", text: "Delivery confirmed, with a record to check." },
     ],
     intro:
-      "These use cases are possibilities for discovery to confirm — not problems Jason has stated, and not a claim about how Giant Pro runs today. Discovery comes first: we map one job type end to end, then build the flow around what actually stalls.",
+      "These use cases are possibilities for discovery to confirm — not problems Jason has stated, and not a claim about how Giant Pro runs today. Discovery comes first: we map one job type end to end, then build the flow around what actually stalls. Giant Pro already runs Nulogy on the floor — Micro Titan builds the connective tissue around it, not a replacement floor system: jobs in without retyping, proofs and approvals kept moving, the floor kept in step, and delivery confirmed, as examples for discovery to confirm.",
     useCases: [
       {
         title: "Job intake without retyping",
@@ -261,6 +261,11 @@ export const PITCH_SHEETS: Record<string, PitchSheet> = {
       "How do customers get status updates today, and how many calls does that take?",
       "What information has to travel from art to production without being lost?",
       "How do you know a job is truly done and out the door?",
+      "Your systems today — Nulogy & CoreBridge: What does Nulogy cover well today, and where does work still fall back to email or spreadsheets?",
+      "Where do jobs actually stall today, between intake, proof, production, and delivery?",
+      "How do retail buyers send orders and store lists now, and how do they check on a job's status?",
+      "What happens when a program changes mid-run — who finds out, and how fast?",
+      "In your own words, what did not fit about CoreBridge when you looked into it?",
     ],
     status: {
       heading: "Where this stands now — updated November 3, 2026",
