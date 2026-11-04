@@ -1,0 +1,18 @@
+/* /pay: scoped to .pay-page so it never leaks into other site pages.
+   Simple centered card, single column at phone width, no overflow. */
+.pay-page { background:#fff; color:#081727; font-family:Arial,Helvetica,sans-serif; line-height:1.55; overflow-x:hidden; padding:32px 0 64px; }
+.pay-page * { box-sizing:border-box; min-width:0; }
+.pay-inner { width:min(720px,calc(100% - 40px)); margin:0 auto; }
+.pay-brand { font-weight:800; letter-spacing:.05em; margin:0 0 24px; }
+.pay-page h1 { font-size:clamp(30px,4vw,44px); letter-spacing:-.02em; line-height:1.1; margin:0 0 16px; }
+.pay-page p { color:#334155; max-width:640px; }
+.pay-page a { color:#2b2a7a; }
+.pay-pricing { border-top:1px solid #dbe2f1; border-bottom:1px solid #dbe2f1; margin:24px 0; }
+.pay-pricing > div { display:flex; justify-content:space-between; gap:16px; padding:12px 0; border-top:1px solid #eef2f7; }
+.pay-pricing > div:first-child { border-top:none; }
+.pay-pricing dt { color:#334155; }
+.pay-pricing dd { margin:0; font-weight:700; }
+.pay-button { border:1px solid #2b2a7a; background:#2b2a7a; color:#fff; padding:12px 20px; border-radius:6px; font-weight:700; font-size:16px; cursor:pointer; margin:8px 0; }
+.pay-button:disabled { opacity:.7; cursor:default; }
+.pay-error { color:#b91c1c; font-weight:600; }
+.pay-fine { font-size:13px; color:#64748b; }
