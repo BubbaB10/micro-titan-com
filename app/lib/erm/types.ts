@@ -83,6 +83,10 @@ export interface DiscoveryTranscriptTurn {
 /** Presentation (design §8): generated from intake + discovery, draft-only, owner-reviewed. */
 export type PresentationStatus = "draft" | "reviewed" | "shown" | "declined";
 
+/** Follow-up audit trail (Gap 6): logging only, no auto-sends. */
+export type FollowUpStep = "day1" | "day3" | "day7" | "day14";
+export type FollowUpChannel = "email" | "text" | "call" | "manual_note";
+
 /** Allowed intake transitions. Anything else is rejected, not stored. */
 export const INTAKE_TRANSITIONS: Record<IntakeStatus, IntakeStatus[]> = {
   received: ["completeness_check", "closed"],
