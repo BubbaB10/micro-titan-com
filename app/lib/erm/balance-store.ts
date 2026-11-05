@@ -63,7 +63,7 @@ import type { Lane } from "./types";
 // resolve a runtime import of "./types" — every other store imports
 // types only as types for exactly this reason. The balance amounts
 // therefore live here as constants mirroring
-// BALANCE_CENTS[lane] in ./types (the same precedent
+// LANE_PRICING[lane].afterCreditCents in ./types (the same precedent
 // as the discovery amounts in checkout.ts), and tests/balance.test.mjs
 // pins them equal to LANE_PRICING so the two can never drift apart
 // silently.
