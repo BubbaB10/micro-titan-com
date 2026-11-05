@@ -44,6 +44,19 @@ export const DISCOVERY_CENTS: Record<Lane, number> = {
 };
 
 /**
+ * Program balance amounts in cents, mirroring
+ * LANE_PRICING.afterCreditCents (Family 150000, Solo entrepreneur
+ * 500000, Business 900000) and BALANCE_CENTS in balance-store.ts.
+ * Same literal-keeping reason as DISCOVERY_CENTS above; the test
+ * suite pins these to the types.ts values.
+ */
+export const BALANCE_CENTS: Record<Lane, number> = {
+  Family: 150000,
+  "Solo entrepreneur": 500000,
+  Business: 900000,
+};
+
+/**
  * Accept the short "Solo" alias Stripe metadata might carry.
  * Case-insensitive (trim + lowercase compare): the existing shared
  * Stripe payment links carry lane lowercase ("family" / "solo" /
@@ -168,6 +181,99 @@ export function parseDiscoveryEvent(event: unknown): ParseDiscoveryResult {
     return { ok: false, reason: "bad_event" };
   }
   if (amountCents !== DISCOVERY_CENTS[lane]) {
+    return { ok: false, reason: "amount_mismatch" };
+  }
+  return {
+    ok: true,
+    payment: { eventId: event.id, stripePaymentId, amountCents, reference, lane },
+  };
+}
+
+export interface ParsedBalancePayment {
+  eventId: string;
+  stripePaymentId: string;
+  amountCents: number;
+  /** Intake reference from Stripe metadata, or null when absent. */
+  reference: string | null;
+  lane: Lane;
+}
+
+export type ParseBalanceResult =
+  | { ok: true; payment: ParsedBalancePayment }
+  | { ok: false; reason: "unsupported_event" | "bad_event" | "unknown_lane" | "amount_mismatch" | "not_a_balance_event" };
+
+/**
+ * The intake_type a Stripe event claims to be, read from the event
+ * object's metadata. The webhook branches on this BEFORE parsing
+ * either payment type: a balance event would fail the discovery
+ * amount check (its amount is the balance, not the discovery fee),
+ * and a discovery event must never be recorded as a balance. An
+ * event with no intake_type is treated as a discovery event, as
+ * before — the shared discovery links carry no intake_type on the
+ * PaymentIntent, and discovery parsing is the default path.
+ */
+export function stripeEventIntakeType(event: unknown): string | null {
+  if (!isRecord(event) || !isRecord(event.data) || !isRecord(event.data.object)) {
+    return null;
+  }
+  const metadata = metadataOf(event.data.object);
+  return typeof metadata.intake_type === "string" ? metadata.intake_type : null;
+}
+
+/**
+ * Extract a program-balance payment from a Stripe event object.
+ * Pure and side-effect free. Only events whose metadata says
+ * intake_type="balance" are balance events — anything else returns
+ * "not_a_balance_event" and is never recorded as a balance. Amount
+ * must equal the lane's after-credit balance exactly; a mismatch
+ * is rejected, never recorded, because a wrong amount proves
+ * nothing about the balance.
+ */
+export function parseBalanceEvent(event: unknown): ParseBalanceResult {
+  if (!isRecord(event) || typeof event.id !== "string" || typeof event.type !== "string") {
+    return { ok: false, reason: "bad_event" };
+  }
+  if (event.type !== "checkout.session.completed" && event.type !== "payment_intent.succeeded") {
+    return { ok: false, reason: "unsupported_event" };
+  }
+  if (stripeEventIntakeType(event) !== "balance") {
+    return { ok: false, reason: "not_a_balance_event" };
+  }
+  if (!isRecord(event.data) || !isRecord(event.data.object)) {
+    return { ok: false, reason: "bad_event" };
+  }
+  const object = event.data.object;
+  const metadata = metadataOf(object);
+  const referenceRaw = metadata.intake_reference ?? metadata.client_reference_id;
+  const reference =
+    typeof referenceRaw === "string" && referenceRaw.length > 0 ? referenceRaw : null;
+  const lane = normalizeLane(metadata.lane);
+  if (lane === null) return { ok: false, reason: "unknown_lane" };
+
+  let stripePaymentId: string | null = null;
+  let amountCents: number | null = null;
+  if (event.type === "checkout.session.completed") {
+    amountCents =
+      typeof object.amount_total === "number" ? object.amount_total : null;
+    stripePaymentId =
+      typeof object.payment_intent === "string"
+        ? object.payment_intent
+        : typeof object.id === "string"
+          ? `cs_${object.id}`
+          : null;
+  } else {
+    amountCents =
+      typeof object.amount_received === "number"
+        ? object.amount_received
+        : typeof object.amount === "number"
+          ? object.amount
+          : null;
+    stripePaymentId = typeof object.id === "string" ? object.id : null;
+  }
+  if (stripePaymentId === null || amountCents === null) {
+    return { ok: false, reason: "bad_event" };
+  }
+  if (amountCents !== BALANCE_CENTS[lane]) {
     return { ok: false, reason: "amount_mismatch" };
   }
   return {

@@ -13,8 +13,20 @@
  *   Payment row + one AuditLog row via
  *   app/lib/erm/payment-store.ts, idempotently on stripe_payment_id
  *   and stripe_event_id.
+ * - Handles the same two event types for program-balance payments
+ *   (Gap 5 billing step): an event whose metadata says
+ *   intake_type="balance" is parsed by parseBalanceEvent (amount
+ *   must equal the lane's after-credit balance exactly) and
+ *   recorded via recordBalancePaid in app/lib/erm/balance-store.ts.
+ *   The branch happens on intake_type BEFORE either parser runs:
+ *   a balance amount would fail the discovery amount check, and a
+ *   discovery event must never be recorded as a balance.
  * - Unknown intake references are recorded as UNLINKED payments,
  *   never dropped silently and never attached to an invented intake.
+ *   That applies to discovery payments only: a balance payment
+ *   with an unknown reference is rejected (400 intake_not_found) —
+ *   a balance is defined against an intake that already exists,
+ *   and recordBalancePaid has no unlinked path.
  *
  * What this route deliberately does NOT do:
  * - It does not charge anyone, create a payment link, refund
@@ -50,8 +62,14 @@
  */
 
 import { NextResponse, type NextRequest } from "next/server";
-import { parseDiscoveryEvent, verifyStripeSignature } from "../../../lib/erm/stripe";
+import {
+  parseBalanceEvent,
+  parseDiscoveryEvent,
+  stripeEventIntakeType,
+  verifyStripeSignature,
+} from "../../../lib/erm/stripe";
 import { recordDiscoveryPayment } from "../../../lib/erm/payment-store";
+import { recordBalancePaid } from "../../../lib/erm/balance-store";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -81,6 +99,44 @@ export async function POST(req: NextRequest) {
     event = JSON.parse(raw);
   } catch {
     return NextResponse.json({ ok: false, error: "bad_json" }, { status: 400 });
+  }
+  // Balance events branch FIRST: their amount is the program
+  // balance, not the discovery fee, so the discovery parser would
+  // reject them as amount_mismatch before they were ever recognised.
+  if (stripeEventIntakeType(event) === "balance") {
+    const balanceParsed = parseBalanceEvent(event);
+    if (!balanceParsed.ok) {
+      if (balanceParsed.reason === "unsupported_event") {
+        return NextResponse.json({ ok: true, ignored: true });
+      }
+      return NextResponse.json(
+        { ok: false, error: balanceParsed.reason },
+        { status: 400 },
+      );
+    }
+    const balance = await recordBalancePaid({
+      reference: balanceParsed.payment.reference ?? "",
+      stripePaymentId: balanceParsed.payment.stripePaymentId,
+      stripeEventId: balanceParsed.payment.eventId,
+      amountCents: balanceParsed.payment.amountCents,
+    });
+    switch (balance.status) {
+      case "written":
+        return NextResponse.json({ ok: true, erm: "written", paymentId: balance.paymentId });
+      case "already_exists":
+        return NextResponse.json({ ok: true, erm: "already_exists", paymentId: balance.paymentId });
+      case "intake_not_found":
+        // A balance is defined against an intake that already
+        // exists; there is no unlinked balance path. The event
+        // itself names a reference that is not in the ERM.
+        return NextResponse.json({ ok: false, error: "intake_not_found" }, { status: 400 });
+      case "amount_mismatch":
+        return NextResponse.json({ ok: false, error: "amount_mismatch" }, { status: 400 });
+      case "not_configured":
+        return NextResponse.json({ ok: false, error: "erm_not_configured" }, { status: 503 });
+      default:
+        return NextResponse.json({ ok: false, error: "record_failed" }, { status: 503 });
+    }
   }
   const parsed = parseDiscoveryEvent(event);
   if (!parsed.ok) {
