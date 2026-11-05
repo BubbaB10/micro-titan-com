@@ -174,6 +174,31 @@ CREATE TABLE IF NOT EXISTS presentations (
 );
 
 CREATE INDEX IF NOT EXISTS idx_presentations_intake ON presentations(intake_id, created_at DESC);
+
+-- Follow-up audit trail (Gap 6): logging only, no auto-sends.
+-- One row per follow-up the owner actually did, by hand, for one
+-- intake: Day 1 intake acknowledged, Day 3 first follow-up,
+-- Day 7 second / final follow-up, Day 14 close as no reply.
+-- The row is the audit trail, not the sending: nothing in this
+-- slice sends an email, SMS, or call, and no sender is created.
+-- A logged day14 step means "close as no reply" is due; the owner
+-- closes the intake as a separate, owner-approved step — this
+-- table never closes an intake by itself.
+-- See migration 005-followups.sql.
+CREATE TABLE IF NOT EXISTS followups (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  intake_id UUID NOT NULL REFERENCES intakes(id),
+  client_id UUID NOT NULL REFERENCES clients(id),
+  reference TEXT NOT NULL,
+  step TEXT NOT NULL CHECK (step IN ('day1', 'day3', 'day7', 'day14')),
+  channel TEXT NOT NULL CHECK (channel IN ('email', 'text', 'call', 'manual_note')),
+  note TEXT NOT NULL DEFAULT '',
+  actor TEXT NOT NULL DEFAULT 'owner',
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS idx_followups_intake ON followups(intake_id, created_at ASC);
+CREATE INDEX IF NOT EXISTS idx_followups_step ON followups(intake_id, step);
 CREATE INDEX IF NOT EXISTS idx_jobs_client_status ON jobs(client_id, status);
 CREATE INDEX IF NOT EXISTS idx_jobs_queue ON jobs(queue_position) WHERE status = 'queued';
 CREATE INDEX IF NOT EXISTS idx_audit_client ON audit_log(client_id, created_at);
