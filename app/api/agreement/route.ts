@@ -1,4 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
+import { recordAgreement } from "../../lib/erm/agreement-store";
 
 /**
  * Server-side Micro Titan Scope & Terms agreement acceptance.
@@ -26,9 +27,18 @@ import { NextResponse, type NextRequest } from "next/server";
  * so a missing key or a backend outage never loses an acceptance.
  *
  * Acceptance is NOT a legal e-signature. That disclaimer is kept on the
- * page and in the email. No CRM write happens here. CRM Agreements
- * hand-logging stays manual. No prospect data is stored by this route,
- * and no PII is logged.
+ * page and in the email.
+ *
+ * ERM logging (Gap 2, second half): after the email sends, the route
+ * also records the acceptance in the ERM via
+ * app/lib/erm/agreement-store.ts — one Agreements row plus one
+ * AuditLog row, idempotent by intake reference, lane totals from
+ * this route's approved LANE_TOTALS (dollars x 100 = cents, never
+ * from client-supplied totals).
+ * If the database is absent or the write fails, the acceptance is
+ * still ok: true with the email as the record, and the response
+ * reports erm: "not_configured" / "failed" / "intake_not_found"
+ * instead of hiding it. No PII is logged.
  *
  * Lane totals are derived server-side from the approved pricing below.
  * The client never supplies totals, so a tampered form cannot misstate
@@ -176,7 +186,7 @@ export function buildEmailBody(p: AgreementPayload): string {
     payLinkForReference(p.reference),
     "",
     "This is not claimed as a legal e-signature. Nothing typed on the acceptance page is saved by the page itself.",
-    "Acceptance is captured by this email plus a row in the Micro Titan CRM Agreements tab, logged on receipt.",
+    "Acceptance is captured by this email plus a record in the Micro Titan ERM, logged against the intake reference.",
   );
   return lines.join("\n");
 }
@@ -247,7 +257,36 @@ export async function POST(req: NextRequest) {
       { status: 502 },
     );
   }
-  return NextResponse.json({ ok: true, reference: payload.reference });
+
+  // ERM logging, after the proven email send: the email remains the
+  // record if the database is absent, the write fails, or the intake
+  // reference is unknown in the ERM. None of those turns a sent
+  // acceptance into a failure, and none is hidden: the response
+  // reports the ERM result either way.
+  const totals = LANE_TOTALS[payload.lane];
+  const erm = await recordAgreement({
+    reference: payload.reference,
+    lane: payload.lane,
+    signatureText: payload.signature,
+    method: "site",
+    discoveryCents: totals.discovery * 100,
+    totalCents: totals.total * 100,
+    afterCreditCents: totals.afterCredit * 100,
+    monthlyCents: totals.monthly * 100,
+  });
+  if (erm.status === "written" || erm.status === "already_exists") {
+    return NextResponse.json({
+      ok: true,
+      reference: payload.reference,
+      erm: erm.status,
+      agreementId: erm.agreementId,
+    });
+  }
+  return NextResponse.json({
+    ok: true,
+    reference: payload.reference,
+    erm: erm.status,
+  });
 }
 
 export function GET() {
