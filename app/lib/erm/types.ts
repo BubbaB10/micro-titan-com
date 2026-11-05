@@ -58,6 +58,28 @@ export type PitchStatus = "draft" | "sent" | "agreed";
 export type AgreementMethod = "email" | "site";
 export type DeadlineStatus = "open" | "done" | "overdue";
 
+/** Agent-led discovery (design: micro-titan-agent-led-discovery-design-2026-11-05.md). */
+export type DiscoveryChannel = "text" | "voice" | "in_app_voice";
+export type DiscoveryStatus =
+  | "scheduled"
+  | "in_progress"
+  | "completed"
+  | "no_answer"
+  | "awaiting_client"
+  | "escalated"
+  | "cancelled";
+export type DiscoveryRecommendation =
+  | "approve"
+  | "join_to_close"
+  | "decline"
+  | "needs_human";
+/** One turn of a discovery transcript, in order. The transcript is the record — a summary is never a substitute. */
+export interface DiscoveryTranscriptTurn {
+  speaker: "agent" | "client";
+  text: string;
+  at: string;
+}
+
 /** Allowed intake transitions. Anything else is rejected, not stored. */
 export const INTAKE_TRANSITIONS: Record<IntakeStatus, IntakeStatus[]> = {
   received: ["completeness_check", "closed"],
