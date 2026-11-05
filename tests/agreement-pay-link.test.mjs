@@ -48,7 +48,10 @@ test('acceptance email body includes the same /pay link and retains all prior fi
     'Total after credit:',
     'Monthly (optional):',
     'not a legal e-signature',
-    'Micro Titan CRM Agreements tab',
+    // Changed by the ERM agreement-logging slice: the email footer now
+    // says the acceptance is recorded in the ERM, not hand-logged in a
+    // CRM Agreements tab (that manual step is what this slice replaces).
+    'record in the Micro Titan ERM',
   ]) {
     assert.ok(routeSource.includes(field), `missing prior email field: ${field}`);
   }
