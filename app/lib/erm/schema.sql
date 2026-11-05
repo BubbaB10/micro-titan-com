@@ -125,7 +125,36 @@ CREATE TABLE IF NOT EXISTS compliance_deadlines (
   created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
+-- Agent-led discovery (design: micro-titan-agent-led-discovery-design-2026-11-05.md).
+-- One record per attempt, for one intake, in one channel (text or voice).
+-- The transcript is the record: message log for text, call transcript
+-- for voice. No audio is stored here — recording_ref carries only the
+-- provider's recording reference. See migration 003-discovery-calls.sql.
+CREATE TABLE IF NOT EXISTS discovery_calls (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  intake_id UUID NOT NULL REFERENCES intakes(id),
+  client_id UUID NOT NULL REFERENCES clients(id),
+  reference TEXT NOT NULL,
+  session_key TEXT NOT NULL UNIQUE,
+  channel TEXT NOT NULL CHECK (channel IN ('text', 'voice', 'in_app_voice')),
+  format_choice TEXT NOT NULL CHECK (format_choice IN ('text', 'call')),
+  status TEXT NOT NULL CHECK (status IN ('scheduled', 'in_progress', 'completed', 'no_answer', 'awaiting_client', 'escalated', 'cancelled')),
+  consent_given BOOLEAN NOT NULL DEFAULT FALSE,
+  consent_at TIMESTAMPTZ,
+  scheduled_at TIMESTAMPTZ,
+  started_at TIMESTAMPTZ,
+  ended_at TIMESTAMPTZ,
+  duration_seconds INT,
+  transcript JSONB NOT NULL DEFAULT '[]'::jsonb,
+  recording_ref TEXT NOT NULL DEFAULT '',
+  recommendation TEXT NOT NULL CHECK (recommendation IN ('approve', 'join_to_close', 'decline', 'needs_human')),
+  recommendation_reason TEXT NOT NULL DEFAULT '',
+  presentation_ref TEXT,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
 CREATE INDEX IF NOT EXISTS idx_intakes_client ON intakes(client_id);
+CREATE INDEX IF NOT EXISTS idx_discovery_calls_intake ON discovery_calls(intake_id, created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_jobs_client_status ON jobs(client_id, status);
 CREATE INDEX IF NOT EXISTS idx_jobs_queue ON jobs(queue_position) WHERE status = 'queued';
 CREATE INDEX IF NOT EXISTS idx_audit_client ON audit_log(client_id, created_at);
