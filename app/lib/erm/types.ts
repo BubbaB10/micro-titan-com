@@ -80,6 +80,9 @@ export interface DiscoveryTranscriptTurn {
   at: string;
 }
 
+/** Presentation (design §8): generated from intake + discovery, draft-only, owner-reviewed. */
+export type PresentationStatus = "draft" | "reviewed" | "shown" | "declined";
+
 /** Allowed intake transitions. Anything else is rejected, not stored. */
 export const INTAKE_TRANSITIONS: Record<IntakeStatus, IntakeStatus[]> = {
   received: ["completeness_check", "closed"],
