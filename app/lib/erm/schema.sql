@@ -155,6 +155,25 @@ CREATE TABLE IF NOT EXISTS discovery_calls (
 
 CREATE INDEX IF NOT EXISTS idx_intakes_client ON intakes(client_id);
 CREATE INDEX IF NOT EXISTS idx_discovery_calls_intake ON discovery_calls(intake_id, created_at DESC);
+
+-- Presentation (design §8): generated from intake + discovery
+-- transcript, verbatim answers only, status "draft", never
+-- auto-sent or auto-published. Owner reviews before any client
+-- sees it. See migration 004-presentations.sql.
+CREATE TABLE IF NOT EXISTS presentations (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  intake_id UUID NOT NULL REFERENCES intakes(id),
+  client_id UUID NOT NULL REFERENCES clients(id),
+  reference TEXT NOT NULL,
+  discovery_session_key TEXT NOT NULL DEFAULT '',
+  channel TEXT NOT NULL CHECK (channel IN ('text', 'voice', 'in_app_voice')),
+  format_choice TEXT NOT NULL CHECK (format_choice IN ('text', 'call')),
+  status TEXT NOT NULL DEFAULT 'draft' CHECK (status IN ('draft', 'reviewed', 'shown', 'declined')),
+  content JSONB NOT NULL DEFAULT '{}'::jsonb,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS idx_presentations_intake ON presentations(intake_id, created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_jobs_client_status ON jobs(client_id, status);
 CREATE INDEX IF NOT EXISTS idx_jobs_queue ON jobs(queue_position) WHERE status = 'queued';
 CREATE INDEX IF NOT EXISTS idx_audit_client ON audit_log(client_id, created_at);
