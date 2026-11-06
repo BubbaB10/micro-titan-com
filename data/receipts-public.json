@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-11-06T22:45:05.288Z",
+  "generatedAt": "2026-11-06T23:45:07.570Z",
   "windowDays": 90,
-  "totalInWindow": 650,
+  "totalInWindow": 648,
   "perApp": {
-    "micro-titan-hq": 332,
-    "the-download": 114,
+    "micro-titan-hq": 331,
+    "the-download": 113,
     "client-222c5c": 52,
     "micro-titan-web": 85,
     "client-bf2ef7": 3,
@@ -3905,18 +3905,6 @@
       "verifiedAt": "2026-08-09T01:16:59.249Z",
       "head": "d28faab",
       "filesChanged": 6
-    },
-    {
-      "app": "micro-titan-hq",
-      "verifiedAt": "2026-08-08T23:30:33.049Z",
-      "head": "aaa3e810",
-      "filesChanged": 2
-    },
-    {
-      "app": "the-download",
-      "verifiedAt": "2026-08-08T23:22:42.874Z",
-      "head": "79426cda",
-      "filesChanged": 2
     }
   ]
 }
