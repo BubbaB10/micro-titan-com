@@ -30,8 +30,11 @@
  *   disclosure is the clean move) — it is never enabled here, and
  *   there is no recording/transcription path in this code at all.
  * - No phone tree, no fake live answer, no callback promise.
- *   An inbound voice request that is not a status callback gets a
- *   TwiML <Reject>, which is honest: we do not take live calls.
+ *   An inbound voice request gets a TwiML <Reject>, which is honest:
+ *   we do not take live calls. Twilio's "A call comes in" webhook
+ *   always includes CallStatus=ringing, so ringing (and queued,
+ *   unless Direction says the call is outbound) is that request,
+ *   not a terminal status callback.
  * - No number purchases, no A2P re-registration, no paid add-ons.
  */
 
@@ -127,6 +130,20 @@ export function verifyTwilioSignature(
   }
 }
 
+/**
+ * The "A call comes in" webhook always includes CallStatus=ringing,
+ * so a CallSid plus ringing is the TwiML request, not a status
+ * callback. queued is the same request unless Direction is outbound
+ * (outbound-api / outbound-dial), which is a status signal for a
+ * call we placed. Terminal statuses stay voice_status.
+ */
+function isInboundVoiceRequest(callStatus: string, direction: string): boolean {
+  const status = callStatus.toLowerCase();
+  if (status === "ringing") return true;
+  if (status !== "queued") return false;
+  return !direction.toLowerCase().startsWith("outbound");
+}
+
 /** Parse Twilio's form-encoded webhook body into a typed event. */
 export function parseTwilioEvent(params: Record<string, string>): TwilioEvent {
   const from = asString(params.From).slice(0, 32);
@@ -142,13 +159,14 @@ export function parseTwilioEvent(params: Record<string, string>): TwilioEvent {
     };
   }
   if (params.CallSid) {
-    if (params.CallStatus) {
+    const callStatus = asString(params.CallStatus);
+    if (callStatus && !isInboundVoiceRequest(callStatus, asString(params.Direction))) {
       return {
         kind: "voice_status",
         callSid: asString(params.CallSid),
         from,
         to,
-        callStatus: asString(params.CallStatus),
+        callStatus,
         durationSeconds: asInt(params.CallDuration),
       };
     }

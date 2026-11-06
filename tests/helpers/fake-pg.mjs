@@ -5,11 +5,76 @@
 // written.
 
 const queries = [];
+const communicationRows = [];
 let mode = "intake_missing";
 
 export function setFakePgMode(next) {
   mode = next;
   queries.length = 0;
+}
+
+export function resetCommunicationLog() {
+  communicationRows.length = 0;
+}
+
+export function communicationLogRows() {
+  return communicationRows.map((row) => ({ ...row }));
+}
+
+function queryCommunicationLog(sql, params = []) {
+  const text = String(sql).replace(/\s+/g, " ").trim();
+  if (text.startsWith("INSERT INTO communication_log")) {
+    const row = {
+      id: `comm-${communicationRows.length + 1}`,
+      twilio_sid: params[0],
+      related_sid: params[1],
+      kind: params[2],
+      direction: params[3],
+      from_number: params[4],
+      to_number: params[5],
+      body: params[6],
+      media_count: params[7],
+      status: params[8],
+    };
+    const conflict = communicationRows.find(
+      (existing) => existing.twilio_sid === row.twilio_sid && existing.kind === row.kind,
+    );
+    if (conflict) return { rows: [] };
+    communicationRows.push(row);
+    return { rows: [{ id: row.id }] };
+  }
+  if (text.startsWith("SELECT id FROM communication_log")) {
+    const found = communicationRows.find(
+      (existing) => existing.twilio_sid === params[0] && existing.kind === params[1],
+    );
+    return { rows: found ? [{ id: found.id }] : [] };
+  }
+  if (text.includes("related_sid = $1")) {
+    const n = communicationRows.filter(
+      (existing) =>
+        existing.kind === "missed_call_auto_text" &&
+        existing.direction === "outbound" &&
+        existing.status === "sent" &&
+        existing.related_sid === params[0],
+    ).length;
+    return { rows: [{ n }] };
+  }
+  if (text.includes("CURRENT_DATE")) {
+    const n = communicationRows.filter(
+      (existing) =>
+        existing.kind === "missed_call_auto_text" &&
+        existing.direction === "outbound" &&
+        existing.status === "sent",
+    ).length;
+    return { rows: [{ n }] };
+  }
+  if (text.includes("15 minutes")) {
+    const n = communicationRows.filter(
+      (existing) => existing.direction === "inbound" && existing.from_number === params[0],
+    ).length;
+    return { rows: [{ n }] };
+  }
+  throw new Error(`unexpected communication sql: ${text}`);
 }
 
 export function fakePgQueries() {
@@ -18,6 +83,10 @@ export function fakePgQueries() {
 
 export class Pool {
   constructor() {}
+
+  async query(sql, params) {
+    return queryCommunicationLog(sql, params);
+  }
 
   async connect() {
     return {

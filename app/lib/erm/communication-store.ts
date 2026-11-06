@@ -17,10 +17,16 @@
  *   from a number Micro Titan does not yet know must still be
  *   logged, never dropped, and never attached to an invented client.
  * - Dedupe is (twilio_sid, kind): a Twilio redelivery of the same
- *   MessageSid / CallSid + kind inserts nothing twice.
+ *   MessageSid / CallSid + kind inserts nothing twice. The webhook
+ *   passes a distinct twilio_sid per voice status
+ *   (`${callSid}:status:${callStatus}`) so a terminal status is
+ *   still inserted after voice_rejected (raw CallSid) or an earlier
+ *   status for that call. No schema change: the unique key is
+ *   already (twilio_sid, kind).
  * - The send dedupe is SEPARATE from the log dedupe, on purpose:
  *   whether an auto-text was already SENT is decided by the
- *   outbound "sent" row for that CallSid, not by the voice log row.
+ *   outbound "sent" row for that CallSid (related_sid), not by the
+ *   voice log row. That key stays the raw CallSid.
  *   That way a redelivery after a failed send can still retry the
  *   send, while a redelivery after a successful send cannot
  *   re-text. A cap_blocked row never counts as sent.
