@@ -348,8 +348,10 @@ export type ParseMonthlyResult =
  * {lane, plan: "monthly"} with no intake_type and no
  * intake_reference, so they do NOT parse as monthly events
  * here — they cannot be linked to a client yet. Linking them
- * needs a per-client monthly checkout (mirroring the Gap 5
- * balance-checkout slice), a later slice, not this one.
+ * needs a per-client monthly checkout: POST
+ * /api/stripe/monthly-checkout (P0 item 3, mirroring the Gap 5
+ * balance-checkout slice), which sets intake_type="monthly" +
+ * intake_reference on the session and PaymentIntent.
  */
 export function parseMonthlyEvent(event: unknown): ParseMonthlyResult {
   if (!isRecord(event) || typeof event.id !== "string" || typeof event.type !== "string") {

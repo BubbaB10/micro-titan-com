@@ -9,12 +9,13 @@
  * confirmation calls recordMonthlyPaid; the owner enrolls a client
  * on the plan by hand through POST /api/ops/monthly-enroll.
  * A per-client monthly Checkout Session (mirroring the Gap 5
- * balance-checkout slice) is a later slice, not this one: the
- * shared monthly payment links carry no intake_type and no
- * intake_reference, so a shared-link monthly payment cannot be
- * linked to a client yet — same limitation discovery had before
- * per-client sessions. This slice records what Stripe reports
- * when the event does carry intake_type="monthly" + a reference.
+ * balance-checkout slice) is POST /api/stripe/monthly-checkout
+ * (P0 item 3): the shared monthly payment links carry no
+ * intake_type and no intake_reference, so a shared-link monthly
+ * payment cannot be linked to a client yet — same limitation
+ * discovery had before per-client sessions. This slice records
+ * what Stripe reports when the event does carry
+ * intake_type="monthly" + a reference.
  *
  * Same gated pattern as app/lib/erm/balance-store.ts (PR #35) and
  * app/lib/erm/payment-store.ts (PR #30, Gap 3):
