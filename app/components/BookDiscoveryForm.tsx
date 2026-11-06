@@ -1,5 +1,6 @@
 "use client";
 import { useMemo, useState } from "react";
+import SmsConsentCheckbox from "./SmsConsentCheckbox";
 
 type Lane = "Family" | "Solo entrepreneur" | "Business";
 
@@ -30,6 +31,7 @@ export default function BookDiscoveryForm() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
+  const [smsConsent, setSmsConsent] = useState(false);
   const [lane, setLane] = useState<Lane | "">("");
   const [preferred, setPreferred] = useState<string[]>(["", "", ""]);
   const [errors, setErrors] = useState<string[]>([]);
@@ -60,6 +62,7 @@ export default function BookDiscoveryForm() {
       `Name: ${name}`,
       `Email: ${email || "(not provided)"}`,
       `Phone: ${phone || "(not provided)"}`,
+      `SMS consent: ${smsConsent ? "yes" : "no"}`,
       `Lane: ${lane || "(not provided)"}`,
       "",
       "Preferred date/times (America/Chicago) — preferences only, not confirmed availability:",
@@ -68,7 +71,7 @@ export default function BookDiscoveryForm() {
       `3: ${preferred[2] || "(left blank)"}`,
     ];
     return lines.join("\n");
-  }, [reference, name, email, phone, lane, preferred]);
+  }, [reference, name, email, phone, smsConsent, lane, preferred]);
 
   const mailto = `mailto:hello@micro-titan.com?subject=${encodeURIComponent(
     `Discovery booking request — ${reference}`,
@@ -86,6 +89,7 @@ export default function BookDiscoveryForm() {
           name,
           email,
           phone,
+          smsConsent,
           lane,
           preferred,
           website,
@@ -222,6 +226,7 @@ export default function BookDiscoveryForm() {
             <p style={{ fontSize: 13, color: "#555" }}>
               Email or phone — at least one is required.
             </p>
+            <SmsConsentCheckbox checked={smsConsent} onChange={setSmsConsent} />
           </div>
           <div>
             <label style={labelStyle}>Lane *</label>

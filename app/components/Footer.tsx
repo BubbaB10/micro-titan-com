@@ -16,6 +16,13 @@ export default function Footer() {
             <a href="mailto:hello@micro-titan.com" className="text-sm text-[#2563eb] hover:text-[#60a5fa] transition-colors">
               hello@micro-titan.com
             </a>
+            <p className="text-sm text-[#a8d8f0]/60">
+              Text or call{" "}
+              <a href="tel:+19033005734" className="text-[#2563eb] hover:text-[#60a5fa] transition-colors">
+                (903) 300-5734
+              </a>
+              . Msg & data rates may apply. Reply STOP to opt out.
+            </p>
           </div>
           {/* Nav */}
           <div className="flex flex-col gap-2 text-sm text-[#a8d8f0]/60">

@@ -350,6 +350,9 @@ export default function HomePage() {
         <p className="closing-sub">
           Agent setup and operation come first. Custom apps are next. Websites and marketing support that work. Reach us at hello@micro-titan.com.
         </p>
+        <p className="closing-sub">
+          Text or call (903) 300-5734. Msg & data rates may apply. Reply STOP to opt out.
+        </p>
         <Link className="button" href="/intake">
           Start <span aria-hidden="true">↗</span>
         </Link>
