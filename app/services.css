@@ -204,3 +204,19 @@
 @media(prefers-reduced-motion:reduce){
   .tier-progress span{transition:none}
 }
+
+/* Pricing agent-setup steps. Four across on desktop, two on a phone. */
+.services-site ol.agent-setup-steps{
+  list-style:none;
+  padding:0;
+  margin-top:8px;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+}
+.services-site ol.agent-setup-steps li{
+  border-top:1px solid #ccd6ea;
+  padding-top:25px;
+  margin:0;
+}
+@media(max-width:700px){
+  .services-site ol.agent-setup-steps{grid-template-columns:repeat(2,minmax(0,1fr));gap:22px}
+}
