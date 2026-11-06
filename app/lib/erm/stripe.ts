@@ -281,3 +281,129 @@ export function parseBalanceEvent(event: unknown): ParseBalanceResult {
     payment: { eventId: event.id, stripePaymentId, amountCents, reference, lane },
   };
 }
+
+/**
+ * Monthly operate-plan amounts in cents, mirroring
+ * LANE_PRICING.monthlyCents (Family 9500, Solo entrepreneur
+ * 35000, Business 95000) and MONTHLY_CENTS in
+ * monthly-store.ts. Same literal-keeping reason as
+ * DISCOVERY_CENTS above; the test suite pins these to the
+ * types.ts values.
+ */
+export const MONTHLY_CENTS: Record<Lane, number> = {
+  Family: 9500,
+  "Solo entrepreneur": 35000,
+  Business: 95000,
+};
+
+/**
+ * The YYYY-MM month of a Stripe event's created time (Unix
+ * seconds), in America/Chicago — the month the payment belongs
+ * to. A payment at 23:30 Chicago time on the last day of the
+ * month is that month, not the next one.
+ */
+export function monthlyPeriodFromEvent(event: unknown): string | null {
+  if (!isRecord(event) || typeof event.created !== "number") return null;
+  const month = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "America/Chicago",
+    year: "numeric",
+    month: "2-digit",
+  }).format(new Date(event.created * 1000));
+  return month.slice(0, 7);
+}
+
+export interface ParsedMonthlyPayment {
+  eventId: string;
+  stripePaymentId: string;
+  amountCents: number;
+  /** Intake reference from Stripe metadata, or null when absent. */
+  reference: string | null;
+  lane: Lane;
+  /** YYYY-MM month, America/Chicago, from the event's created time. */
+  periodMonth: string;
+}
+
+export type ParseMonthlyResult =
+  | { ok: true; payment: ParsedMonthlyPayment }
+  | {
+      ok: false;
+      reason:
+        | "unsupported_event"
+        | "bad_event"
+        | "unknown_lane"
+        | "amount_mismatch"
+        | "not_a_monthly_event";
+    };
+
+/**
+ * Extract a monthly operate-plan payment from a Stripe event
+ * object. Pure and side-effect free. Only events whose metadata
+ * says intake_type="monthly" are monthly events — anything else
+ * returns "not_a_monthly_event" and is never recorded as a
+ * monthly payment. Amount must equal the lane's monthly price
+ * exactly; a mismatch is rejected, never recorded, because a
+ * wrong amount proves nothing about the monthly plan.
+ *
+ * NOTE: the shared monthly payment links carry metadata
+ * {lane, plan: "monthly"} with no intake_type and no
+ * intake_reference, so they do NOT parse as monthly events
+ * here — they cannot be linked to a client yet. Linking them
+ * needs a per-client monthly checkout (mirroring the Gap 5
+ * balance-checkout slice), a later slice, not this one.
+ */
+export function parseMonthlyEvent(event: unknown): ParseMonthlyResult {
+  if (!isRecord(event) || typeof event.id !== "string" || typeof event.type !== "string") {
+    return { ok: false, reason: "bad_event" };
+  }
+  if (event.type !== "checkout.session.completed" && event.type !== "payment_intent.succeeded") {
+    return { ok: false, reason: "unsupported_event" };
+  }
+  if (stripeEventIntakeType(event) !== "monthly") {
+    return { ok: false, reason: "not_a_monthly_event" };
+  }
+  if (!isRecord(event.data) || !isRecord(event.data.object)) {
+    return { ok: false, reason: "bad_event" };
+  }
+  const periodMonth = monthlyPeriodFromEvent(event);
+  if (periodMonth === null) {
+    return { ok: false, reason: "bad_event" };
+  }
+  const object = event.data.object;
+  const metadata = metadataOf(object);
+  const referenceRaw = metadata.intake_reference ?? metadata.client_reference_id;
+  const reference =
+    typeof referenceRaw === "string" && referenceRaw.length > 0 ? referenceRaw : null;
+  const lane = normalizeLane(metadata.lane);
+  if (lane === null) return { ok: false, reason: "unknown_lane" };
+
+  let stripePaymentId: string | null = null;
+  let amountCents: number | null = null;
+  if (event.type === "checkout.session.completed") {
+    amountCents =
+      typeof object.amount_total === "number" ? object.amount_total : null;
+    stripePaymentId =
+      typeof object.payment_intent === "string"
+        ? object.payment_intent
+        : typeof object.id === "string"
+          ? `cs_${object.id}`
+          : null;
+  } else {
+    amountCents =
+      typeof object.amount_received === "number"
+        ? object.amount_received
+        : typeof object.amount === "number"
+          ? object.amount
+          : null;
+    stripePaymentId = typeof object.id === "string" ? object.id : null;
+  }
+  if (stripePaymentId === null || amountCents === null) {
+    return { ok: false, reason: "bad_event" };
+  }
+  if (amountCents !== MONTHLY_CENTS[lane]) {
+    return { ok: false, reason: "amount_mismatch" };
+  }
+  return {
+    ok: true,
+    payment: { eventId: event.id, stripePaymentId, amountCents, reference, lane, periodMonth },
+  };
+}

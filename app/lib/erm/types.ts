@@ -106,6 +106,9 @@ export type ChangeLogAction =
   | "access_reviewed"
   | "access_changed";
 
+/** Monthly billing tracking (Gap 9): the optional operate plan. */
+export type MonthlySubscriptionStatus = "active" | "cancelled";
+
 /** Allowed intake transitions. Anything else is rejected, not stored. */
 export const INTAKE_TRANSITIONS: Record<IntakeStatus, IntakeStatus[]> = {
   received: ["completeness_check", "closed"],

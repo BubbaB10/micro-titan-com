@@ -21,6 +21,15 @@
  *   The branch happens on intake_type BEFORE either parser runs:
  *   a balance amount would fail the discovery amount check, and a
  *   discovery event must never be recorded as a balance.
+ * - Handles the same two event types for monthly operate-plan
+ *   payments (Gap 9): an event whose metadata says
+ *   intake_type="monthly" is parsed by parseMonthlyEvent (amount
+ *   must equal the lane's monthly price exactly, period month
+ *   derived from the event's created time in America/Chicago)
+ *   and recorded via recordMonthlyPaid in
+ *   app/lib/erm/monthly-store.ts. Unknown intake references are
+ *   recorded as UNLINKED monthly payments, like discovery —
+ *   never dropped, never attached to an invented intake.
  * - Unknown intake references are recorded as UNLINKED payments,
  *   never dropped silently and never attached to an invented intake.
  *   That applies to discovery payments only: a balance payment
@@ -65,11 +74,13 @@ import { NextResponse, type NextRequest } from "next/server";
 import {
   parseBalanceEvent,
   parseDiscoveryEvent,
+  parseMonthlyEvent,
   stripeEventIntakeType,
   verifyStripeSignature,
 } from "../../../lib/erm/stripe";
 import { recordDiscoveryPayment } from "../../../lib/erm/payment-store";
 import { recordBalancePaid } from "../../../lib/erm/balance-store";
+import { recordMonthlyPaid } from "../../../lib/erm/monthly-store";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -99,6 +110,52 @@ export async function POST(req: NextRequest) {
     event = JSON.parse(raw);
   } catch {
     return NextResponse.json({ ok: false, error: "bad_json" }, { status: 400 });
+  }
+  // Monthly events branch FIRST, alongside balance: their amount
+  // is the monthly price, not the discovery fee, so the discovery
+  // parser would reject them as amount_mismatch before they were
+  // ever recognised.
+  if (stripeEventIntakeType(event) === "monthly") {
+    const monthlyParsed = parseMonthlyEvent(event);
+    if (!monthlyParsed.ok) {
+      if (monthlyParsed.reason === "unsupported_event") {
+        return NextResponse.json({ ok: true, ignored: true });
+      }
+      return NextResponse.json(
+        { ok: false, error: monthlyParsed.reason },
+        { status: 400 },
+      );
+    }
+    const monthly = await recordMonthlyPaid({
+      reference: monthlyParsed.payment.reference ?? "",
+      stripePaymentId: monthlyParsed.payment.stripePaymentId,
+      stripeEventId: monthlyParsed.payment.eventId,
+      amountCents: monthlyParsed.payment.amountCents,
+      periodMonth: monthlyParsed.payment.periodMonth,
+    });
+    switch (monthly.status) {
+      case "written":
+        return NextResponse.json({ ok: true, erm: "written", paymentId: monthly.paymentId });
+      case "already_exists":
+        return NextResponse.json({
+          ok: true,
+          erm: "already_exists",
+          paymentId: monthly.paymentId,
+          linked: monthly.linked,
+        });
+      case "unlinked":
+        return NextResponse.json({ ok: true, erm: "unlinked", paymentId: monthly.paymentId });
+      case "unlinked_not_stored":
+        return NextResponse.json({ ok: true, erm: "unlinked_not_stored" });
+      case "amount_mismatch":
+        return NextResponse.json({ ok: false, error: "amount_mismatch" }, { status: 400 });
+      case "invalid_period":
+        return NextResponse.json({ ok: false, error: "invalid_period" }, { status: 400 });
+      case "not_configured":
+        return NextResponse.json({ ok: false, error: "erm_not_configured" }, { status: 503 });
+      default:
+        return NextResponse.json({ ok: false, error: "record_failed" }, { status: 503 });
+    }
   }
   // Balance events branch FIRST: their amount is the program
   // balance, not the discovery fee, so the discovery parser would

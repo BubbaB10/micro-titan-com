@@ -77,6 +77,7 @@ CREATE TABLE IF NOT EXISTS payments (
   amount_cents INT NOT NULL,
   status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'paid', 'refunded', 'failed')),
   paid_at TIMESTAMPTZ,
+  period_month TEXT,
   created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
@@ -235,6 +236,31 @@ CREATE TABLE IF NOT EXISTS change_log (
 CREATE INDEX IF NOT EXISTS idx_change_log_created ON change_log(created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_change_log_reference ON change_log(reference, created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_change_log_kind ON change_log(kind, created_at DESC);
+
+-- Monthly billing tracking (Gap 9): the optional operate plan.
+-- One row per enrollment: a client is on the plan only when an
+-- active row exists here. Enrollment is an explicit owner action,
+-- never automatic, and a payment never enrolls anyone. A cancelled
+-- row stays as the record; re-enrolling inserts a new row.
+-- Monthly payments themselves live in payments (kind 'monthly')
+-- with period_month (YYYY-MM, America/Chicago) saying which
+-- month the payment covers. See migration 007-monthly-billing.sql.
+CREATE TABLE IF NOT EXISTS monthly_subscriptions (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  intake_id UUID NOT NULL REFERENCES intakes(id),
+  client_id UUID NOT NULL REFERENCES clients(id),
+  reference TEXT NOT NULL,
+  lane TEXT NOT NULL CHECK (lane IN ('Family', 'Solo entrepreneur', 'Business')),
+  amount_cents INT NOT NULL,
+  status TEXT NOT NULL DEFAULT 'active' CHECK (status IN ('active', 'cancelled')),
+  started_month TEXT NOT NULL,
+  cancelled_at TIMESTAMPTZ,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS idx_monthly_subs_intake ON monthly_subscriptions(intake_id, created_at ASC);
+CREATE INDEX IF NOT EXISTS idx_monthly_subs_active ON monthly_subscriptions(status, created_at ASC);
+CREATE INDEX IF NOT EXISTS idx_payments_monthly_period ON payments(intake_id, period_month) WHERE kind = 'monthly';
 CREATE INDEX IF NOT EXISTS idx_jobs_client_status ON jobs(client_id, status);
 CREATE INDEX IF NOT EXISTS idx_jobs_queue ON jobs(queue_position) WHERE status = 'queued';
 CREATE INDEX IF NOT EXISTS idx_audit_client ON audit_log(client_id, created_at);
