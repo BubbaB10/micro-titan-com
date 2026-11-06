@@ -1,0 +1,14 @@
+/* /balance-paid: scoped so it never leaks into other site pages.
+   Matches /pay card style — payment-adjacent confirmation. */
+.balance-paid-page { background:#fff; color:#081727; font-family:Arial,Helvetica,sans-serif; line-height:1.55; overflow-x:hidden; padding:32px 0 64px; }
+.balance-paid-page * { box-sizing:border-box; min-width:0; }
+.balance-paid-inner { width:min(720px,calc(100% - 40px)); margin:0 auto; }
+.balance-paid-brand { font-weight:800; letter-spacing:.05em; margin:0 0 24px; }
+.balance-paid-page h1 { font-size:clamp(30px,4vw,44px); letter-spacing:-.02em; line-height:1.1; margin:0 0 16px; }
+.balance-paid-page h2 { font-size:1.1rem; margin:28px 0 10px; }
+.balance-paid-page p { color:#334155; max-width:640px; }
+.balance-paid-page a { color:#2b2a7a; }
+.balance-paid-page ul { color:#334155; max-width:640px; padding-left:1.25rem; margin:0 0 16px; }
+.balance-paid-page li { margin:6px 0; }
+.balance-paid-fine { font-size:13px; color:#64748b; }
+.balance-paid-note { border:1px solid #dbe2f1; background:#f8fafc; border-radius:8px; padding:14px 16px; margin:20px 0; max-width:640px; }
