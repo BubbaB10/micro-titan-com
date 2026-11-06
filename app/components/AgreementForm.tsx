@@ -354,14 +354,42 @@ export default function AgreementForm() {
             {summary}
           </pre>
           {submitState === "sent" ? (
-            <div style={{ border: "2px solid #15803d", borderRadius: 10, padding: 16, background: "#f0fdf4", color: "#111" }}>
-              <strong>Acceptance sent.</strong>
-              <p style={{ fontSize: 15, lineHeight: 1.5, margin: "8px 0 0" }}>
-                Your intake reference is <strong>{serverReference}</strong>. Micro Titan has
-                received your acceptance at hello@micro-titan.com. This is not claimed as a legal
-                e-signature.
-              </p>
-            </div>
+            <>
+              <div style={{ border: "2px solid #15803d", borderRadius: 10, padding: 16, background: "#f0fdf4", color: "#111" }}>
+                <strong>Acceptance sent.</strong>
+                <p style={{ fontSize: 15, lineHeight: 1.5, margin: "8px 0 0" }}>
+                  Your intake reference is <strong>{serverReference}</strong>. Micro Titan has
+                  received your acceptance at hello@micro-titan.com. This is not claimed as a legal
+                  e-signature.
+                </p>
+              </div>
+              <div style={{ border: "2px solid #4f46e5", borderRadius: 10, padding: 16, background: "#eef2ff", color: "#111" }}>
+                <strong>Next step — pay your discovery fee.</strong>
+                <p style={{ fontSize: 15, lineHeight: 1.5, margin: "8px 0 0" }}>
+                  {lane && totals
+                    ? `Your discovery fee for the ${lane} lane is ${money(totals.discovery)}, credited toward the program total. `
+                    : "Your discovery fee is credited toward the program total. "}
+                  Paying is the next step before booking discovery.
+                </p>
+                <a
+                  href={`/pay?reference=${encodeURIComponent(serverReference)}`}
+                  style={{
+                    display: "block",
+                    textAlign: "center",
+                    padding: 14,
+                    fontSize: 17,
+                    borderRadius: 10,
+                    border: "none",
+                    background: "#4f46e5",
+                    color: "#fff",
+                    textDecoration: "none",
+                    marginTop: 12,
+                  }}
+                >
+                  Pay discovery fee
+                </a>
+              </div>
+            </>
           ) : (
             <>
               <button

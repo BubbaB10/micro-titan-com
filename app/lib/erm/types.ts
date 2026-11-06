@@ -58,6 +58,57 @@ export type PitchStatus = "draft" | "sent" | "agreed";
 export type AgreementMethod = "email" | "site";
 export type DeadlineStatus = "open" | "done" | "overdue";
 
+/** Agent-led discovery (design: micro-titan-agent-led-discovery-design-2026-11-05.md). */
+export type DiscoveryChannel = "text" | "voice" | "in_app_voice";
+export type DiscoveryStatus =
+  | "scheduled"
+  | "in_progress"
+  | "completed"
+  | "no_answer"
+  | "awaiting_client"
+  | "escalated"
+  | "cancelled";
+export type DiscoveryRecommendation =
+  | "approve"
+  | "join_to_close"
+  | "decline"
+  | "needs_human";
+/** One turn of a discovery transcript, in order. The transcript is the record — a summary is never a substitute. */
+export interface DiscoveryTranscriptTurn {
+  speaker: "agent" | "client";
+  text: string;
+  at: string;
+}
+
+/** Presentation (design §8): generated from intake + discovery, draft-only, owner-reviewed. */
+export type PresentationStatus = "draft" | "reviewed" | "shown" | "declined";
+
+/** Follow-up audit trail (Gap 6): logging only, no auto-sends. */
+export type FollowUpStep = "day1" | "day3" | "day7" | "day14";
+export type FollowUpChannel = "email" | "text" | "call" | "manual_note";
+
+/** Change + access log (Gap 10): logging only, no auto-sends. */
+export type ChangeLogKind = "change" | "access";
+export type ChangeLogAction =
+  | "config_changed"
+  | "integration_added"
+  | "integration_removed"
+  | "integration_rewired"
+  | "price_changed"
+  | "route_added"
+  | "route_changed"
+  | "env_updated"
+  | "migration_applied"
+  | "deployment_made"
+  | "other_change"
+  | "access_granted"
+  | "access_revoked"
+  | "access_reviewed"
+  | "access_changed";
+
+/** Monthly billing tracking (Gap 9): the optional operate plan. */
+export type MonthlySubscriptionStatus = "active" | "cancelled";
+
 /** Allowed intake transitions. Anything else is rejected, not stored. */
 export const INTAKE_TRANSITIONS: Record<IntakeStatus, IntakeStatus[]> = {
   received: ["completeness_check", "closed"],

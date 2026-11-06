@@ -1,12 +1,12 @@
 {
-  "generatedAt": "2026-11-04T05:04:59.618Z",
+  "generatedAt": "2026-11-05T23:00:29.600Z",
   "windowDays": 90,
-  "totalInWindow": 665,
+  "totalInWindow": 657,
   "perApp": {
     "micro-titan-hq": 335,
-    "the-download": 119,
-    "client-222c5c": 54,
-    "micro-titan-web": 89,
+    "the-download": 116,
+    "client-222c5c": 52,
+    "micro-titan-web": 87,
     "client-bf2ef7": 3,
     "client-a3c7b8": 5,
     "hq-dashboard": 26,
@@ -14,8 +14,7 @@
     "client-34d279": 3,
     "client-c74f31": 3,
     "micro-titan-com": 25,
-    "client-a97f1f": 1,
-    "greg-installer": 1
+    "client-a97f1f": 1
   },
   "failuresRecordedSince": null,
   "receipts": [
@@ -3960,54 +3959,6 @@
       "verifiedAt": "2026-08-08T01:22:09.872Z",
       "head": "b6286c16",
       "filesChanged": 3
-    },
-    {
-      "app": "client-222c5c",
-      "verifiedAt": "2026-08-07T22:39:53.883Z",
-      "head": "d1f2a308",
-      "filesChanged": 4
-    },
-    {
-      "app": "micro-titan-web",
-      "verifiedAt": "2026-08-07T20:40:43.729Z",
-      "head": "fbf7e1e",
-      "filesChanged": 3
-    },
-    {
-      "app": "the-download",
-      "verifiedAt": "2026-08-07T18:00:34.892Z",
-      "head": "e2829f2a",
-      "filesChanged": 4
-    },
-    {
-      "app": "micro-titan-web",
-      "verifiedAt": "2026-08-07T12:17:39.406Z",
-      "head": "9f1f7552",
-      "filesChanged": 1
-    },
-    {
-      "app": "the-download",
-      "verifiedAt": "2026-08-07T12:14:22.529Z",
-      "head": "cabce1c6",
-      "filesChanged": 3
-    },
-    {
-      "app": "client-222c5c",
-      "verifiedAt": "2026-08-07T12:03:08.362Z",
-      "head": "a938ed11",
-      "filesChanged": 3
-    },
-    {
-      "app": "the-download",
-      "verifiedAt": "2026-08-07T03:37:48.789Z",
-      "head": "84658234",
-      "filesChanged": 4
-    },
-    {
-      "app": "greg-installer",
-      "verifiedAt": "2026-08-06T21:34:43.379Z",
-      "head": "86024195",
-      "filesChanged": 8
     }
   ]
 }
