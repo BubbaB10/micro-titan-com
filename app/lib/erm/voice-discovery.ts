@@ -7,10 +7,12 @@
  * the guardrail script, the consent gate, the 20-minute hard stop,
  * transcript validation, and the per-call cost estimate. It makes no
  * call, opens no socket, and sends nothing. The live audio bridge is
- * voice-bridge/server.mjs — a separate, standalone process that is
- * NOT deployed here (Vercel serverless cannot hold a live voice
- * session; the bridge needs a persistent host, which is a decision
- * for the owner, not a thing this slice creates).
+ * voice-bridge/ — a separate Node service. The owner chose Railway
+ * (root directory /voice-bridge). Vercel serverless cannot hold a
+ * live voice session, so the bridge does not run in this Next app.
+ * This module still places no call. The TwiML route that can start
+ * a Media Stream is off unless VOICE_DISCOVERY_ENABLED=true, and
+ * /api/twilio/webhook still rejects inbound calls.
  *
  * APPROVED VERBATIM WORDING — 2026-11-05 ~14:59 CST:
  * VOICE_CALL_OPENING, VOICE_BOOKING_CONSENT, and
@@ -35,9 +37,10 @@
  *   Twilio recording SID). The transcript is text turns only.
  * - No auto-send: the no-answer follow-up text in this file is a
  *   DRAFT, not approved wording, and nothing in this slice sends it.
- * - No hosting is created and no paid add-on is added. The bridge
- *   server file exists; a host for it does not, and choosing one
- *   needs the owner's decision.
+ * - No Railway service is created here and no paid add-on is added.
+ *   The bridge is deployable as its own Railway service; creating
+ *   that service and setting its secrets is an owner step. No
+ *   Twilio webhook is pointed at it by this code.
  */
 
 import type { DiscoveryTranscriptTurn } from "./types";
@@ -131,9 +134,31 @@ export const VOICE_HARD_STOP_WRAP_UP_DRAFT =
 export const VOICE_NO_ANSWER_FOLLOW_UP_DRAFT =
   "We missed you — reply here to reschedule, or switch to text discovery instead.";
 
-/** Gemini Live is the voice brain: approved vendor (Google), native speech-to-speech. */
+/**
+ * Native-audio Gemini Live model id. Re-checked 2026-11-06 against
+ * https://ai.google.dev/gemini-api/docs/deprecations (Live API models:
+ * gemini-3.8-live, released 2026-09-15, no shutdown date announced;
+ * the recommended replacement for the older native-audio preview
+ * models) and the raw websocket getting-started sample
+ * (MODEL_NAME = "gemini-3.8-live") at
+ * https://ai.google.dev/gemini-api/docs/live-api/get-started-websocket.
+ * The setup message sends `models/${GEMINI_LIVE_MODEL}`. Still
+ * unproven on a live call in this stack — the first proof is a TEST call.
+ */
 export const GEMINI_LIVE_MODEL = "gemini-3.8-live";
-/** Model name as given in the design doc (2026-11-05, from Gemini Live API docs). Unproven in this stack — re-check before the first test call. */
+/**
+ * Live API WebSocket endpoint, no API key in the URL.
+ * https://ai.google.dev/api/live
+ * The key is sent as the x-goog-api-key header, from GEMINI_API_KEY.
+ */
+export const GEMINI_LIVE_WS_URL_DEFAULT =
+  "wss://generativelanguage.googleapis.com/ws/google.ai.generativelanguage.v1beta.GenerativeService.BidiGenerateContent";
+/**
+ * Input audio is raw 16-bit little-endian PCM at 16 kHz.
+ * https://ai.google.dev/gemini-api/docs/live-api/get-started-websocket
+ * Output is raw 16-bit little-endian PCM at 24 kHz.
+ */
+export const GEMINI_INPUT_AUDIO_MIME = "audio/pcm;rate=16000";
 export const GEMINI_LIVE_AUDIO_IN_USD_PER_MIN = 0.005;
 export const GEMINI_LIVE_AUDIO_OUT_USD_PER_MIN = 0.018;
 
@@ -143,13 +168,21 @@ export const TWILIO_MEDIA_STREAMS_USD_PER_MIN = 0.0044;
 export const TWILIO_RECORDING_USD_PER_MIN = 0.0025;
 export const TWILIO_CONVERSATION_RELAY_USD_PER_MIN = 0.07;
 
-/** Environment names the bridge server reads. Values live in the host env only, never in code. */
+/**
+ * Environment names the bridge server reads. Values live in the host
+ * env only, never in code. PORT is what Railway injects; VOICE_BRIDGE_PORT
+ * is the fallback when PORT is unset. GEMINI_LIVE_WS_URL overrides
+ * GEMINI_LIVE_WS_URL_DEFAULT when set.
+ */
 export const VOICE_BRIDGE_ENV_VARS: ReadonlyArray<string> = [
   "GEMINI_API_KEY",
   "GEMINI_LIVE_WS_URL",
   "ERM_API_BASE_URL",
   "OPS_DASHBOARD_TOKEN",
+  "PORT",
   "VOICE_BRIDGE_PORT",
+  "TWILIO_ACCOUNT_SID",
+  "TWILIO_AUTH_TOKEN",
 ];
 
 /** A voice call may start only with consent at booking AND consent confirmed at the start of the call. */
@@ -280,5 +313,156 @@ export function estimateVoiceCallCostUsd(minutes: number): VoiceCallCostEstimate
     geminiAudioUsd,
     totalUsd: twilioOutboundUsd + mediaStreamsUsd + recordingUsd + geminiAudioUsd,
     basis: "Twilio + Gemini Live list prices, US, Oct 2026 — estimate, not a measured bill",
+  };
+}
+
+/** TwiML spoken by nobody: the call is rejected and no stream starts. */
+export const VOICE_DISCOVERY_REJECT_TWIML =
+  `<?xml version="1.0" encoding="UTF-8"?><Response><Reject reason="busy"/></Response>`;
+
+/** The flag is on only for the exact string "true". Unset, "1", and "TRUE" stay off. */
+export function voiceDiscoveryEnabled(raw: string | undefined): boolean {
+  return raw === "true";
+}
+
+/**
+ * Hostname (optional port) for the Railway voice bridge. A scheme is
+ * stripped so a pasted URL still becomes the host in wss://${host}/...
+ * A path, query, userinfo, or whitespace is rejected.
+ */
+export function voiceBridgeHost(raw: string | undefined): string | null {
+  if (typeof raw !== "string") return null;
+  const stripped = raw.trim().replace(/^[a-z][a-z0-9+.-]*:\/\//i, "").replace(/\/+$/, "");
+  if (!stripped || /[/?#@\s]/.test(stripped)) return null;
+  return stripped;
+}
+
+const INTAKE_REFERENCE_RE = /^MT-\d{8}-[A-Z0-9]{4}$/;
+const SESSION_KEY_RE = /^[A-Za-z0-9._:-]{1,100}$/;
+
+/**
+ * reference, sessionKey, and consentAt from the signed voice URL.
+ * consentAt is the booking-consent timestamp: missing or unparseable
+ * means consent was not supplied, and the stream must not start.
+ * The reference format matches the intake reference (MT-YYYYMMDD-XXXX).
+ */
+export function parseVoiceDiscoveryStreamParams(
+  searchParams: URLSearchParams,
+):
+  | { ok: true; reference: string; sessionKey: string; consentAt: string }
+  | { ok: false; reason: "bad_reference" | "bad_session_key" | "consent_required" } {
+  const reference = searchParams.get("reference") ?? "";
+  const sessionKey = searchParams.get("sessionKey") ?? "";
+  const consentAt = searchParams.get("consentAt") ?? "";
+  if (!INTAKE_REFERENCE_RE.test(reference)) return { ok: false, reason: "bad_reference" };
+  if (!SESSION_KEY_RE.test(sessionKey)) return { ok: false, reason: "bad_session_key" };
+  if (consentAt.length === 0 || consentAt.length > 40 || Number.isNaN(Date.parse(consentAt))) {
+    return { ok: false, reason: "consent_required" };
+  }
+  return { ok: true, reference, sessionKey, consentAt };
+}
+
+function xmlAttr(value: string): string {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/"/g, "&quot;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+}
+
+/** wss URL the TwiML <Stream> connects to. Query values are percent-encoded. */
+export function buildVoiceDiscoveryStreamUrl(input: {
+  host: string;
+  reference: string;
+  sessionKey: string;
+  consentAt: string;
+}): string {
+  const params = new URLSearchParams({
+    reference: input.reference,
+    sessionKey: input.sessionKey,
+    consentAt: input.consentAt,
+  });
+  return `wss://${input.host}/twilio-stream?${params.toString()}`;
+}
+
+/**
+ * TwiML that speaks nothing: no <Say>, no <Play>. It only connects
+ * the Media Stream. The caller hears the agent through the bridge,
+ * starting with VOICE_CALL_OPENING, not a line invented here.
+ */
+export function buildVoiceDiscoveryTwiml(input: {
+  host: string;
+  reference: string;
+  sessionKey: string;
+  consentAt: string;
+}): string {
+  const url = buildVoiceDiscoveryStreamUrl(input);
+  return `<?xml version="1.0" encoding="UTF-8"?><Response><Connect><Stream url="${xmlAttr(url)}"/></Connect></Response>`;
+}
+
+export type VoiceDiscoveryDecision =
+  | { action: "reject"; reason: string }
+  | { action: "error"; status: 503 | 403; error: string }
+  | { action: "lookup"; reference: string; sessionKey: string; consentAt: string; host: string }
+  | { action: "stream"; twiml: string };
+
+/**
+ * Gate for the voice-discovery TwiML route. Order:
+ *   1. Off unless enabled (VOICE_DISCOVERY_ENABLED=true). A disabled
+ *      route rejects even a valid, consented, known intake.
+ *   2. Twilio auth token must be configured.
+ *   3. X-Twilio-Signature must verify.
+ *   4. VOICE_BRIDGE_HOST must be a hostname.
+ *   5. reference, sessionKey, and consentAt must be present and valid.
+ *   6. If intakeStatus is omitted, the caller must look the reference
+ *      up before a stream can start. not_found, not_configured, and
+ *      failed all reject: an unconfirmed intake is not a known intake.
+ *   7. found + consentAt → TwiML <Connect><Stream>.
+ */
+export function decideVoiceDiscovery(input: {
+  enabled: boolean;
+  authTokenPresent: boolean;
+  signatureOk: boolean;
+  hostRaw: string | undefined;
+  searchParams: URLSearchParams;
+  intakeStatus?: "found" | "not_found" | "not_configured" | "failed";
+}): VoiceDiscoveryDecision {
+  if (!input.enabled) return { action: "reject", reason: "disabled" };
+  if (!input.authTokenPresent) {
+    return { action: "error", status: 503, error: "twilio_not_configured" };
+  }
+  if (!input.signatureOk) {
+    return { action: "error", status: 403, error: "invalid_signature" };
+  }
+  const host = voiceBridgeHost(input.hostRaw);
+  if (!host) return { action: "error", status: 503, error: "voice_bridge_not_configured" };
+  const params = parseVoiceDiscoveryStreamParams(input.searchParams);
+  if (!params.ok) return { action: "reject", reason: params.reason };
+  if (input.intakeStatus === undefined) {
+    return {
+      action: "lookup",
+      reference: params.reference,
+      sessionKey: params.sessionKey,
+      consentAt: params.consentAt,
+      host,
+    };
+  }
+  if (input.intakeStatus !== "found") {
+    const reason =
+      input.intakeStatus === "not_found"
+        ? "intake_not_found"
+        : input.intakeStatus === "not_configured"
+          ? "intake_not_confirmed"
+          : "intake_lookup_failed";
+    return { action: "reject", reason };
+  }
+  return {
+    action: "stream",
+    twiml: buildVoiceDiscoveryTwiml({
+      host,
+      reference: params.reference,
+      sessionKey: params.sessionKey,
+      consentAt: params.consentAt,
+    }),
   };
 }

@@ -4,13 +4,16 @@
 // WebSocket client; the Twilio side is a WebSocket server built on
 // node:http + voice-bridge/ws-frames.mjs).
 //
+//   node server.mjs          (Railway start: npm start)
 //   node voice-bridge/server.mjs
 //
 // Required env (values in the host env only, never in code):
-//   GEMINI_API_KEY, GEMINI_LIVE_WS_URL, ERM_API_BASE_URL,
-//   OPS_DASHBOARD_TOKEN
+//   GEMINI_API_KEY, ERM_API_BASE_URL, OPS_DASHBOARD_TOKEN
 // Optional env:
-//   VOICE_BRIDGE_PORT (default 8080),
+//   GEMINI_LIVE_WS_URL (default: the Live API WebSocket in
+//   guardrails.mjs — no API key in the URL),
+//   PORT (Railway sets this), else VOICE_BRIDGE_PORT, else 8080.
+//   The process binds 0.0.0.0.
 //   TWILIO_ACCOUNT_SID + TWILIO_AUTH_TOKEN (only needed to hang the
 //   call up from the bridge at the hard stop; without them the
 //   bridge logs that the hang-up must come from the TwiML side).
@@ -26,17 +29,18 @@
 //
 // What it does NOT do:
 // - It does not dial anyone and it does not answer an inbound call.
-//   A call reaches it only when Twilio is pointed at it (a later
-//   slice: the TwiML that starts the <Stream>, with the intake
-//   reference and session key in the stream URL).
-// - It is NOT deployed anywhere. Vercel serverless cannot hold a
-//   live voice session, and no host has been chosen for this
-//   process. Choosing a host needs the owner's decision; see
-//   voice-bridge/README.md. Do not point a real Twilio webhook at
-//   an unhosted bridge.
+//   A call reaches it only when the Next.js TwiML route
+//   (/api/twilio/voice-discovery) returns a <Connect><Stream> to
+//   this process. That route is off unless
+//   VOICE_DISCOVERY_ENABLED=true. /api/twilio/webhook still rejects
+//   inbound calls.
+// - Railway is the chosen host (root directory /voice-bridge). This
+//   file does not create that service and does not point a Twilio
+//   webhook at it. See voice-bridge/README.md.
 // - No call is made in this repo. The first proof is a TEST call to
-//   a test number, after the bridge is hosted and verified locally.
+//   a test number, after the bridge is hosted and /health is ok.
 import { createServer } from "node:http";
+import { pathToFileURL } from "node:url";
 import {
   createVoiceSession,
   sessionAddTurn,
@@ -57,16 +61,27 @@ import {
 } from "./audio.mjs";
 import { decodeFrames, encodeFrame, reassembleTextFrames, websocketAccept } from "./ws-frames.mjs";
 import {
+  GEMINI_INPUT_AUDIO_MIME,
   GEMINI_LIVE_MODEL,
-  VOICE_CALL_OPENING,
-  VOICE_CALL_AGENDA,
+  GEMINI_LIVE_WS_URL_DEFAULT,
   VOICE_BANNED_ACTIONS,
+  VOICE_CALL_AGENDA,
+  VOICE_CALL_OPENING,
   VOICE_HARD_STOP_WRAP_UP_DRAFT,
-} from "../app/lib/erm/voice-discovery.ts";
+} from "./guardrails.mjs";
 
-const PORT = Number.parseInt(process.env.VOICE_BRIDGE_PORT ?? "8080", 10);
+/** Railway sets PORT. Fall back to VOICE_BRIDGE_PORT, then 8080. */
+export function resolveListenPort(env = process.env) {
+  const raw = env.PORT ?? env.VOICE_BRIDGE_PORT ?? "8080";
+  const port = Number.parseInt(String(raw), 10);
+  if (!Number.isInteger(port) || port < 1 || port > 65535) return null;
+  return port;
+}
+
+export const LISTEN_HOST = "0.0.0.0";
+
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY ?? "";
-const GEMINI_LIVE_WS_URL = process.env.GEMINI_LIVE_WS_URL ?? "";
+const GEMINI_LIVE_WS_URL = process.env.GEMINI_LIVE_WS_URL || GEMINI_LIVE_WS_URL_DEFAULT;
 const ERM_API_BASE_URL = process.env.ERM_API_BASE_URL ?? "";
 const OPS_DASHBOARD_TOKEN = process.env.OPS_DASHBOARD_TOKEN ?? "";
 const TWILIO_ACCOUNT_SID = process.env.TWILIO_ACCOUNT_SID ?? "";
@@ -74,10 +89,55 @@ const TWILIO_AUTH_TOKEN = process.env.TWILIO_AUTH_TOKEN ?? "";
 
 const REQUIRED_ENV = {
   GEMINI_API_KEY,
-  GEMINI_LIVE_WS_URL,
   ERM_API_BASE_URL,
   OPS_DASHBOARD_TOKEN,
 };
+
+/**
+ * First Live API client message. Model resource name is
+ * models/{id}. responseModalities is set both on setup (the raw
+ * websocket getting-started sample) and on generationConfig (the
+ * BidiGenerateContentSetup schema). Empty transcription configs
+ * turn input and output transcripts on.
+ * https://ai.google.dev/api/live
+ * https://ai.google.dev/gemini-api/docs/live-api/get-started-websocket
+ */
+export function buildGeminiSetupMessage(systemInstruction) {
+  return {
+    setup: {
+      model: `models/${GEMINI_LIVE_MODEL}`,
+      responseModalities: ["AUDIO"],
+      generationConfig: { responseModalities: ["AUDIO"] },
+      systemInstruction: { parts: [{ text: systemInstruction }] },
+      inputAudioTranscription: {},
+      outputAudioTranscription: {},
+    },
+  };
+}
+
+/** realtimeInput.audio — mediaChunks is deprecated and is not sent. */
+export function buildGeminiRealtimeAudioMessage(pcm16leBase64) {
+  return {
+    realtimeInput: {
+      audio: {
+        mimeType: GEMINI_INPUT_AUDIO_MIME,
+        data: pcm16leBase64,
+      },
+    },
+  };
+}
+
+/** Every inline audio part on a serverContent event, not just the first. */
+export function serverAudioPayloads(serverContent) {
+  const parts = serverContent?.modelTurn?.parts;
+  if (!Array.isArray(parts)) return [];
+  const out = [];
+  for (const part of parts) {
+    const data = part?.inlineData?.data;
+    if (typeof data === "string" && data.length > 0) out.push(data);
+  }
+  return out;
+}
 
 function log(event, fields = {}) {
   console.log(JSON.stringify({ service: "micro-titan-voice-bridge", event, ...fields }));
@@ -146,6 +206,7 @@ function handleTwilioSocket(socket, req) {
   let streamSid = null;
   let callSid = null;
   let gemini = null;
+  let geminiReady = false;
   let buffer = Buffer.alloc(0);
   let pendingClientText = "";
   let pendingAgentText = "";
@@ -216,7 +277,7 @@ function handleTwilioSocket(socket, req) {
     if (sessionIsHardStop(session)) {
       log("hard_stop_reached", { reference, sessionKey });
       sessionBeginWrapUp(session);
-      if (gemini && gemini.readyState === 1 && !wrapUpSent) {
+      if (gemini && geminiReady && gemini.readyState === 1 && !wrapUpSent) {
         wrapUpSent = true;
         gemini.send(
           JSON.stringify({
@@ -238,21 +299,12 @@ function handleTwilioSocket(socket, req) {
   }, 1000);
 
   const openGemini = () => {
+    geminiReady = false;
     gemini = new WebSocket(GEMINI_LIVE_WS_URL, {
       headers: { "x-goog-api-key": GEMINI_API_KEY },
     });
     gemini.on("open", () => {
-      gemini.send(
-        JSON.stringify({
-          setup: {
-            model: GEMINI_LIVE_MODEL,
-            systemInstruction: { parts: [{ text: buildVoiceSystemInstruction() }] },
-            generationConfig: { responseModalities: ["AUDIO"] },
-            inputAudioTranscription: {},
-            outputAudioTranscription: {},
-          },
-        }),
-      );
+      gemini.send(JSON.stringify(buildGeminiSetupMessage(buildVoiceSystemInstruction())));
     });
     gemini.on("message", (data) => {
       let msg;
@@ -261,18 +313,27 @@ function handleTwilioSocket(socket, req) {
       } catch {
         return;
       }
+      // Nothing but setup may be sent until setupComplete.
+      // https://ai.google.dev/api/live#bidigeneratecontentsetup
+      if (msg.setupComplete) {
+        geminiReady = true;
+        log("gemini_setup_complete", { reference, sessionKey });
+        return;
+      }
       const content = msg.serverContent;
       if (!content) return;
       // Audio back to the caller: PCM 24kHz -> PCM 8kHz -> mulaw.
-      const audioPart = content.modelTurn?.parts?.find((p) => p.inlineData?.data);
-      if (audioPart && streamSid) {
-        const pcm24 = bytesToPcm16(Buffer.from(audioPart.inlineData.data, "base64"));
-        const pcm8 = downsample(pcm24, Math.round(GEMINI_OUTPUT_SAMPLE_RATE_HZ / 8000));
-        sendToTwilio({
-          event: "media",
-          streamSid,
-          media: { payload: pcm16ToMulawBuffer(pcm8).toString("base64") },
-        });
+      // One server event can carry several inline audio parts.
+      if (streamSid) {
+        for (const payload of serverAudioPayloads(content)) {
+          const pcm24 = bytesToPcm16(Buffer.from(payload, "base64"));
+          const pcm8 = downsample(pcm24, Math.round(GEMINI_OUTPUT_SAMPLE_RATE_HZ / 8000));
+          sendToTwilio({
+            event: "media",
+            streamSid,
+            media: { payload: pcm16ToMulawBuffer(pcm8).toString("base64") },
+          });
+        }
       }
       if (content.inputTranscription?.text) pendingClientText += content.inputTranscription.text;
       if (content.outputTranscription?.text) pendingAgentText += content.outputTranscription.text;
@@ -330,17 +391,13 @@ function handleTwilioSocket(socket, req) {
         sessionStart(session);
         log("call_started", { reference, sessionKey, callSid });
         openGemini();
-      } else if (event.event === "media" && gemini && gemini.readyState === 1) {
-        // Twilio mulaw 8kHz -> PCM 16kHz -> Gemini.
+      } else if (event.event === "media" && gemini && geminiReady && gemini.readyState === 1) {
+        // Twilio mulaw 8kHz -> PCM 16kHz -> Gemini realtimeInput.audio.
+        // Audio that arrives before setupComplete is dropped: the Live
+        // API rejects client messages sent before that ack.
         const pcm8 = mulawBufferToPcm16(Buffer.from(event.media?.payload ?? "", "base64"));
         const pcm16 = upsample(pcm8, 2);
-        gemini.send(
-          JSON.stringify({
-            realtimeInput: {
-              mediaChunks: [{ mimeType: "audio/pcm", data: pcm16ToBytes(pcm16).toString("base64") }],
-            },
-          }),
-        );
+        gemini.send(JSON.stringify(buildGeminiRealtimeAudioMessage(pcm16ToBytes(pcm16).toString("base64"))));
       } else if (event.event === "stop") {
         log("twilio_stop", { reference, sessionKey });
         void endCall("completed");
@@ -363,8 +420,14 @@ function main() {
     console.error(`micro-titan-voice-bridge: missing required env: ${missing.join(", ")}`);
     process.exit(1);
   }
+  const port = resolveListenPort();
+  if (port === null) {
+    console.error("micro-titan-voice-bridge: bad port (PORT, else VOICE_BRIDGE_PORT, else 8080)");
+    process.exit(1);
+  }
   const server = createServer((req, res) => {
-    if (req.url === "/health") {
+    const pathname = new URL(req.url ?? "/", "http://localhost").pathname;
+    if (req.method === "GET" && pathname === "/health") {
       res.writeHead(200, { "content-type": "application/json" });
       res.end(JSON.stringify({ ok: true, service: "micro-titan-voice-bridge" }));
       return;
@@ -391,16 +454,16 @@ function main() {
     );
     handleTwilioSocket(socket, req);
   });
-  server.listen(PORT, () => {
-    log("bridge_listening", { port: PORT });
+  server.listen(port, LISTEN_HOST, () => {
+    log("bridge_listening", { port, host: LISTEN_HOST });
     log("bridge_ready", {
       secondsRemainingNote: "hard stop 1200s enforced per call",
-      model: GEMINI_LIVE_MODEL,
+      model: `models/${GEMINI_LIVE_MODEL}`,
     });
   });
 }
 
 // Only run the server when executed directly, not when imported.
-if (process.argv[1] && import.meta.url === `file://${process.argv[1]}`) {
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   main();
 }

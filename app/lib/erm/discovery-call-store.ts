@@ -256,3 +256,33 @@ export async function discoveryCallStatus(
     return { status: "failed" };
   }
 }
+
+export type VoiceIntakeLookup =
+  | { status: "found" }
+  | { status: "not_found" }
+  | { status: "not_configured" }
+  | { status: "failed" };
+
+/**
+ * Read-only: does this intake reference exist? Used by the
+ * voice-discovery TwiML route before it will connect a Media Stream.
+ * No insert, no update, no delete. Missing database → not_configured,
+ * which the route treats as "not a known intake" and rejects.
+ */
+export async function voiceIntakeExists(reference: string): Promise<VoiceIntakeLookup> {
+  const url = dbUrl();
+  if (!url) return { status: "not_configured" };
+  try {
+    const { Pool } = await import("pg");
+    const pool = new Pool({ connectionString: url, max: 1 });
+    try {
+      const found = await pool.query("SELECT id FROM intakes WHERE reference = $1", [reference]);
+      if (found.rows.length === 0) return { status: "not_found" };
+      return { status: "found" };
+    } finally {
+      await pool.end().catch(() => undefined);
+    }
+  } catch {
+    return { status: "failed" };
+  }
+}

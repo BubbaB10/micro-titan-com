@@ -10,7 +10,9 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import {
+  GEMINI_INPUT_AUDIO_MIME,
   GEMINI_LIVE_MODEL,
+  GEMINI_LIVE_WS_URL_DEFAULT,
   VOICE_BANNED_ACTIONS,
   VOICE_BOOKING_CONSENT,
   VOICE_CALL_AGENDA,
@@ -53,6 +55,22 @@ import {
   reassembleTextFrames,
   websocketAccept,
 } from "../voice-bridge/ws-frames.mjs";
+import {
+  GEMINI_INPUT_AUDIO_MIME as COPY_MIME,
+  GEMINI_LIVE_MODEL as COPY_MODEL,
+  GEMINI_LIVE_WS_URL_DEFAULT as COPY_URL,
+  VOICE_BANNED_ACTIONS as COPY_BANNED,
+  VOICE_CALL_AGENDA as COPY_AGENDA,
+  VOICE_CALL_OPENING as COPY_OPENING,
+  VOICE_HARD_STOP_WRAP_UP_DRAFT as COPY_WRAP,
+} from "../voice-bridge/guardrails.mjs";
+import {
+  LISTEN_HOST,
+  buildGeminiRealtimeAudioMessage,
+  buildGeminiSetupMessage,
+  resolveListenPort,
+  serverAudioPayloads,
+} from "../voice-bridge/server.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const read = (p) => fs.readFileSync(path.join(root, p), "utf8");
@@ -325,6 +343,29 @@ test("discovery-status route is token-gated and returns the transcript to the ow
 test("the bridge uses Gemini Live only — no OpenAI, no managed voice platforms", () => {
   assert.match(serverSource, /GEMINI_LIVE_MODEL/);
   assert.equal(GEMINI_LIVE_MODEL, "gemini-3.8-live");
+  assert.equal(
+    GEMINI_LIVE_WS_URL_DEFAULT,
+    "wss://generativelanguage.googleapis.com/ws/google.ai.generativelanguage.v1beta.GenerativeService.BidiGenerateContent",
+  );
+  assert.equal(GEMINI_INPUT_AUDIO_MIME, "audio/pcm;rate=16000");
+  const setup = buildGeminiSetupMessage("system");
+  assert.equal(setup.setup.model, "models/gemini-3.8-live");
+  assert.deepEqual(setup.setup.responseModalities, ["AUDIO"]);
+  assert.deepEqual(setup.setup.generationConfig.responseModalities, ["AUDIO"]);
+  assert.deepEqual(setup.setup.inputAudioTranscription, {});
+  assert.deepEqual(setup.setup.outputAudioTranscription, {});
+  const audio = buildGeminiRealtimeAudioMessage("AAAA");
+  assert.equal(audio.realtimeInput.audio.mimeType, "audio/pcm;rate=16000");
+  assert.equal(audio.realtimeInput.audio.data, "AAAA");
+  assert.equal(audio.realtimeInput.mediaChunks, undefined);
+  assert.deepEqual(
+    serverAudioPayloads({
+      modelTurn: { parts: [{ inlineData: { data: "one" } }, { text: "skip" }, { inlineData: { data: "two" } }] },
+    }),
+    ["one", "two"],
+  );
+  assert.match(serverSource, /setupComplete/);
+  assert.doesNotMatch(serverSource, /mediaChunks:\s*\[/);
   for (const banned of ["openai", "gpt-", "vapi", "retell", "bland", "elevenlabs"]) {
     assert.doesNotMatch(serverSource.toLowerCase(), new RegExp(banned), banned);
   }
@@ -344,8 +385,42 @@ test("the bridge holds no secrets and points at no production system by default"
   assert.match(serverSource, /VOICE_CALL_OPENING|buildVoiceSystemInstruction/);
 });
 
-test("the bridge README states plainly that it is not deployed and no host is chosen", () => {
-  assert.match(bridgeReadme, /NOT deployed/i);
-  assert.match(bridgeReadme, /no host has been chosen/i);
+test("the bridge README names Railway, the default Gemini URL and model, and still requires a TEST call", () => {
+  assert.match(bridgeReadme, /Railway/);
+  assert.match(bridgeReadme, /Root Directory/);
+  assert.match(bridgeReadme, /\/voice-bridge/);
+  assert.match(bridgeReadme, /\/health/);
+  assert.match(bridgeReadme, /gemini-3\.8-live/);
+  assert.match(bridgeReadme, /generativelanguage\.googleapis\.com/);
+  assert.match(bridgeReadme, /GEMINI_API_KEY/);
+  assert.match(bridgeReadme, /\*\*secret\*\*/);
   assert.match(bridgeReadme, /TEST call/i);
+  assert.match(bridgeReadme, /VOICE_DISCOVERY_ENABLED/);
+});
+
+test("vendored guardrails match voice-discovery.ts, and the bridge imports nothing outside its folder", () => {
+  assert.equal(COPY_MODEL, GEMINI_LIVE_MODEL);
+  assert.equal(COPY_URL, GEMINI_LIVE_WS_URL_DEFAULT);
+  assert.equal(COPY_MIME, GEMINI_INPUT_AUDIO_MIME);
+  assert.equal(COPY_OPENING, VOICE_CALL_OPENING);
+  assert.equal(COPY_WRAP, VOICE_HARD_STOP_WRAP_UP_DRAFT);
+  assert.deepEqual(COPY_AGENDA, [...VOICE_CALL_AGENDA]);
+  assert.deepEqual(COPY_BANNED, [...VOICE_BANNED_ACTIONS]);
+  for (const file of ["server.mjs", "session.mjs", "audio.mjs", "ws-frames.mjs", "guardrails.mjs"]) {
+    const src = read(`voice-bridge/${file}`);
+    assert.doesNotMatch(src, /from\s+["']\.\.\//, file);
+    assert.doesNotMatch(src, /from\s+["']@\//, file);
+  }
+  const pkg = JSON.parse(read("voice-bridge/package.json"));
+  assert.equal(pkg.name, "micro-titan-voice-bridge");
+  assert.equal(pkg.type, "module");
+  assert.equal(pkg.engines.node, ">=24");
+  assert.equal(pkg.scripts.start, "node server.mjs");
+  assert.equal(pkg.dependencies, undefined);
+  assert.equal(LISTEN_HOST, "0.0.0.0");
+  assert.equal(resolveListenPort({ PORT: "4321" }), 4321);
+  assert.equal(resolveListenPort({ VOICE_BRIDGE_PORT: "9090" }), 9090);
+  assert.equal(resolveListenPort({}), 8080);
+  assert.equal(resolveListenPort({ PORT: "0" }), null);
+  assert.match(serverSource, /server\.listen\(port, LISTEN_HOST/);
 });
