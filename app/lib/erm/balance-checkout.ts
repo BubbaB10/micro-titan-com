@@ -44,13 +44,12 @@
  * This module never charges anyone, never stores card details, and
  * never touches a Stripe secret. The secret lives only in the route.
  *
- * success_url / cancel_url: there is no post-balance client page
- * yet — after paying, the client waits for setup, which starts
- * only after the payment lands. Until a post-balance confirmation
- * page exists, success goes to the site home with ?balance=paid
- * (ignored by the home page) and cancel goes back to the
- * agreement page. Neither URL is a promise of a page; both are
- * flagged as a later slice in the PR body.
+ * success_url / cancel_url: success goes to /balance-paid (the
+ * post-balance confirmation page). That page confirms Stripe
+ * returned the payer here and states that setup starts only after
+ * the payment is confirmed on our side; it does not look up ERM
+ * state or invent client data. Cancel still goes back to the
+ * agreement page.
  */
 
 import type { Lane } from "./types";
@@ -87,7 +86,7 @@ export function buildBalanceCheckoutSessionParams(
   const metadata = balanceMetadata(reference, lane);
   return {
     mode: "payment",
-    "success_url": `${base}/?balance=paid`,
+    "success_url": `${base}/balance-paid`,
     "cancel_url": `${base}/accept-agreement`,
     "metadata[intake_reference]": metadata.intake_reference,
     "metadata[lane]": metadata.lane,

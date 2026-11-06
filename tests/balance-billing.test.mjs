@@ -67,6 +67,8 @@ test('balance session params carry intake_type=balance on session and PaymentInt
   assert.equal(params['line_items[0][price_data][unit_amount]'], '500000');
   assert.equal(params['line_items[0][price_data][product_data][name]'], 'Micro Titan Program Balance — Solo entrepreneur');
   assert.equal(params.mode, 'payment');
+  assert.equal(params['success_url'], 'https://micro-titan.com/balance-paid');
+  assert.equal(params['cancel_url'], 'https://micro-titan.com/accept-agreement');
   assert.deepEqual(balanceMetadata('MT-20261103-TEST', 'Family'), { intake_reference: 'MT-20261103-TEST', lane: 'Family', intake_type: 'balance' });
 });
 
