@@ -88,7 +88,7 @@ export default function PrivacyPage() {
         >
           Privacy Policy
         </h1>
-        <p className="text-sm text-[#a8d8f0]/50 mb-2">Version 1 · Last updated: October 24, 2026</p>
+        <p className="text-sm text-[#a8d8f0]/50 mb-2">Version 1 · Last updated: November 6, 2026</p>
         <p className="text-xs text-[#a8d8f0]/50 mb-10">
           Written in plain words by Micro Titan LLC from how the service actually works. Not yet reviewed by an attorney.
         </p>
@@ -111,6 +111,29 @@ export default function PrivacyPage() {
               )}
             </div>
           ))}
+          <div id="sms">
+            <h2 className="text-base font-semibold text-[#f4f7fa] mb-2">SMS / text messages</h2>
+            <p>
+              Micro Titan, LLC (
+              <a href="https://www.micro-titan.com" className="text-[#2563eb] hover:text-[#60a5fa] transition-colors">
+                https://www.micro-titan.com
+              </a>
+              ) collects the mobile number you use when you call or text our business line, +1 903-300-5734, and any phone number you choose to enter on an intake or booking form. We use those numbers to reply to people who call or text our business line, and to send intake and booking updates about the inquiry you started with us.
+            </p>
+            <p className="mt-2">
+              Message frequency varies. Msg & data rates may apply. Reply STOP to opt out, HELP for help.
+            </p>
+            <p className="mt-2">
+              We do not sell, rent, or share mobile phone numbers or SMS opt-in consent with third parties or affiliates for marketing or promotional purposes. Text messaging originator opt-in data and consent will not be shared with any third parties.
+            </p>
+            <p className="mt-2">
+              Contact{" "}
+              <a href="mailto:hello@micro-titan.com" className="text-[#2563eb] hover:text-[#60a5fa] transition-colors">
+                hello@micro-titan.com
+              </a>
+              .
+            </p>
+          </div>
           <div>
             <h2 className="text-base font-semibold text-[#f4f7fa] mb-2">10. Contact</h2>
             <p>

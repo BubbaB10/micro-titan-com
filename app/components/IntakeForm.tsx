@@ -1,5 +1,6 @@
 "use client";
 import { useMemo, useState } from "react";
+import SmsConsentCheckbox from "./SmsConsentCheckbox";
 
 type Lane = "Family" | "Solo entrepreneur" | "Business";
 type Pricing = {
@@ -104,6 +105,7 @@ export default function IntakeForm() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
+  const [smsConsent, setSmsConsent] = useState(false);
   const [agent, setAgent] = useState(AGENTS[0]);
   const [plate, setPlate] = useState("");
   const [answers, setAnswers] = useState<Record<string, string>>({});
@@ -149,6 +151,7 @@ export default function IntakeForm() {
       `Name: ${name}`,
       `Email: ${email || "(not provided)"}`,
       `Phone: ${phone || "(not provided)"}`,
+      `SMS consent: ${smsConsent ? "yes" : "no"}`,
       `Agent preference: ${agent}`,
       "",
       `What they most want taken off their plate:`,
@@ -173,7 +176,7 @@ export default function IntakeForm() {
       );
     }
     return lines.join("\n");
-  }, [lane, reference, name, email, phone, agent, plate, answers, pricing]);
+  }, [lane, reference, name, email, phone, smsConsent, agent, plate, answers, pricing]);
 
   const mailto = `mailto:hello@micro-titan.com?subject=${encodeURIComponent(
     `Micro Titan intake — ${lane} — ${reference}`,
@@ -196,6 +199,7 @@ export default function IntakeForm() {
           name,
           email,
           phone,
+          smsConsent,
           agent,
           plate,
           answers: payloadAnswers,
@@ -334,6 +338,7 @@ export default function IntakeForm() {
             <label style={labelStyle}>Phone</label>
             <input style={inputStyle} type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} autoComplete="tel" />
             <p style={{ fontSize: 13, color: "#555" }}>Email or phone — at least one is required.</p>
+            <SmsConsentCheckbox checked={smsConsent} onChange={setSmsConsent} />
           </div>
           <div>
             <label style={labelStyle}>Agent preference</label>

@@ -74,6 +74,8 @@ export type BookDiscoveryPayload = {
   name: string;
   email: string;
   phone: string;
+  /** Optional text opt-in. Included in the email only. This route stores nothing. */
+  smsConsent: boolean;
   lane: Lane;
   preferred: string[];
 };
@@ -111,6 +113,9 @@ export function validateBookDiscovery(body: unknown): { errors: Record<string, s
   const phoneRaw = asString(b.phone, MAX_PHONE);
   const phone = phoneRaw ?? "";
   if (!email && !phone) errors.contact = "Email or phone — at least one is required.";
+  // Opt-in only when the box was checked. Missing or any other value is no.
+  // Consent is never required, including when a phone number is present.
+  const smsConsent = b.smsConsent === true;
   const lane = b.lane;
   if (typeof lane !== "string" || !(LANES as readonly string[]).includes(lane)) {
     errors.lane = "Pick a lane: Family, Solo entrepreneur, or Business.";
@@ -142,6 +147,7 @@ export function validateBookDiscovery(body: unknown): { errors: Record<string, s
       name: name as string,
       email,
       phone,
+      smsConsent,
       lane: lane as Lane,
       preferred,
     },
@@ -156,6 +162,8 @@ export function buildEmailBody(p: BookDiscoveryPayload): string {
     `Name: ${p.name}`,
     `Email: ${p.email || "(not provided)"}`,
     `Phone: ${p.phone || "(not provided)"}`,
+    `SMS consent: ${p.smsConsent ? "yes" : "no"}`,
+    "Text-message consent is optional and is not a condition of purchase.",
     `Lane: ${p.lane}`,
     "",
     "Preferred date/times (America/Chicago) — preferences only, not confirmed availability:",

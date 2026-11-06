@@ -103,7 +103,7 @@ export default function TermsPage() {
         >
           Terms of Service
         </h1>
-        <p className="text-sm text-[#a8d8f0]/50 mb-2">Version 1 · Last updated: October 24, 2026</p>
+        <p className="text-sm text-[#a8d8f0]/50 mb-2">Version 1 · Last updated: November 6, 2026</p>
         <p className="text-xs text-[#a8d8f0]/50 mb-10">
           Written in plain words by Micro Titan LLC from what this site already promises. Not yet reviewed by an attorney.
         </p>
@@ -119,6 +119,24 @@ export default function TermsPage() {
               ))}
             </div>
           ))}
+          <div id="sms">
+            <h2 className="text-base font-semibold text-[#f4f7fa] mb-2">SMS terms</h2>
+            <p>Program name: Micro Titan text support.</p>
+            <p className="mt-2">
+              When you call or text Micro Titan, LLC, or when you agree to texts about an inquiry you send us, you may receive a reply when you call or text us, including a one-time text if we miss your call, and follow-ups about your inquiry, intake, or booking.
+            </p>
+            <p className="mt-2">
+              Message frequency varies. Msg & data rates may apply. Reply STOP to opt out, HELP for help.
+            </p>
+            <p className="mt-2">Carriers are not liable for delayed or undelivered messages.</p>
+            <p className="mt-2">
+              See our{" "}
+              <Link href="/privacy#sms" className="text-[#2563eb] hover:text-[#60a5fa] transition-colors">
+                Privacy Policy
+              </Link>
+              .
+            </p>
+          </div>
           <div>
             <h2 className="text-base font-semibold text-[#f4f7fa] mb-2">14. Contact</h2>
             <p>

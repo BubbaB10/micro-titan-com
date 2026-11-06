@@ -13,7 +13,7 @@ export default function ServicesShell({ children, vision = false }: { children: 
     </header>}
     <main id="content">{children}</main>
     <footer className="service-footer wrap">
-      <div><strong>MICRO TITAN</strong>{vision ? <p>Remote, nationwide.<br/>Delivered wherever you are in the United States.</p> : <p>Built in Paris, Texas.<br/>For the businesses that keep a town running.</p>}{vision ? <p>hello@micro-titan.com</p> : <a href="mailto:hello@micro-titan.com">hello@micro-titan.com ↗</a>}</div>
+      <div><strong>MICRO TITAN</strong>{vision ? <p>Remote, nationwide.<br/>Delivered wherever you are in the United States.</p> : <p>Built in Paris, Texas.<br/>For the businesses that keep a town running.</p>}{vision ? <p>hello@micro-titan.com</p> : <a href="mailto:hello@micro-titan.com">hello@micro-titan.com ↗</a>}<p>Text or call <a href="tel:+19033005734">(903) 300-5734</a>. Msg & data rates may apply. Reply STOP to opt out.</p></div>
       <nav aria-label="More from Micro Titan"><Link href="/pricing">Services & pricing</Link><Link href="/studio">Custom software</Link><Link href="/valet">Meet Valet</Link><Link href="/valet/pricing">Valet plans</Link><Link href="/about">About Micro Titan</Link></nav>
       <div className="footer-legal"><span>{vision ? "© 2026 Micro Titan LLC" : "© 2026 Micro Titan LLC · Paris, Texas"}</span><span><Link href="/privacy">Privacy</Link> · <Link href="/terms">Terms</Link></span></div>
     </footer>

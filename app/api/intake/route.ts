@@ -168,6 +168,8 @@ export type IntakePayload = {
   name: string;
   email: string;
   phone: string;
+  /** Optional text opt-in. Included in the backup email only; not stored. */
+  smsConsent: boolean;
   agent: string;
   plate: string;
   answers: Answer[];
@@ -207,6 +209,9 @@ export function validateIntake(body: unknown): { errors: Record<string, string>;
   const phoneRaw = asString(b.phone, MAX_PHONE);
   const phone = phoneRaw ?? "";
   if (!email && !phone) errors.contact = "Email or phone — at least one is required.";
+  // Opt-in only when the box was checked. Missing or any other value is no.
+  // Consent is never required, including when a phone number is present.
+  const smsConsent = b.smsConsent === true;
   const agent = asString(b.agent, 100);
   if (!agent || !(AGENTS as readonly string[]).includes(agent)) {
     errors.agent = "Pick an agent preference, or 'Help me choose in discovery'.";
@@ -252,6 +257,7 @@ export function validateIntake(body: unknown): { errors: Record<string, string>;
       name: name as string,
       email,
       phone,
+      smsConsent,
       agent: agent as string,
       plate: plate as string,
       answers,
@@ -269,6 +275,8 @@ export function buildEmailBody(p: IntakePayload): string {
     `Name: ${p.name}`,
     `Email: ${p.email || "(not provided)"}`,
     `Phone: ${p.phone || "(not provided)"}`,
+    `SMS consent: ${p.smsConsent ? "yes" : "no"}`,
+    "Text-message consent is optional and is not a condition of purchase.",
     `Agent preference: ${p.agent}`,
     "",
     "What they most want taken off their plate:",
@@ -353,6 +361,8 @@ export async function POST(req: NextRequest) {
   //    even if the backup email fails, and that is reported.
   let erm: string;
   try {
+    // smsConsent rides in the backup email below. clients.contact_phone and
+    // intakes have no consent column, and this call does not add one.
     erm = (await recordIntake(payload)).status;
   } catch {
     erm = "failed";
