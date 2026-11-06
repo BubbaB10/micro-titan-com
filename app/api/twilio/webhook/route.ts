@@ -56,14 +56,14 @@
  * Limits: 64 KB body. Inbound rate limit: 20 rows per from-number
  * per 15 minutes (DB count, serverless-safe; fail-open on DB error
  * for the limit check only — dedupe itself always fails closed
- * via 503). PLACEHOLDER auto-text wording: see twilio.ts — replace
- * with Bubba's verbatim approved wording before merge.
+ * via 503). Auto-text wording: MISSED_CALL_AUTO_TEXT in twilio.ts —
+ * Bubba-approved verbatim 2026-11-05, used exactly, no paraphrasing.
  */
 
 import { NextResponse } from "next/server";
 import {
   INBOUND_RATE_LIMIT_PER_15_MIN,
-  MISSED_CALL_AUTO_TEXT_PLACEHOLDER,
+  MISSED_CALL_AUTO_TEXT,
   isCapReached,
   isMissedCall,
   parseDailyCap,
@@ -220,7 +220,7 @@ export async function POST(req: Request) {
     authToken,
     fromNumber,
     event.from,
-    MISSED_CALL_AUTO_TEXT_PLACEHOLDER,
+    MISSED_CALL_AUTO_TEXT,
   );
   if (!sent.ok) {
     return NextResponse.json({ ok: false, error: "send_failed" }, { status: 503 });
@@ -232,7 +232,7 @@ export async function POST(req: Request) {
     direction: "outbound",
     fromNumber,
     toNumber: event.from,
-    body: MISSED_CALL_AUTO_TEXT_PLACEHOLDER,
+    body: MISSED_CALL_AUTO_TEXT,
     status: "sent",
   });
   if (recorded.status === "failed" || recorded.status === "not_configured") {

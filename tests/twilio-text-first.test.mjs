@@ -12,7 +12,7 @@ import { fileURLToPath } from 'node:url';
 import { createHmac } from 'node:crypto';
 import {
   DEFAULT_DAILY_AUTO_TEXT_CAP,
-  MISSED_CALL_AUTO_TEXT_PLACEHOLDER,
+  MISSED_CALL_AUTO_TEXT,
   isCapReached,
   isMissedCall,
   parseDailyCap,
@@ -77,14 +77,28 @@ test('missed-call decision: missed statuses and zero-duration completed text, an
   assert.equal(isMissedCall({ kind: 'voice_status', callStatus: 'in-progress', durationSeconds: 0 }), false);
 });
 
-test('placeholder wording is marked placeholder, offers all four options, and is flagged pre-merge', () => {
-  assert.match(twilioSource, /PLACEHOLDER/);
-  assert.match(twilioSource, /NOT approved verbatim/);
-  assert.match(twilioSource, /Replace with/);
-  assert.match(MISSED_CALL_AUTO_TEXT_PLACEHOLDER, /micro-titan\.com\/intake/);
-  assert.match(MISSED_CALL_AUTO_TEXT_PLACEHOLDER, /micro-titan\.com\/book-discovery/);
-  assert.match(MISSED_CALL_AUTO_TEXT_PLACEHOLDER, /photo/);
-  assert.match(webhookSource, /PLACEHOLDER/);
+// Approved verbatim text, copied exactly from
+// micro-titan-g7-discovery-wording-DRAFT-2026-11-05.md, section 1
+// (approved verbatim by Bubba 2026-11-05 ~14:59 CST). The test
+// asserts byte-for-byte equality so no paraphrase can slip in.
+const APPROVED_MISSED_CALL_AUTO_TEXT =
+  'Hi \u2014 this is Micro Titan. We missed your call, sorry about that. ' +
+  'We work by text first, so just reply here and a real agent will pick it up.\n\n' +
+  'You can:\n' +
+  '1. Reply to this text\n' +
+  '2. Send a photo or document here\n' +
+  '3. Start an intake: micro-titan.com/intake\n' +
+  '4. Book a discovery call: micro-titan.com/book-discovery\n\n' +
+  'Nothing is booked, charged, or changed until you say so.';
+
+test('approved verbatim wording: exact text, all four options, no placeholder anywhere', () => {
+  assert.equal(MISSED_CALL_AUTO_TEXT, APPROVED_MISSED_CALL_AUTO_TEXT);
+  assert.doesNotMatch(twilioSource, /PLACEHOLDER/);
+  assert.doesNotMatch(webhookSource, /PLACEHOLDER/);
+  assert.match(MISSED_CALL_AUTO_TEXT, /micro-titan\.com\/intake/);
+  assert.match(MISSED_CALL_AUTO_TEXT, /micro-titan\.com\/book-discovery/);
+  assert.match(MISSED_CALL_AUTO_TEXT, /photo/);
+  assert.match(MISSED_CALL_AUTO_TEXT, /Nothing is booked, charged, or changed until you say so/);
 });
 
 test('daily cap: default 25, env override, 0 disables, reached at cap', () => {

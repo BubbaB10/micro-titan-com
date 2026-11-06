@@ -16,13 +16,13 @@
  *   Boone-drafted step. This slice sends NO auto-reply to inbound
  *   SMS — it only logs the message. Auto-blasts are not a thing here.
  *
- * PLACEHOLDER WARNING — read before merging:
- * MISSED_CALL_AUTO_TEXT_PLACEHOLDER below is NOT Bubba-approved
- * verbatim wording. Draft wording exists elsewhere, but it is also
- * not approved verbatim, so neither is used as if it were. Before
- * this PR merges, Bubba must approve the exact auto-text wording
- * and this constant must be replaced with it. Do not point a
- * Twilio webhook at this route with placeholder wording in place.
+ * APPROVED VERBATIM WORDING — 2026-11-05 ~14:59 CST:
+ * MISSED_CALL_AUTO_TEXT below is the missed-call auto-text Bubba
+ * approved verbatim ("Nothing needs to change on any of it, I read
+ * through them all and thought you did great, never sterile, warm
+ * but not going over the top, and professional."). Source:
+ * micro-titan-g7-discovery-wording-DRAFT-2026-11-05.md, section 1.
+ * Use it EXACTLY, no paraphrasing in code.
  *
  * What this slice deliberately does NOT do:
  * - No call recording, no transcription, no voice AI. Recording
@@ -38,19 +38,19 @@
 import { createHmac, timingSafeEqual } from "node:crypto";
 
 /**
- * PLACEHOLDER auto-text — NOT approved verbatim. Replace with
- * Bubba's exact approved wording before merge. It offers the four
- * decided options (reply by text, send photo/document, start an
- * intake, book a discovery call) without claiming approved copy.
+ * Missed-call auto-text — APPROVED VERBATIM by Bubba 2026-11-05
+ * ~14:59 CST. Source: micro-titan-g7-discovery-wording-DRAFT-2026-11-05.md,
+ * section 1. Do not paraphrase, shorten, or reword this constant.
  */
-export const MISSED_CALL_AUTO_TEXT_PLACEHOLDER =
-  "Hi, this is Micro Titan. We missed your call — we don't take live " +
-  "support calls, but a real agent can help right here by text. " +
-  "[PLACEHOLDER WORDING — verbatim text requires Bubba's approval " +
-  "before this is ever sent.] Reply with what you're trying to get " +
-  "done, send a photo if it helps, start an intake at " +
-  "micro-titan.com/intake, or book a discovery call at " +
-  "micro-titan.com/book-discovery.";
+export const MISSED_CALL_AUTO_TEXT =
+  "Hi \u2014 this is Micro Titan. We missed your call, sorry about that. " +
+  "We work by text first, so just reply here and a real agent will pick it up.\n\n" +
+  "You can:\n" +
+  "1. Reply to this text\n" +
+  "2. Send a photo or document here\n" +
+  "3. Start an intake: micro-titan.com/intake\n" +
+  "4. Book a discovery call: micro-titan.com/book-discovery\n\n" +
+  "Nothing is booked, charged, or changed until you say so.";
 
 export const DEFAULT_DAILY_AUTO_TEXT_CAP = 25;
 export const MAX_DAILY_AUTO_TEXT_CAP = 1000;
