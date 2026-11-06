@@ -6,7 +6,7 @@ body:has(.vision-home){background:#f5f6fc;padding-bottom:0}
 .vision-home .mtv-header{border-bottom:1px solid #d8dced;background:#f7f8fcdd;position:relative;z-index:10}
 .mtv-header-inner{max-width:1320px;margin:auto;min-height:88px;padding:0 56px;display:flex;align-items:center;justify-content:space-between;gap:28px}
 .vision-home .mtv-brand{display:flex;align-items:center;gap:17px;color:#11132f;font:bold 29px Georgia,serif;letter-spacing:-.035em;white-space:nowrap}
-.mtv-brand-tile{display:grid;place-items:center;width:49px;height:49px;border-radius:13px;background:linear-gradient(145deg,#773af7,#4221cf);color:white;font:bold 18px Arial,sans-serif;letter-spacing:-.03em;box-shadow:inset 0 1px 2px #ffffff40}
+.mtv-brand-tile{display:grid;place-items:center;width:49px;height:49px;border-radius:13px;overflow:hidden;background:#080c14;box-shadow:inset 0 1px 2px #ffffff40}.mtv-brand-logo{display:block;width:100%;height:100%;object-fit:cover}
 .mtv-desktop-nav{display:flex;gap:45px;font-size:15px;font-weight:600}
 .vision-home .mtv-button{display:inline-flex;justify-content:center;align-items:center;gap:15px;min-height:50px;padding:12px 24px;border-radius:999px;background:var(--vision-grad);color:white;font-size:15px;font-weight:600;line-height:1.3;border:1px solid #6630df;box-shadow:inset 0 1px 0 #ffffff30,0 5px 12px #6223cf12;text-decoration:none;transition:box-shadow .2s,transform .2s}
 .vision-home .mtv-button:hover{box-shadow:0 6px 22px #6223cf35;transform:translateY(-1px);text-decoration:none}
