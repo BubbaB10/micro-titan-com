@@ -1,7 +1,19 @@
 @import url('https://fonts.googleapis.com/css2?family=Mulish:wght@300;400;500;600;700;800;900&display=swap');
 @import "tailwindcss";
 
-:root { --font-mulish: 'Mulish', system-ui, sans-serif; }
+:root {
+  --font-mulish: 'Mulish', system-ui, sans-serif;
+  /* Phone-app primaries, defined once. Blue, red, and green clear WCAG AA
+     for normal text on white (4.5:1) and for white text on the fill.
+     Yellow keeps the #FFCC00 hue, darkened to gold so large text and thin
+     lines on white clear AA (3:1). Do not use yellow for small text. */
+  --mt-blue: #0070EB;
+  --mt-red: #DB3329;
+  --mt-green: #23853C;
+  --mt-yellow: #A28200;
+  --mt-blue-hover: #0058C4;
+  --mt-on-yellow: #1d1d1f;
+}
 body { font-family: var(--font-mulish); }
 
 * {

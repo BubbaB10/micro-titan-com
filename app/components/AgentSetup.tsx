@@ -5,7 +5,12 @@ import AgentFlowVisuals from "./AgentFlowVisuals";
 const TYING_LINE =
   "We don't sell you an agent, and we don't just build you software. We wire the agent into your real work, prove each job with a record, and keep operating it — so the work stops depending on you being available.";
 
-const STEPS = ["Start", "Set up", "Prove", "Operate"];
+const STEPS = [
+  { name: "Start", tone: "blue" },
+  { name: "Set up", tone: "red" },
+  { name: "Prove", tone: "green" },
+  { name: "Operate", tone: "yellow" },
+] as const;
 
 const tiers = [
   {
@@ -65,10 +70,10 @@ export default function AgentSetup() {
         <p>{TYING_LINE}</p>
       </div>
       <ol className="service-columns agent-setup-steps">
-        {STEPS.map((name, index) => (
-          <li key={name}>
+        {STEPS.map((step, index) => (
+          <li key={step.name} className={`is-${step.tone}`}>
             <span className="service-number" aria-hidden="true">0{index + 1}</span>
-            <h3>{name}</h3>
+            <h3>{step.name}</h3>
           </li>
         ))}
       </ol>

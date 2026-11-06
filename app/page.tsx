@@ -37,11 +37,11 @@ const DISCOVERY_FORMAT_CHOICE =
   "A 15–20 minute call with Micro Titan's agent, at a time you pick. It's recorded so nothing you say gets lost.\n\n" +
   "Either way, what you say goes into your presentation, and nothing moves to setup until you've seen it.";
 
-const STEPS: { name: string; icon: VisionIconName }[] = [
-  { name: "Start", icon: "chat" },
-  { name: "Set up", icon: "setup" },
-  { name: "Prove", icon: "proof" },
-  { name: "Operate", icon: "flag" },
+const STEPS: { name: string; icon: VisionIconName; tone: "blue" | "red" | "green" | "yellow" }[] = [
+  { name: "Start", icon: "chat", tone: "blue" },
+  { name: "Set up", icon: "setup", tone: "red" },
+  { name: "Prove", icon: "proof", tone: "green" },
+  { name: "Operate", icon: "flag", tone: "yellow" },
 ];
 
 const TIERS = [
@@ -141,7 +141,7 @@ export default function HomePage() {
         </h2>
         <ol>
           {STEPS.map((step) => (
-            <li key={step.name}>
+            <li key={step.name} className={`is-${step.tone}`}>
               <span>
                 <VisionIcon name={step.icon} />
               </span>
