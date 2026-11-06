@@ -25,9 +25,11 @@
  *   logged and nothing is sent. Send failure -> 503 so Twilio
  *   retries the status callback; the send dedupe (sent row) still
  *   allows that retry, while a successful send blocks any re-text.
- * - Voice request with no CallStatus (the "a call comes in"
- *   webhook) -> TwiML <Reject>, no text, no fake answer, no phone
- *   tree. The auto-text, if any, comes from the later status
+ * - The "a call comes in" webhook includes CallStatus=ringing
+ *   (queued is the same unless Direction is outbound). That event
+ *   is voice_incoming -> TwiML <Reject reason="busy">, one
+ *   voice_rejected row, no text, no fake answer, no phone tree.
+ *   The auto-text, if any, comes from the later terminal status
  *   callback, not from answering the call.
  *
  * What it deliberately does NOT do:
@@ -163,9 +165,15 @@ export async function POST(req: Request) {
     );
   }
 
-  // voice_status from here.
+  // voice_status from here. The sid includes the status so a
+  // terminal callback is stored even when another row already uses
+  // this CallSid: voice_rejected keeps the raw CallSid, and an
+  // earlier status such as in-progress does not occupy this row.
+  // A redelivery of the same status still conflicts on
+  // (twilio_sid, kind). Missed-call send dedupe is unchanged:
+  // related_sid on the sent row is the raw CallSid.
   const logged = await recordCommunication({
-    twilioSid: event.callSid,
+    twilioSid: `${event.callSid}:status:${event.callStatus}`,
     kind: "voice_status",
     direction: "inbound",
     fromNumber: event.from,

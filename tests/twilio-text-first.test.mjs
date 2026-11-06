@@ -65,7 +65,28 @@ test('parse: sms, voice status, voice incoming, unknown', () => {
   const incoming = parseTwilioEvent({ CallSid: 'CA_2', From: '+19035550001', To: '+19033005734' });
   assert.equal(incoming.kind, 'voice_incoming');
   assert.equal(isMissedCall(incoming), false);
+  const ringing = parseTwilioEvent({ CallSid: 'CA_ring', From: '+19035550001', To: '+19033005734', CallStatus: 'ringing', Direction: 'inbound' });
+  assert.equal(ringing.kind, 'voice_incoming');
+  assert.equal(isMissedCall(ringing), false);
   assert.deepEqual(parseTwilioEvent({ Foo: 'bar' }), { kind: 'unknown' });
+});
+
+test('parse: ringing is incoming; queued is incoming unless Direction is outbound; terminal statuses stay voice_status', () => {
+  const base = { CallSid: 'CA_q', From: '+19035550001', To: '+19033005734' };
+  assert.equal(parseTwilioEvent({ ...base, CallStatus: 'ringing' }).kind, 'voice_incoming');
+  assert.equal(parseTwilioEvent({ ...base, CallStatus: 'ringing', Direction: 'outbound-api' }).kind, 'voice_incoming');
+  assert.equal(parseTwilioEvent({ ...base, CallStatus: 'queued' }).kind, 'voice_incoming');
+  assert.equal(parseTwilioEvent({ ...base, CallStatus: 'queued', Direction: 'inbound' }).kind, 'voice_incoming');
+  const queuedOut = parseTwilioEvent({ ...base, CallStatus: 'queued', Direction: 'outbound-api' });
+  assert.equal(queuedOut.kind, 'voice_status');
+  assert.equal(queuedOut.callStatus, 'queued');
+  assert.equal(parseTwilioEvent({ ...base, CallStatus: 'queued', Direction: 'outbound-dial' }).kind, 'voice_status');
+  for (const callStatus of ['no-answer', 'busy', 'failed', 'canceled', 'completed']) {
+    const event = parseTwilioEvent({ ...base, CallStatus: callStatus, CallDuration: '3' });
+    assert.equal(event.kind, 'voice_status', callStatus);
+    assert.equal(event.callStatus, callStatus);
+    assert.equal(event.durationSeconds, 3);
+  }
 });
 
 test('missed-call decision: missed statuses and zero-duration completed text, answered does not', () => {
@@ -144,6 +165,8 @@ test('dedupe and cap are enforced in code, not just claimed', () => {
   assert.match(storeSource, /cap_blocked/);
   assert.match(webhookSource, /alreadySent/);
   assert.match(webhookSource, /isCapReached/);
+  assert.match(webhookSource, /\$\{event\.callSid\}:status:\$\{event\.callStatus\}/);
+  assert.match(webhookSource, /relatedSid: event\.callSid/);
   assert.match(webhookSource, /invalid_signature/);
   assert.match(webhookSource, /403/);
   assert.match(migrationSource, /CREATE TABLE IF NOT EXISTS communication_log/);
