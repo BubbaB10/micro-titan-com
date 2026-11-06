@@ -8,7 +8,10 @@
 //   · lane totals are derived server-side, never trusted from the client;
 //   · the mailto fallback survives alongside the one-tap send;
 //   · acceptance is never claimed as a legal e-signature;
-//   · no CRM auto-write.
+//   · after the email sends, the acceptance is recorded in the ERM.
+//     That write replaced the manual CRM Agreements hand-log. If the
+//     database is absent or the write fails, the route still returns
+//     ok: true and the email remains the record.
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -56,11 +59,18 @@ test('lane totals are derived server-side from approved pricing', () => {
   assert.ok(!form.includes('total:') || form.includes('Display totals only'), 'form must label its totals as display only');
 });
 
-test('acceptance is never claimed as a legal e-signature, and no CRM write', () => {
+test('acceptance is never claimed as a legal e-signature, and the ERM write follows the email', () => {
   assert.match(route, /NOT a legal e-signature/);
   assert.match(form, /not claimed as a legal e-signature/);
-  assert.match(route, /No CRM write happens here/);
-  assert.ok(!/sheets|CRM.*insert|appendRow/i.test(route) || route.includes('No CRM write'), 'route must not write to the CRM');
+  // Gap 2 replaced the manual CRM hand-log. The route records the
+  // acceptance in the ERM only after Resend accepts the email. A missing
+  // or failed write does not turn that sent acceptance into a failure.
+  const emailSend = route.indexOf('https://api.resend.com/emails');
+  const ermWrite = route.indexOf('await recordAgreement(');
+  assert.ok(emailSend > 0 && ermWrite > emailSend, 'ERM record happens only after the acceptance email is sent');
+  assert.match(route, /still ok: true with the email as the record/);
+  assert.match(route, /record in the Micro Titan ERM/);
+  assert.ok(!/sheets|appendRow/i.test(route), 'the acceptance is stored in the ERM, not a spreadsheet');
 });
 
 test('form keeps the mailto fallback and adds a one-tap send', () => {
