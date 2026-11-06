@@ -5,22 +5,11 @@ import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
 /**
- * LocalBusiness structured data — added 2026-09-19.
+ * Organization structured data.
  *
- * Measured that day: micro-titan.com served ZERO JSON-LD blocks, while the competitor we intend to
- * displace (Hibu, for Nu-Tek Foundation Solutions) ships LocalBusiness with PostalAddress,
- * GeoCoordinates and OpeningHoursSpecification. Selling local search from a site with no structured
- * data is a position that does not survive the first question.
- *
- * ⚠️ NO STREET ADDRESS, DELIBERATELY. The address on file for this business is a private residence.
- * A street address measurably helps local ranking, and publishing a home is irreversible once
- * crawled — so that is the OWNER'S decision, not a default. If Micro Titan takes a commercial
- * address or opens a Google Business Profile, add `streetAddress` + `postalCode` here and point
- * `sameAs` at the GBP.
- *
- * ⚠️ NO `telephone`. There is no business number on this site today. Do not invent one: an
- * inconsistent NAP (name / address / phone) across the web actively damages local ranking, which
- * is the exact service being sold.
+ * The public offering is remote and nationwide. This block does not publish a city,
+ * a street address, or a telephone number. Do not add a personal phone, a personal
+ * email, or a Twilio number. The only contact is hello@micro-titan.com.
  */
 const ORGANIZATION_JSON_LD = {
   "@context": "https://schema.org",
@@ -31,21 +20,11 @@ const ORGANIZATION_JSON_LD = {
   url: "https://micro-titan.com",
   email: "hello@micro-titan.com",
   description:
-    "Micro Titan builds custom software and automation for small businesses, and provides practical AI setup and hands-on guidance for individuals. An assistant can be scoped into a build where it helps. Websites and local search are available as supporting services.",
-  address: {
-    "@type": "PostalAddress",
-    addressLocality: "Paris",
-    addressRegion: "TX",
-    addressCountry: "US",
-  },
-  areaServed: [
-    { "@type": "AdministrativeArea", name: "Northeast Texas" },
-    { "@type": "Country", name: "United States" },
-  ],
+    "Micro Titan wires an agent into real work, proves each job with a record, and keeps operating it. Custom apps, websites, and marketing are supporting services. Remote, nationwide.",
+  areaServed: { "@type": "Country", name: "United States" },
   knowsAbout: [
     "custom business software",
     "business operating systems",
-    "local search optimization",
     "verifiable AI agents",
   ],
 };

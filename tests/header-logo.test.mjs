@@ -20,6 +20,8 @@ test('public brand logo asset exists for the header', () => {
 test('vision header uses the brand logo image, not the MT text tile', () => {
   assert.match(headerSrc, /logo-512\.png/);
   assert.match(headerSrc, /mtv-brand-logo/);
+  assert.match(headerSrc, /alt="Micro Titan"/);
+  assert.match(headerSrc, /href="\/"/);
   assert.ok(!headerSrc.includes('>MT</span>'), 'must not render MT initials tile');
   assert.ok(!/>MT</.test(headerSrc), 'must not contain MT text mark');
 });
