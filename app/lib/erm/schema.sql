@@ -199,6 +199,42 @@ CREATE TABLE IF NOT EXISTS followups (
 
 CREATE INDEX IF NOT EXISTS idx_followups_intake ON followups(intake_id, created_at ASC);
 CREATE INDEX IF NOT EXISTS idx_followups_step ON followups(intake_id, step);
+
+-- Change + access log (Gap 10): logging only, no auto-sends.
+-- One row per change the owner actually made, or per access
+-- the owner actually granted / revoked / reviewed, for one
+-- intake or system-wide (empty reference). The row is the audit
+-- trail, not the change itself: nothing in this slice changes a
+-- system, grants access, or sends anything. One row per event
+-- key, ever; records are insert-only. No secrets in from_value /
+-- to_value — descriptions only, never a credential value.
+-- See migration 006-change-log.sql.
+CREATE TABLE IF NOT EXISTS change_log (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  intake_id UUID REFERENCES intakes(id),
+  client_id UUID REFERENCES clients(id),
+  reference TEXT NOT NULL DEFAULT '',
+  event_key TEXT NOT NULL UNIQUE,
+  kind TEXT NOT NULL CHECK (kind IN ('change', 'access')),
+  action TEXT NOT NULL CHECK (action IN (
+    'config_changed', 'integration_added', 'integration_removed',
+    'integration_rewired', 'price_changed', 'route_added',
+    'route_changed', 'env_updated', 'migration_applied',
+    'deployment_made', 'other_change',
+    'access_granted', 'access_revoked', 'access_reviewed',
+    'access_changed'
+  )),
+  actor TEXT NOT NULL DEFAULT 'owner',
+  subject TEXT NOT NULL,
+  summary TEXT NOT NULL DEFAULT '',
+  from_value TEXT NOT NULL DEFAULT '',
+  to_value TEXT NOT NULL DEFAULT '',
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS idx_change_log_created ON change_log(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_change_log_reference ON change_log(reference, created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_change_log_kind ON change_log(kind, created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_jobs_client_status ON jobs(client_id, status);
 CREATE INDEX IF NOT EXISTS idx_jobs_queue ON jobs(queue_position) WHERE status = 'queued';
 CREATE INDEX IF NOT EXISTS idx_audit_client ON audit_log(client_id, created_at);

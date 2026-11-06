@@ -87,6 +87,25 @@ export type PresentationStatus = "draft" | "reviewed" | "shown" | "declined";
 export type FollowUpStep = "day1" | "day3" | "day7" | "day14";
 export type FollowUpChannel = "email" | "text" | "call" | "manual_note";
 
+/** Change + access log (Gap 10): logging only, no auto-sends. */
+export type ChangeLogKind = "change" | "access";
+export type ChangeLogAction =
+  | "config_changed"
+  | "integration_added"
+  | "integration_removed"
+  | "integration_rewired"
+  | "price_changed"
+  | "route_added"
+  | "route_changed"
+  | "env_updated"
+  | "migration_applied"
+  | "deployment_made"
+  | "other_change"
+  | "access_granted"
+  | "access_revoked"
+  | "access_reviewed"
+  | "access_changed";
+
 /** Allowed intake transitions. Anything else is rejected, not stored. */
 export const INTAKE_TRANSITIONS: Record<IntakeStatus, IntakeStatus[]> = {
   received: ["completeness_check", "closed"],
