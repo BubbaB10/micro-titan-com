@@ -18,10 +18,12 @@
  * would require both a client request and owner approval, and
  * this route does neither.
  *
- * Body: { reference }. Unknown reference -> 404
- * intake_not_found. No draft -> 404 packet_not_found.
- * Already signed -> 200 already_signed, and the stored sign-off
- * is left as it was.
+ * Body: { reference, expectedHash }. expectedHash is the content
+ * hash GET showed for this packet. A different hash is 409 and
+ * writes nothing. Unknown reference -> 404 intake_not_found.
+ * No draft -> 404 packet_not_found. Already signed with the same
+ * hash -> 200 already_signed, and the stored sign-off is left
+ * as it was.
  */
 
 import { createHash, timingSafeEqual } from "node:crypto";
@@ -70,10 +72,14 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: false, error: "share_not_allowed" }, { status: 400 });
   }
   const reference = typeof b.reference === "string" ? b.reference : "";
+  const expectedHash = typeof b.expectedHash === "string" ? b.expectedHash : "";
   if (reference.length === 0 || reference.length > 50) {
     return NextResponse.json({ ok: false, error: "bad_reference" }, { status: 400 });
   }
-  const result = await signProofPacket(reference);
+  const result = await signProofPacket(reference, expectedHash);
+  if (result.status === "hash_mismatch") {
+    return NextResponse.json({ ok: false, error: "content_hash_mismatch" }, { status: 409 });
+  }
   if (result.status === "not_configured") {
     return NextResponse.json({ ok: false, error: "not_configured" }, { status: 503 });
   }
@@ -97,6 +103,7 @@ export async function POST(req: Request) {
       packetId: result.packetId,
       signedBy: result.signedBy,
       ownerSignedAt: result.ownerSignedAt,
+      contentHash: result.contentHash,
       sharedWithClient: false,
     });
   }
@@ -109,6 +116,7 @@ export async function POST(req: Request) {
     test: result.test,
     signedBy: result.signedBy,
     ownerSignedAt: result.ownerSignedAt,
+    contentHash: result.contentHash,
     sharedWithClient: false,
   });
 }

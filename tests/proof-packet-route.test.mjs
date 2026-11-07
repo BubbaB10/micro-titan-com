@@ -382,8 +382,23 @@ describe("proof packet routes", { concurrency: 1 }, () => {
     assert.equal(readBody.packet.sections.checks[2].runByDate, "2026-11-12");
     assert.equal(readBody.packet.sections.header.clientDisplayName, "TEST Solo Example Co");
     assert.equal(JSON.stringify(readBody).includes("example.invalid"), false);
+    assert.match(readBody.packet.contentHash, /^[0-9a-f]{64}$/);
+    assert.equal(sqlTexts().some((sql) => sql.startsWith("BEGIN ISOLATION LEVEL REPEATABLE READ")), true);
 
-    const signed = await sign({ reference: REFERENCE, signedBy: "client" });
+    const stale = await sign({
+      reference: REFERENCE,
+      signedBy: "owner",
+      expectedHash: "0".repeat(64),
+    });
+    assert.equal(stale.status, 409);
+    assert.deepEqual(await stale.json(), { ok: false, error: "content_hash_mismatch" });
+    assert.equal(sqlTexts().some((sql) => sql.includes("status = 'signed'")), false);
+
+    const signed = await sign({
+      reference: REFERENCE,
+      signedBy: "client",
+      expectedHash: readBody.packet.contentHash,
+    });
     assert.equal(signed.status, 200);
     const signedBody = await signed.json();
     assert.equal(signedBody.ok, true);
@@ -393,7 +408,8 @@ describe("proof packet routes", { concurrency: 1 }, () => {
     assert.equal(signedBody.sharedWithClient, false);
     assert.equal(signedBody.ownerSignedAt, "2026-11-07T22:00:00.000Z");
     const signUpdate = fakePgQueries().find((query) => query.sql.includes("status = 'signed'"));
-    assert.deepEqual(signUpdate.params, ["owner", "packet-1"]);
+    assert.deepEqual(signUpdate.params, ["owner", "packet-1", readBody.packet.contentHash]);
+    assert.equal(signedBody.contentHash, readBody.packet.contentHash);
 
     const after = await getPacket();
     const afterBody = await after.json();

@@ -12,6 +12,8 @@ import {
   approvedProofPacketHeading,
   approvedProofPacketText,
   isTestIntake,
+  packetIdentityOk,
+  proofPacketContentHash,
   readProofPacket,
   saveProofPacketDraft,
   signProofPacket,
@@ -181,7 +183,51 @@ test("whitespace-only evidence is rejected, including tabs", () => {
 
 test("a client-supplied signer is not an input the store accepts", () => {
   assert.equal(OWNER_ROLE, "owner");
-  assert.equal(signProofPacket.length, 1);
+  assert.equal(signProofPacket.length, 2);
+});
+
+test("identity mismatches are rejected and the content hash is stable", () => {
+  const base = {
+    reference: REFERENCE,
+    intakeId: "11111111-1111-1111-1111-111111111111",
+    intakeReference: REFERENCE,
+    intakeClientId: "22222222-2222-2222-2222-222222222222",
+    packetIntakeId: "11111111-1111-1111-1111-111111111111",
+    packetClientId: "22222222-2222-2222-2222-222222222222",
+    packetReference: REFERENCE,
+    test: true,
+  };
+  assert.equal(packetIdentityOk(base), true);
+  assert.equal(packetIdentityOk({ ...base, packetClientId: "33333333-3333-3333-3333-333333333333" }), false);
+  assert.equal(packetIdentityOk({ ...base, packetReference: "MT-20261107-AB12" }), false);
+  assert.equal(packetIdentityOk({ ...base, test: false }), false);
+  assert.equal(
+    packetIdentityOk({
+      ...base,
+      reference: "MT-20261107-AB12",
+      intakeReference: "MT-20261107-AB12",
+      packetReference: "MT-20261107-AB12",
+      test: false,
+    }),
+    true,
+  );
+  const valid = validateProofPacketDraft(draft());
+  assert.equal(valid.ok, true);
+  const first = proofPacketContentHash(REFERENCE, valid.heading, valid.intro, valid.sections);
+  const second = proofPacketContentHash(REFERENCE, valid.heading, valid.intro, valid.sections);
+  assert.equal(first, second);
+  assert.match(first, /^[0-9a-f]{64}$/);
+  const changed = structuredClone(valid.sections);
+  changed.checks.push({
+    check: "Another check",
+    method: "Look",
+    result: "FAIL",
+    evidence: "LOG:other@2026-11-07 16:10 CT",
+  });
+  assert.notEqual(
+    proofPacketContentHash(REFERENCE, valid.heading, valid.intro, changed),
+    first,
+  );
 });
 
 test("only MT-YYYYMMDD-TEST is a test packet reference", () => {
@@ -209,7 +255,7 @@ test("store stays closed when no database is configured", async () => {
   try {
     assert.deepEqual(await saveProofPacketDraft(draft()), { status: "not_configured" });
     assert.deepEqual(await readProofPacket(REFERENCE), { status: "not_configured" });
-    assert.deepEqual(await signProofPacket(REFERENCE), { status: "not_configured" });
+    assert.deepEqual(await signProofPacket(REFERENCE, "ab"), { status: "not_configured" });
     assert.deepEqual(await signProofPacket("MT-TEST-DUE"), { status: "invalid", error: "bad_reference" });
     assert.deepEqual(await readProofPacket("TEST-intake"), { status: "invalid", error: "bad_reference" });
     const missing = await saveProofPacketDraft(
@@ -244,6 +290,11 @@ test("schema and migration enforce evidence, NOT_RUN, and owner sign-off", () =>
     assert.match(src, /result <> 'NOT_RUN'/);
     assert.match(src, /run_by_date IS NOT NULL/);
     assert.match(src, /signed proof packet is frozen/);
+    assert.match(src, /proof packet child packet_id is immutable/);
+    assert.match(src, /OLD.packet_id < NEW.packet_id/);
+    assert.match(src, /proof packet identity does not match intake/);
+    assert.match(src, /proof packet test flag does not match reference/);
+    assert.match(src, /content_hash IS NOT NULL/);
     assert.match(src, /FOR UPDATE/);
     assert.match(src, /CREATE TRIGGER proof_packet_claims_freeze/);
     assert.match(src, /CREATE TRIGGER proof_packet_checks_freeze/);

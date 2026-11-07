@@ -45,6 +45,7 @@
  * - No PII is logged. Errors return a status string only.
  */
 
+import { createHash, timingSafeEqual } from "node:crypto";
 import type {
   ApprovedAgent,
   Lane,
@@ -503,6 +504,7 @@ export interface StoredProofPacket {
   sections: ProofPacketSections;
   ownerSignedAt: string | null;
   signedBy: string | null;
+  contentHash: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -530,13 +532,16 @@ export type SignProofPacketResult =
       test: boolean;
       signedBy: typeof OWNER_ROLE;
       ownerSignedAt: string;
+      contentHash: string;
     }
   | {
       status: "already_signed";
       packetId: string;
       signedBy: string | null;
       ownerSignedAt: string | null;
+      contentHash: string | null;
     }
+  | { status: "hash_mismatch" }
   | { status: "not_found" }
   | { status: "intake_not_found" }
   | { status: "not_configured" }
@@ -598,6 +603,79 @@ function asDateOnly(value: unknown): string | null {
     return match ? match[1] : null;
   }
   return null;
+}
+
+/**
+ * intake_id, reference, and client_id must name one intake row.
+ * test must agree with the reference code, not with a caller flag.
+ */
+export function packetIdentityOk(input: {
+  reference: string;
+  intakeId: string;
+  intakeReference: string;
+  intakeClientId: string;
+  packetIntakeId: string;
+  packetClientId: string;
+  packetReference: string;
+  test: boolean;
+}): boolean {
+  return (
+    input.packetReference === input.reference &&
+    input.packetReference === input.intakeReference &&
+    input.packetIntakeId === input.intakeId &&
+    input.packetClientId === input.intakeClientId &&
+    input.test === isTestIntake(input.packetReference)
+  );
+}
+
+function canonicalJson(value: unknown): unknown {
+  if (Array.isArray(value)) return value.map((item) => canonicalJson(item));
+  if (isRecord(value)) {
+    const out: Record<string, unknown> = {};
+    for (const key of Object.keys(value).sort()) out[key] = canonicalJson(value[key]);
+    return out;
+  }
+  return value;
+}
+
+/**
+ * Hash of the packet the owner reviews: reference, heading, intro,
+ * header, not-proven lines, and claims and checks in document order.
+ * Claims are ordered by section then position. Checks are ordered
+ * by position. Evidence is the child-column value already copied
+ * onto each row.
+ */
+export function proofPacketContentHash(
+  reference: string,
+  heading: string,
+  intro: string,
+  sections: ProofPacketSections,
+): string {
+  const claims: Array<{ section: string; position: number; body: unknown }> = [];
+  for (const section of CLAIM_SECTION_NAMES) {
+    const rows = sections[section] as unknown[];
+    rows.forEach((body, index) => {
+      claims.push({ section, position: index + 1, body });
+    });
+  }
+  const checks = sections.checks.map((check, index) => ({ position: index + 1, ...check }));
+  const payload = JSON.stringify(
+    canonicalJson({
+      reference,
+      heading,
+      intro,
+      header: sections.header,
+      notProven: sections["not-proven"],
+      claims,
+      checks,
+    }),
+  );
+  return createHash("sha256").update(payload, "utf8").digest("hex");
+}
+
+function contentHashesMatch(provided: string, expected: string): boolean {
+  if (!/^[0-9a-f]{64}$/.test(provided) || !/^[0-9a-f]{64}$/.test(expected)) return false;
+  return timingSafeEqual(Buffer.from(provided, "utf8"), Buffer.from(expected, "utf8"));
 }
 
 const CLAIM_SECTION_NAMES = [
@@ -851,6 +929,60 @@ export async function saveProofPacketDraft(
   }
 }
 
+function asRowArray(value: unknown): Array<Record<string, unknown>> {
+  const parsed = typeof value === "string" ? asSections(value) : value;
+  if (!Array.isArray(parsed)) return [];
+  return parsed.filter((row): row is Record<string, unknown> => isRecord(row));
+}
+
+/**
+ * One statement, inside one REPEATABLE READ snapshot, so a draft
+ * replace cannot land between the parent and its children.
+ */
+const READ_PACKET_SQL = `SELECT i.id AS intake_id,
+       i.client_id AS intake_client_id,
+       i.reference AS intake_reference,
+       p.id AS packet_id,
+       p.intake_id AS packet_intake_id,
+       p.client_id AS packet_client_id,
+       p.reference AS packet_reference,
+       p.test AS packet_test,
+       p.status AS packet_status,
+       p.heading AS heading,
+       p.intro AS intro,
+       p.sections AS sections,
+       p.owner_signed_at AS owner_signed_at,
+       p.signed_by AS signed_by,
+       p.content_hash AS content_hash,
+       p.created_at AS created_at,
+       p.updated_at AS updated_at,
+       COALESCE((
+         SELECT json_agg(json_build_object(
+           'section', c.section,
+           'position', c.position,
+           'body', c.body,
+           'evidence', c.evidence
+         ) ORDER BY c.section, c.position)
+         FROM proof_packet_claims c
+         WHERE c.packet_id = p.id
+       ), '[]'::json) AS claims,
+       COALESCE((
+         SELECT json_agg(json_build_object(
+           'position', k.position,
+           'check_text', k.check_text,
+           'method', k.method,
+           'result', k.result,
+           'evidence', k.evidence,
+           'not_run_reason', k.not_run_reason,
+           'run_by_date', k.run_by_date
+         ) ORDER BY k.position)
+         FROM proof_packet_checks k
+         WHERE k.packet_id = p.id
+       ), '[]'::json) AS checks
+  FROM intakes i
+  LEFT JOIN proof_packets p ON p.intake_id = i.id AND p.reference = i.reference
+ WHERE i.reference = $1`;
+
 export async function readProofPacket(reference: string): Promise<ReadProofPacketResult> {
   const trimmed = reference.trim();
   if (!REFERENCE_RE.test(trimmed)) return { status: "invalid", error: "bad_reference" };
@@ -862,40 +994,82 @@ export async function readProofPacket(reference: string): Promise<ReadProofPacke
     try {
       const client = await pool.connect();
       try {
-        const intake = await client.query("SELECT id FROM intakes WHERE reference = $1", [trimmed]);
-        if (intake.rows.length === 0) return { status: "intake_not_found" };
-        const found = await client.query(
-          `SELECT id, reference, test, status, heading, intro, sections,
-                  owner_signed_at, signed_by, created_at, updated_at
-             FROM proof_packets WHERE reference = $1`,
-          [trimmed],
-        );
-        if (found.rows.length === 0) return { status: "not_found" };
-        const row = found.rows[0];
-        const derived = await authoritativeSections(client, String(row.id), asSections(row.sections));
-        const checked = validateProofPacketDraft({
-          reference: String(row.reference),
-          heading: String(row.heading),
-          intro: String(row.intro),
-          sections: derived,
-        });
-        if (!checked.ok) return { status: "failed" };
-        return {
-          status: "found",
-          packet: {
-            packetId: String(row.id),
-            reference: String(row.reference),
-            test: asBool(row.test),
-            status: row.status === "signed" ? "signed" : "draft",
+        await client.query("BEGIN ISOLATION LEVEL REPEATABLE READ READ ONLY");
+        try {
+          const found = await client.query(READ_PACKET_SQL, [trimmed]);
+          if (found.rows.length === 0) {
+            await client.query("COMMIT");
+            return { status: "intake_not_found" };
+          }
+          const row = found.rows[0];
+          if (row.packet_id == null) {
+            await client.query("COMMIT");
+            return { status: "not_found" };
+          }
+          const test = asBool(row.packet_test);
+          if (
+            !packetIdentityOk({
+              reference: trimmed,
+              intakeId: String(row.intake_id),
+              intakeReference: String(row.intake_reference),
+              intakeClientId: String(row.intake_client_id),
+              packetIntakeId: String(row.packet_intake_id),
+              packetClientId: String(row.packet_client_id),
+              packetReference: String(row.packet_reference),
+              test,
+            })
+          ) {
+            await client.query("COMMIT");
+            return { status: "invalid", error: "identity_mismatch" };
+          }
+          const derived = assembleAuthoritativeSections(
+            asSections(row.sections),
+            asRowArray(row.claims),
+            asRowArray(row.checks),
+          );
+          const checked = validateProofPacketDraft({
+            reference: String(row.packet_reference),
             heading: String(row.heading),
             intro: String(row.intro),
-            sections: checked.sections,
-            ownerSignedAt: asIso(row.owner_signed_at),
-            signedBy: row.signed_by == null ? null : String(row.signed_by),
-            createdAt: asIso(row.created_at) ?? "",
-            updatedAt: asIso(row.updated_at) ?? "",
-          },
-        };
+            sections: derived,
+          });
+          if (!checked.ok) {
+            await client.query("COMMIT");
+            return { status: "failed" };
+          }
+          const contentHash = proofPacketContentHash(
+            trimmed,
+            checked.heading,
+            checked.intro,
+            checked.sections,
+          );
+          const storedHash = row.content_hash == null ? null : String(row.content_hash);
+          if (row.packet_status === "signed" && storedHash !== contentHash) {
+            await client.query("COMMIT");
+            return { status: "invalid", error: "identity_mismatch" };
+          }
+          await client.query("COMMIT");
+          return {
+            status: "found",
+            packet: {
+              packetId: String(row.packet_id),
+              reference: String(row.packet_reference),
+              test,
+              status: row.packet_status === "signed" ? "signed" : "draft",
+              heading: String(row.heading),
+              intro: String(row.intro),
+              sections: checked.sections,
+              ownerSignedAt: asIso(row.owner_signed_at),
+              signedBy: row.signed_by == null ? null : String(row.signed_by),
+              contentHash,
+              createdAt: asIso(row.created_at) ?? "",
+              updatedAt: asIso(row.updated_at) ?? "",
+            },
+          };
+        } catch {
+          await client.query("ROLLBACK").catch(() => undefined);
+          return { status: "failed" };
+        }
       } finally {
         client.release();
       }
@@ -907,7 +1081,10 @@ export async function readProofPacket(reference: string): Promise<ReadProofPacke
   }
 }
 
-export async function signProofPacket(reference: string): Promise<SignProofPacketResult> {
+export async function signProofPacket(
+  reference: string,
+  expectedHash: string,
+): Promise<SignProofPacketResult> {
   const trimmed = reference.trim();
   if (!REFERENCE_RE.test(trimmed)) return { status: "invalid", error: "bad_reference" };
   const url = dbUrl();
@@ -930,7 +1107,8 @@ export async function signProofPacket(reference: string): Promise<SignProofPacke
         const intakeId = String(intake.rows[0].id);
         const clientId = String(intake.rows[0].client_id);
         const existing = await client.query(
-          `SELECT id, status, test, heading, intro, sections, signed_by, owner_signed_at
+          `SELECT id, intake_id, client_id, reference, status, test, heading, intro, sections,
+                  signed_by, owner_signed_at, content_hash
              FROM proof_packets WHERE intake_id = $1 FOR UPDATE`,
           [intakeId],
         );
@@ -940,14 +1118,21 @@ export async function signProofPacket(reference: string): Promise<SignProofPacke
         }
         const row = existing.rows[0];
         const packetId = String(row.id);
-        if (row.status === "signed") {
+        const test = asBool(row.test);
+        if (
+          !packetIdentityOk({
+            reference: trimmed,
+            intakeId,
+            intakeReference: trimmed,
+            intakeClientId: clientId,
+            packetIntakeId: String(row.intake_id),
+            packetClientId: String(row.client_id),
+            packetReference: String(row.reference),
+            test,
+          })
+        ) {
           await client.query("ROLLBACK");
-          return {
-            status: "already_signed",
-            packetId,
-            signedBy: row.signed_by == null ? null : String(row.signed_by),
-            ownerSignedAt: asIso(row.owner_signed_at),
-          };
+          return { status: "invalid", error: "identity_mismatch" };
         }
         const derived = await authoritativeSections(client, packetId, asSections(row.sections));
         const recheck = validateProofPacketDraft({
@@ -960,16 +1145,43 @@ export async function signProofPacket(reference: string): Promise<SignProofPacke
           await client.query("ROLLBACK");
           return { status: "invalid", error: recheck.error };
         }
+        const contentHash = proofPacketContentHash(
+          trimmed,
+          recheck.heading,
+          recheck.intro,
+          recheck.sections,
+        );
+        if (!contentHashesMatch(expectedHash, contentHash)) {
+          await client.query("ROLLBACK");
+          return { status: "hash_mismatch" };
+        }
+        if (row.status === "signed") {
+          await client.query("ROLLBACK");
+          return {
+            status: "already_signed",
+            packetId,
+            signedBy: row.signed_by == null ? null : String(row.signed_by),
+            ownerSignedAt: asIso(row.owner_signed_at),
+            contentHash,
+          };
+        }
         const signed = await client.query(
           `UPDATE proof_packets
-             SET status = 'signed', signed_by = $1, owner_signed_at = now(), updated_at = now()
+             SET status = 'signed', signed_by = $1, owner_signed_at = now(), updated_at = now(),
+                 content_hash = $3
            WHERE id = $2 AND status = 'draft'
-           RETURNING id, test, signed_by, owner_signed_at`,
-          [OWNER_ROLE, packetId],
+           RETURNING id, test, signed_by, owner_signed_at, content_hash`,
+          [OWNER_ROLE, packetId, contentHash],
         );
         if (signed.rows.length === 0) {
           await client.query("ROLLBACK");
-          return { status: "already_signed", packetId, signedBy: null, ownerSignedAt: null };
+          return {
+            status: "already_signed",
+            packetId,
+            signedBy: null,
+            ownerSignedAt: null,
+            contentHash,
+          };
         }
         await client.query(
           `INSERT INTO audit_log (entity_type, entity_id, client_id, actor, action, from_status, to_status, reference)
@@ -983,6 +1195,7 @@ export async function signProofPacket(reference: string): Promise<SignProofPacke
           test: asBool(signed.rows[0].test),
           signedBy: OWNER_ROLE,
           ownerSignedAt: asIso(signed.rows[0].owner_signed_at) ?? "",
+          contentHash: String(signed.rows[0].content_hash),
         };
       } catch {
         await client.query("ROLLBACK").catch(() => undefined);

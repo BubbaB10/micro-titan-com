@@ -107,11 +107,58 @@ function proofPacketQuery(text, params = []) {
         .map((row) => ({ ...row })),
     };
   }
+  if (text.includes("FROM intakes i") && text.includes("LEFT JOIN proof_packets")) {
+    if (mode === "intake_missing") return { rows: [] };
+    const reference = params[0];
+    const packet = proofPackets.find((row) => row.reference === reference) ?? null;
+    const claims = packet
+      ? proofClaims
+          .filter((row) => row.packet_id === packet.id)
+          .sort((a, b) => String(a.section).localeCompare(String(b.section)) || a.position - b.position)
+          .map((row) => ({
+            section: row.section,
+            position: row.position,
+            body: row.body,
+            evidence: row.evidence,
+          }))
+      : [];
+    const checks = packet
+      ? proofChecks
+          .filter((row) => row.packet_id === packet.id)
+          .sort((a, b) => a.position - b.position)
+          .map((row) => ({ ...row }))
+      : [];
+    return {
+      rows: [
+        {
+          intake_id: "11111111-1111-1111-1111-111111111111",
+          intake_client_id: "22222222-2222-2222-2222-222222222222",
+          intake_reference: reference,
+          packet_id: packet ? packet.id : null,
+          packet_intake_id: packet ? packet.intake_id : null,
+          packet_client_id: packet ? packet.client_id : null,
+          packet_reference: packet ? packet.reference : null,
+          packet_test: packet ? packet.test : null,
+          packet_status: packet ? packet.status : null,
+          heading: packet ? packet.heading : null,
+          intro: packet ? packet.intro : null,
+          sections: packet ? packet.sections : null,
+          owner_signed_at: packet ? packet.owner_signed_at : null,
+          signed_by: packet ? packet.signed_by : null,
+          content_hash: packet ? packet.content_hash : null,
+          created_at: packet ? packet.created_at : null,
+          updated_at: packet ? packet.updated_at : null,
+          claims,
+          checks,
+        },
+      ],
+    };
+  }
   if (text.startsWith("SELECT id, status FROM proof_packets WHERE intake_id")) {
     const found = proofPackets.find((row) => row.intake_id === params[0]);
     return { rows: found ? [{ id: found.id, status: found.status }] : [] };
   }
-  if (text.startsWith("SELECT id, status, test, heading, intro, sections, signed_by, owner_signed_at")) {
+  if (text.startsWith("SELECT id, intake_id, client_id, reference, status, test, heading")) {
     const found = proofPackets.find((row) => row.intake_id === params[0]);
     return { rows: found ? [{ ...found, sections: found.sections }] : [] };
   }
@@ -135,6 +182,7 @@ function proofPacketQuery(text, params = []) {
       sections: JSON.parse(params[6]),
       owner_signed_at: null,
       signed_by: null,
+      content_hash: null,
       created_at: "2026-11-07T16:00:00.000Z",
       updated_at: "2026-11-07T16:00:00.000Z",
     };
@@ -156,6 +204,7 @@ function proofPacketQuery(text, params = []) {
     if (!row) return { rows: [] };
     row.status = "signed";
     row.signed_by = params[0];
+    row.content_hash = params[2];
     row.owner_signed_at = "2026-11-07T22:00:00.000Z";
     row.updated_at = "2026-11-07T22:00:00.000Z";
     return {
@@ -165,6 +214,7 @@ function proofPacketQuery(text, params = []) {
           test: row.test,
           signed_by: row.signed_by,
           owner_signed_at: row.owner_signed_at,
+          content_hash: row.content_hash,
         },
       ],
     };
@@ -236,7 +286,7 @@ export class Pool {
         if (mode === "throw") {
           throw new Error("fake pg failure");
         }
-        if (/^(BEGIN|COMMIT|ROLLBACK)$/i.test(text)) return { rows: [] };
+        if (/^BEGIN\b/i.test(text) || /^(COMMIT|ROLLBACK)$/i.test(text)) return { rows: [] };
         if (text.startsWith("INSERT INTO audit_log")) return { rows: [] };
         if (text.includes("proof_packet")) return proofPacketQuery(text, params);
         if (text.includes("FROM intakes")) {

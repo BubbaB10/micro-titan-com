@@ -295,15 +295,23 @@ CREATE TABLE IF NOT EXISTS proof_packets (
   sections JSONB NOT NULL,
   owner_signed_at TIMESTAMPTZ,
   signed_by TEXT,
+  content_hash TEXT,
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   CONSTRAINT proof_packets_sign_shape CHECK (
-    (status = 'draft' AND owner_signed_at IS NULL AND signed_by IS NULL)
+    (
+      status = 'draft'
+      AND owner_signed_at IS NULL
+      AND signed_by IS NULL
+      AND content_hash IS NULL
+    )
     OR (
       status = 'signed'
       AND owner_signed_at IS NOT NULL
       AND signed_by IS NOT NULL
       AND signed_by = 'owner'
+      AND content_hash IS NOT NULL
+      AND content_hash ~ '^[0-9a-f]{64}$'
     )
   )
 );
@@ -385,22 +393,46 @@ RETURNS trigger
 LANGUAGE plpgsql
 AS $$
 DECLARE
-  parent_status TEXT;
+  parent_ids UUID[];
   parent_id UUID;
+  parent_status TEXT;
 BEGIN
-  parent_id := COALESCE(NEW.packet_id, OLD.packet_id);
-  SELECT status INTO parent_status
-    FROM proof_packets
-   WHERE id = parent_id
-   FOR UPDATE;
-  IF parent_status IS NULL THEN
-    RAISE EXCEPTION 'proof packet is missing'
+  -- packet_id never moves. Lock every parent this statement
+  -- touches, smaller uuid first, so two parents cannot deadlock
+  -- each other. A signed OLD parent blocks the change even when
+  -- NEW points at a draft.
+  IF TG_OP = 'INSERT' THEN
+    parent_ids := ARRAY[NEW.packet_id];
+  ELSIF TG_OP = 'DELETE' THEN
+    parent_ids := ARRAY[OLD.packet_id];
+  ELSIF NEW.packet_id = OLD.packet_id THEN
+    parent_ids := ARRAY[OLD.packet_id];
+  ELSIF OLD.packet_id < NEW.packet_id THEN
+    parent_ids := ARRAY[OLD.packet_id, NEW.packet_id];
+  ELSE
+    parent_ids := ARRAY[NEW.packet_id, OLD.packet_id];
+  END IF;
+
+  FOREACH parent_id IN ARRAY parent_ids LOOP
+    SELECT status INTO parent_status
+      FROM proof_packets
+     WHERE id = parent_id
+     FOR UPDATE;
+    IF parent_status IS NULL THEN
+      RAISE EXCEPTION 'proof packet is missing'
+        USING ERRCODE = 'restrict_violation';
+    END IF;
+    IF parent_status = 'signed' THEN
+      RAISE EXCEPTION 'signed proof packet is frozen'
+        USING ERRCODE = 'restrict_violation';
+    END IF;
+  END LOOP;
+
+  IF TG_OP = 'UPDATE' AND NEW.packet_id IS DISTINCT FROM OLD.packet_id THEN
+    RAISE EXCEPTION 'proof packet child packet_id is immutable'
       USING ERRCODE = 'restrict_violation';
   END IF;
-  IF parent_status = 'signed' THEN
-    RAISE EXCEPTION 'signed proof packet is frozen'
-      USING ERRCODE = 'restrict_violation';
-  END IF;
+
   IF TG_OP = 'DELETE' THEN
     RETURN OLD;
   END IF;
@@ -419,3 +451,46 @@ CREATE TRIGGER proof_packet_checks_freeze
   BEFORE INSERT OR UPDATE OR DELETE ON proof_packet_checks
   FOR EACH ROW
   EXECUTE FUNCTION proof_packet_children_freeze_when_signed();
+
+-- intake_id, reference, and client_id must describe the same intake.
+-- test is true only when the reference code is TEST.
+CREATE OR REPLACE FUNCTION proof_packets_identity_guard()
+RETURNS trigger
+LANGUAGE plpgsql
+AS $$
+DECLARE
+  intake_client UUID;
+  intake_reference TEXT;
+  reference_is_test BOOLEAN;
+BEGIN
+  SELECT client_id, reference
+    INTO intake_client, intake_reference
+    FROM intakes
+   WHERE id = NEW.intake_id
+   FOR SHARE;
+
+  IF intake_reference IS NULL THEN
+    RAISE EXCEPTION 'proof packet intake is missing'
+      USING ERRCODE = 'restrict_violation';
+  END IF;
+  IF NEW.client_id IS DISTINCT FROM intake_client
+     OR NEW.reference IS DISTINCT FROM intake_reference THEN
+    RAISE EXCEPTION 'proof packet identity does not match intake'
+      USING ERRCODE = 'restrict_violation';
+  END IF;
+
+  reference_is_test := NEW.reference ~ '^MT-[0-9]{8}-TEST$';
+  IF NEW.test IS DISTINCT FROM reference_is_test THEN
+    RAISE EXCEPTION 'proof packet test flag does not match reference'
+      USING ERRCODE = 'restrict_violation';
+  END IF;
+
+  RETURN NEW;
+END;
+$$;
+
+DROP TRIGGER IF EXISTS proof_packets_identity_guard ON proof_packets;
+CREATE TRIGGER proof_packets_identity_guard
+  BEFORE INSERT OR UPDATE ON proof_packets
+  FOR EACH ROW
+  EXECUTE FUNCTION proof_packets_identity_guard();
