@@ -6,11 +6,19 @@
 
 const queries = [];
 const communicationRows = [];
+const proofPackets = [];
+const proofClaims = [];
+const proofChecks = [];
 let mode = "intake_missing";
+let proofPacketSeq = 1;
 
 export function setFakePgMode(next) {
   mode = next;
   queries.length = 0;
+  proofPackets.length = 0;
+  proofClaims.length = 0;
+  proofChecks.length = 0;
+  proofPacketSeq = 1;
 }
 
 export function resetCommunicationLog() {
@@ -77,6 +85,117 @@ function queryCommunicationLog(sql, params = []) {
   throw new Error(`unexpected communication sql: ${text}`);
 }
 
+function proofPacketQuery(text, params = []) {
+  if (text.startsWith("SELECT id, status FROM proof_packets WHERE intake_id")) {
+    const found = proofPackets.find((row) => row.intake_id === params[0]);
+    return { rows: found ? [{ id: found.id, status: found.status }] : [] };
+  }
+  if (text.startsWith("SELECT id, status, test, heading, intro, sections, signed_by, owner_signed_at")) {
+    const found = proofPackets.find((row) => row.intake_id === params[0]);
+    return { rows: found ? [{ ...found, sections: found.sections }] : [] };
+  }
+  if (text.startsWith("SELECT id, reference, test, status, heading, intro, sections")) {
+    const found = proofPackets.find((row) => row.reference === params[0]);
+    return { rows: found ? [{ ...found, sections: found.sections }] : [] };
+  }
+  if (text.startsWith("INSERT INTO proof_packets")) {
+    if (proofPackets.some((row) => row.intake_id === params[0] || row.reference === params[2])) {
+      throw new Error("duplicate proof packet");
+    }
+    const row = {
+      id: `packet-${proofPacketSeq++}`,
+      intake_id: params[0],
+      client_id: params[1],
+      reference: params[2],
+      test: params[3] === true,
+      status: "draft",
+      heading: params[4],
+      intro: params[5],
+      sections: JSON.parse(params[6]),
+      owner_signed_at: null,
+      signed_by: null,
+      created_at: "2026-11-07T16:00:00.000Z",
+      updated_at: "2026-11-07T16:00:00.000Z",
+    };
+    proofPackets.push(row);
+    return { rows: [{ id: row.id, test: row.test }] };
+  }
+  if (text.startsWith("UPDATE proof_packets") && text.includes("status = 'draft'") && text.includes("heading = $1")) {
+    const row = proofPackets.find((existing) => existing.id === params[4] && existing.status === "draft");
+    if (!row) return { rows: [] };
+    row.heading = params[0];
+    row.intro = params[1];
+    row.sections = JSON.parse(params[2]);
+    row.test = params[3] === true;
+    row.updated_at = "2026-11-07T16:05:00.000Z";
+    return { rows: [{ id: row.id, test: row.test }] };
+  }
+  if (text.startsWith("UPDATE proof_packets") && text.includes("status = 'signed'")) {
+    const row = proofPackets.find((existing) => existing.id === params[1] && existing.status === "draft");
+    if (!row) return { rows: [] };
+    row.status = "signed";
+    row.signed_by = params[0];
+    row.owner_signed_at = "2026-11-07T22:00:00.000Z";
+    row.updated_at = "2026-11-07T22:00:00.000Z";
+    return {
+      rows: [
+        {
+          id: row.id,
+          test: row.test,
+          signed_by: row.signed_by,
+          owner_signed_at: row.owner_signed_at,
+        },
+      ],
+    };
+  }
+  if (text.startsWith("DELETE FROM proof_packet_claims")) {
+    for (let i = proofClaims.length - 1; i >= 0; i -= 1) {
+      if (proofClaims[i].packet_id === params[0]) proofClaims.splice(i, 1);
+    }
+    return { rows: [] };
+  }
+  if (text.startsWith("DELETE FROM proof_packet_checks")) {
+    for (let i = proofChecks.length - 1; i >= 0; i -= 1) {
+      if (proofChecks[i].packet_id === params[0]) proofChecks.splice(i, 1);
+    }
+    return { rows: [] };
+  }
+  if (text.startsWith("INSERT INTO proof_packet_claims")) {
+    const evidence = String(params[4] ?? "");
+    if (evidence.trim().length === 0) throw new Error("claim evidence check");
+    proofClaims.push({
+      packet_id: params[0],
+      section: params[1],
+      position: params[2],
+      body: params[3],
+      evidence,
+    });
+    return { rows: [] };
+  }
+  if (text.startsWith("INSERT INTO proof_packet_checks")) {
+    const evidence = String(params[5] ?? "");
+    if (evidence.trim().length === 0) throw new Error("check evidence check");
+    if (params[4] === "NOT_RUN") {
+      const reason = String(params[6] ?? "");
+      if (reason.trim().length === 0 || params[7] == null || params[7] === "") {
+        throw new Error("not_run check");
+      }
+    }
+    proofChecks.push({
+      packet_id: params[0],
+      position: params[1],
+      check_text: params[2],
+      method: params[3],
+      result: params[4],
+      evidence,
+      not_run_reason: params[6],
+      run_by_date: params[7],
+    });
+    return { rows: [] };
+  }
+  throw new Error(`unexpected proof packet sql: ${text}`);
+}
+
 export function fakePgQueries() {
   return queries.map((query) => ({ sql: query.sql, params: query.params }));
 }
@@ -97,6 +216,8 @@ export class Pool {
           throw new Error("fake pg failure");
         }
         if (/^(BEGIN|COMMIT|ROLLBACK)$/i.test(text)) return { rows: [] };
+        if (text.startsWith("INSERT INTO audit_log")) return { rows: [] };
+        if (text.includes("proof_packet")) return proofPacketQuery(text, params);
         if (text.includes("FROM intakes")) {
           if (mode === "intake_missing") return { rows: [] };
           return {

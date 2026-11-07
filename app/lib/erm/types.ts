@@ -109,6 +109,106 @@ export type ChangeLogAction =
 /** Monthly billing tracking (Gap 9): the optional operate plan. */
 export type MonthlySubscriptionStatus = "active" | "cancelled";
 
+/**
+ * Proof packet (internal ERM record). One packet per intake.
+ * Sign-off is the owner role only. Nothing here is a public receipt.
+ */
+export type ProofPacketStatus = "draft" | "signed";
+export type ProofCheckResult = "PASS" | "FAIL" | "NOT_RUN";
+export type ApprovedAgent = "Muse" | "Grok Bot" | "Claude" | "Gemini";
+
+export interface ProofPacketHeader {
+  clientDisplayName: string;
+  lane: Lane;
+  agent: ApprovedAgent;
+  /** Must name the client as the account owner. */
+  agentAccountOwner: string;
+  preparedBy: string;
+  version: string;
+}
+
+export interface ProofAuthorshipClaim {
+  item: string;
+  writtenBy: string;
+  mergedBy: string;
+  verifiedBy: string;
+  evidence: string;
+}
+
+export interface ProofTimelineClaim {
+  stage: string;
+  when: string;
+  actor: string;
+  evidence: string;
+}
+
+export interface ProofMoneyClaim {
+  line: string;
+  amount: string;
+  /** Agreement line status (for example "not charged (test)"), not the packet status. */
+  status: string;
+  evidence: string;
+}
+
+export interface ProofDiscoveryClaim {
+  field: string;
+  value: string;
+  evidence: string;
+}
+
+export interface ProofSetupClaim {
+  change: string;
+  kind: string;
+  actor: string;
+  fromTo: string;
+  evidence: string;
+}
+
+export interface ProofAccessClaim {
+  system: string;
+  grantedTo: string;
+  grantedOrRevoked: string;
+  evidence: string;
+}
+
+export interface ProofFollowUpClaim {
+  step: "day1" | "day3" | "day7" | "day14";
+  channel: "email" | "text" | "call" | "manual_note";
+  actor: string;
+  when: string;
+  evidence: string;
+}
+
+export interface ProofWordingClaim {
+  text: string;
+  source: string;
+  evidence: string;
+}
+
+export interface ProofCheck {
+  check: string;
+  method: string;
+  result: ProofCheckResult;
+  evidence: string;
+  notRunReason?: string;
+  runByDate?: string;
+}
+
+/** Stored document inside proof_packets.sections. */
+export interface ProofPacketSections {
+  header: ProofPacketHeader;
+  authorship: ProofAuthorshipClaim[];
+  timeline: ProofTimelineClaim[];
+  money: ProofMoneyClaim[];
+  discovery: ProofDiscoveryClaim[];
+  setup: ProofSetupClaim[];
+  access: ProofAccessClaim[];
+  checks: ProofCheck[];
+  "follow-ups": ProofFollowUpClaim[];
+  wording: ProofWordingClaim[];
+  "not-proven": string[];
+}
+
 /** Allowed intake transitions. Anything else is rejected, not stored. */
 export const INTAKE_TRANSITIONS: Record<IntakeStatus, IntakeStatus[]> = {
   received: ["completeness_check", "closed"],

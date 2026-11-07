@@ -265,3 +265,64 @@ CREATE INDEX IF NOT EXISTS idx_jobs_client_status ON jobs(client_id, status);
 CREATE INDEX IF NOT EXISTS idx_jobs_queue ON jobs(queue_position) WHERE status = 'queued';
 CREATE INDEX IF NOT EXISTS idx_audit_client ON audit_log(client_id, created_at);
 CREATE INDEX IF NOT EXISTS idx_payments_client ON payments(client_id, status);
+
+-- Proof packets (internal only). One row per intake. The packet is
+-- not a public receipt and nothing here sends it to a client.
+-- Claim and check rows carry a non-empty evidence value. A NOT_RUN
+-- check also carries a reason and a target date. Sign-off is the
+-- owner role only (signed_by = 'owner'). See migration
+-- 008-proof-packets.sql for the apply-once text and the rules.
+CREATE TABLE IF NOT EXISTS proof_packets (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  intake_id UUID NOT NULL UNIQUE REFERENCES intakes(id),
+  client_id UUID NOT NULL REFERENCES clients(id),
+  reference TEXT NOT NULL UNIQUE REFERENCES intakes(reference),
+  test BOOLEAN NOT NULL DEFAULT FALSE,
+  status TEXT NOT NULL DEFAULT 'draft' CHECK (status IN ('draft', 'signed')),
+  heading TEXT NOT NULL,
+  intro TEXT NOT NULL,
+  sections JSONB NOT NULL,
+  owner_signed_at TIMESTAMPTZ,
+  signed_by TEXT,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  CONSTRAINT proof_packets_sign_shape CHECK (
+    (status = 'draft' AND owner_signed_at IS NULL AND signed_by IS NULL)
+    OR (status = 'signed' AND owner_signed_at IS NOT NULL AND signed_by = 'owner')
+  )
+);
+
+CREATE TABLE IF NOT EXISTS proof_packet_claims (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  packet_id UUID NOT NULL REFERENCES proof_packets(id),
+  section TEXT NOT NULL CHECK (section IN (
+    'authorship', 'timeline', 'money', 'discovery', 'setup',
+    'access', 'follow-ups', 'wording'
+  )),
+  position INT NOT NULL,
+  body JSONB NOT NULL,
+  evidence TEXT NOT NULL CHECK (length(btrim(evidence)) > 0),
+  UNIQUE (packet_id, section, position)
+);
+
+CREATE TABLE IF NOT EXISTS proof_packet_checks (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  packet_id UUID NOT NULL REFERENCES proof_packets(id),
+  position INT NOT NULL,
+  check_text TEXT NOT NULL,
+  method TEXT NOT NULL,
+  result TEXT NOT NULL CHECK (result IN ('PASS', 'FAIL', 'NOT_RUN')),
+  evidence TEXT NOT NULL CHECK (length(btrim(evidence)) > 0),
+  not_run_reason TEXT NOT NULL DEFAULT '',
+  run_by_date DATE,
+  UNIQUE (packet_id, position),
+  CONSTRAINT proof_packet_checks_not_run CHECK (
+    result <> 'NOT_RUN'
+    OR (length(btrim(not_run_reason)) > 0 AND run_by_date IS NOT NULL)
+  )
+);
+
+CREATE INDEX IF NOT EXISTS idx_proof_packet_claims_packet
+  ON proof_packet_claims(packet_id, section, position);
+CREATE INDEX IF NOT EXISTS idx_proof_packet_checks_packet
+  ON proof_packet_checks(packet_id, position);
