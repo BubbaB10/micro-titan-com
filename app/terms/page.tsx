@@ -8,18 +8,18 @@ export const metadata: Metadata = {
   description: "Terms of Service for micro-titan.com and Micro Titan LLC services.",
 };
 
-// v1 — owner-approved 2026-10-24 ("Publish v1"). Written from what the site already promises
-// (/onboarding, /valet/pricing). Not yet reviewed by an attorney; that is stated to the reader below.
+// v1 — owner-approved 2026-10-24 ("Publish v1"). Pricing language now points at /pricing.
+// Not yet reviewed by an attorney; that is stated to the reader below.
 const sections: { title: string; body: string[] }[] = [
   {
     title: "1. Who we are",
-    body: ["Micro Titan LLC, Paris, Texas. Contact: hello@micro-titan.com."],
+    body: ["Micro Titan LLC, a Texas limited liability company. Contact: hello@micro-titan.com."],
   },
   {
     title: "2. What these terms cover",
     body: [
       "These terms cover your use of micro-titan.com and download.micro-titan.com, including the intake conversation.",
-      "Paid services (Valet plans and Studio builds) are governed by these terms plus the Service Agreement you accept before anything is installed. If the two conflict, the Service Agreement wins for that service.",
+      "Paid services are governed by these terms plus the Service Agreement you accept before work begins. If the two conflict, the Service Agreement wins for that service.",
     ],
   },
   {
@@ -50,7 +50,7 @@ const sections: { title: string; body: string[] }[] = [
   {
     title: "7. Prices and billing",
     body: [
-      "Prices for Valet plans are published at micro-titan.com/valet/pricing: a one-time build fee, then a flat monthly fee. No per-seat fees, no per-feature upsells, no silent overages, no trial that upgrades itself.",
+      "Prices for our services are published at micro-titan.com/pricing. No per-seat fees, no per-feature upsells, no silent overages, no trial that upgrades itself.",
       "Outside costs you choose to carry yourself (for example your own model-provider or hosting account) are billed to you by that provider, not by us.",
       "Changes to prices never apply to a running plan without written notice before your next monthly charge.",
     ],

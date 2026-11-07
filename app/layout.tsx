@@ -34,8 +34,8 @@ export const metadata: Metadata = {
   // localhost at build time and warns. Set explicitly so social cards work from production.
   metadataBase: new URL("https://micro-titan.com"),
   title: "Micro Titan — Custom Software, Automation & Practical AI Help",
-  description: "Custom software and automation for small businesses, plus practical AI setup and hands-on guidance for individuals. An assistant is scoped in where it helps, not assumed. Based in Paris, Texas. Websites and monthly care are available separately: $2,500 setup + $750/month.",
-  keywords: ["Micro Titan", "custom business software", "business automation", "AI tool setup", "AI help", "business operations software", "small business websites", "local SEO", "Northeast Texas", "Paris Texas", "Fairway Bets", "Mineral Ledger"],
+  description: "Custom software and automation for small businesses, plus practical AI setup and hands-on guidance for individuals. An assistant is scoped in where it helps, not assumed. Remote, nationwide. Websites and monthly care are available separately: $2,500 setup + $750/month.",
+  keywords: ["Micro Titan", "custom business software", "business automation", "AI tool setup", "AI help", "business operations software", "small business websites", "local SEO", "Fairway Bets", "Mineral Ledger"],
   openGraph: {
     title: "Micro Titan — Custom Software, Automation & Practical AI Help",
     description: "Custom software and automation for small businesses, plus practical AI setup and hands-on guidance for individuals.",

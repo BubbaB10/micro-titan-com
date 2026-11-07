@@ -8,7 +8,6 @@ const NAV_LINKS = [
   { href: "/studio", label: "Custom software", desc: null },
   { href: "/about", label: "About", desc: null },
   { href: "/pricing", label: "Pricing", desc: null },
-  { href: "/valet", label: "Valet", desc: "the agent" },
 ];
 
 // Mobile hamburger shows the overflow items the tab bar doesn't cover
@@ -16,10 +15,6 @@ const MOBILE_OVERFLOW = [
   { href: "/", label: "Micro Titan services" },
   { href: "/studio", label: "Custom software" },
   { href: "/about", label: "About" },
-  { href: "/valet", label: "Meet Valet" },
-  { href: "/valet/pricing", label: "Valet plans" },
-  { href: "/why-provable", label: "How verification works" },
-  { href: "/pivot", label: "Pivot" },
 ];
 
 export default function Nav() {
@@ -59,12 +54,6 @@ export default function Nav() {
 
           {/* Desktop CTAs */}
           <div className="hidden lg:flex items-center gap-3">
-            <Link
-              href="https://download.micro-titan.com"
-              className="bg-[#818cf8]/15 hover:bg-[#818cf8]/25 border border-[#818cf8]/35 text-[#c7d2fe] text-sm font-semibold px-5 py-2 rounded-lg transition-colors"
-            >
-              Try Valet →
-            </Link>
             <Link
               href="/pricing"
               className="bg-[#2563eb] hover:bg-[#1d4ed8] text-white text-sm font-semibold px-5 py-2 rounded-lg transition-colors"

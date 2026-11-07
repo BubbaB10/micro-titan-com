@@ -193,14 +193,13 @@ export default function GuidePage() {
               This ritual works on paper, in a notes app, anywhere. You don&apos;t need us for it.
             </p>
             <p className="text-base leading-relaxed" style={{ color: "#44403c" }}>
-              We built <strong>Valet</strong> for the people who want steps 1–4 to happen automatically, all week long,
-              with proof — a personal agent that watches the domains, hands you only the decisions, and shows
-              its work. If that&apos;s interesting, it&apos;s at{" "}
-              <Link href="/valet" className="underline underline-offset-2" style={{ color: "#818cf8" }}>
-                micro-titan.com/valet
-              </Link>. If not, this guide is yours either way. Nothing slips.
+              If you want this done with your own agent, wired in, the current services are at{" "}
+              <Link href="/pricing" className="underline underline-offset-2" style={{ color: "#818cf8" }}>
+                micro-titan.com/pricing
+              </Link>
+              . If not, this guide is yours either way. Nothing slips.
             </p>
-            <p className="mt-6 text-sm" style={{ color: "#9ca3af" }}>— Micro Titan · Paris, TX</p>
+            <p className="mt-6 text-sm" style={{ color: "#9ca3af" }}>— Micro Titan</p>
           </section>
 
         </div>
@@ -208,7 +207,7 @@ export default function GuidePage() {
         {/* Footer */}
         <footer className="px-5 py-8 border-t text-center no-print" style={{ borderColor: "#e7e3dc" }}>
           <p className="text-xs" style={{ color: "#a8a29e" }}>
-            © 2026 Micro Titan LLC · Paris, Texas ·{" "}
+            © 2026 Micro Titan LLC · Remote, nationwide ·{" "}
             <Link href="/" className="hover:underline" style={{ color: "#a8a29e" }}>
               micro-titan.com
             </Link>
