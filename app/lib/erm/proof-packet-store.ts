@@ -25,15 +25,20 @@
  * - Heading and intro must be the approved text, verbatim, with
  *   the intake reference filled into the heading. Any other
  *   wording is rejected and nothing is written.
- * - Sign-off is the owner role only. The signer must be "owner",
- *   the actor value already stored on owner-written rows
- *   (followups.actor, change_log.actor). The route that calls
- *   sign is also gated by OPS_DASHBOARD_TOKEN, the flag this
- *   repo already uses for owner actions. Any other signer is
- *   rejected and nothing is written.
- * - TEST intakes are allowed. A reference that ends in -TEST, or
- *   that contains a -TEST- segment, is stored with test = true.
- *   The caller cannot turn that flag off or on.
+ * - Sign-off is recorded as the owner role. This module does not
+ *   accept a client-supplied signer. POST /api/ops/proof-packet-sign
+ *   is the only HTTP caller, and it requires OWNER_SIGNING_TOKEN
+ *   in addition to OPS_DASHBOARD_TOKEN. The ops token alone
+ *   cannot sign.
+ * - proof_packets.sections stores the header and the not-proven
+ *   lines only. Claims and checks live in proof_packet_claims and
+ *   proof_packet_checks. Reads and the sign recheck assemble the
+ *   document from those child rows, using each row's evidence
+ *   column. The parent JSON is not the claim record.
+ * - TEST intakes are allowed when the reference matches the
+ *   intake shape MT-YYYYMMDD-XXXX and the four-character code is
+ *   TEST. The packet is stored with test = true. The caller
+ *   cannot turn that flag off or on. Other shapes are rejected.
  * - This module never advances an intake, never sends email,
  *   SMS, or a call, and never marks a packet as shared. A packet
  *   does not feed the public /receipts page.
@@ -116,18 +121,14 @@ export function approvedProofPacketText(reference: string): string {
 
 /**
  * TEST intakes are allowed to carry a packet. The packet is flagged
- * test so it never counts as proof of client work. There is no
- * isTestIntake helper on master; this is that rule: a reference
- * ending in -TEST, a -TEST- segment, or a TEST- prefix.
+ * test so it never counts as proof of client work. A reference
+ * counts only when it matches the same intake shape the store
+ * accepts (MT-YYYYMMDD-XXXX) and the four-character code is TEST.
+ * MT-TEST-DUE and a TEST- prefix are not packet references.
  */
 export function isTestIntake(reference: string): boolean {
   const ref = reference.trim().toUpperCase();
-  return ref.endsWith("-TEST") || ref.includes("-TEST-") || ref.startsWith("TEST-");
-}
-
-export function validateOwnerSigner(signedBy: unknown): "not_owner" | null {
-  if (signedBy !== OWNER_ROLE) return "not_owner";
-  return null;
+  return REFERENCE_RE.test(ref) && ref.endsWith("-TEST");
 }
 
 export type ProofPacketDraftInput = {
@@ -537,7 +538,6 @@ export type SignProofPacketResult =
       ownerSignedAt: string | null;
     }
   | { status: "not_found" }
-  | { status: "not_owner" }
   | { status: "intake_not_found" }
   | { status: "not_configured" }
   | { status: "invalid"; error: string }
@@ -575,6 +575,121 @@ type ClaimInsert = {
   body: object;
   evidence: string;
 };
+
+/**
+ * The parent JSON is header + not-proven only. Claim and check
+ * text is inserted into the child tables, which are the record
+ * reads and signing use.
+ */
+function persistedDocument(sections: ProofPacketSections): string {
+  return JSON.stringify({
+    header: sections.header,
+    "not-proven": sections["not-proven"],
+  });
+}
+
+function asDateOnly(value: unknown): string | null {
+  if (value == null || value === "") return null;
+  if (value instanceof Date && !Number.isNaN(value.getTime())) {
+    return value.toISOString().slice(0, 10);
+  }
+  if (typeof value === "string") {
+    const match = /^(\d{4}-\d{2}-\d{2})/.exec(value);
+    return match ? match[1] : null;
+  }
+  return null;
+}
+
+const CLAIM_SECTION_NAMES = [
+  "authorship",
+  "timeline",
+  "money",
+  "discovery",
+  "setup",
+  "access",
+  "follow-ups",
+  "wording",
+] as const;
+
+/**
+ * Build the packet document from the parent header / not-proven
+ * JSON plus the constrained child rows. Evidence always comes
+ * from the child evidence column.
+ */
+export function assembleAuthoritativeSections(
+  stored: unknown,
+  claimRows: Array<Record<string, unknown>>,
+  checkRows: Array<Record<string, unknown>>,
+): unknown {
+  if (!isRecord(stored)) return null;
+  const grouped: Record<string, unknown[]> = {};
+  for (const name of CLAIM_SECTION_NAMES) grouped[name] = [];
+  const orderedClaims = [...claimRows].sort((a, b) => {
+    const section = String(a.section).localeCompare(String(b.section));
+    if (section !== 0) return section;
+    return Number(a.position) - Number(b.position);
+  });
+  for (const row of orderedClaims) {
+    const section = typeof row.section === "string" ? row.section : "";
+    if (!CLAIM_SECTION_NAMES.includes(section as (typeof CLAIM_SECTION_NAMES)[number])) return null;
+    const body = asSections(row.body);
+    if (!isRecord(body)) return null;
+    const evidence = typeof row.evidence === "string" ? row.evidence : "";
+    grouped[section].push({ ...body, evidence });
+  }
+  const checks = [...checkRows]
+    .sort((a, b) => Number(a.position) - Number(b.position))
+    .map((row) => {
+      const built: Record<string, unknown> = {
+        check: row.check_text,
+        method: row.method,
+        result: row.result,
+        evidence: row.evidence,
+      };
+      if (row.result === "NOT_RUN") {
+        built.notRunReason = typeof row.not_run_reason === "string" ? row.not_run_reason : "";
+        built.runByDate = asDateOnly(row.run_by_date) ?? "";
+      }
+      return built;
+    });
+  return {
+    header: stored.header,
+    authorship: grouped.authorship,
+    timeline: grouped.timeline,
+    money: grouped.money,
+    discovery: grouped.discovery,
+    setup: grouped.setup,
+    access: grouped.access,
+    checks,
+    "follow-ups": grouped["follow-ups"],
+    wording: grouped.wording,
+    "not-proven": stored["not-proven"],
+  };
+}
+
+async function authoritativeSections(
+  client: {
+    query: (sql: string, params?: unknown[]) => Promise<{ rows: Array<Record<string, unknown>> }>;
+  },
+  packetId: string,
+  stored: unknown,
+): Promise<unknown> {
+  const claims = await client.query(
+    `SELECT section, position, body, evidence
+       FROM proof_packet_claims
+      WHERE packet_id = $1
+      ORDER BY section, position`,
+    [packetId],
+  );
+  const checks = await client.query(
+    `SELECT position, check_text, method, result, evidence, not_run_reason, run_by_date
+       FROM proof_packet_checks
+      WHERE packet_id = $1
+      ORDER BY position`,
+    [packetId],
+  );
+  return assembleAuthoritativeSections(stored, claims.rows, checks.rows);
+}
 
 function claimInserts(sections: ProofPacketSections): ClaimInsert[] {
   const groups: Array<{ section: string; rows: Array<{ evidence: string }> }> = [
@@ -671,7 +786,7 @@ export async function saveProofPacketDraft(
           "SELECT id, status FROM proof_packets WHERE intake_id = $1 FOR UPDATE",
           [intakeId],
         );
-        const sectionsJson = JSON.stringify(validated.sections);
+        const sectionsJson = persistedDocument(validated.sections);
         if (existing.rows.length > 0) {
           const packetId = String(existing.rows[0].id);
           if (existing.rows[0].status === "signed") {
@@ -757,8 +872,14 @@ export async function readProofPacket(reference: string): Promise<ReadProofPacke
         );
         if (found.rows.length === 0) return { status: "not_found" };
         const row = found.rows[0];
-        const sections = asSections(row.sections);
-        if (!isRecord(sections)) return { status: "failed" };
+        const derived = await authoritativeSections(client, String(row.id), asSections(row.sections));
+        const checked = validateProofPacketDraft({
+          reference: String(row.reference),
+          heading: String(row.heading),
+          intro: String(row.intro),
+          sections: derived,
+        });
+        if (!checked.ok) return { status: "failed" };
         return {
           status: "found",
           packet: {
@@ -768,7 +889,7 @@ export async function readProofPacket(reference: string): Promise<ReadProofPacke
             status: row.status === "signed" ? "signed" : "draft",
             heading: String(row.heading),
             intro: String(row.intro),
-            sections: sections as unknown as ProofPacketSections,
+            sections: checked.sections,
             ownerSignedAt: asIso(row.owner_signed_at),
             signedBy: row.signed_by == null ? null : String(row.signed_by),
             createdAt: asIso(row.created_at) ?? "",
@@ -786,11 +907,7 @@ export async function readProofPacket(reference: string): Promise<ReadProofPacke
   }
 }
 
-export async function signProofPacket(
-  reference: string,
-  signedBy: unknown,
-): Promise<SignProofPacketResult> {
-  if (validateOwnerSigner(signedBy) !== null) return { status: "not_owner" };
+export async function signProofPacket(reference: string): Promise<SignProofPacketResult> {
   const trimmed = reference.trim();
   if (!REFERENCE_RE.test(trimmed)) return { status: "invalid", error: "bad_reference" };
   const url = dbUrl();
@@ -832,12 +949,12 @@ export async function signProofPacket(
             ownerSignedAt: asIso(row.owner_signed_at),
           };
         }
-        const sections = asSections(row.sections);
+        const derived = await authoritativeSections(client, packetId, asSections(row.sections));
         const recheck = validateProofPacketDraft({
           reference: trimmed,
           heading: String(row.heading),
           intro: String(row.intro),
-          sections,
+          sections: derived,
         });
         if (!recheck.ok) {
           await client.query("ROLLBACK");

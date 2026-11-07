@@ -8,7 +8,9 @@
 -- stores what was set up, what was checked, and the evidence
 -- for each claim. It is an internal ERM record. It does not
 -- feed the public /receipts page. The application has no route
--- that sends or shares a packet.
+-- that sends or shares a packet. Release to a client requires
+-- both a client request and owner approval. This migration
+-- does not release anything.
 --
 -- Approved heading and intro, verbatim, with the intake
 -- reference filled in for <REFERENCE>:
@@ -23,26 +25,28 @@
 -- * One packet per intake. intake_id references intakes(id)
 --   and reference references intakes(reference). The store
 --   writes both from the same intake row.
--- * status is draft or signed. A draft can be replaced. A
---   signed packet is not updated and is not deleted.
--- * Sign-off is the owner role only. signed_by stays NULL
---   until sign, and the sign check allows only 'owner' — the
---   same actor role already stored on owner-written rows.
---   owner_signed_at is set in that same update.
--- * sections is the packet document: header, authorship,
---   timeline, money, discovery, setup, access, checks,
---   follow-ups, wording, not-proven.
--- * proof_packet_claims is one row per claim. evidence is
---   NOT NULL and must be non-empty after trim. not-proven
---   lines are not claims and are not stored in this table.
+-- * status is draft or signed. A draft can be replaced. Once
+--   signed, the packet and its claim and check rows are frozen
+--   by trigger: no update, delete, reopen, or new child row.
+-- * Sign-off stores signed_by = 'owner' only, and signed_by
+--   must be non-null when status is signed. NULL does not
+--   satisfy the check. The HTTP sign route derives that role
+--   from OWNER_SIGNING_TOKEN. It does not trust a signedBy field.
+-- * sections holds the header and the not-proven lines only.
+--   Claims and checks are the child tables. Those rows are the
+--   record the application reads and signs.
+-- * proof_packet_claims is one row per claim. evidence must
+--   still contain text after leading and trailing whitespace
+--   (spaces, tabs, and other POSIX space) is removed.
+--   not-proven lines are not claims and are not stored here.
 -- * proof_packet_checks is one row per acceptance check.
 --   result is PASS, FAIL, or NOT_RUN. NOT_RUN requires a
---   non-empty not_run_reason and a run_by_date. Every check
---   requires non-empty evidence.
--- * The application validates those same rules before it
---   writes (app/lib/erm/proof-packet-store.ts). A TEST intake
---   (reference ending in -TEST, or a -TEST- segment) is
---   allowed and stored with test = true.
+--   reason that is non-empty after the same whitespace trim,
+--   and a run_by_date. Every check requires evidence under
+--   that same trim.
+-- * A TEST intake is a reference of the form MT-YYYYMMDD-XXXX
+--   whose four-character code is TEST. It is stored with
+--   test = true. Broader shapes are not packet references.
 -- * Replacing a draft deletes that draft's claim and check
 --   rows and inserts the new set, in one transaction. The
 --   packet row stays. Signed rows are never deleted here.
@@ -51,6 +55,14 @@
 --
 -- If this migration errors on "already exists", stop and report —
 -- do not re-run blindly.
+
+CREATE OR REPLACE FUNCTION proof_packet_visible_text(value TEXT)
+RETURNS TEXT
+LANGUAGE sql
+IMMUTABLE
+AS $$
+  SELECT regexp_replace(COALESCE(value, ''), '^[[:space:]]+|[[:space:]]+$', '', 'g');
+$$;
 
 CREATE TABLE IF NOT EXISTS proof_packets (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -68,7 +80,12 @@ CREATE TABLE IF NOT EXISTS proof_packets (
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   CONSTRAINT proof_packets_sign_shape CHECK (
     (status = 'draft' AND owner_signed_at IS NULL AND signed_by IS NULL)
-    OR (status = 'signed' AND owner_signed_at IS NOT NULL AND signed_by = 'owner')
+    OR (
+      status = 'signed'
+      AND owner_signed_at IS NOT NULL
+      AND signed_by IS NOT NULL
+      AND signed_by = 'owner'
+    )
   )
 );
 
@@ -81,7 +98,7 @@ CREATE TABLE IF NOT EXISTS proof_packet_claims (
   )),
   position INT NOT NULL,
   body JSONB NOT NULL,
-  evidence TEXT NOT NULL CHECK (length(btrim(evidence)) > 0),
+  evidence TEXT NOT NULL CHECK (length(proof_packet_visible_text(evidence)) > 0),
   UNIQUE (packet_id, section, position)
 );
 
@@ -92,13 +109,16 @@ CREATE TABLE IF NOT EXISTS proof_packet_checks (
   check_text TEXT NOT NULL,
   method TEXT NOT NULL,
   result TEXT NOT NULL CHECK (result IN ('PASS', 'FAIL', 'NOT_RUN')),
-  evidence TEXT NOT NULL CHECK (length(btrim(evidence)) > 0),
+  evidence TEXT NOT NULL CHECK (length(proof_packet_visible_text(evidence)) > 0),
   not_run_reason TEXT NOT NULL DEFAULT '',
   run_by_date DATE,
   UNIQUE (packet_id, position),
   CONSTRAINT proof_packet_checks_not_run CHECK (
     result <> 'NOT_RUN'
-    OR (length(btrim(not_run_reason)) > 0 AND run_by_date IS NOT NULL)
+    OR (
+      length(proof_packet_visible_text(not_run_reason)) > 0
+      AND run_by_date IS NOT NULL
+    )
   )
 );
 
@@ -106,3 +126,77 @@ CREATE INDEX IF NOT EXISTS idx_proof_packet_claims_packet
   ON proof_packet_claims(packet_id, section, position);
 CREATE INDEX IF NOT EXISTS idx_proof_packet_checks_packet
   ON proof_packet_checks(packet_id, position);
+
+CREATE OR REPLACE FUNCTION proof_packets_freeze_signed()
+RETURNS trigger
+LANGUAGE plpgsql
+AS $$
+BEGIN
+  IF TG_OP = 'DELETE' THEN
+    IF OLD.status = 'signed' THEN
+      RAISE EXCEPTION 'signed proof packet is frozen'
+        USING ERRCODE = 'restrict_violation';
+    END IF;
+    RETURN OLD;
+  END IF;
+
+  IF OLD.status = 'signed' THEN
+    RAISE EXCEPTION 'signed proof packet is frozen'
+      USING ERRCODE = 'restrict_violation';
+  END IF;
+
+  RETURN NEW;
+END;
+$$;
+
+DROP TRIGGER IF EXISTS proof_packets_freeze_signed_update ON proof_packets;
+CREATE TRIGGER proof_packets_freeze_signed_update
+  BEFORE UPDATE ON proof_packets
+  FOR EACH ROW
+  EXECUTE FUNCTION proof_packets_freeze_signed();
+
+DROP TRIGGER IF EXISTS proof_packets_freeze_signed_delete ON proof_packets;
+CREATE TRIGGER proof_packets_freeze_signed_delete
+  BEFORE DELETE ON proof_packets
+  FOR EACH ROW
+  EXECUTE FUNCTION proof_packets_freeze_signed();
+
+CREATE OR REPLACE FUNCTION proof_packet_children_freeze_when_signed()
+RETURNS trigger
+LANGUAGE plpgsql
+AS $$
+DECLARE
+  parent_status TEXT;
+  parent_id UUID;
+BEGIN
+  parent_id := COALESCE(NEW.packet_id, OLD.packet_id);
+  SELECT status INTO parent_status
+    FROM proof_packets
+   WHERE id = parent_id
+   FOR UPDATE;
+  IF parent_status IS NULL THEN
+    RAISE EXCEPTION 'proof packet is missing'
+      USING ERRCODE = 'restrict_violation';
+  END IF;
+  IF parent_status = 'signed' THEN
+    RAISE EXCEPTION 'signed proof packet is frozen'
+      USING ERRCODE = 'restrict_violation';
+  END IF;
+  IF TG_OP = 'DELETE' THEN
+    RETURN OLD;
+  END IF;
+  RETURN NEW;
+END;
+$$;
+
+DROP TRIGGER IF EXISTS proof_packet_claims_freeze ON proof_packet_claims;
+CREATE TRIGGER proof_packet_claims_freeze
+  BEFORE INSERT OR UPDATE OR DELETE ON proof_packet_claims
+  FOR EACH ROW
+  EXECUTE FUNCTION proof_packet_children_freeze_when_signed();
+
+DROP TRIGGER IF EXISTS proof_packet_checks_freeze ON proof_packet_checks;
+CREATE TRIGGER proof_packet_checks_freeze
+  BEFORE INSERT OR UPDATE OR DELETE ON proof_packet_checks
+  FOR EACH ROW
+  EXECUTE FUNCTION proof_packet_children_freeze_when_signed();

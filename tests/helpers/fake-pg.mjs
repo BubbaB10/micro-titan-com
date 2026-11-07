@@ -86,6 +86,27 @@ function queryCommunicationLog(sql, params = []) {
 }
 
 function proofPacketQuery(text, params = []) {
+  if (text.startsWith("SELECT section, position, body, evidence FROM proof_packet_claims")) {
+    return {
+      rows: proofClaims
+        .filter((row) => row.packet_id === params[0])
+        .sort((a, b) => a.position - b.position)
+        .map((row) => ({
+          section: row.section,
+          position: row.position,
+          body: row.body,
+          evidence: row.evidence,
+        })),
+    };
+  }
+  if (text.startsWith("SELECT position, check_text, method, result, evidence, not_run_reason, run_by_date")) {
+    return {
+      rows: proofChecks
+        .filter((row) => row.packet_id === params[0])
+        .sort((a, b) => a.position - b.position)
+        .map((row) => ({ ...row })),
+    };
+  }
   if (text.startsWith("SELECT id, status FROM proof_packets WHERE intake_id")) {
     const found = proofPackets.find((row) => row.intake_id === params[0]);
     return { rows: found ? [{ id: found.id, status: found.status }] : [] };
@@ -167,7 +188,7 @@ function proofPacketQuery(text, params = []) {
       packet_id: params[0],
       section: params[1],
       position: params[2],
-      body: params[3],
+      body: typeof params[3] === "string" ? JSON.parse(params[3]) : params[3],
       evidence,
     });
     return { rows: [] };

@@ -23,6 +23,7 @@ const { approvedProofPacketHeading, APPROVED_PROOF_PACKET_INTRO } = await import
 );
 
 const TOKEN = "test-ops-token";
+const SIGNING = "test-owner-signing-token";
 const FAKE_URL = "postgres://proof-packet-unit.invalid/none";
 const REFERENCE = "MT-20261107-TEST";
 
@@ -235,9 +236,10 @@ function getPacket(reference = REFERENCE, { token = TOKEN } = {}) {
   );
 }
 
-function sign(body, { token = TOKEN } = {}) {
+function sign(body, { token = TOKEN, signingToken = SIGNING } = {}) {
   const headers = { "content-type": "application/json" };
   if (token !== null) headers.authorization = `Bearer ${token}`;
+  if (signingToken !== null) headers["x-owner-signing-token"] = signingToken;
   return SIGN(
     new Request("http://localhost/api/ops/proof-packet-sign", {
       method: "POST",
@@ -254,6 +256,7 @@ function sqlTexts() {
 describe("proof packet routes", { concurrency: 1 }, () => {
   beforeEach(() => {
     process.env.OPS_DASHBOARD_TOKEN = TOKEN;
+    process.env.OWNER_SIGNING_TOKEN = SIGNING;
     process.env.ERM_DATABASE_URL = FAKE_URL;
     delete process.env.ERM_DATABASE_DATABASE_URL;
     setFakePgMode("written");
@@ -281,6 +284,42 @@ describe("proof packet routes", { concurrency: 1 }, () => {
     const signWrong = await sign({ reference: REFERENCE, signedBy: "owner" }, { token: "not-the-token" });
     assert.equal(signWrong.status, 401);
     assert.equal(sqlTexts().length, 0);
+  });
+
+  test("an ops token alone cannot sign, and a client signedBy field is ignored", async () => {
+    delete process.env.OWNER_SIGNING_TOKEN;
+    const unset = await sign({ reference: REFERENCE, signedBy: "owner" });
+    assert.equal(unset.status, 503);
+    assert.deepEqual(await unset.json(), { ok: false, error: "owner_signing_not_configured" });
+    assert.equal(sqlTexts().length, 0);
+
+    process.env.OWNER_SIGNING_TOKEN = "   ";
+    const blank = await sign({ reference: REFERENCE, signedBy: "owner" }, { signingToken: "   " });
+    assert.equal(blank.status, 503);
+    assert.equal(sqlTexts().length, 0);
+
+    process.env.OWNER_SIGNING_TOKEN = SIGNING;
+    const opsOnly = await sign(
+      { reference: REFERENCE, signedBy: "owner" },
+      { signingToken: null },
+    );
+    assert.equal(opsOnly.status, 401);
+    assert.deepEqual(await opsOnly.json(), { ok: false, error: "owner_signing_required" });
+    const wrongSigning = await sign(
+      { reference: REFERENCE, signedBy: "owner" },
+      { signingToken: "not-the-signing-token" },
+    );
+    assert.equal(wrongSigning.status, 401);
+    assert.deepEqual(await wrongSigning.json(), { ok: false, error: "owner_signing_required" });
+    assert.equal(sqlTexts().length, 0);
+
+    const signSource = fs.readFileSync(
+      path.join(root, "app", "api", "ops", "proof-packet-sign", "route.ts"),
+      "utf8",
+    );
+    assert.match(signSource, /timingSafeEqual/);
+    assert.match(signSource, /OWNER_SIGNING_TOKEN/);
+    assert.match(signSource, /ignored/i);
   });
 
   test("rejects a claim with no evidence and writes nothing", async () => {
@@ -315,6 +354,11 @@ describe("proof packet routes", { concurrency: 1 }, () => {
     assert.equal(packetInsert.params[3], true);
     assert.equal(packetInsert.params[4], approvedProofPacketHeading(REFERENCE));
     assert.equal(packetInsert.params[5], APPROVED_PROOF_PACKET_INTRO);
+    const storedDocument = JSON.parse(packetInsert.params[6]);
+    assert.equal(storedDocument.checks, undefined);
+    assert.equal(storedDocument.authorship, undefined);
+    assert.equal(storedDocument.header.clientDisplayName, "TEST Solo Example Co");
+    assert.ok(storedDocument["not-proven"].length > 0);
     assert.equal(sqlTexts().some((sql) => sql.startsWith("DELETE FROM proof_packet")), false);
 
     const notRun = fakePgQueries().find(
@@ -339,15 +383,7 @@ describe("proof packet routes", { concurrency: 1 }, () => {
     assert.equal(readBody.packet.sections.header.clientDisplayName, "TEST Solo Example Co");
     assert.equal(JSON.stringify(readBody).includes("example.invalid"), false);
 
-    const refused = await sign({ reference: REFERENCE, signedBy: "client" });
-    assert.equal(refused.status, 400);
-    assert.deepEqual(await refused.json(), { ok: false, error: "not_owner" });
-    assert.equal(
-      sqlTexts().filter((sql) => sql.includes("status = 'signed'")).length,
-      0,
-    );
-
-    const signed = await sign({ reference: REFERENCE, signedBy: "owner" });
+    const signed = await sign({ reference: REFERENCE, signedBy: "client" });
     assert.equal(signed.status, 200);
     const signedBody = await signed.json();
     assert.equal(signedBody.ok, true);
@@ -385,5 +421,10 @@ describe("proof packet routes", { concurrency: 1 }, () => {
       assert.match(src, /sharedWithClient: false/);
       assert.doesNotMatch(src, /from ["'].*receipts|\/api\/receipts/);
     }
+    const signSource = fs.readFileSync(
+      path.join(root, "app", "api", "ops", "proof-packet-sign", "route.ts"),
+      "utf8",
+    );
+    assert.match(signSource, /OWNER_SIGNING_TOKEN/);
   });
 });

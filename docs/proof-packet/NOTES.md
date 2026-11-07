@@ -9,14 +9,17 @@
 - Evidence pointers: tables in app/lib/erm/schema.sql: intakes, audit_log, pitch_sheets, agreements, payments, bookings, discovery_calls, presentations, jobs (status includes 'proof'), change_log (change/access), followups (manual log, no auto-sends), monthly_subscriptions.
 - Honest framing (report FAIL/NOT RUN, nothing hidden): /receipts "Gate Ledger" page copy (app/receipts/page.tsx) and the GATE_CHECKS rule in app/proof/page.tsx ("every entry must name a check that exists").
 
-## Gaps in this draft
-- I couldn't read the rundown transcripts: SearchTranscripts returned "no record" in this subagent. The attachments folder path doesn't exist on the box, so I couldn't read the Muse and Claude PDFs. Check the template against the rundowns' "proof packet" section before treating it as final.
-- I read /receipts, /pricing and /studio from the master source in /workspace/mt, not by fetching the live pages.
+## Source limits
+- The rundown transcripts were not available when these notes were first written. DECISIONS.md is the authority for the packet record.
+- /receipts, /pricing, and /studio were read from the repo source, not by fetching the live pages.
 
-## Open questions for Bubba
-1. Is a proof packet client-facing (sent at handoff), internal only, or both? This decides how much ERM ID detail stays visible.
-2. Should packets feed the public /receipts ledger? Today that ledger only covers gate completions across the portfolio.
-3. Who signs off: just you, or does the client counter-sign acceptance checks?
-4. Where does a packet live: a Cockpit page, a PDF, or an ERM row (jobs.status='proof')?
-5. Should a packet ever issue with a NOT RUN check, or wait until every agreed check has run?
-6. Is there approved verbatim wording for the packet's own intro/heading that I should use?
+## Settled decisions
+
+The questions below were open while the template was drafted. They are settled in DECISIONS.md. They are not open questions.
+
+1. Audience is internal. Release to a client requires both a client request and owner approval. This repo does not send or share a packet.
+2. Packets do not feed the public /receipts page.
+3. Sign-off is the owner alone. There is no client counter-signature. Signing uses `OWNER_SIGNING_TOKEN`, which is separate from the ops token.
+4. A packet lives as an ERM record (`proof_packets`), not as a public page.
+5. A NOT RUN check may be included. It must list the reason and a target date, and it still needs evidence.
+6. Heading and intro, verbatim: "Proof of work: <REFERENCE>. This record shows what we set up, what we checked, and the evidence for each. Anything without evidence isn't claimed here, and anything we couldn't check yet is listed as not run."

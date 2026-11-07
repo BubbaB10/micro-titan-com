@@ -15,7 +15,6 @@ import {
   readProofPacket,
   saveProofPacketDraft,
   signProofPacket,
-  validateOwnerSigner,
   validateProofPacketDraft,
 } from "../app/lib/erm/proof-packet-store.ts";
 
@@ -170,18 +169,25 @@ test("a NOT_RUN check with a reason and a date is accepted", () => {
   assert.equal(result.sections.checks[0].runByDate, "2026-11-12");
 });
 
-test("signing is rejected for anyone except the owner role", () => {
-  assert.equal(OWNER_ROLE, "owner");
-  assert.equal(validateOwnerSigner("owner"), null);
-  for (const signer of ["client", "agent", "Grok Bot", "", "Owner"]) {
-    assert.equal(validateOwnerSigner(signer), "not_owner", signer);
+test("whitespace-only evidence is rejected, including tabs", () => {
+  for (const evidence of ["\t", "\n", " \t "]) {
+    const result = validateProofPacketDraft(
+      draft({ sections: sections({ authorship: [authorshipClaim(evidence)] }) }),
+    );
+    assert.equal(result.ok, false, JSON.stringify(evidence));
+    assert.equal(result.error, "missing_evidence");
   }
 });
 
-test("TEST references are allowed and flagged, other references are not flagged", () => {
+test("a client-supplied signer is not an input the store accepts", () => {
+  assert.equal(OWNER_ROLE, "owner");
+  assert.equal(signProofPacket.length, 1);
+});
+
+test("only MT-YYYYMMDD-TEST is a test packet reference", () => {
   assert.equal(isTestIntake("MT-20261107-TEST"), true);
-  assert.equal(isTestIntake("MT-TEST-DUE"), true);
-  assert.equal(isTestIntake("TEST-intake"), true);
+  assert.equal(isTestIntake("MT-TEST-DUE"), false);
+  assert.equal(isTestIntake("TEST-intake"), false);
   assert.equal(isTestIntake("MT-20261107-AB12"), false);
   const testPacket = validateProofPacketDraft(draft());
   assert.equal(testPacket.ok, true);
@@ -189,6 +195,10 @@ test("TEST references are allowed and flagged, other references are not flagged"
   const live = validateProofPacketDraft(draft({ reference: "MT-20261107-AB12" }));
   assert.equal(live.ok, true);
   assert.equal(live.test, false);
+  for (const reference of ["MT-TEST-DUE", "TEST-intake", "MT-20261107-TESTING"]) {
+    assert.equal(validateProofPacketDraft(draft({ reference })).ok, false);
+    assert.equal(validateProofPacketDraft(draft({ reference })).error, "bad_reference");
+  }
 });
 
 test("store stays closed when no database is configured", async () => {
@@ -199,8 +209,9 @@ test("store stays closed when no database is configured", async () => {
   try {
     assert.deepEqual(await saveProofPacketDraft(draft()), { status: "not_configured" });
     assert.deepEqual(await readProofPacket(REFERENCE), { status: "not_configured" });
-    assert.deepEqual(await signProofPacket(REFERENCE, "owner"), { status: "not_configured" });
-    assert.deepEqual(await signProofPacket(REFERENCE, "client"), { status: "not_owner" });
+    assert.deepEqual(await signProofPacket(REFERENCE), { status: "not_configured" });
+    assert.deepEqual(await signProofPacket("MT-TEST-DUE"), { status: "invalid", error: "bad_reference" });
+    assert.deepEqual(await readProofPacket("TEST-intake"), { status: "invalid", error: "bad_reference" });
     const missing = await saveProofPacketDraft(
       draft({ sections: sections({ authorship: [authorshipClaim("")] }) }),
     );
@@ -224,13 +235,47 @@ test("schema and migration enforce evidence, NOT_RUN, and owner sign-off", () =>
     assert.match(src, /intake_id UUID NOT NULL UNIQUE REFERENCES intakes\(id\)/);
     assert.match(src, /reference TEXT NOT NULL UNIQUE REFERENCES intakes\(reference\)/);
     assert.match(src, /status TEXT NOT NULL DEFAULT 'draft' CHECK \(status IN \('draft', 'signed'\)\)/);
+    assert.match(src, /signed_by IS NOT NULL/);
     assert.match(src, /signed_by = 'owner'/);
+    assert.match(src, /proof_packet_visible_text\(evidence\)/);
+    assert.match(src, /proof_packet_visible_text\(not_run_reason\)/);
     assert.match(src, /CREATE TABLE IF NOT EXISTS proof_packet_claims \(/);
-    assert.match(src, /evidence TEXT NOT NULL CHECK \(length\(btrim\(evidence\)\) > 0\)/);
     assert.match(src, /result TEXT NOT NULL CHECK \(result IN \('PASS', 'FAIL', 'NOT_RUN'\)\)/);
     assert.match(src, /result <> 'NOT_RUN'/);
     assert.match(src, /run_by_date IS NOT NULL/);
+    assert.match(src, /signed proof packet is frozen/);
+    assert.match(src, /FOR UPDATE/);
+    assert.match(src, /CREATE TRIGGER proof_packet_claims_freeze/);
+    assert.match(src, /CREATE TRIGGER proof_packet_checks_freeze/);
   }
+});
+
+test("packet docs use the approved sentence, NOT RUN reason and date, and both release gates", () => {
+  const approved = `${approvedProofPacketHeading("<REFERENCE>")} ${APPROVED_PROOF_PACKET_INTRO}`;
+  const template = fs.readFileSync(path.join(root, "docs", "proof-packet", "TEMPLATE.md"), "utf8");
+  const example = fs.readFileSync(
+    path.join(root, "docs", "proof-packet", "EXAMPLE-MT-20261107-TEST.md"),
+    "utf8",
+  );
+  const decisions = fs.readFileSync(path.join(root, "docs", "proof-packet", "DECISIONS.md"), "utf8");
+  const notes = fs.readFileSync(path.join(root, "docs", "proof-packet", "NOTES.md"), "utf8");
+  assert.equal(template.includes(approved), true);
+  assert.equal(decisions.includes(approved), true);
+  assert.equal(notes.includes(approved), true);
+  assert.equal(example.includes(approvedProofPacketText("MT-20261107-TEST")), true);
+  assert.equal(example.includes("Fully fictional"), true);
+  assert.match(example, /NOT RUN \| LOG:routine-schedule@2026-11-07 16:00 CT \| Needs 5 weekday runs/);
+  assert.match(example, /2026-11-12/);
+  assert.equal(example.includes("| **NOT RUN** | — |"), false);
+  for (const src of [template, example, decisions, notes]) {
+    assert.match(src, /client request/);
+    assert.match(src, /owner approval/);
+  }
+  assert.equal(notes.includes("## Open questions"), false);
+  const readme = fs.readFileSync(path.join(root, "app", "lib", "erm", "README.md"), "utf8");
+  assert.match(readme, /OWNER_SIGNING_TOKEN/);
+  assert.match(readme, /secret/i);
+  assert.doesNotMatch(readme, /OWNER_SIGNING_TOKEN` — [^`\n]*test-owner/);
 });
 
 test("packets stay off the public site and off /receipts", () => {

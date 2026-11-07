@@ -1,6 +1,6 @@
-# Micro Titan — Proof Packet
+# Proof of work: <REFERENCE>. This record shows what we set up, what we checked, and the evidence for each. Anything without evidence isn't claimed here, and anything we couldn't check yet is listed as not run.
 
-> One packet per client job. It covers the **Prove** step of Start → Set up → Prove → Operate.
+> One packet per client job. It covers the **Prove** step of Start → Set up → Prove → Operate. The heading and intro above are the approved text. Fill `<REFERENCE>` with `intakes.reference` and do not paraphrase the rest.
 > **Evidence rule:** every claim row has an `Evidence` cell. If the cell is empty, delete the claim. Evidence is one of:
 > `ERM:<table>.<id>` (Neon shy-cake-63714658), `COMMIT:<sha>`, `PR:#<n>`, `LOG:<source>@<timestamp CT>`, `SHOT:<file>`, `STRIPE:<id>`, `TWILIO:<call/msg SID>`.
 > No earnings claims. No owner last name or personal contacts. Client-facing wording is copied verbatim from the site (see §9); don't paraphrase it.
@@ -63,9 +63,9 @@
 |---|---|---|---|
 
 ## 7. Acceptance checks (agreed with the client before the work)
-| # | Check (client's words) | Method | Result PASS/FAIL/NOT RUN | Evidence |
-|---|---|---|---|---|
-> Report FAILs and NOT RUNs; don't hide them. A passing software check alone is not proof of a business outcome.
+| # | Check (client's words) | Method | Result PASS/FAIL/NOT RUN | Evidence | Reason (NOT RUN only) | Target date (NOT RUN only) |
+|---|---|---|---|---|---|---|
+> Report FAILs and NOT RUNs; don't hide them. A NOT RUN row still needs non-empty evidence, a reason, and a target date. A passing software check alone is not proof of a business outcome.
 
 ## 8. Follow-ups (logged by hand, nothing auto-sent)
 | Step | Channel | Actor | When | Evidence |
@@ -84,4 +84,4 @@
 |---|---|---|---|
 | Packet prepared by | | | |
 | Reviewed and approved by (owner) | | | |
-| Shared with client? (owner go required) | no / yes | | |
+| Shared with client? | no | | Release requires both a client request and owner approval. This template does not send or share. |

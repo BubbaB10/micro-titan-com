@@ -15,10 +15,13 @@
  * POST body: { reference, heading, intro, sections }. heading
  * and intro must be the approved text. Every claim and every
  * check needs non-empty evidence. A NOT_RUN check also needs
- * notRunReason and runByDate (YYYY-MM-DD). signedBy is not
- * accepted here; sign is POST /api/ops/proof-packet-sign, and
- * only the owner role can sign. sharedWithClient true is
- * rejected: this route never shares a packet.
+ * notRunReason and runByDate (YYYY-MM-DD). This route does not
+ * sign. Sign is POST /api/ops/proof-packet-sign, which requires
+ * OWNER_SIGNING_TOKEN in addition to the ops token. A signedBy
+ * field cannot grant a signature. sharedWithClient true is
+ * rejected: this route never shares a packet. Release requires
+ * both a client request and owner approval, and this route
+ * does neither.
  *
  * A TEST reference is allowed and stored with test: true.
  */

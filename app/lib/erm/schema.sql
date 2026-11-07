@@ -268,10 +268,21 @@ CREATE INDEX IF NOT EXISTS idx_payments_client ON payments(client_id, status);
 
 -- Proof packets (internal only). One row per intake. The packet is
 -- not a public receipt and nothing here sends it to a client.
--- Claim and check rows carry a non-empty evidence value. A NOT_RUN
--- check also carries a reason and a target date. Sign-off is the
--- owner role only (signed_by = 'owner'). See migration
+-- sections stores the header and not-proven lines. Claims and
+-- checks are child rows, and those rows are what a read returns.
+-- Evidence must survive a whitespace trim that includes tabs.
+-- A NOT_RUN check also carries a reason and a target date.
+-- Sign-off requires signed_by IS NOT NULL AND signed_by = 'owner'.
+-- Triggers freeze a signed packet and its children. See migration
 -- 008-proof-packets.sql for the apply-once text and the rules.
+CREATE OR REPLACE FUNCTION proof_packet_visible_text(value TEXT)
+RETURNS TEXT
+LANGUAGE sql
+IMMUTABLE
+AS $$
+  SELECT regexp_replace(COALESCE(value, ''), '^[[:space:]]+|[[:space:]]+$', '', 'g');
+$$;
+
 CREATE TABLE IF NOT EXISTS proof_packets (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   intake_id UUID NOT NULL UNIQUE REFERENCES intakes(id),
@@ -288,7 +299,12 @@ CREATE TABLE IF NOT EXISTS proof_packets (
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   CONSTRAINT proof_packets_sign_shape CHECK (
     (status = 'draft' AND owner_signed_at IS NULL AND signed_by IS NULL)
-    OR (status = 'signed' AND owner_signed_at IS NOT NULL AND signed_by = 'owner')
+    OR (
+      status = 'signed'
+      AND owner_signed_at IS NOT NULL
+      AND signed_by IS NOT NULL
+      AND signed_by = 'owner'
+    )
   )
 );
 
@@ -301,7 +317,7 @@ CREATE TABLE IF NOT EXISTS proof_packet_claims (
   )),
   position INT NOT NULL,
   body JSONB NOT NULL,
-  evidence TEXT NOT NULL CHECK (length(btrim(evidence)) > 0),
+  evidence TEXT NOT NULL CHECK (length(proof_packet_visible_text(evidence)) > 0),
   UNIQUE (packet_id, section, position)
 );
 
@@ -312,13 +328,16 @@ CREATE TABLE IF NOT EXISTS proof_packet_checks (
   check_text TEXT NOT NULL,
   method TEXT NOT NULL,
   result TEXT NOT NULL CHECK (result IN ('PASS', 'FAIL', 'NOT_RUN')),
-  evidence TEXT NOT NULL CHECK (length(btrim(evidence)) > 0),
+  evidence TEXT NOT NULL CHECK (length(proof_packet_visible_text(evidence)) > 0),
   not_run_reason TEXT NOT NULL DEFAULT '',
   run_by_date DATE,
   UNIQUE (packet_id, position),
   CONSTRAINT proof_packet_checks_not_run CHECK (
     result <> 'NOT_RUN'
-    OR (length(btrim(not_run_reason)) > 0 AND run_by_date IS NOT NULL)
+    OR (
+      length(proof_packet_visible_text(not_run_reason)) > 0
+      AND run_by_date IS NOT NULL
+    )
   )
 );
 
@@ -326,3 +345,77 @@ CREATE INDEX IF NOT EXISTS idx_proof_packet_claims_packet
   ON proof_packet_claims(packet_id, section, position);
 CREATE INDEX IF NOT EXISTS idx_proof_packet_checks_packet
   ON proof_packet_checks(packet_id, position);
+
+CREATE OR REPLACE FUNCTION proof_packets_freeze_signed()
+RETURNS trigger
+LANGUAGE plpgsql
+AS $$
+BEGIN
+  IF TG_OP = 'DELETE' THEN
+    IF OLD.status = 'signed' THEN
+      RAISE EXCEPTION 'signed proof packet is frozen'
+        USING ERRCODE = 'restrict_violation';
+    END IF;
+    RETURN OLD;
+  END IF;
+
+  IF OLD.status = 'signed' THEN
+    RAISE EXCEPTION 'signed proof packet is frozen'
+      USING ERRCODE = 'restrict_violation';
+  END IF;
+
+  RETURN NEW;
+END;
+$$;
+
+DROP TRIGGER IF EXISTS proof_packets_freeze_signed_update ON proof_packets;
+CREATE TRIGGER proof_packets_freeze_signed_update
+  BEFORE UPDATE ON proof_packets
+  FOR EACH ROW
+  EXECUTE FUNCTION proof_packets_freeze_signed();
+
+DROP TRIGGER IF EXISTS proof_packets_freeze_signed_delete ON proof_packets;
+CREATE TRIGGER proof_packets_freeze_signed_delete
+  BEFORE DELETE ON proof_packets
+  FOR EACH ROW
+  EXECUTE FUNCTION proof_packets_freeze_signed();
+
+CREATE OR REPLACE FUNCTION proof_packet_children_freeze_when_signed()
+RETURNS trigger
+LANGUAGE plpgsql
+AS $$
+DECLARE
+  parent_status TEXT;
+  parent_id UUID;
+BEGIN
+  parent_id := COALESCE(NEW.packet_id, OLD.packet_id);
+  SELECT status INTO parent_status
+    FROM proof_packets
+   WHERE id = parent_id
+   FOR UPDATE;
+  IF parent_status IS NULL THEN
+    RAISE EXCEPTION 'proof packet is missing'
+      USING ERRCODE = 'restrict_violation';
+  END IF;
+  IF parent_status = 'signed' THEN
+    RAISE EXCEPTION 'signed proof packet is frozen'
+      USING ERRCODE = 'restrict_violation';
+  END IF;
+  IF TG_OP = 'DELETE' THEN
+    RETURN OLD;
+  END IF;
+  RETURN NEW;
+END;
+$$;
+
+DROP TRIGGER IF EXISTS proof_packet_claims_freeze ON proof_packet_claims;
+CREATE TRIGGER proof_packet_claims_freeze
+  BEFORE INSERT OR UPDATE OR DELETE ON proof_packet_claims
+  FOR EACH ROW
+  EXECUTE FUNCTION proof_packet_children_freeze_when_signed();
+
+DROP TRIGGER IF EXISTS proof_packet_checks_freeze ON proof_packet_checks;
+CREATE TRIGGER proof_packet_checks_freeze
+  BEFORE INSERT OR UPDATE OR DELETE ON proof_packet_checks
+  FOR EACH ROW
+  EXECUTE FUNCTION proof_packet_children_freeze_when_signed();

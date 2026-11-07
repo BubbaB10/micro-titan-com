@@ -1,6 +1,6 @@
-# Micro Titan — Proof Packet — EXAMPLE (FAKE TEST JOB)
+# Proof of work: MT-20261107-TEST. This record shows what we set up, what we checked, and the evidence for each. Anything without evidence isn't claimed here, and anything we couldn't check yet is listed as not run.
 
-> ⚠️ **Fully fictional.** No ERM rows exist for this reference, and no DB writes were made. IDs below are placeholders shaped like real evidence pointers (`…-TEST`) to show the format. This is not a prospect and not proof of client work.
+> ⚠️ **Fully fictional TEST job.** No ERM rows exist for this reference, and no DB writes were made. IDs below are placeholders shaped like real evidence pointers (`…-TEST`) to show the format. This is not a prospect and not proof of client work. Do not treat the dollar figures as charges or as earnings.
 
 ## 0. Packet header
 | Field | Value |
@@ -27,11 +27,11 @@
 | completeness_check | Nov 7, 9:20 AM | owner | ERM:audit_log.TEST-0002 |
 | pitch_sent | Nov 7, 9:40 AM | owner | ERM:pitch_sheets.TEST-0003 (sent_at) |
 | agreed | Nov 7, 10:05 AM | client, method=site | ERM:agreements.TEST-0004 |
-| discovery_paid | — | — | **NOT RUN**: no test charges allowed |
+| discovery_paid | — | — | ERM:agreements.TEST-0004 (test job; discovery fee not charged) |
 | discovery_booked | Nov 7, 10:30 AM | owner | ERM:discovery_calls.TEST-0005 |
 | setup → switchover | Nov 7, 1:00–3:00 PM | Grok Bot / owner | ERM:change_log.TEST-0006..0008 |
 | first_project | Nov 7, 3:15 PM | Grok Bot | ERM:jobs.TEST-0009 |
-| proof_and_handoff | Nov 7, 4:00 PM | this packet | — |
+| proof_and_handoff | Nov 7, 4:00 PM | this packet | this packet |
 
 ## 3. Money (from the agreement row; the Solo lane matches the live /pricing page)
 | Line | Amount | Status | Evidence |
@@ -63,11 +63,11 @@
 | Micro Titan setup access | Micro Titan ops | **revoked** at handoff, 4:05 PM | ERM:change_log.TEST-0011 |
 
 ## 7. Acceptance checks
-| # | Check | Method | Result | Evidence |
-|---|---|---|---|---|
-| 1 | "Remind me each weekday at 10 of tomorrow's appointments" | Watched 1 live run | PASS | LOG:routine-run@2026-11-07 10:02 CT · SHOT:test-run.png |
-| 2 | "Nothing goes out to my customers without my OK" | Reviewed the routine config | PASS | SHOT:test-config.png |
-| 3 | Runs 5 days in a row | Needs 5 days | **NOT RUN** | — |
+| # | Check | Method | Result | Evidence | Reason (NOT RUN only) | Target date (NOT RUN only) |
+|---|---|---|---|---|---|---|
+| 1 | "Remind me each weekday at 10 of tomorrow's appointments" | Watched 1 live run | PASS | LOG:routine-run@2026-11-07 10:02 CT · SHOT:test-run.png | | |
+| 2 | "Nothing goes out to my customers without my OK" | Reviewed the routine config | PASS | SHOT:test-config.png | | |
+| 3 | Runs 5 days in a row | Needs 5 days | NOT RUN | LOG:routine-schedule@2026-11-07 16:00 CT | Needs 5 weekday runs; this test job has one watched run. | 2026-11-12 |
 
 ## 8. Follow-ups
 | Step | Channel | Actor | When | Evidence |
@@ -91,4 +91,4 @@
 |---|---|---|---|
 | Prepared by | Grok Bot (Micro Titan ops) | Nov 6, 2026 | this file |
 | Approved by owner | — pending — | | |
-| Shared with client | **no** | | |
+| Shared with client | **no** | | Release requires both a client request and owner approval. This fictional packet was not released. |
