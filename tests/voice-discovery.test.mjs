@@ -50,6 +50,7 @@ import {
   upsample,
 } from "../voice-bridge/audio.mjs";
 import {
+  createMessageReassembler,
   decodeFrames,
   encodeFrame,
   reassembleTextFrames,
@@ -66,6 +67,7 @@ import {
 } from "../voice-bridge/guardrails.mjs";
 import {
   LISTEN_HOST,
+  buildGeminiGreetingKick,
   buildGeminiRealtimeAudioMessage,
   buildGeminiSetupMessage,
   resolveListenPort,
@@ -259,6 +261,29 @@ test("server frames encode and client frames decode, with masking enforced", () 
   assert.deepEqual(reassembleTextFrames(frames), ["hi"]);
   // An unmasked client frame is a protocol error.
   assert.throws(() => decodeFrames(Buffer.from([0x81, 0x02, 0x68, 0x69])), /not_masked/);
+});
+
+test("binary setupComplete is delivered, and a fragment split across two chunks is kept", () => {
+  const setup = JSON.stringify({ setupComplete: {} });
+  const binary = decodeFrames(encodeFrame(setup, 2, false), { requireMask: false }).frames;
+  const once = createMessageReassembler();
+  assert.deepEqual(once.push(binary).map((buf) => buf.toString("utf8")), [setup]);
+
+  const mid = 11;
+  const first = decodeFrames(encodeFrame(setup.slice(0, mid), 2, false, false), { requireMask: false }).frames;
+  const second = decodeFrames(encodeFrame(setup.slice(mid), 0, false, true), { requireMask: false }).frames;
+  const split = createMessageReassembler();
+  assert.deepEqual(split.push(first), []);
+  assert.deepEqual(split.push(second).map((buf) => buf.toString("utf8")), [setup]);
+});
+
+test("the greeting kick is the approved opening, sent as one completed turn", () => {
+  const kick = buildGeminiGreetingKick();
+  assert.equal(kick.clientContent.turnComplete, true);
+  assert.equal(kick.clientContent.turns.length, 1);
+  assert.match(kick.clientContent.turns[0].parts[0].text, /Speak your first line now, verbatim, then wait/);
+  assert.ok(kick.clientContent.turns[0].parts[0].text.includes(VOICE_CALL_OPENING));
+  assert.equal(kick.setup, undefined);
 });
 
 // --- Bridge: audio transcoding ---

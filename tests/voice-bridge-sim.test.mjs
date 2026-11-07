@@ -7,7 +7,9 @@ import assert from "node:assert/strict";
 import { createServer } from "node:http";
 import { voiceStreamToken } from "../app/lib/erm/voice-discovery.ts";
 import { createBridgeServer } from "../voice-bridge/server.mjs";
-import { decodeFrames, encodeFrame, reassembleTextFrames, websocketAccept } from "../voice-bridge/ws-frames.mjs";
+import { connectWebSocket } from "../voice-bridge/ws-client.mjs";
+import { createMessageReassembler, decodeFrames, encodeFrame, websocketAccept } from "../voice-bridge/ws-frames.mjs";
+import { VOICE_CALL_OPENING } from "../app/lib/erm/voice-discovery.ts";
 import { resolveStreamIdentity } from "../voice-bridge/stream-auth.mjs";
 
 const SECRET = "test_only_stream_secret";
@@ -39,6 +41,7 @@ function closeServer(server) {
 function startGeminiStub() {
   const setups = [];
   const audios = [];
+  const fromClient = [];
   const server = createServer();
   server.on("upgrade", (req, socket) => {
     const key = req.headers["sec-websocket-key"];
@@ -49,6 +52,7 @@ function startGeminiStub() {
         `Sec-WebSocket-Accept: ${websocketAccept(key)}\r\n\r\n`,
     );
     let buffer = Buffer.alloc(0);
+    const reassembler = createMessageReassembler();
     socket.on("data", (chunk) => {
       buffer = Buffer.concat([buffer, chunk]);
       let decoded;
@@ -59,39 +63,39 @@ function startGeminiStub() {
         return;
       }
       buffer = decoded.rest;
-      let texts;
+      let payloads;
       try {
-        texts = reassembleTextFrames(decoded.frames);
+        payloads = reassembler.push(decoded.frames);
       } catch {
         socket.destroy();
         return;
       }
-      for (const text of texts) {
-        const msg = JSON.parse(text);
+      for (const payload of payloads) {
+        const msg = JSON.parse(payload.toString("utf8"));
+        fromClient.push(msg);
         if (msg.setup) {
           setups.push(msg);
-          socket.write(encodeFrame(JSON.stringify({ setupComplete: {} }), 1));
+          // Gemini Live delivers JSON on binary frames (opcode 2).
+          socket.write(encodeFrame(JSON.stringify({ setupComplete: {} }), 2));
         }
         if (msg.realtimeInput?.audio) {
           audios.push(msg.realtimeInput.audio);
-          socket.write(
-            encodeFrame(
-              JSON.stringify({
-                serverContent: {
-                  modelTurn: {
-                    parts: [{ inlineData: { mimeType: "audio/pcm;rate=24000", data: REPLY_PCM.toString("base64") } }],
-                  },
-                  outputTranscription: { text: "ok" },
-                },
-              }),
-              1,
-            ),
-          );
+          const body = JSON.stringify({
+            serverContent: {
+              modelTurn: {
+                parts: [{ inlineData: { mimeType: "audio/pcm;rate=24000", data: REPLY_PCM.toString("base64") } }],
+              },
+              outputTranscription: { text: "ok" },
+            },
+          });
+          const mid = 24;
+          socket.write(encodeFrame(body.slice(0, mid), 2, false, false));
+          socket.write(encodeFrame(body.slice(mid), 0));
         }
       }
     });
   });
-  return { server, setups, audios };
+  return { server, setups, audios, fromClient };
 }
 
 async function startBridge({ geminiUrl, startDeadlineMs = 5000 }) {
@@ -128,6 +132,42 @@ function until(check, ms = 2000) {
     tick();
   });
 }
+
+test("a binary setupComplete split across two socket writes is delivered", async () => {
+  const body = JSON.stringify({ setupComplete: {} });
+  const mid = 8;
+  const server = createServer();
+  server.on("upgrade", (req, socket) => {
+    socket.write(
+      "HTTP/1.1 101 Switching Protocols\r\nUpgrade: websocket\r\nConnection: Upgrade\r\n" +
+        `Sec-WebSocket-Accept: ${websocketAccept(req.headers["sec-websocket-key"])}\r\n\r\n`,
+    );
+    // After the handshake, so the client is listening, then two reads.
+    setTimeout(() => {
+      socket.write(encodeFrame(body.slice(0, mid), 2, false, false));
+      setTimeout(() => socket.write(encodeFrame(body.slice(mid), 0)), 30);
+    }, 30);
+  });
+  const port = await listen(server);
+  const client = connectWebSocket(`ws://127.0.0.1:${port}/`);
+  const received = new Promise((resolve, reject) => {
+    const timer = setTimeout(() => reject(new Error("binary frame timeout")), 1500);
+    client.on("message", (payload) => {
+      clearTimeout(timer);
+      resolve(payload.toString("utf8"));
+    });
+    client.on("error", (err) => {
+      clearTimeout(timer);
+      reject(err);
+    });
+  });
+  try {
+    assert.equal(await received, body);
+  } finally {
+    client.close();
+    await closeServer(server);
+  }
+});
 
 test("custom parameters win and query values fill gaps", () => {
   const query = new URLSearchParams({
@@ -184,6 +224,13 @@ test("a fake Twilio stream reaches a stub Gemini and a bad token does not", asyn
     assert.equal(stub.setups[0].setup.model, "models/gemini-3.8-live");
     assert.deepEqual(stub.setups[0].setup.inputAudioTranscription, {});
     assert.deepEqual(stub.setups[0].setup.outputAudioTranscription, {});
+    await until(() =>
+      stub.fromClient.some(
+        (msg) =>
+          msg.clientContent?.turnComplete === true &&
+          msg.clientContent.turns?.[0]?.parts?.[0]?.text?.includes(VOICE_CALL_OPENING),
+      ),
+    );
     client.send(
       JSON.stringify({
         event: "media",
@@ -214,6 +261,8 @@ test("a fake Twilio stream reaches a stub Gemini and a bad token does not", asyn
   for (const row of parsed) assert.equal(typeof row.message, "string");
   assert.ok(parsed.some((row) => row.event === "stream_started" && row.callSid === "CA_test_sim" && row.reference === REFERENCE));
   assert.ok(parsed.some((row) => row.event === "gemini_setup_complete" && row.message.includes("gemini_setup_complete")));
+  assert.ok(parsed.some((row) => row.event === "gemini_first_message" && row.type === "setupComplete"));
+  assert.ok(parsed.some((row) => row.event === "gemini_first_audio_out"));
   assert.ok(parsed.some((row) => row.event === "twilio_stop"));
   assert.equal(parsed.some((row) => JSON.stringify(row).includes(SECRET)), false);
 });

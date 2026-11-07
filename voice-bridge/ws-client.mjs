@@ -6,7 +6,7 @@ import { request as httpRequest } from "node:http";
 import { request as httpsRequest } from "node:https";
 import { randomBytes } from "node:crypto";
 import { EventEmitter } from "node:events";
-import { decodeFrames, encodeFrame, reassembleTextFrames, websocketAccept } from "./ws-frames.mjs";
+import { createMessageReassembler, decodeFrames, encodeFrame, websocketAccept } from "./ws-frames.mjs";
 
 export function connectWebSocket(urlString, { headers = {} } = {}) {
   const url = new URL(urlString);
@@ -16,6 +16,7 @@ export function connectWebSocket(urlString, { headers = {} } = {}) {
   let socket = null;
   let buffer = Buffer.alloc(0);
   let state = 0;
+  const reassembler = createMessageReassembler();
   const request = (secure ? httpsRequest : httpRequest)({
     hostname: url.hostname,
     port: url.port || (secure ? 443 : 80),
@@ -66,14 +67,14 @@ export function connectWebSocket(urlString, { headers = {} } = {}) {
         }
         if (frame.opcode === 9) sock.write(encodeFrame(frame.payload, 10, true));
       }
-      let texts;
+      let messages;
       try {
-        texts = reassembleTextFrames(decoded.frames);
+        messages = reassembler.push(decoded.frames);
       } catch (err) {
         fail(err);
         return;
       }
-      for (const text of texts) emitter.emit("message", Buffer.from(text, "utf8"));
+      for (const payload of messages) emitter.emit("message", payload);
     });
     sock.on("close", () => {
       if (state !== 3) {

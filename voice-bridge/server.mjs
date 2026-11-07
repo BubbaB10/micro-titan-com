@@ -66,7 +66,7 @@ import {
   pcm16ToMulawBuffer,
   upsample,
 } from "./audio.mjs";
-import { decodeFrames, encodeFrame, reassembleTextFrames, websocketAccept } from "./ws-frames.mjs";
+import { createMessageReassembler, decodeFrames, encodeFrame, websocketAccept } from "./ws-frames.mjs";
 import { connectWebSocket } from "./ws-client.mjs";
 import { resolveStreamIdentity, verifyVoiceStreamToken } from "./stream-auth.mjs";
 import {
@@ -108,6 +108,29 @@ export function buildGeminiSetupMessage(systemInstruction) {
       systemInstruction: { parts: [{ text: systemInstruction }] },
       inputAudioTranscription: {},
       outputAudioTranscription: {},
+    },
+  };
+}
+
+/**
+ * Outbound calls have nobody speaking until the agent does. After
+ * setupComplete, this one turn tells the model to say the approved
+ * opening now. The only client-facing words are VOICE_CALL_OPENING.
+ */
+export function buildGeminiGreetingKick() {
+  return {
+    clientContent: {
+      turns: [
+        {
+          role: "user",
+          parts: [
+            {
+              text: `The call just connected. Speak your first line now, verbatim, then wait: "${VOICE_CALL_OPENING}"`,
+            },
+          ],
+        },
+      ],
+      turnComplete: true,
     },
   };
 }
@@ -222,6 +245,10 @@ export function createBridgeServer(config = {}) {
     let gemini = null;
     let geminiReady = false;
     let buffer = Buffer.alloc(0);
+    const inbound = createMessageReassembler();
+    let sawFirstGeminiMessage = false;
+    let sawFirstAudioOut = false;
+    let greetingSent = false;
     let pendingClientText = "";
     let pendingAgentText = "";
     let wrapUpSent = false;
@@ -318,9 +345,23 @@ export function createBridgeServer(config = {}) {
         } catch {
           return;
         }
+        if (!sawFirstGeminiMessage) {
+          sawFirstGeminiMessage = true;
+          const type =
+            msg.setupComplete !== undefined
+              ? "setupComplete"
+              : msg.serverContent
+                ? "serverContent"
+                : "other";
+          log("gemini_first_message", { type, reference });
+        }
         if (msg.setupComplete) {
           geminiReady = true;
           log("gemini_setup_complete", { reference, sessionKey });
+          if (!greetingSent && gemini.readyState === 1) {
+            greetingSent = true;
+            gemini.send(JSON.stringify(buildGeminiGreetingKick()));
+          }
           return;
         }
         const content = msg.serverContent;
@@ -329,6 +370,10 @@ export function createBridgeServer(config = {}) {
           for (const payload of serverAudioPayloads(content)) {
             const pcm24 = bytesToPcm16(Buffer.from(payload, "base64"));
             const pcm8 = downsample(pcm24, Math.round(GEMINI_OUTPUT_SAMPLE_RATE_HZ / 8000));
+            if (!sawFirstAudioOut) {
+              sawFirstAudioOut = true;
+              log("gemini_first_audio_out", { reference });
+            }
             sendToTwilio({
               event: "media",
               streamSid,
@@ -364,7 +409,7 @@ export function createBridgeServer(config = {}) {
       buffer = decoded.rest;
       let messages;
       try {
-        messages = reassembleTextFrames(decoded.frames);
+        messages = inbound.push(decoded.frames);
       } catch (err) {
         log("ws_reassemble_failed", { reference, error: String(err) });
         socket.destroy();
@@ -379,7 +424,8 @@ export function createBridgeServer(config = {}) {
           return;
         }
       }
-      for (const text of messages) {
+      for (const payload of messages) {
+        const text = payload.toString("utf8");
         let event;
         try {
           event = JSON.parse(text);

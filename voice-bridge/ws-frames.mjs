@@ -22,10 +22,10 @@ export function websocketAccept(key) {
  * Encode one frame. opcode 1 = text, 2 = binary. Payloads under 64KB.
  * Servers must pass mask=false. Clients must pass mask=true (RFC 6455).
  */
-export function encodeFrame(payload, opcode = 1, mask = false) {
+export function encodeFrame(payload, opcode = 1, mask = false, fin = true) {
   const raw = Buffer.isBuffer(payload) ? Buffer.from(payload) : Buffer.from(payload, "utf8");
   if (raw.length >= 65536) throw new Error("frame_too_large");
-  const header = [0x80 | opcode];
+  const header = [(fin ? 0x80 : 0) | opcode];
   const maskKey = mask ? randomBytes(4) : null;
   const data = maskKey ? Buffer.from(raw) : raw;
   if (maskKey) {
@@ -112,9 +112,41 @@ export function reassembleTextFrames(frames) {
         current = null;
       }
     }
-    // Opcodes 2 (binary), 8 (close), 9 (ping), 10 (pong) are handled
-    // by the caller, not reassembled here.
+    // Opcodes 8 (close), 9 (ping), and 10 (pong) are handled by the
+    // caller, not reassembled here. Opcode 2 is a data message; use
+    // createMessageReassembler, which keeps a partial message across
+    // chunks and accepts both text and binary.
   }
   if (current !== null) throw new Error("incomplete_fragmented_message");
   return messages;
+}
+
+/**
+ * Streaming reassembly for text (opcode 1) and binary (opcode 2)
+ * messages, including opcode 0 continuations. An unfinished message
+ * stays here until a later push; it is not an error that the current
+ * TCP chunk ended mid-message.
+ */
+export function createMessageReassembler() {
+  let parts = null;
+  return {
+    push(frames) {
+      const messages = [];
+      for (const frame of frames) {
+        if (frame.opcode === 1 || frame.opcode === 2) {
+          if (parts !== null) throw new Error("fragmented_message_interrupted");
+          if (frame.fin) messages.push(frame.payload);
+          else parts = [frame.payload];
+        } else if (frame.opcode === 0) {
+          if (parts === null) throw new Error("continuation_without_start");
+          parts.push(frame.payload);
+          if (frame.fin) {
+            messages.push(Buffer.concat(parts));
+            parts = null;
+          }
+        }
+      }
+      return messages;
+    },
+  };
 }
