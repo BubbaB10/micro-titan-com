@@ -60,11 +60,11 @@ import {
 } from "./session.mjs";
 import {
   bytesToPcm16,
-  downsample,
+  createDownsampler,
+  createUpsampler,
   mulawBufferToPcm16,
   pcm16ToBytes,
   pcm16ToMulawBuffer,
-  upsample,
 } from "./audio.mjs";
 import { createMessageReassembler, decodeFrames, encodeFrame, websocketAccept } from "./ws-frames.mjs";
 import { connectWebSocket } from "./ws-client.mjs";
@@ -92,6 +92,63 @@ export const LISTEN_HOST = "0.0.0.0";
 export const START_DEADLINE_MS = 5000;
 
 /**
+ * Prebuilt voices from the Gemini speech-generation voice list, the
+ * same voiceName values the Live API setup example uses.
+ * https://ai.google.dev/gemini-api/docs/speech-generation
+ * The gemini-3.8-live setup sample uses Puck. Sulafat is the documented
+ * "Warm" voice, the default for a phone conversation.
+ */
+export const GEMINI_VOICE_NAMES = [
+  "Zephyr",
+  "Puck",
+  "Charon",
+  "Kore",
+  "Fenrir",
+  "Leda",
+  "Orus",
+  "Aoede",
+  "Callirrhoe",
+  "Autonoe",
+  "Enceladus",
+  "Iapetus",
+  "Umbriel",
+  "Algieba",
+  "Despina",
+  "Erinome",
+  "Algenib",
+  "Rasalgethi",
+  "Laomedeia",
+  "Achernar",
+  "Alnilam",
+  "Schedar",
+  "Gacrux",
+  "Pulcherrima",
+  "Achird",
+  "Zubenelgenubi",
+  "Vindemiatrix",
+  "Sadachbia",
+  "Sadaltager",
+  "Sulafat",
+];
+export const DEFAULT_GEMINI_VOICE_NAME = "Sulafat";
+
+export function resolveGeminiVoiceName(raw) {
+  if (typeof raw === "string" && GEMINI_VOICE_NAMES.includes(raw.trim())) return raw.trim();
+  return DEFAULT_GEMINI_VOICE_NAME;
+}
+
+/**
+ * One reconnect after an unexpected Gemini close, and only when a
+ * resumption handle exists. A normal close (1000) or a second failure
+ * ends the call. Nothing new is spoken on the retry.
+ */
+export function shouldResumeGemini({ ended, code, resumeUsed, handle }) {
+  if (ended || resumeUsed || !handle) return false;
+  if (code === 1000) return false;
+  return true;
+}
+
+/**
  * First Live API client message. Model resource name is
  * models/{id}. responseModalities lives only on generationConfig: the
  * live server rejects it at the top of setup (code 1007, test call
@@ -100,14 +157,29 @@ export const START_DEADLINE_MS = 5000;
  * https://ai.google.dev/api/live
  * https://ai.google.dev/gemini-api/docs/live-api/get-started-websocket
  */
-export function buildGeminiSetupMessage(systemInstruction) {
+export function buildGeminiSetupMessage(systemInstruction, options = {}) {
+  const voiceName = resolveGeminiVoiceName(options.voiceName);
+  const sessionResumption = options.resumeHandle ? { handle: options.resumeHandle } : {};
   return {
     setup: {
       model: `models/${GEMINI_LIVE_MODEL}`,
-      generationConfig: { responseModalities: ["AUDIO"] },
+      generationConfig: {
+        responseModalities: ["AUDIO"],
+        speechConfig: {
+          voiceConfig: {
+            prebuiltVoiceConfig: { voiceName },
+          },
+        },
+      },
       systemInstruction: { parts: [{ text: systemInstruction }] },
       inputAudioTranscription: {},
       outputAudioTranscription: {},
+      // Audio-only sessions without compression stop at 15 minutes,
+      // and the websocket itself resets around 10 minutes. Both are
+      // inside a 20-minute discovery call.
+      // https://ai.google.dev/gemini-api/docs/live-session
+      contextWindowCompression: { slidingWindow: {} },
+      sessionResumption,
     },
   };
 }
@@ -179,9 +251,10 @@ function log(event, fields = {}) {
 export function buildVoiceSystemInstruction() {
   return [
     "You are Micro Titan's agent, conducting a discovery call for Micro Titan.",
+    "Delivery: sound natural on a phone call, warm and relaxed, not like you are reading a script. Short turns. Contractions. One question at a time. A brief acknowledgement, then respond to what the caller just said. Never read a list aloud. Never monologue.",
     `Your first spoken line, verbatim, is: "${VOICE_CALL_OPENING}"`,
     "Do not ask any discovery question until the client has said it is OK to continue.",
-    "Agenda, in order:",
+    "Work the agenda in order, but weave it into the conversation. Do not announce the step numbers:",
     ...VOICE_CALL_AGENDA.map((step, i) => `${i + 1}. ${step}`),
     "You cannot do any of these, and if one comes up, say so plainly, record it as an open question for the owner, and stop there: " +
       VOICE_BANNED_ACTIONS.join(", ") +
@@ -201,6 +274,7 @@ export function createBridgeServer(config = {}) {
   const twilioAccountSid = config.twilioAccountSid ?? "";
   const twilioAuthToken = config.twilioAuthToken ?? "";
   const startDeadlineMs = config.startDeadlineMs ?? START_DEADLINE_MS;
+  const voiceName = resolveGeminiVoiceName(config.geminiVoiceName);
 
   async function postDiscoveryRecord(record) {
     const url = `${ermApiBaseUrl.replace(/\/$/, "")}/api/ops/discovery-voice-complete`;
@@ -249,6 +323,10 @@ export function createBridgeServer(config = {}) {
     let sawFirstGeminiMessage = false;
     let sawFirstAudioOut = false;
     let greetingSent = false;
+    let resumeUsed = false;
+    let resumptionHandle = "";
+    const toCaller = createDownsampler(Math.round(GEMINI_OUTPUT_SAMPLE_RATE_HZ / 8000));
+    const toModel = createUpsampler(2);
     let pendingClientText = "";
     let pendingAgentText = "";
     let wrapUpSent = false;
@@ -330,13 +408,20 @@ export function createBridgeServer(config = {}) {
     }, startDeadlineMs);
     startTimer.unref();
 
-    const openGemini = () => {
+    const openGemini = (resumeHandle) => {
       geminiReady = false;
       gemini = connectWebSocket(geminiUrl, {
         headers: { "x-goog-api-key": geminiApiKey },
       });
       gemini.on("open", () => {
-        gemini.send(JSON.stringify(buildGeminiSetupMessage(buildVoiceSystemInstruction())));
+        gemini.send(
+          JSON.stringify(
+            buildGeminiSetupMessage(buildVoiceSystemInstruction(), {
+              voiceName,
+              resumeHandle: resumeHandle || undefined,
+            }),
+          ),
+        );
       });
       gemini.on("message", (data) => {
         let msg;
@@ -355,6 +440,17 @@ export function createBridgeServer(config = {}) {
                 : "other";
           log("gemini_first_message", { type, reference });
         }
+        if (msg.goAway) {
+          log("go_away", { reference, timeLeft: msg.goAway.timeLeft ?? null });
+        }
+        const resumption = msg.sessionResumptionUpdate;
+        if (resumption) {
+          const handle = resumption.newHandle || resumption.token || "";
+          if (handle && resumption.resumable !== false) {
+            resumptionHandle = handle;
+            log("session_resumption_update", { reference, resumable: true });
+          }
+        }
         if (msg.setupComplete) {
           geminiReady = true;
           log("gemini_setup_complete", { reference, sessionKey });
@@ -369,7 +465,7 @@ export function createBridgeServer(config = {}) {
         if (streamSid) {
           for (const payload of serverAudioPayloads(content)) {
             const pcm24 = bytesToPcm16(Buffer.from(payload, "base64"));
-            const pcm8 = downsample(pcm24, Math.round(GEMINI_OUTPUT_SAMPLE_RATE_HZ / 8000));
+            const pcm8 = toCaller.process(pcm24);
             if (!sawFirstAudioOut) {
               sawFirstAudioOut = true;
               log("gemini_first_audio_out", { reference });
@@ -392,7 +488,14 @@ export function createBridgeServer(config = {}) {
       gemini.on("close", (code, reason) => {
         const reasonText = Buffer.isBuffer(reason) ? reason.toString("utf8") : String(reason ?? "");
         log("gemini_close", { reference, code: code ?? null, reason: reasonText });
-        if (!ended) void endCall("client_hung_up");
+        if (ended) return;
+        if (shouldResumeGemini({ ended, code, resumeUsed, handle: resumptionHandle })) {
+          resumeUsed = true;
+          log("gemini_reconnect", { reference, code: code ?? null });
+          openGemini(resumptionHandle);
+          return;
+        }
+        void endCall(code === 1000 ? "client_hung_up" : "error");
       });
     };
 
@@ -494,7 +597,7 @@ export function createBridgeServer(config = {}) {
           openGemini();
         } else if (event.event === "media" && gemini && geminiReady && gemini.readyState === 1) {
           const pcm8 = mulawBufferToPcm16(Buffer.from(event.media?.payload ?? "", "base64"));
-          const pcm16 = upsample(pcm8, 2);
+          const pcm16 = toModel.process(pcm8);
           gemini.send(JSON.stringify(buildGeminiRealtimeAudioMessage(pcm16ToBytes(pcm16).toString("base64"))));
         } else if (event.event === "stop") {
           log("twilio_stop", { reference: reference || null, sessionKey: sessionKey || null, callSid });
@@ -566,6 +669,7 @@ function main() {
   const server = createBridgeServer({
     streamSecret: process.env.VOICE_BRIDGE_STREAM_SECRET ?? "",
     geminiUrl: process.env.GEMINI_LIVE_WS_URL || GEMINI_LIVE_WS_URL_DEFAULT,
+    geminiVoiceName: process.env.GEMINI_VOICE_NAME,
     geminiApiKey: process.env.GEMINI_API_KEY ?? "",
     ermApiBaseUrl: process.env.ERM_API_BASE_URL ?? "",
     opsDashboardToken: process.env.OPS_DASHBOARD_TOKEN ?? "",

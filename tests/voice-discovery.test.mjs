@@ -41,6 +41,8 @@ import {
 } from "../voice-bridge/session.mjs";
 import {
   bytesToPcm16,
+  createDownsampler,
+  createUpsampler,
   downsample,
   mulawBufferToPcm16,
   mulawDecode,
@@ -70,8 +72,12 @@ import {
   buildGeminiGreetingKick,
   buildGeminiRealtimeAudioMessage,
   buildGeminiSetupMessage,
+  buildVoiceSystemInstruction,
+  resolveGeminiVoiceName,
   resolveListenPort,
   serverAudioPayloads,
+  shouldResumeGemini,
+  DEFAULT_GEMINI_VOICE_NAME,
 } from "../voice-bridge/server.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -300,16 +306,59 @@ test("mulaw round-trip stays within quantization for speech levels", () => {
   }
 });
 
-test("mulaw buffer round-trip and resampling are inverses", () => {
+test("mulaw buffer round-trip stays within quantization", () => {
   const pcm = new Int16Array([0, 1000, -1000, 8000, -8000]);
   const mulaw = pcm16ToMulawBuffer(pcm);
   const back = mulawBufferToPcm16(mulaw);
   for (let i = 0; i < pcm.length; i++) assert.ok(Math.abs(back[i] - pcm[i]) <= 256);
-  const up = upsample(pcm, 2);
-  assert.equal(up.length, 10);
-  assert.deepEqual(Array.from(downsample(up, 2)), Array.from(pcm));
   const bytes = pcm16ToBytes(pcm);
   assert.deepEqual(Array.from(bytesToPcm16(bytes)), Array.from(pcm));
+});
+
+function tone(rate, freq, seconds, amp = 12000) {
+  const count = Math.floor(rate * seconds);
+  const out = new Int16Array(count);
+  for (let i = 0; i < count; i++) out[i] = Math.round(amp * Math.sin((2 * Math.PI * freq * i) / rate));
+  return out;
+}
+
+function rms(samples) {
+  let sum = 0;
+  for (let i = 0; i < samples.length; i++) sum += samples[i] * samples[i];
+  return Math.sqrt(sum / samples.length);
+}
+
+function concatInt16(parts) {
+  const total = parts.reduce((n, part) => n + part.length, 0);
+  const out = new Int16Array(total);
+  let offset = 0;
+  for (const part of parts) {
+    out.set(part, offset);
+    offset += part.length;
+  }
+  return out;
+}
+
+test("24 kHz to 8 kHz attenuates energy above 4 kHz, and chunks match one shot", () => {
+  const low = downsample(tone(24000, 1000, 0.5), 3);
+  const high = downsample(tone(24000, 7000, 0.5), 3);
+  assert.ok(rms(high) < rms(low) * 0.1, `high ${rms(high)} low ${rms(low)}`);
+  const all = tone(24000, 440, 0.2);
+  const one = downsample(all, 3);
+  const streaming = createDownsampler(3);
+  const parts = [];
+  for (let i = 0; i < all.length; i += 80) parts.push(streaming.process(all.subarray(i, i + 80)));
+  assert.deepEqual(Array.from(concatInt16(parts)), Array.from(one));
+});
+
+test("8 kHz to 16 kHz chunks match one shot", () => {
+  const all = tone(8000, 300, 0.25);
+  const one = upsample(all, 2);
+  const streaming = createUpsampler(2);
+  const parts = [];
+  for (let i = 0; i < all.length; i += 50) parts.push(streaming.process(all.subarray(i, i + 50)));
+  assert.deepEqual(Array.from(concatInt16(parts)), Array.from(one));
+  assert.ok(one.length > all.length);
 });
 
 // --- Bridge: session state machine ---
@@ -390,8 +439,30 @@ test("the bridge uses Gemini Live only — no OpenAI, no managed voice platforms
   assert.equal(setup.setup.model, "models/gemini-3.8-live");
   assert.equal(setup.setup.responseModalities, undefined);
   assert.deepEqual(setup.setup.generationConfig.responseModalities, ["AUDIO"]);
+  assert.equal(
+    setup.setup.generationConfig.speechConfig.voiceConfig.prebuiltVoiceConfig.voiceName,
+    DEFAULT_GEMINI_VOICE_NAME,
+  );
+  assert.equal(setup.setup.generationConfig.enableAffectiveDialog, undefined);
+  assert.equal(setup.setup.proactivity, undefined);
+  assert.deepEqual(setup.setup.contextWindowCompression, { slidingWindow: {} });
+  assert.deepEqual(setup.setup.sessionResumption, {});
+  assert.equal(resolveGeminiVoiceName("not-a-voice"), DEFAULT_GEMINI_VOICE_NAME);
+  assert.equal(resolveGeminiVoiceName("Aoede"), "Aoede");
+  const resumed = buildGeminiSetupMessage("system", { resumeHandle: "handle-1", voiceName: "Puck" });
+  assert.deepEqual(resumed.setup.sessionResumption, { handle: "handle-1" });
+  assert.equal(resumed.setup.generationConfig.speechConfig.voiceConfig.prebuiltVoiceConfig.voiceName, "Puck");
   assert.deepEqual(setup.setup.inputAudioTranscription, {});
   assert.deepEqual(setup.setup.outputAudioTranscription, {});
+  const instruction = buildVoiceSystemInstruction();
+  assert.ok(instruction.includes(VOICE_CALL_OPENING));
+  assert.match(instruction, /One question at a time/);
+  assert.match(instruction, /Never pretend to be a human/);
+  assert.equal(shouldResumeGemini({ ended: false, code: 1011, resumeUsed: false, handle: "h" }), true);
+  assert.equal(shouldResumeGemini({ ended: false, code: 1011, resumeUsed: true, handle: "h" }), false);
+  assert.equal(shouldResumeGemini({ ended: false, code: 1011, resumeUsed: false, handle: "" }), false);
+  assert.equal(shouldResumeGemini({ ended: true, code: 1011, resumeUsed: false, handle: "h" }), false);
+  assert.equal(shouldResumeGemini({ ended: false, code: 1000, resumeUsed: false, handle: "h" }), false);
   const audio = buildGeminiRealtimeAudioMessage("AAAA");
   assert.equal(audio.realtimeInput.audio.mimeType, "audio/pcm;rate=16000");
   assert.equal(audio.realtimeInput.audio.data, "AAAA");

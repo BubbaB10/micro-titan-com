@@ -17,8 +17,8 @@ const REFERENCE = "MT-20261107-TEST";
 const SESSION = "voice-test-sim";
 const CONSENT = "2026-11-07T00:40:00.000Z";
 const TOKEN = voiceStreamToken(SECRET, REFERENCE, SESSION, CONSENT);
-const REPLY_PCM = Buffer.alloc(12);
-REPLY_PCM.writeInt16LE(1000, 0);
+const REPLY_PCM = Buffer.alloc(400);
+for (let i = 0; i < REPLY_PCM.length; i += 2) REPLY_PCM.writeInt16LE(1000, i);
 
 function listen(server, host = "127.0.0.1") {
   return new Promise((resolve) => {
@@ -121,12 +121,19 @@ function waitForClose(socket, ms = 2000) {
   });
 }
 
-function until(check, ms = 2000) {
+function until(check, ms = 2000, label = "condition") {
   const start = Date.now();
   return new Promise((resolve, reject) => {
     const tick = () => {
-      if (check()) resolve();
-      else if (Date.now() - start > ms) reject(new Error("condition timeout"));
+      let ok = false;
+      try {
+        ok = check();
+      } catch (err) {
+        reject(err);
+        return;
+      }
+      if (ok) resolve();
+      else if (Date.now() - start > ms) reject(new Error(`timeout ${label}`));
       else setTimeout(tick, 15);
     };
     tick();
@@ -220,25 +227,33 @@ test("a fake Twilio stream reaches a stub Gemini and a bad token does not", asyn
         },
       }),
     );
-    await until(() => stub.setups.length === 1 && logs.some((line) => line.includes("gemini_setup_complete")));
+    await until(() => stub.setups.length === 1, 2000, `setups=${stub.setups.length}`);
+    await until(() => logs.some((line) => line.includes("gemini_setup_complete")), 2000, `logs=${logs.length}`);
     assert.equal(stub.setups[0].setup.model, "models/gemini-3.8-live");
     assert.deepEqual(stub.setups[0].setup.inputAudioTranscription, {});
     assert.deepEqual(stub.setups[0].setup.outputAudioTranscription, {});
-    await until(() =>
-      stub.fromClient.some(
-        (msg) =>
-          msg.clientContent?.turnComplete === true &&
-          msg.clientContent.turns?.[0]?.parts?.[0]?.text?.includes(VOICE_CALL_OPENING),
-      ),
+    await until(
+      () =>
+        stub.fromClient.some(
+          (msg) =>
+            msg.clientContent?.turnComplete === true &&
+            msg.clientContent.turns?.[0]?.parts?.[0]?.text?.includes(VOICE_CALL_OPENING),
+        ),
+      2000,
+      "greeting",
     );
     client.send(
       JSON.stringify({
         event: "media",
         streamSid: "MZ_test",
-        media: { payload: Buffer.alloc(16, 0xff).toString("base64") },
+        media: { payload: Buffer.alloc(160, 0xff).toString("base64") },
       }),
     );
-    await until(() => stub.audios.length === 1 && messages.some((m) => m.event === "media" && m.media?.payload));
+    await until(
+      () => stub.audios.length === 1 && messages.some((m) => m.event === "media" && m.media?.payload),
+      2000,
+      "audio",
+    );
     assert.equal(stub.audios[0].mimeType, "audio/pcm;rate=16000");
     assert.ok(stub.audios[0].data.length > 0);
     client.send(JSON.stringify({ event: "stop", streamSid: "MZ_test" }));

@@ -65,6 +65,7 @@ then `8080`, and binds `0.0.0.0`. Railway sets `PORT`.
 | Name | Required | Secret |
 | --- | --- | --- |
 | `GEMINI_API_KEY` | yes | **secret** |
+| `GEMINI_VOICE_NAME` | no | not a secret — prebuilt Live voice. Default `Sulafat` (Warm). Unknown names fall back to the default. |
 | `OPS_DASHBOARD_TOKEN` | yes | **secret** — bearer token for `POST /api/ops/discovery-voice-complete` |
 | `ERM_API_BASE_URL` | yes | not a secret — origin of the Next app, e.g. `https://micro-titan.com` |
 | `GEMINI_LIVE_WS_URL` | no | not a secret — override only. Default is the URL above. Do not put the API key in this URL. |
