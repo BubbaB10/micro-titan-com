@@ -16,8 +16,9 @@
  * not_configured.
  *
  * Returns references, lanes, intake statuses, and steps only —
- * no names, no answers, no contact details. Bubba/Boone only,
- * NOT a client login.
+ * no names, no answers, no contact details. Test intakes are
+ * omitted by the shared due list and are not identified here.
+ * Bubba/Boone only, NOT a client login.
  */
 
 import { NextResponse } from "next/server";

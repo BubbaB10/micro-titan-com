@@ -21,6 +21,11 @@
  * no owner email: this codebase has no owner-only follow-up
  * sender, and this route does not add one. The owner reads the
  * same due list at GET /api/ops/followups-due.
+ *
+ * Test intakes are not prospects. The shared due list omits them.
+ * The JSON adds excludedTestCount, a number only: no test
+ * reference and no name. Step timing, labels, and the zero
+ * client-message result are unchanged.
  */
 
 import { handleDailyFollowUpCron } from "../../../lib/erm/followup-store";

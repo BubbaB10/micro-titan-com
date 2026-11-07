@@ -28,6 +28,9 @@
  *   the due list the caller already loaded. It inserts nothing,
  *   so two runs on the same Chicago day cannot create a duplicate
  *   follow-up row, and it sends nothing to a client or the owner.
+ * - Test intakes are not prospects. followUpsDue omits them
+ *   through isTestIntake. The cron reports that as
+ *   excludedTestCount, a number only: no reference and no name.
  * - This module never advances an intake's status and never closes
  *   an intake. A logged "day14" step means "close as no reply" is
  *   due; the owner closes the intake as a separate, owner-approved
@@ -77,6 +80,65 @@ export const FOLLOW_UP_ELIGIBLE_STATUSES: ReadonlyArray<string> = [
 /** Intake statuses the follow-up sequence applies to. */
 export function isFollowUpEligibleStatus(status: string): boolean {
   return FOLLOW_UP_ELIGIBLE_STATUSES.includes(status);
+}
+
+/** Exact email domains that are reserved for examples and tests. */
+const TEST_EMAIL_DOMAINS: ReadonlySet<string> = new Set([
+  "example.com",
+  "example.org",
+  "example.net",
+]);
+
+/** Domain endings reserved for tests, documentation, and invalid addresses. */
+const TEST_EMAIL_DOMAIN_SUFFIXES: readonly string[] = [".invalid", ".test", ".example"];
+
+export interface TestIntakeSignals {
+  reference?: string | null;
+  clientName?: string | null;
+  contactEmail?: string | null;
+  source?: string | null;
+}
+
+function emailDomain(email: string): string {
+  const trimmed = email.trim().toLowerCase();
+  const at = trimmed.lastIndexOf("@");
+  if (at < 0 || at === trimmed.length - 1) return "";
+  return trimmed.slice(at + 1).trim();
+}
+
+/**
+ * True when an intake is a test and is not a prospect. Any one
+ * marker is enough. Pure: no I/O and no logging. followUpsDue
+ * applies this to every eligible row, so the cron and the owner
+ * view share one rule and the query does not restate it.
+ *
+ * - reference ends with "-TEST"
+ * - the client name's first word is "test" (case-insensitive,
+ *   ASCII word boundary, so a name such as "Testa" does not match)
+ * - the email domain is example.com, example.org, or example.net,
+ *   or that domain ends with .invalid, .test, or .example
+ * - source contains "test" in any case
+ */
+export function isTestIntake(input: TestIntakeSignals): boolean {
+  const reference = (input.reference ?? "").trim();
+  if (reference.endsWith("-TEST")) return true;
+
+  const clientName = (input.clientName ?? "").trim();
+  if (/^test\b/i.test(clientName)) return true;
+
+  const domain = emailDomain(input.contactEmail ?? "");
+  if (
+    domain.length > 0 &&
+    (TEST_EMAIL_DOMAINS.has(domain) ||
+      TEST_EMAIL_DOMAIN_SUFFIXES.some((suffix) => domain.endsWith(suffix)))
+  ) {
+    return true;
+  }
+
+  const source = input.source ?? "";
+  if (source.toLowerCase().includes("test")) return true;
+
+  return false;
 }
 
 /**
@@ -228,9 +290,13 @@ export interface DueFollowUp {
 }
 
 export type FollowUpsDueResult =
-  | { status: "found"; due: DueFollowUp[] }
+  | { status: "found"; due: DueFollowUp[]; excludedTestCount: number }
   | { status: "not_configured" }
   | { status: "failed" };
+
+function textCell(value: unknown): string {
+  return value == null ? "" : String(value);
+}
 
 function dbUrl(): string | undefined {
   return process.env.ERM_DATABASE_URL ?? process.env.ERM_DATABASE_DATABASE_URL;
@@ -385,13 +451,33 @@ export async function followUpsDue(now: Date = new Date()): Promise<FollowUpsDue
     try {
       const client = await pool.connect();
       try {
+        // The join loads the signals isTestIntake reads. The rule
+        // itself stays in that function — this query does not restate
+        // it — and both the cron and the owner view call followUpsDue.
         const intakes = await client.query(
-          `SELECT id, reference, lane, status, created_at FROM intakes
-            WHERE status = ANY($1::text[]) ORDER BY created_at ASC LIMIT 200`,
+          `SELECT i.id, i.reference, i.lane, i.status, i.created_at, i.source,
+                  c.name AS client_name, c.contact_email
+             FROM intakes i
+             JOIN clients c ON c.id = i.client_id
+            WHERE i.status = ANY($1::text[])
+            ORDER BY i.created_at ASC
+            LIMIT 200`,
           [[...isFollowUpEligibleStatusList()]],
         );
         const due: DueFollowUp[] = [];
+        let excludedTestCount = 0;
         for (const row of intakes.rows) {
+          if (
+            isTestIntake({
+              reference: textCell(row.reference),
+              clientName: textCell(row.client_name),
+              contactEmail: textCell(row.contact_email),
+              source: textCell(row.source),
+            })
+          ) {
+            excludedTestCount += 1;
+            continue;
+          }
           const intakeId = String(row.id);
           const createdAt = new Date(row.created_at);
           const loggedRows = await client.query(
@@ -415,7 +501,7 @@ export async function followUpsDue(now: Date = new Date()): Promise<FollowUpsDue
             dueDate: next.dueDate.toISOString(),
           });
         }
-        return { status: "found", due };
+        return { status: "found", due, excludedTestCount };
       } finally {
         client.release();
       }
@@ -468,6 +554,8 @@ export type DailyFollowUpJobResult =
       runKey: string;
       due: DueFollowUp[];
       count: number;
+      /** Eligible intakes omitted because isTestIntake matched. A count only. */
+      excludedTestCount: number;
       writes: 0;
       clientMessages: 0;
     }
@@ -480,6 +568,7 @@ export type DailyFollowUpJobResult =
  * and it does not send. A follow-up row still means the owner
  * logged a step they actually did; creating one here would hide
  * the due item and is intentionally not done.
+ * excludedTestCount is copied from the load. It is a number only.
  */
 export function dailyFollowUpJob(
   loaded: FollowUpsDueResult,
@@ -495,6 +584,7 @@ export function dailyFollowUpJob(
     runKey: `followups:${chicagoDate}`,
     due: loaded.due,
     count: loaded.due.length,
+    excludedTestCount: loaded.excludedTestCount ?? 0,
     writes: 0,
     clientMessages: 0,
   };

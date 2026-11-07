@@ -7,10 +7,16 @@
 const queries = [];
 const communicationRows = [];
 let mode = "intake_missing";
+let followupIntakeRows = null;
 
 export function setFakePgMode(next) {
   mode = next;
   queries.length = 0;
+}
+
+/** Rows returned for the follow-up due-list query when mode is followups_due. */
+export function setFakeFollowupIntakes(rows) {
+  followupIntakeRows = rows;
 }
 
 export function resetCommunicationLog() {
@@ -97,6 +103,13 @@ export class Pool {
           throw new Error("fake pg failure");
         }
         if (/^(BEGIN|COMMIT|ROLLBACK)$/i.test(text)) return { rows: [] };
+        if (mode === "followups_due") {
+          if (text.includes("FROM intakes")) {
+            return { rows: (followupIntakeRows ?? []).map((row) => ({ ...row })) };
+          }
+          if (text.includes("FROM followups")) return { rows: [] };
+          throw new Error(`unexpected followups sql: ${text}`);
+        }
         if (text.includes("FROM intakes")) {
           if (mode === "intake_missing") return { rows: [] };
           return {

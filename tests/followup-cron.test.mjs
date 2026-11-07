@@ -82,6 +82,7 @@ test("the daily job is idempotent per Chicago day and writes nothing", () => {
   assert.equal(first.runKey, "followups:2026-11-06");
   assert.equal(first.writes, 0);
   assert.equal(first.clientMessages, 0);
+  assert.equal(first.excludedTestCount, 0);
   assert.equal(first.count, 1);
   assert.equal(first.due[0].reference, "MT-TEST-DUE");
   assert.equal(first.due[0].step, "day1");
@@ -193,6 +194,7 @@ test("an authorized run surfaces the due list twice without writing or sending",
   assert.equal(first.body.runKey, "followups:2026-11-06");
   assert.equal(first.body.writes, 0);
   assert.equal(first.body.clientMessages, 0);
+  assert.equal(first.body.excludedTestCount, 0);
   assert.equal(first.body.count, 1);
   assert.equal(first.body.due[0].reference, "MT-TEST-DUE");
   assert.equal(DUE.length, 1);
