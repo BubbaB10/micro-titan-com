@@ -3,10 +3,10 @@
  * a follow-up step right now.
  *
  * This is the ERM replacement for the daily follow-up reminder
- * cron's Sheet read: instead of scanning the Google Sheet, the
- * reminder reads this route and tells the owner which prospects
- * are at Day 1 / 3 / 7 / 14 with no reply recorded. It sends
- * nothing to any prospect, and it does not change any intake.
+ * cron's Sheet read. The scheduled job is GET /api/cron/followups
+ * (vercel.json). It loads this same due list and returns it to
+ * the owner. It sends nothing to any prospect, and it does not
+ * change any intake. This route stays the owner check.
  * The follow-up itself is still done by hand by the owner, and
  * logged through POST /api/ops/followup-log.
  *

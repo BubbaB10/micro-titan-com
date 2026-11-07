@@ -24,6 +24,10 @@
  *   records a follow-up the owner actually did, by hand, through
  *   the token-gated owner route — it is the audit trail, not the
  *   sending. Automated sending needs the owner's separate go.
+ * - dailyFollowUpJob is the daily cron's plan. It only surfaces
+ *   the due list the caller already loaded. It inserts nothing,
+ *   so two runs on the same Chicago day cannot create a duplicate
+ *   follow-up row, and it sends nothing to a client or the owner.
  * - This module never advances an intake's status and never closes
  *   an intake. A logged "day14" step means "close as no reply" is
  *   due; the owner closes the intake as a separate, owner-approved
@@ -426,4 +430,109 @@ export async function followUpsDue(now: Date = new Date()): Promise<FollowUpsDue
 function isFollowUpEligibleStatusList(): string[] {
   // Keep the SQL filter identical to the pure rule in followup.ts.
   return ["received", "completeness_check", "pitch_sent", "agreed"];
+}
+
+/** YYYY-MM-DD calendar date in America/Chicago. */
+export function chicagoCalendarDate(now: Date = new Date()): string {
+  const fmt = new Intl.DateTimeFormat("en-US", {
+    timeZone: "America/Chicago",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  });
+  const p = fmt.formatToParts(now);
+  const get = (type: string): string => p.find((x) => x.type === type)?.value ?? "00";
+  return `${get("year")}-${get("month")}-${get("day")}`;
+}
+
+/**
+ * Vercel Cron sends `Authorization: Bearer <CRON_SECRET>` when the
+ * CRON_SECRET env var is set. Missing secret is not configured.
+ * Anything other than that exact header is unauthorized. The
+ * secret value is never read from source and never returned.
+ */
+export function authorizeCronBearer(
+  authorization: string | null,
+  secret: string | undefined,
+): "ok" | "not_configured" | "unauthorized" {
+  if (!secret) return "not_configured";
+  if ((authorization ?? "") !== `Bearer ${secret}`) return "unauthorized";
+  return "ok";
+}
+
+export type DailyFollowUpJobResult =
+  | {
+      ok: true;
+      job: "followups";
+      chicagoDate: string;
+      runKey: string;
+      due: DueFollowUp[];
+      count: number;
+      writes: 0;
+      clientMessages: 0;
+    }
+  | { ok: false; error: "not_configured" | "followups_due_failed" };
+
+/**
+ * Turn a loaded due-list into the daily job result. The run key is
+ * the Chicago calendar date, so two invocations on that date are
+ * the same run. This function does not insert, update, or delete,
+ * and it does not send. A follow-up row still means the owner
+ * logged a step they actually did; creating one here would hide
+ * the due item and is intentionally not done.
+ */
+export function dailyFollowUpJob(
+  loaded: FollowUpsDueResult,
+  now: Date = new Date(),
+): DailyFollowUpJobResult {
+  if (loaded.status === "not_configured") return { ok: false, error: "not_configured" };
+  if (loaded.status === "failed") return { ok: false, error: "followups_due_failed" };
+  const chicagoDate = chicagoCalendarDate(now);
+  return {
+    ok: true,
+    job: "followups",
+    chicagoDate,
+    runKey: `followups:${chicagoDate}`,
+    due: loaded.due,
+    count: loaded.due.length,
+    writes: 0,
+    clientMessages: 0,
+  };
+}
+
+export type DailyFollowUpCronResponse =
+  | { status: 503; body: { ok: false; error: "cron_not_configured" | "not_configured" } }
+  | { status: 401; body: { ok: false; error: "unauthorized" } }
+  | { status: 502; body: { ok: false; error: "followups_due_failed" } }
+  | { status: 200; body: Extract<DailyFollowUpJobResult, { ok: true }> };
+
+/**
+ * The daily cron's whole decision: reject without CRON_SECRET,
+ * then surface the due list. `load` defaults to the database
+ * read. A caller can pass a load function in tests. This function
+ * never calls recordFollowUp and never sends.
+ */
+export async function handleDailyFollowUpCron(input: {
+  authorization: string | null;
+  secret: string | undefined;
+  now?: Date;
+  load?: (now: Date) => Promise<FollowUpsDueResult>;
+}): Promise<DailyFollowUpCronResponse> {
+  const decision = authorizeCronBearer(input.authorization, input.secret);
+  if (decision === "not_configured") {
+    return { status: 503, body: { ok: false, error: "cron_not_configured" } };
+  }
+  if (decision !== "ok") {
+    return { status: 401, body: { ok: false, error: "unauthorized" } };
+  }
+  const now = input.now ?? new Date();
+  const load = input.load ?? followUpsDue;
+  const job = dailyFollowUpJob(await load(now), now);
+  if (!job.ok && job.error === "not_configured") {
+    return { status: 503, body: { ok: false, error: "not_configured" } };
+  }
+  if (!job.ok) {
+    return { status: 502, body: { ok: false, error: "followups_due_failed" } };
+  }
+  return { status: 200, body: job };
 }

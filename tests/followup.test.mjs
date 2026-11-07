@@ -39,6 +39,10 @@ const dueRouteSource = fs.readFileSync(
   path.join(root, "app", "api", "ops", "followups-due", "route.ts"),
   "utf8",
 );
+const cronRouteSource = fs.readFileSync(
+  path.join(root, "app", "api", "cron", "followups", "route.ts"),
+  "utf8",
+);
 const schemaSource = fs.readFileSync(
   path.join(root, "app", "lib", "erm", "schema.sql"),
   "utf8",
@@ -255,6 +259,7 @@ test("no sending anywhere in the new code: no email, SMS, call, or sender", () =
     ["followup-log route", logRouteSource],
     ["followup-status route", statusRouteSource],
     ["followups-due route", dueRouteSource],
+    ["followups cron route", cronRouteSource],
   ]) {
     assert.ok(!/resend|twilio|sendgrid|fetch\(|axios|nodemailer/i.test(src), `${name} must not send`);
     assert.ok(!/sendFollowUp|send_followup|autoSend|auto_send/i.test(src), `${name} must not auto-send`);
