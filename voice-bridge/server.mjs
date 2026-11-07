@@ -93,9 +93,9 @@ export const START_DEADLINE_MS = 5000;
 
 /**
  * First Live API client message. Model resource name is
- * models/{id}. responseModalities is set both on setup (the raw
- * websocket getting-started sample) and on generationConfig (the
- * BidiGenerateContentSetup schema). Empty transcription configs
+ * models/{id}. responseModalities lives only on generationConfig: the
+ * live server rejects it at the top of setup (code 1007, test call
+ * 2026-11-06). Empty transcription configs
  * turn input and output transcripts on.
  * https://ai.google.dev/api/live
  * https://ai.google.dev/gemini-api/docs/live-api/get-started-websocket
@@ -104,7 +104,6 @@ export function buildGeminiSetupMessage(systemInstruction) {
   return {
     setup: {
       model: `models/${GEMINI_LIVE_MODEL}`,
-      responseModalities: ["AUDIO"],
       generationConfig: { responseModalities: ["AUDIO"] },
       systemInstruction: { parts: [{ text: systemInstruction }] },
       inputAudioTranscription: {},

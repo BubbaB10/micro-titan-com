@@ -363,7 +363,7 @@ test("the bridge uses Gemini Live only — no OpenAI, no managed voice platforms
   assert.equal(GEMINI_INPUT_AUDIO_MIME, "audio/pcm;rate=16000");
   const setup = buildGeminiSetupMessage("system");
   assert.equal(setup.setup.model, "models/gemini-3.8-live");
-  assert.deepEqual(setup.setup.responseModalities, ["AUDIO"]);
+  assert.equal(setup.setup.responseModalities, undefined);
   assert.deepEqual(setup.setup.generationConfig.responseModalities, ["AUDIO"]);
   assert.deepEqual(setup.setup.inputAudioTranscription, {});
   assert.deepEqual(setup.setup.outputAudioTranscription, {});
