@@ -67,7 +67,7 @@ import {
   VOICE_BANNED_ACTIONS,
   VOICE_CALL_AGENDA,
   VOICE_CALL_OPENING,
-  VOICE_HARD_STOP_WRAP_UP_DRAFT,
+  VOICE_HARD_STOP_WRAP_UP,
 } from "./guardrails.mjs";
 
 /** Railway sets PORT. Fall back to VOICE_BRIDGE_PORT, then 8080. */
@@ -285,7 +285,7 @@ function handleTwilioSocket(socket, req) {
               turns: [
                 {
                   role: "user",
-                  parts: [{ text: `The 20-minute call time is up. Say this wrap-up line, then stop: "${VOICE_HARD_STOP_WRAP_UP_DRAFT}"` }],
+                  parts: [{ text: `The 20-minute call time is up. Say this wrap-up line, then stop: "${VOICE_HARD_STOP_WRAP_UP}"` }],
                 },
               ],
               turnComplete: true,

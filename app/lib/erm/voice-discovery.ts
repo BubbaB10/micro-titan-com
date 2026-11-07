@@ -35,8 +35,8 @@
  * - No audio is stored in the ERM. A voice discovery carries only
  *   recording_ref — the provider's recording reference (e.g. a
  *   Twilio recording SID). The transcript is text turns only.
- * - No auto-send: the no-answer follow-up text in this file is a
- *   DRAFT, not approved wording, and nothing in this slice sends it.
+ * - No auto-send: the no-answer follow-up text is approved wording,
+ *   and nothing in this slice sends it. No repeated dialling.
  * - No Railway service is created here and no paid add-on is added.
  *   The bridge is deployable as its own Railway service; creating
  *   that service and setting its secrets is an owner step. No
@@ -117,21 +117,21 @@ export const VOICE_ESCALATION_TRIGGERS: ReadonlyArray<string> = [
 ];
 
 /**
- * DRAFT wrap-up line, spoken at the 20-minute hard stop (design §4).
- * DRAFT — NOT approved verbatim. Do not use it with a client until
- * the owner approves it in words. It exists here so the bridge has
- * one fixed line to speak, not a line invented at call time.
+ * Wrap-up line, spoken at the 20-minute hard stop (design §4).
+ * Approved verbatim by Bubba 2026-11-06 ~18:27 CST.
+ * Do not paraphrase, shorten, or reword this constant.
  */
-export const VOICE_HARD_STOP_WRAP_UP_DRAFT =
+export const VOICE_HARD_STOP_WRAP_UP =
   "That's our time — I'll finish the presentation from what you've told me and the owner will review it. If anything is unfinished, I'll follow up by text.";
 
 /**
- * DRAFT no-answer follow-up (design §4): one text if the client does
- * not answer, then the discovery is marked "no_answer" and waits.
- * DRAFT — NOT approved verbatim. Nothing in this slice sends it, and
- * no repeated dialling ever happens.
+ * No-answer follow-up (design §4): one text if the client does not
+ * answer, then the discovery is marked "no_answer" and waits.
+ * Approved verbatim by Bubba 2026-11-06 ~18:27 CST.
+ * Do not paraphrase, shorten, or reword this constant.
+ * Nothing in this slice sends it, and no repeated dialling ever happens.
  */
-export const VOICE_NO_ANSWER_FOLLOW_UP_DRAFT =
+export const VOICE_NO_ANSWER_FOLLOW_UP =
   "We missed you — reply here to reschedule, or switch to text discovery instead.";
 
 /**

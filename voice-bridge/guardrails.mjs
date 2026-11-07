@@ -42,5 +42,6 @@ export const VOICE_BANNED_ACTIONS = [
   "move_to_setup",
 ];
 
-export const VOICE_HARD_STOP_WRAP_UP_DRAFT =
+/** Approved verbatim by Bubba 2026-11-06 ~18:27 CST. Copy of voice-discovery.ts. */
+export const VOICE_HARD_STOP_WRAP_UP =
   "That's our time — I'll finish the presentation from what you've told me and the owner will review it. If anything is unfinished, I'll follow up by text.";

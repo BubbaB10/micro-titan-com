@@ -104,29 +104,43 @@ Twilio Media Streams connect to `wss://<host>/twilio-stream?reference=MT-...&ses
 - Collects Gemini input/output transcription into transcript turns
   (agent / client, in order, with timestamps).
 - Enforces the 20-minute hard stop: at 1200 seconds it speaks the
-  draft wrap-up line, then ends the call.
+  approved wrap-up line, then ends the call.
 - On end, POSTs the transcript to the Next app's owner route
   `POST /api/ops/discovery-voice-complete`, which records it in the
   ERM via `recordDiscoveryCall` (channel `voice`, format `call`).
   No audio is stored, sent to the ERM, or logged — only the
   provider's recording reference, if one is supplied.
 - If the client does not answer, the session ends as `no_answer`.
-  No repeated dialling. The one-text follow-up is a DRAFT in
-  `voice-discovery.ts`, not approved wording, and nothing here sends
-  it.
+  No repeated dialling. The one-text follow-up is approved wording
+  in `voice-discovery.ts` (Bubba 2026-11-06 ~18:27 CST), and nothing
+  here sends it.
+
+## First test call
+
+The bridge is deployed at `voice-bridge-production-5a71.up.railway.app`.
+Audio connects when the stream URL has `reference` and `sessionKey`.
+The bridge does not look up the ERM before it connects. The transcript
+is stored only if that reference already exists in `intakes`.
+
+`scripts/voice-test-call.mjs` builds one outbound call with inline
+TwiML straight to this host. It does not change the Twilio console
+and it does not enable `VOICE_DISCOVERY_ENABLED`. Without `--confirm`
+it prints the plan and exits before any Twilio request.
+
+```sh
+TWILIO_ACCOUNT_SID=... TWILIO_AUTH_TOKEN=... TWILIO_PHONE_NUMBER=+1... \
+node scripts/voice-test-call.mjs --to +1... --reference MT-20261107-TEST
+```
+
+Add `--confirm` only when that plan is the call you mean to place.
+`/api/twilio/webhook` stays the inbound reject route.
 
 ## What still needs the owner
 
-1. **Create the Railway service** with the settings above and set
-   the secret env vars there. This repo does not do that step.
-2. **Point a TEST call at the TwiML route** only after `/health` is
-   ok and `VOICE_DISCOVERY_ENABLED=true` is set on the Next app for
-   that test. The voice URL must include `reference`, `sessionKey`,
-   and `consentAt` for an intake that already exists and for which
-   booking consent was given. Do not change the existing inbound
-   webhook: `/api/twilio/webhook` keeps rejecting calls.
-3. **Consent wording** — the call opening and booking consent lines
-   are APPROVED VERBATIM and are used exactly. The wrap-up and
-   no-answer lines are DRAFTS and need the owner's approval before
-   use with a client. TCPA / consent wording is not legal advice
-   and has not been reviewed by counsel.
+1. **Place the TEST call** with the command above, to the owner's own
+   phone, after a TEST intake row exists if the transcript should be
+   kept. This repo does not place that call.
+2. **Consent wording** — the call opening, booking consent, wrap-up,
+   and no-answer lines are approved verbatim and are used exactly.
+   Nothing sends the no-answer text. TCPA / consent wording is not
+   legal advice and has not been reviewed by counsel.

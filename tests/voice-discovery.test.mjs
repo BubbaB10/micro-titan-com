@@ -20,8 +20,8 @@ import {
   VOICE_CALL_OPENING,
   VOICE_DISCOVERY_FORMAT_CHOICE,
   VOICE_ESCALATION_TRIGGERS,
-  VOICE_HARD_STOP_WRAP_UP_DRAFT,
-  VOICE_NO_ANSWER_FOLLOW_UP_DRAFT,
+  VOICE_HARD_STOP_WRAP_UP,
+  VOICE_NO_ANSWER_FOLLOW_UP,
   canStartVoiceCall,
   estimateVoiceCallCostUsd,
   isHardStop,
@@ -62,7 +62,7 @@ import {
   VOICE_BANNED_ACTIONS as COPY_BANNED,
   VOICE_CALL_AGENDA as COPY_AGENDA,
   VOICE_CALL_OPENING as COPY_OPENING,
-  VOICE_HARD_STOP_WRAP_UP_DRAFT as COPY_WRAP,
+  VOICE_HARD_STOP_WRAP_UP as COPY_WRAP,
 } from "../voice-bridge/guardrails.mjs";
 import {
   LISTEN_HOST,
@@ -167,10 +167,23 @@ test("banned actions and escalation triggers cover the guardrails", () => {
   }
 });
 
-test("wrap-up and no-answer lines are labelled DRAFT, not approved", () => {
-  assert.match(voiceSource, /DRAFT — NOT approved verbatim/);
-  assert.ok(VOICE_HARD_STOP_WRAP_UP_DRAFT.length > 0);
-  assert.ok(VOICE_NO_ANSWER_FOLLOW_UP_DRAFT.length > 0);
+test("wrap-up line is the approved verbatim text, exactly", () => {
+  assert.equal(
+    VOICE_HARD_STOP_WRAP_UP,
+    "That's our time — I'll finish the presentation from what you've told me and the owner will review it. If anything is unfinished, I'll follow up by text.",
+  );
+  assert.match(voiceSource, /Approved verbatim by Bubba 2026-11-06 ~18:27 CST/);
+  assert.doesNotMatch(voiceSource, /VOICE_HARD_STOP_WRAP_UP_DRAFT/);
+  assert.doesNotMatch(voiceSource, /NOT approved verbatim/);
+});
+
+test("no-answer follow-up is the approved verbatim text, exactly, and nothing sends it", () => {
+  assert.equal(
+    VOICE_NO_ANSWER_FOLLOW_UP,
+    "We missed you — reply here to reschedule, or switch to text discovery instead.",
+  );
+  assert.doesNotMatch(voiceSource, /VOICE_NO_ANSWER_FOLLOW_UP_DRAFT/);
+  assert.match(voiceSource, /Nothing in this slice sends it/);
 });
 
 // --- Transcript + recording reference validation ---
@@ -403,7 +416,7 @@ test("vendored guardrails match voice-discovery.ts, and the bridge imports nothi
   assert.equal(COPY_URL, GEMINI_LIVE_WS_URL_DEFAULT);
   assert.equal(COPY_MIME, GEMINI_INPUT_AUDIO_MIME);
   assert.equal(COPY_OPENING, VOICE_CALL_OPENING);
-  assert.equal(COPY_WRAP, VOICE_HARD_STOP_WRAP_UP_DRAFT);
+  assert.equal(COPY_WRAP, VOICE_HARD_STOP_WRAP_UP);
   assert.deepEqual(COPY_AGENDA, [...VOICE_CALL_AGENDA]);
   assert.deepEqual(COPY_BANNED, [...VOICE_BANNED_ACTIONS]);
   for (const file of ["server.mjs", "session.mjs", "audio.mjs", "ws-frames.mjs", "guardrails.mjs"]) {
