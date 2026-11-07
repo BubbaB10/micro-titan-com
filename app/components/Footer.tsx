@@ -27,18 +27,15 @@ export default function Footer() {
           {/* Nav */}
           <div className="flex flex-col gap-2 text-sm text-[#a8d8f0]/60">
             <Link href="/" className="hover:text-[#f4f7fa] transition-colors">Services</Link>
-            <Link href="/valet/pricing" className="hover:text-[#f4f7fa] transition-colors">Valet plans</Link>
-            <Link href="/valet" className="hover:text-[#f4f7fa] transition-colors">Valet</Link>
             <Link href="/studio" className="hover:text-[#f4f7fa] transition-colors">The Studio</Link>
-            <Link href="/pivot" className="hover:text-[#f4f7fa] transition-colors">Pivot</Link>
             <Link href="/about" className="hover:text-[#f4f7fa] transition-colors">About</Link>
             <Link href="/pricing" className="hover:text-[#f4f7fa] transition-colors">Pricing</Link>
-            <Link href="/why-provable" className="hover:text-[#f4f7fa] transition-colors">How it works</Link>
+            <Link href="/#how-it-works" className="hover:text-[#f4f7fa] transition-colors">How it works</Link>
           </div>
         </div>
 
         <div className="mt-10 pt-8 border-t border-[rgba(168,216,240,0.08)] flex flex-col md:flex-row justify-between items-center gap-3">
-          <p className="text-xs text-[#a8d8f0]/40">&copy; 2026 Micro Titan LLC &middot; Paris, Texas &middot; All rights reserved.</p>
+          <p className="text-xs text-[#a8d8f0]/40">&copy; 2026 Micro Titan LLC &middot; Remote, nationwide &middot; All rights reserved.</p>
           <div className="flex items-center gap-4">
             <Link href="/terms" className="text-xs text-[#a8d8f0]/30 hover:text-[#a8d8f0]/60 transition-colors">Terms</Link>
             <Link href="/privacy" className="text-xs text-[#a8d8f0]/30 hover:text-[#a8d8f0]/60 transition-colors">Privacy</Link>

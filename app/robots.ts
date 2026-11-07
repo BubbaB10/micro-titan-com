@@ -8,10 +8,9 @@ import type { MetadataRoute } from "next";
  * first thing anyone checks when judging whether a site is looked after. Micro Titan is about to
  * sell local search as a service; being unfindable while doing so is not a position we can hold.
  *
- * Deliberately permissive: every route on this site is public marketing. /dashboard and /onboarding
- * look internal from their names but are interactive PRODUCT DEMOS, and /guide is a real content
- * page — all three are worth indexing. The only excluded routes are the two that 308 elsewhere,
- * and those are handled in sitemap.ts rather than here.
+ * Deliberately permissive: public pages are allowed. Retired product URLs redirect in
+ * next.config.ts and are left out of sitemap.ts rather than blocked here. /guide stays
+ * indexable.
  */
 export default function robots(): MetadataRoute.Robots {
   return {

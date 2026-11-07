@@ -207,20 +207,14 @@ export default function ReceiptsPage() {
       <section className="py-14 px-4 border-t border-[rgba(168,216,240,0.08)] bg-[#07101e]">
         <div className="max-w-2xl mx-auto text-center">
           <h2 className="text-xl font-[300] text-[#f4f7fa] mb-3" style={{ fontFamily: "var(--font-mulish)" }}>
-            See how the gate works
+            Current services
           </h2>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
-              href="/why-provable"
+              href="/pricing"
               className="inline-flex items-center justify-center gap-2 bg-[#12243d] hover:bg-[#1e3a5f] border border-[rgba(168,216,240,0.15)] text-[#f4f7fa] font-semibold px-6 py-3 rounded-xl text-sm transition-all"
             >
-              How provability works →
-            </Link>
-            <Link
-              href="/valet"
-              className="inline-flex items-center justify-center gap-2 text-[#a8d8f0]/60 hover:text-[#c7d2fe] text-sm transition-colors px-4 py-3"
-            >
-              Meet Valet →
+              Services & pricing →
             </Link>
           </div>
         </div>

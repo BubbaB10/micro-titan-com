@@ -141,7 +141,7 @@ export default function PrivacyPage() {
               <a href="mailto:hello@micro-titan.com" className="text-[#2563eb] hover:text-[#60a5fa] transition-colors">
                 hello@micro-titan.com
               </a>{" "}
-              · Micro Titan LLC · Paris, Texas
+              · Micro Titan LLC, a Texas limited liability company
             </p>
           </div>
         </div>
