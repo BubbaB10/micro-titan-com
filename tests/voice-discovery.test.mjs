@@ -419,7 +419,7 @@ test("vendored guardrails match voice-discovery.ts, and the bridge imports nothi
   assert.equal(COPY_WRAP, VOICE_HARD_STOP_WRAP_UP);
   assert.deepEqual(COPY_AGENDA, [...VOICE_CALL_AGENDA]);
   assert.deepEqual(COPY_BANNED, [...VOICE_BANNED_ACTIONS]);
-  for (const file of ["server.mjs", "session.mjs", "audio.mjs", "ws-frames.mjs", "guardrails.mjs"]) {
+  for (const file of ["server.mjs", "session.mjs", "audio.mjs", "ws-frames.mjs", "ws-client.mjs", "guardrails.mjs", "stream-auth.mjs"]) {
     const src = read(`voice-bridge/${file}`);
     assert.doesNotMatch(src, /from\s+["']\.\.\//, file);
     assert.doesNotMatch(src, /from\s+["']@\//, file);
@@ -436,4 +436,8 @@ test("vendored guardrails match voice-discovery.ts, and the bridge imports nothi
   assert.equal(resolveListenPort({}), 8080);
   assert.equal(resolveListenPort({ PORT: "0" }), null);
   assert.match(serverSource, /server\.listen\(port, LISTEN_HOST/);
+  assert.match(serverSource, /VOICE_BRIDGE_STREAM_SECRET/);
+  assert.match(serverSource, /customParameters/);
+  assert.match(serverSource, /message: parts\.join/);
+  assert.match(serverSource, /START_DEADLINE_MS = 5000/);
 });

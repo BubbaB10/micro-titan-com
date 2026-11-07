@@ -72,6 +72,7 @@ then `8080`, and binds `0.0.0.0`. Railway sets `PORT`.
 | `VOICE_BRIDGE_PORT` | no | not a secret — used only when `PORT` is unset |
 | `TWILIO_ACCOUNT_SID` | no | not a secret — account identifier, only for the hard-stop hang-up |
 | `TWILIO_AUTH_TOKEN` | no | **secret** — only for the hard-stop hang-up. Without it the bridge logs that hang-up must come from the TwiML side. |
+| `VOICE_BRIDGE_STREAM_SECRET` | yes | **secret** — HMAC key for `streamToken`. The process exits on startup if this is unset. The same value must be in the shell that runs `scripts/voice-test-call.mjs`, and on the Next app if `VOICE_DISCOVERY_ENABLED=true`. |
 
 ### Next.js app (not this Railway service)
 
@@ -83,6 +84,7 @@ The TwiML route runs in the Next app. Leave it off until a TEST call.
 | `VOICE_BRIDGE_HOST` | yes, once the flag is on | not a secret — Railway hostname only, no `wss://` and no path |
 | `TWILIO_AUTH_TOKEN` | yes, once the flag is on | **secret** — verifies `X-Twilio-Signature`. Already used by `/api/twilio/webhook`. |
 | `ERM_DATABASE_URL` | yes, once the flag is on | **secret** — the route will not open a stream unless it can read the intake. `ERM_DATABASE_DATABASE_URL` is the existing Neon fallback. |
+| `VOICE_BRIDGE_STREAM_SECRET` | yes, once the flag is on | **secret** — same value as on the Railway service. The route will not emit TwiML without it. |
 
 ## Run locally (TEST only)
 
@@ -90,12 +92,17 @@ The TwiML route runs in the Next app. Leave it off until a TEST call.
 GEMINI_API_KEY=dummy \
 ERM_API_BASE_URL=http://127.0.0.1:9 \
 OPS_DASHBOARD_TOKEN=dummy \
+VOICE_BRIDGE_STREAM_SECRET=dummy \
 PORT=8080 \
 node voice-bridge/server.mjs
 ```
 
 `GET /health` returns `{"ok":true,"service":"micro-titan-voice-bridge"}`.
-Twilio Media Streams connect to `wss://<host>/twilio-stream?reference=MT-...&sessionKey=...&consentAt=...`.
+Twilio connects to `wss://<host>/twilio-stream` with no query string.
+`reference`, `sessionKey`, `consentAt`, and `streamToken` arrive in
+the `start` event's `customParameters`. Gemini opens only after the
+token matches. A `start` that does not arrive within 5 seconds is
+rejected.
 
 ## What it does
 
@@ -118,9 +125,10 @@ Twilio Media Streams connect to `wss://<host>/twilio-stream?reference=MT-...&ses
 ## First test call
 
 The bridge is deployed at `voice-bridge-production-5a71.up.railway.app`.
-Audio connects when the stream URL has `reference` and `sessionKey`.
-The bridge does not look up the ERM before it connects. The transcript
-is stored only if that reference already exists in `intakes`.
+Set `VOICE_BRIDGE_STREAM_SECRET` on that service (it will not boot
+without it), and export the same value in the shell below. The bridge
+does not look up the ERM before it connects. The transcript is stored
+only if that reference already exists in `intakes`.
 
 `scripts/voice-test-call.mjs` builds one outbound call with inline
 TwiML straight to this host. It does not change the Twilio console
@@ -129,6 +137,7 @@ it prints the plan and exits before any Twilio request.
 
 ```sh
 TWILIO_ACCOUNT_SID=... TWILIO_AUTH_TOKEN=... TWILIO_PHONE_NUMBER=+1... \
+VOICE_BRIDGE_STREAM_SECRET=... \
 node scripts/voice-test-call.mjs --to +1... --reference MT-20261107-TEST
 ```
 

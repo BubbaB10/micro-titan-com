@@ -15,7 +15,9 @@ import {
   buildVoiceDiscoveryTwiml,
   decideVoiceDiscovery,
   voiceDiscoveryEnabled,
+  voiceStreamToken,
 } from "../app/lib/erm/voice-discovery.ts";
+import { voiceStreamToken as bridgeStreamToken } from "../voice-bridge/stream-auth.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const read = (p) => fs.readFileSync(path.join(root, p), "utf8");
@@ -24,6 +26,7 @@ const webhookSource = read("app/api/twilio/webhook/route.ts");
 const storeSource = read("app/lib/erm/discovery-call-store.ts");
 
 const TOKEN = "test_only_not_a_real_auth_token";
+const STREAM_SECRET = "test_only_stream_secret";
 const HOST = "bridge.example.test";
 const REFERENCE = "MT-20261105-TEST";
 const SESSION = "CA-test-1";
@@ -152,12 +155,22 @@ test("an unconfirmed or unknown intake does not stream; a known one does, and sp
     assert.equal(decision.action, "reject", intakeStatus);
     assert.equal(decision.twiml, undefined);
   }
+  const missingSecret = decideVoiceDiscovery({
+    enabled: true,
+    authTokenPresent: true,
+    signatureOk: true,
+    hostRaw: HOST,
+    searchParams: params(),
+    intakeStatus: "found",
+  });
+  assert.deepEqual(missingSecret, { action: "error", status: 503, error: "stream_secret_not_configured" });
   const stream = decideVoiceDiscovery({
     enabled: true,
     authTokenPresent: true,
     signatureOk: true,
     hostRaw: HOST,
     searchParams: params(),
+    streamSecret: STREAM_SECRET,
     intakeStatus: "found",
   });
   assert.equal(stream.action, "stream");
@@ -167,17 +180,22 @@ test("an unconfirmed or unknown intake does not stream; a known one does, and sp
     reference: REFERENCE,
     sessionKey: SESSION,
     consentAt: CONSENT,
+    streamSecret: STREAM_SECRET,
   }));
-  assert.match(twiml, /<Response><Connect><Stream url="wss:\/\/bridge\.example\.test\/twilio-stream\?/);
+  assert.match(twiml, /<Response><Connect><Stream url="wss:\/\/bridge\.example\.test\/twilio-stream">/);
+  assert.doesNotMatch(twiml, /twilio-stream\?/);
   assert.doesNotMatch(twiml, /<Say|<Play|<Gather|<Dial|<Pause/);
-  const url = twiml.match(/url="([^"]+)"/)[1].replaceAll("&amp;", "&");
-  const parsed = new URL(url);
-  assert.equal(parsed.protocol, "wss:");
-  assert.equal(parsed.host, HOST);
-  assert.equal(parsed.pathname, "/twilio-stream");
-  assert.equal(parsed.searchParams.get("reference"), REFERENCE);
-  assert.equal(parsed.searchParams.get("sessionKey"), SESSION);
-  assert.equal(parsed.searchParams.get("consentAt"), CONSENT);
+  const token = voiceStreamToken(STREAM_SECRET, REFERENCE, SESSION, CONSENT);
+  assert.equal(token, bridgeStreamToken(STREAM_SECRET, REFERENCE, SESSION, CONSENT));
+  for (const [name, value] of [
+    ["reference", REFERENCE],
+    ["sessionKey", SESSION],
+    ["consentAt", CONSENT],
+    ["streamToken", token],
+  ]) {
+    assert.match(twiml, new RegExp(`<Parameter name="${name}" value="${value}"/>`));
+  }
+  assert.equal(twiml.includes(STREAM_SECRET), false);
 });
 
 test("signature helper agrees with the route's verifier, and the token is not in the TwiML", () => {
@@ -191,6 +209,7 @@ test("signature helper agrees with the route's verifier, and the token is not in
     reference: REFERENCE,
     sessionKey: SESSION,
     consentAt: CONSENT,
+    streamSecret: STREAM_SECRET,
   });
   assert.equal(twiml.includes(TOKEN), false);
 });
@@ -221,6 +240,7 @@ test("the TwiML route is gated and the existing webhook still rejects inbound ca
   assert.match(routeSource, /TWILIO_AUTH_TOKEN/);
   assert.match(routeSource, /voiceIntakeExists/);
   assert.match(routeSource, /decideVoiceDiscovery/);
+  assert.match(routeSource, /VOICE_BRIDGE_STREAM_SECRET/);
   const post = routeSource.slice(routeSource.indexOf("export async function POST"));
   const enabledAt = post.indexOf("voiceDiscoveryEnabled");
   const textAt = post.indexOf("req.text()");

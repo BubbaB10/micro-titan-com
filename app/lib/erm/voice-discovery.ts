@@ -43,6 +43,7 @@
  *   Twilio webhook is pointed at it by this code.
  */
 
+import { createHmac, timingSafeEqual } from "node:crypto";
 import type { DiscoveryTranscriptTurn } from "./types";
 
 /**
@@ -183,6 +184,7 @@ export const VOICE_BRIDGE_ENV_VARS: ReadonlyArray<string> = [
   "VOICE_BRIDGE_PORT",
   "TWILIO_ACCOUNT_SID",
   "TWILIO_AUTH_TOKEN",
+  "VOICE_BRIDGE_STREAM_SECRET",
 ];
 
 /** A voice call may start only with consent at booking AND consent confirmed at the start of the call. */
@@ -370,34 +372,76 @@ function xmlAttr(value: string): string {
     .replace(/>/g, "&gt;");
 }
 
-/** wss URL the TwiML <Stream> connects to. Query values are percent-encoded. */
-export function buildVoiceDiscoveryStreamUrl(input: {
-  host: string;
-  reference: string;
-  sessionKey: string;
-  consentAt: string;
-}): string {
-  const params = new URLSearchParams({
-    reference: input.reference,
-    sessionKey: input.sessionKey,
-    consentAt: input.consentAt,
-  });
-  return `wss://${input.host}/twilio-stream?${params.toString()}`;
+/**
+ * HMAC-SHA256 hex of `reference|sessionKey|consentAt`.
+ * voice-bridge/stream-auth.mjs is a copy; a test asserts they match.
+ * The secret never goes in the TwiML. The hex token does.
+ */
+export function voiceStreamToken(
+  secret: string,
+  reference: string,
+  sessionKey: string,
+  consentAt: string,
+): string {
+  return createHmac("sha256", secret)
+    .update(`${reference}|${sessionKey}|${consentAt}`, "utf8")
+    .digest("hex");
+}
+
+/** Timing-safe check. A missing secret or token fails closed. */
+export function verifyVoiceStreamToken(
+  secret: string,
+  reference: string,
+  sessionKey: string,
+  consentAt: string,
+  token: string,
+): boolean {
+  if (!secret || typeof token !== "string" || token.length === 0) return false;
+  const expected = voiceStreamToken(secret, reference, sessionKey, consentAt);
+  const expectedBuf = Buffer.from(expected, "utf8");
+  const actualBuf = Buffer.from(token, "utf8");
+  if (expectedBuf.length !== actualBuf.length) return false;
+  return timingSafeEqual(expectedBuf, actualBuf);
+}
+
+/**
+ * wss URL the TwiML <Stream> connects to. No query string: Twilio
+ * <Connect><Stream> does not forward one. Identity travels in
+ * <Parameter> elements and arrives on the start event.
+ */
+export function buildVoiceDiscoveryStreamUrl(host: string): string {
+  return `wss://${host}/twilio-stream`;
 }
 
 /**
  * TwiML that speaks nothing: no <Say>, no <Play>. It only connects
- * the Media Stream. The caller hears the agent through the bridge,
- * starting with VOICE_CALL_OPENING, not a line invented here.
+ * the Media Stream. reference, sessionKey, consentAt, and streamToken
+ * are <Parameter> children. The caller hears the agent through the
+ * bridge, starting with VOICE_CALL_OPENING.
  */
 export function buildVoiceDiscoveryTwiml(input: {
   host: string;
   reference: string;
   sessionKey: string;
   consentAt: string;
+  streamSecret: string;
 }): string {
-  const url = buildVoiceDiscoveryStreamUrl(input);
-  return `<?xml version="1.0" encoding="UTF-8"?><Response><Connect><Stream url="${xmlAttr(url)}"/></Connect></Response>`;
+  const token = voiceStreamToken(
+    input.streamSecret,
+    input.reference,
+    input.sessionKey,
+    input.consentAt,
+  );
+  const url = buildVoiceDiscoveryStreamUrl(input.host);
+  const parameters = [
+    ["reference", input.reference],
+    ["sessionKey", input.sessionKey],
+    ["consentAt", input.consentAt],
+    ["streamToken", token],
+  ]
+    .map(([name, value]) => `<Parameter name="${xmlAttr(name)}" value="${xmlAttr(value)}"/>`)
+    .join("");
+  return `<?xml version="1.0" encoding="UTF-8"?><Response><Connect><Stream url="${xmlAttr(url)}">${parameters}</Stream></Connect></Response>`;
 }
 
 export type VoiceDiscoveryDecision =
@@ -417,7 +461,10 @@ export type VoiceDiscoveryDecision =
  *   6. If intakeStatus is omitted, the caller must look the reference
  *      up before a stream can start. not_found, not_configured, and
  *      failed all reject: an unconfirmed intake is not a known intake.
- *   7. found + consentAt → TwiML <Connect><Stream>.
+ *   7. VOICE_BRIDGE_STREAM_SECRET must be set. The TwiML carries
+ *      streamToken = HMAC-SHA256(secret, reference|sessionKey|consentAt).
+ *   8. found + consentAt + secret → TwiML <Connect><Stream> with
+ *      <Parameter> children. The stream URL has no query string.
  */
 export function decideVoiceDiscovery(input: {
   enabled: boolean;
@@ -425,6 +472,7 @@ export function decideVoiceDiscovery(input: {
   signatureOk: boolean;
   hostRaw: string | undefined;
   searchParams: URLSearchParams;
+  streamSecret?: string;
   intakeStatus?: "found" | "not_found" | "not_configured" | "failed";
 }): VoiceDiscoveryDecision {
   if (!input.enabled) return { action: "reject", reason: "disabled" };
@@ -456,6 +504,10 @@ export function decideVoiceDiscovery(input: {
           : "intake_lookup_failed";
     return { action: "reject", reason };
   }
+  const streamSecret = typeof input.streamSecret === "string" ? input.streamSecret : "";
+  if (!streamSecret) {
+    return { action: "error", status: 503, error: "stream_secret_not_configured" };
+  }
   return {
     action: "stream",
     twiml: buildVoiceDiscoveryTwiml({
@@ -463,6 +515,7 @@ export function decideVoiceDiscovery(input: {
       reference: params.reference,
       sessionKey: params.sessionKey,
       consentAt: params.consentAt,
+      streamSecret,
     }),
   };
 }

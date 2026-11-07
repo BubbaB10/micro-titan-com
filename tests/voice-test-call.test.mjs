@@ -18,6 +18,7 @@ const execFileAsync = promisify(execFile);
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const script = path.join(root, "scripts", "voice-test-call.mjs");
 const TOKEN = "test_only_not_a_real_auth_token";
+const STREAM_SECRET = "test_only_stream_secret";
 const SID = "AC_test_only_not_a_real_sid";
 const NOW = new Date("2026-11-07T00:27:00.000Z");
 
@@ -27,6 +28,7 @@ const ready = {
   from: "+15555550199",
   accountSid: SID,
   authToken: TOKEN,
+  streamSecret: STREAM_SECRET,
   now: NOW,
 };
 
@@ -42,14 +44,15 @@ test("without --confirm the plan is complete and no Twilio request is built", ()
   assert.equal(decision.request, undefined);
   assert.equal(decision.plan.bridgeHost, DEFAULT_VOICE_BRIDGE_HOST);
   assert.equal(decision.plan.sessionKey, "voice-test-20261107T002700Z");
-  assert.match(decision.plan.streamUrl, new RegExp(`^wss://${DEFAULT_VOICE_BRIDGE_HOST}/twilio-stream\\?`));
-  const url = new URL(decision.plan.streamUrl);
-  assert.equal(url.searchParams.get("reference"), "MT-20261107-TEST");
-  assert.equal(url.searchParams.get("sessionKey"), decision.plan.sessionKey);
-  assert.equal(url.searchParams.get("consentAt"), "2026-11-07T00:27:00.000Z");
-  assert.match(decision.plan.twiml, /<Connect><Stream /);
+  assert.equal(decision.plan.streamUrl, `wss://${DEFAULT_VOICE_BRIDGE_HOST}/twilio-stream`);
+  assert.match(decision.plan.twiml, /<Parameter name="reference" value="MT-20261107-TEST"\/>/);
+  assert.match(decision.plan.twiml, /<Parameter name="sessionKey" value="voice-test-20261107T002700Z"\/>/);
+  assert.match(decision.plan.twiml, /<Parameter name="consentAt" value="2026-11-07T00:27:00.000Z"\/>/);
+  assert.match(decision.plan.twiml, /<Parameter name="streamToken" value="[0-9a-f]{64}"\/>/);
+  assert.doesNotMatch(decision.plan.twiml, /twilio-stream\?/);
   assert.doesNotMatch(decision.plan.twiml, /<Say|<Play|<Gather|<Dial/);
   assert.equal(JSON.stringify(decision.plan).includes(TOKEN), false);
+  assert.equal(JSON.stringify(decision.plan).includes(STREAM_SECRET), false);
 });
 
 test("the Twilio request keeps the token in the header only", () => {
@@ -95,6 +98,7 @@ test("a local run with fake creds stops before any Twilio request", async () => 
       TWILIO_ACCOUNT_SID: SID,
       TWILIO_AUTH_TOKEN: TOKEN,
       TWILIO_PHONE_NUMBER: "+15555550199",
+      VOICE_BRIDGE_STREAM_SECRET: STREAM_SECRET,
     },
   }).then(
     (result) => ({ stdout: result.stdout, code: 0 }),
@@ -109,5 +113,7 @@ test("a local run with fake creds stops before any Twilio request", async () => 
   assert.equal(body.plan.reference, "MT-20261107-TEST");
   assert.equal(body.plan.speaksExtra, false);
   assert.equal(stdout.includes(TOKEN), false);
+  assert.equal(stdout.includes(STREAM_SECRET), false);
+  assert.deepEqual(body.plan.parameters, ["reference", "sessionKey", "consentAt", "streamToken"]);
   assert.equal(stdout.includes("Calls.json"), false);
 });

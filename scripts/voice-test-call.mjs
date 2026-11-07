@@ -1,8 +1,12 @@
 // First TEST call for the Railway voice bridge. Places nothing unless
 // --confirm is passed. No secrets belong in this file.
 //
-// The bridge accepts the stream when the URL has reference and
-// sessionKey. It does not look up the ERM before audio starts.
+// Twilio does not forward query strings on <Stream>. The script puts
+// reference, sessionKey, consentAt, and streamToken on <Parameter>
+// elements. streamToken is HMAC-SHA256 of reference|sessionKey|consentAt
+// keyed by VOICE_BRIDGE_STREAM_SECRET (same value as on Railway).
+// The bridge opens Gemini only after that token checks out.
+// It does not look up the ERM before audio starts.
 // When the call ends it POSTs the transcript to
 // /api/ops/discovery-voice-complete, which stores the row only if
 // that intake reference already exists.
@@ -27,6 +31,7 @@
 //
 // Dry run (no Twilio request):
 //   TWILIO_ACCOUNT_SID=AC... TWILIO_AUTH_TOKEN=... TWILIO_PHONE_NUMBER=+1... \
+//   VOICE_BRIDGE_STREAM_SECRET=... \
 //   node scripts/voice-test-call.mjs --to +1... --reference MT-20261107-TEST
 //
 // Place the one call (owner only, after reading the dry run):
@@ -83,18 +88,20 @@ export function planVoiceTestCall(input) {
   const from = typeof input.from === "string" ? input.from.trim() : "";
   const accountSid = typeof input.accountSid === "string" ? input.accountSid.trim() : "";
   const authToken = typeof input.authToken === "string" ? input.authToken.trim() : "";
+  const streamSecret = typeof input.streamSecret === "string" ? input.streamSecret.trim() : "";
   const missing = [];
   if (!accountSid) missing.push("TWILIO_ACCOUNT_SID");
   if (!authToken) missing.push("TWILIO_AUTH_TOKEN");
   if (!E164_RE.test(from)) missing.push("TWILIO_PHONE_NUMBER");
+  if (!streamSecret) missing.push("VOICE_BRIDGE_STREAM_SECRET");
   if (missing.length > 0) return { action: "error", error: "missing_env", missing };
   const host = voiceBridgeHost(input.bridgeHost || DEFAULT_VOICE_BRIDGE_HOST);
   if (!host) return { action: "error", error: "bad_bridge_host" };
   const now = input.now instanceof Date ? input.now : new Date();
   const sessionKey = voiceTestSessionKey(now);
   const consentAt = now.toISOString();
-  const twiml = buildVoiceDiscoveryTwiml({ host, reference, sessionKey, consentAt });
-  const streamUrl = `wss://${host}/twilio-stream?${new URLSearchParams({ reference, sessionKey, consentAt }).toString()}`;
+  const twiml = buildVoiceDiscoveryTwiml({ host, reference, sessionKey, consentAt, streamSecret });
+  const streamUrl = `wss://${host}/twilio-stream`;
   const plan = { to, from, reference, sessionKey, consentAt, bridgeHost: host, streamUrl, twiml };
   if (!input.confirm) return { action: "dry_run", plan };
   return {
@@ -128,6 +135,9 @@ function publicPlan(plan) {
     bridgeHost: plan.bridgeHost,
     streamUrl: plan.streamUrl,
     speaksExtra: /<Say|<Play|<Gather|<Dial/.test(plan.twiml),
+    parameters: ["reference", "sessionKey", "consentAt", "streamToken"].filter((name) =>
+      plan.twiml.includes(`name="${name}"`),
+    ),
   };
 }
 
@@ -143,6 +153,7 @@ async function main() {
     from: process.env.TWILIO_PHONE_NUMBER,
     accountSid: process.env.TWILIO_ACCOUNT_SID,
     authToken: process.env.TWILIO_AUTH_TOKEN,
+    streamSecret: process.env.VOICE_BRIDGE_STREAM_SECRET,
     bridgeHost: process.env.VOICE_BRIDGE_HOST,
     confirm: parsed.confirm,
   });

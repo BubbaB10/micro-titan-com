@@ -23,8 +23,16 @@
  *   read-only. No database, or an unknown reference, rejects:
  *   the stream does not start for an unconfirmed intake.
  *
- * Success TwiML speaks nothing. It is only:
- *   <Connect><Stream url="wss://${VOICE_BRIDGE_HOST}/twilio-stream?reference=...&sessionKey=...&consentAt=..."/></Connect>
+ * Success TwiML speaks nothing. The stream URL has no query string
+ * (Twilio does not forward one). Identity is <Parameter> children:
+ *   <Connect><Stream url="wss://${VOICE_BRIDGE_HOST}/twilio-stream">
+ *     <Parameter name="reference" value="..."/>
+ *     <Parameter name="sessionKey" value="..."/>
+ *     <Parameter name="consentAt" value="..."/>
+ *     <Parameter name="streamToken" value="HMAC-SHA256(VOICE_BRIDGE_STREAM_SECRET, reference|sessionKey|consentAt)"/>
+ *   </Stream></Connect>
+ * VOICE_BRIDGE_STREAM_SECRET is required to build that token. It is
+ * the same secret the Railway bridge requires at startup.
  * The agent's first spoken line is VOICE_CALL_OPENING, inside the
  * bridge. This route adds no spoken verb of its own.
  *
@@ -91,12 +99,14 @@ export async function POST(req: Request) {
   const signatureOk = verifyTwilioSignature(req.url, params, signature, authToken);
   const searchParams = new URL(req.url).searchParams;
   const hostRaw = process.env.VOICE_BRIDGE_HOST;
+  const streamSecret = process.env.VOICE_BRIDGE_STREAM_SECRET;
   const decision = decideVoiceDiscovery({
     enabled: true,
     authTokenPresent: true,
     signatureOk,
     hostRaw,
     searchParams,
+    streamSecret,
   });
   if (decision.action !== "lookup") return render(decision);
   const intake = await voiceIntakeExists(decision.reference);
@@ -110,6 +120,7 @@ export async function POST(req: Request) {
     signatureOk: true,
     hostRaw,
     searchParams,
+    streamSecret,
     intakeStatus,
   });
   if (after.action === "lookup") {
