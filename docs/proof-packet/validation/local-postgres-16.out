@@ -1,0 +1,133 @@
+=== setup 2026-11-07T12:54:14Z ===
+NOTICE:  database "proof_packet_throwaway" does not exist, skipping
+DROP DATABASE
+CREATE DATABASE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+INSERT 0 2
+INSERT 0 6
+=== apply migration 008 ===
+CREATE FUNCTION
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE INDEX
+CREATE INDEX
+CREATE FUNCTION
+psql:/workspace/app/lib/erm/migrations/008-proof-packets.sql:160: NOTICE:  trigger "proof_packets_freeze_signed_update" for relation "proof_packets" does not exist, skipping
+DROP TRIGGER
+CREATE TRIGGER
+psql:/workspace/app/lib/erm/migrations/008-proof-packets.sql:166: NOTICE:  trigger "proof_packets_freeze_signed_delete" for relation "proof_packets" does not exist, skipping
+DROP TRIGGER
+CREATE TRIGGER
+CREATE FUNCTION
+psql:/workspace/app/lib/erm/migrations/008-proof-packets.sql:224: NOTICE:  trigger "proof_packet_claims_freeze" for relation "proof_packet_claims" does not exist, skipping
+DROP TRIGGER
+CREATE TRIGGER
+psql:/workspace/app/lib/erm/migrations/008-proof-packets.sql:230: NOTICE:  trigger "proof_packet_checks_freeze" for relation "proof_packet_checks" does not exist, skipping
+DROP TRIGGER
+CREATE TRIGGER
+CREATE FUNCTION
+psql:/workspace/app/lib/erm/migrations/008-proof-packets.sql:273: NOTICE:  trigger "proof_packets_identity_guard" for relation "proof_packets" does not exist, skipping
+DROP TRIGGER
+CREATE TRIGGER
+FIRST_APPLY:0
+=== apply migration 008 again ===
+CREATE FUNCTION
+psql:/workspace/app/lib/erm/migrations/008-proof-packets.sql:98: NOTICE:  relation "proof_packets" already exists, skipping
+CREATE TABLE
+psql:/workspace/app/lib/erm/migrations/008-proof-packets.sql:111: NOTICE:  relation "proof_packet_claims" already exists, skipping
+CREATE TABLE
+psql:/workspace/app/lib/erm/migrations/008-proof-packets.sql:131: NOTICE:  relation "proof_packet_checks" already exists, skipping
+CREATE TABLE
+psql:/workspace/app/lib/erm/migrations/008-proof-packets.sql:134: NOTICE:  relation "idx_proof_packet_claims_packet" already exists, skipping
+CREATE INDEX
+psql:/workspace/app/lib/erm/migrations/008-proof-packets.sql:136: NOTICE:  relation "idx_proof_packet_checks_packet" already exists, skipping
+CREATE INDEX
+CREATE FUNCTION
+DROP TRIGGER
+CREATE TRIGGER
+DROP TRIGGER
+CREATE TRIGGER
+CREATE FUNCTION
+DROP TRIGGER
+CREATE TRIGGER
+DROP TRIGGER
+CREATE TRIGGER
+CREATE FUNCTION
+DROP TRIGGER
+CREATE TRIGGER
+SECOND_APPLY:0
+CREATE FUNCTION
+NOTICE:  PASS rejected [client_id from a different intake]: proof packet identity does not match intake
+NOTICE:  PASS rejected [reference from a different intake]: proof packet identity does not match intake
+NOTICE:  PASS rejected [test true on a non-TEST reference]: proof packet test flag does not match reference
+NOTICE:  PASS rejected [test false on a TEST reference]: proof packet test flag does not match reference
+NOTICE:  PASS matching draft inserts
+NOTICE:  PASS draft child replace
+NOTICE:  PASS rejected [reparent claim draft to other draft]: proof packet child packet_id is immutable
+NOTICE:  PASS rejected [reparent check draft to other draft]: proof packet child packet_id is immutable
+NOTICE:  PASS sign one packet
+NOTICE:  PASS rejected [reparent claim signed to draft]: signed proof packet is frozen
+NOTICE:  PASS rejected [reparent check signed to draft]: signed proof packet is frozen
+NOTICE:  PASS rejected [reparent claim draft to signed]: signed proof packet is frozen
+NOTICE:  PASS rejected [reparent check draft to signed]: signed proof packet is frozen
+NOTICE:  PASS rejected [update signed claim]: signed proof packet is frozen
+NOTICE:  PASS rejected [delete signed claim]: signed proof packet is frozen
+NOTICE:  PASS rejected [insert signed claim]: signed proof packet is frozen
+NOTICE:  PASS rejected [update signed check]: signed proof packet is frozen
+NOTICE:  PASS rejected [delete signed check]: signed proof packet is frozen
+NOTICE:  PASS rejected [insert signed check]: signed proof packet is frozen
+NOTICE:  PASS rejected [update signed packet]: signed proof packet is frozen
+NOTICE:  PASS rejected [reopen signed packet]: signed proof packet is frozen
+NOTICE:  PASS rejected [delete signed packet]: signed proof packet is frozen
+NOTICE:  PASS signed rows unchanged and draft row still editable
+DO
+=== snapshot: GET-style read versus draft save ===
+INSERT 0 1
+INSERT 0 1
+BEGIN
+                  id                  
+--------------------------------------
+ cccccccc-cccc-cccc-cccc-ccccccccccc4
+(1 row)
+
+UPDATE 1
+UPDATE 1
+COMMIT
+READER_OUTPUT:
+BEGIN
+OLD-HEAD|COMMIT:old
+
+OLD-HEAD|COMMIT:old
+COMMIT
+PASS open snapshot stayed wholly old
+PASS later read is wholly new
+=== race: sign holds parent, then child insert ===
+INSERT 0 1
+INSERT 0 1
+PASS sign-then-insert rejected after 2s
+PASS sign-then-insert left the signed row unchanged
+=== race: child row lock first, then sign, then child update ===
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+UPDATE 1
+PASS child-lock-then-sign update rejected
+PASS child-lock-then-sign left the signed evidence unchanged
+=== app sign rejects a different content hash with no write ===
+(node:7559) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/app/api/ops/proof-packet/route.ts is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /workspace/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+HASH_MISMATCH_STATUS 409
+HASH_MISMATCH_ERROR content_hash_mismatch
+SIGN_STATUS 200
+SIGN_HASH 992c6a39ffe2a8794c8b156d42c689140adf79c4f4f81606efac86dcb9eb60f1
+GET_HASH 992c6a39ffe2a8794c8b156d42c689140adf79c4f4f81606efac86dcb9eb60f1
+STORED_AFTER_SIGN signed|992c6a39ffe2a8794c8b156d42c689140adf79c4f4f81606efac86dcb9eb60f1
+PASS stored content hash is present and the row is signed
+=== drop throwaway database ===
+DROP DATABASE
+DONE

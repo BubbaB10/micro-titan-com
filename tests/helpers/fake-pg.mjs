@@ -6,11 +6,19 @@
 
 const queries = [];
 const communicationRows = [];
+const proofPackets = [];
+const proofClaims = [];
+const proofChecks = [];
 let mode = "intake_missing";
+let proofPacketSeq = 1;
 
 export function setFakePgMode(next) {
   mode = next;
   queries.length = 0;
+  proofPackets.length = 0;
+  proofClaims.length = 0;
+  proofChecks.length = 0;
+  proofPacketSeq = 1;
 }
 
 export function resetCommunicationLog() {
@@ -77,6 +85,188 @@ function queryCommunicationLog(sql, params = []) {
   throw new Error(`unexpected communication sql: ${text}`);
 }
 
+function proofPacketQuery(text, params = []) {
+  if (text.startsWith("SELECT section, position, body, evidence FROM proof_packet_claims")) {
+    return {
+      rows: proofClaims
+        .filter((row) => row.packet_id === params[0])
+        .sort((a, b) => a.position - b.position)
+        .map((row) => ({
+          section: row.section,
+          position: row.position,
+          body: row.body,
+          evidence: row.evidence,
+        })),
+    };
+  }
+  if (text.startsWith("SELECT position, check_text, method, result, evidence, not_run_reason, run_by_date")) {
+    return {
+      rows: proofChecks
+        .filter((row) => row.packet_id === params[0])
+        .sort((a, b) => a.position - b.position)
+        .map((row) => ({ ...row })),
+    };
+  }
+  if (text.includes("FROM intakes i") && text.includes("LEFT JOIN proof_packets")) {
+    if (mode === "intake_missing") return { rows: [] };
+    const reference = params[0];
+    const packet = proofPackets.find((row) => row.reference === reference) ?? null;
+    const claims = packet
+      ? proofClaims
+          .filter((row) => row.packet_id === packet.id)
+          .sort((a, b) => String(a.section).localeCompare(String(b.section)) || a.position - b.position)
+          .map((row) => ({
+            section: row.section,
+            position: row.position,
+            body: row.body,
+            evidence: row.evidence,
+          }))
+      : [];
+    const checks = packet
+      ? proofChecks
+          .filter((row) => row.packet_id === packet.id)
+          .sort((a, b) => a.position - b.position)
+          .map((row) => ({ ...row }))
+      : [];
+    return {
+      rows: [
+        {
+          intake_id: "11111111-1111-1111-1111-111111111111",
+          intake_client_id: "22222222-2222-2222-2222-222222222222",
+          intake_reference: reference,
+          packet_id: packet ? packet.id : null,
+          packet_intake_id: packet ? packet.intake_id : null,
+          packet_client_id: packet ? packet.client_id : null,
+          packet_reference: packet ? packet.reference : null,
+          packet_test: packet ? packet.test : null,
+          packet_status: packet ? packet.status : null,
+          heading: packet ? packet.heading : null,
+          intro: packet ? packet.intro : null,
+          sections: packet ? packet.sections : null,
+          owner_signed_at: packet ? packet.owner_signed_at : null,
+          signed_by: packet ? packet.signed_by : null,
+          content_hash: packet ? packet.content_hash : null,
+          created_at: packet ? packet.created_at : null,
+          updated_at: packet ? packet.updated_at : null,
+          claims,
+          checks,
+        },
+      ],
+    };
+  }
+  if (text.startsWith("SELECT id, status FROM proof_packets WHERE intake_id")) {
+    const found = proofPackets.find((row) => row.intake_id === params[0]);
+    return { rows: found ? [{ id: found.id, status: found.status }] : [] };
+  }
+  if (text.startsWith("SELECT id, intake_id, client_id, reference, status, test, heading")) {
+    const found = proofPackets.find((row) => row.intake_id === params[0]);
+    return { rows: found ? [{ ...found, sections: found.sections }] : [] };
+  }
+  if (text.startsWith("SELECT id, reference, test, status, heading, intro, sections")) {
+    const found = proofPackets.find((row) => row.reference === params[0]);
+    return { rows: found ? [{ ...found, sections: found.sections }] : [] };
+  }
+  if (text.startsWith("INSERT INTO proof_packets")) {
+    if (proofPackets.some((row) => row.intake_id === params[0] || row.reference === params[2])) {
+      throw new Error("duplicate proof packet");
+    }
+    const row = {
+      id: `packet-${proofPacketSeq++}`,
+      intake_id: params[0],
+      client_id: params[1],
+      reference: params[2],
+      test: params[3] === true,
+      status: "draft",
+      heading: params[4],
+      intro: params[5],
+      sections: JSON.parse(params[6]),
+      owner_signed_at: null,
+      signed_by: null,
+      content_hash: null,
+      created_at: "2026-11-07T16:00:00.000Z",
+      updated_at: "2026-11-07T16:00:00.000Z",
+    };
+    proofPackets.push(row);
+    return { rows: [{ id: row.id, test: row.test }] };
+  }
+  if (text.startsWith("UPDATE proof_packets") && text.includes("status = 'draft'") && text.includes("heading = $1")) {
+    const row = proofPackets.find((existing) => existing.id === params[4] && existing.status === "draft");
+    if (!row) return { rows: [] };
+    row.heading = params[0];
+    row.intro = params[1];
+    row.sections = JSON.parse(params[2]);
+    row.test = params[3] === true;
+    row.updated_at = "2026-11-07T16:05:00.000Z";
+    return { rows: [{ id: row.id, test: row.test }] };
+  }
+  if (text.startsWith("UPDATE proof_packets") && text.includes("status = 'signed'")) {
+    const row = proofPackets.find((existing) => existing.id === params[1] && existing.status === "draft");
+    if (!row) return { rows: [] };
+    row.status = "signed";
+    row.signed_by = params[0];
+    row.content_hash = params[2];
+    row.owner_signed_at = "2026-11-07T22:00:00.000Z";
+    row.updated_at = "2026-11-07T22:00:00.000Z";
+    return {
+      rows: [
+        {
+          id: row.id,
+          test: row.test,
+          signed_by: row.signed_by,
+          owner_signed_at: row.owner_signed_at,
+          content_hash: row.content_hash,
+        },
+      ],
+    };
+  }
+  if (text.startsWith("DELETE FROM proof_packet_claims")) {
+    for (let i = proofClaims.length - 1; i >= 0; i -= 1) {
+      if (proofClaims[i].packet_id === params[0]) proofClaims.splice(i, 1);
+    }
+    return { rows: [] };
+  }
+  if (text.startsWith("DELETE FROM proof_packet_checks")) {
+    for (let i = proofChecks.length - 1; i >= 0; i -= 1) {
+      if (proofChecks[i].packet_id === params[0]) proofChecks.splice(i, 1);
+    }
+    return { rows: [] };
+  }
+  if (text.startsWith("INSERT INTO proof_packet_claims")) {
+    const evidence = String(params[4] ?? "");
+    if (evidence.trim().length === 0) throw new Error("claim evidence check");
+    proofClaims.push({
+      packet_id: params[0],
+      section: params[1],
+      position: params[2],
+      body: typeof params[3] === "string" ? JSON.parse(params[3]) : params[3],
+      evidence,
+    });
+    return { rows: [] };
+  }
+  if (text.startsWith("INSERT INTO proof_packet_checks")) {
+    const evidence = String(params[5] ?? "");
+    if (evidence.trim().length === 0) throw new Error("check evidence check");
+    if (params[4] === "NOT_RUN") {
+      const reason = String(params[6] ?? "");
+      if (reason.trim().length === 0 || params[7] == null || params[7] === "") {
+        throw new Error("not_run check");
+      }
+    }
+    proofChecks.push({
+      packet_id: params[0],
+      position: params[1],
+      check_text: params[2],
+      method: params[3],
+      result: params[4],
+      evidence,
+      not_run_reason: params[6],
+      run_by_date: params[7],
+    });
+    return { rows: [] };
+  }
+  throw new Error(`unexpected proof packet sql: ${text}`);
+}
+
 export function fakePgQueries() {
   return queries.map((query) => ({ sql: query.sql, params: query.params }));
 }
@@ -96,7 +286,9 @@ export class Pool {
         if (mode === "throw") {
           throw new Error("fake pg failure");
         }
-        if (/^(BEGIN|COMMIT|ROLLBACK)$/i.test(text)) return { rows: [] };
+        if (/^BEGIN\b/i.test(text) || /^(COMMIT|ROLLBACK)$/i.test(text)) return { rows: [] };
+        if (text.startsWith("INSERT INTO audit_log")) return { rows: [] };
+        if (text.includes("proof_packet")) return proofPacketQuery(text, params);
         if (text.includes("FROM intakes")) {
           if (mode === "intake_missing") return { rows: [] };
           return {

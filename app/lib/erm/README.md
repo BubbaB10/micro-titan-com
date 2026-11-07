@@ -39,7 +39,14 @@ in the middle of an intake.
    - `ERM_DATABASE_URL` — the provider's pooled connection string.
      Never commit it, never paste it in chat.
    - `OPS_DASHBOARD_TOKEN` — a long random value, kept private.
-     It gates `GET /api/ops/summary` only.
+     It gates the owner ops routes, including `GET /api/ops/summary`.
+     It does not by itself authorize proof-packet signing.
+   - `OWNER_SIGNING_TOKEN` — a secret, distinct from
+     `OPS_DASHBOARD_TOKEN`. It is the owner credential for
+     `POST /api/ops/proof-packet-sign` (header
+     `X-Owner-Signing-Token`). The ops token alone cannot sign.
+     Do not commit it, do not paste it in chat, and do not put a
+     value in this repo. If it is unset, signing fails closed.
 4. **Redeploy**, then test with a **TEST intake only**:
    - Verify one Client + Intake + AuditLog row appears.
    - Re-POST the same reference and verify **no duplicate intake**
